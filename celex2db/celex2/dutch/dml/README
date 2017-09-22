@@ -1,0 +1,92 @@
+DUTCH MORPHOLOGY, LEMMAS
+
+
+The dml.cd file contains the following fields:
+
+   1.     IdNum
+   2.     Head
+   3.     Inl
+   4.     MorphStatus
+   5.     MorphCnt
+   6.     DerComp
+   7.     Comp
+   8.     Def
+   9.     Imm
+   10.    ImmSubCat
+   11.    ImmAllo
+   12.    ImmSubst
+   13.    StrucLab
+   14.    StrucAllo
+   15.    StrucSubst
+   16.    Sepa
+
+Those words which appear with alternative parsings are assigned 11
+fields for each extra parsing. For instance, the columns
+
+   17.     DerComp 
+   18.     Comp
+   19.     Def
+   20.     Imm
+   21.     ImmSubCat
+   22.     ImmAllo
+   23.     ImmSubst
+   24.     StrucLab
+   25.     StrucAllo
+   26.     StrucSubst
+   27.     Sepa
+
+specify the second parsing, if present. The next parsing variant is
+specified in the columns 28--38, etc.
+
+
+The awk directory contains the following scripts:
+
+       script CountLevels(String):                      cntlevel.awk
+       script CountMorpComponents(String):              cntmc.awk
+       script CountMorphemes(String):                   cntmorph.awk
+       script ConvertVerbNumbersToV(String):            cnvnum2v.awk
+       script ConvertImmWordClassToSAPattern(String):   icnvwcsa.awk
+       script ConvertFlatWordClassToSAPattern(String):  fcnvwcsa.awk
+       script ExtractWordClass(String):                 extrctwc.awk
+       script StripClassLabels(String):                 stripcls.awk
+       script StripOrthographicInformation(String):     striport.awk
+       script StripStructureMarkers(String):            stripstr.awk
+
+These scripts may be used to obtain those columns listed in the CELEX
+User Guide that do not appear in the above list, as follows:
+
+
+   DML-fields in CELEX.            DML-fields in CD-file.
+
+   1.     IdNum                     $1
+   2.     Head                      $2
+   3.     MorphStatus               $4
+   4.     MorphCnt                  $5
+   5.     MorphNum                  -
+   6.     DerComp                   $6
+   7.     Comp                      $7
+   8.     Def                       $8
+   9.     Imm                       $9
+   10.    ImmClass                  ConvertVerbNumbersToV(ImmSubCat);
+   11.    ImmSubCat                 $10
+   12.    ImmSA                     ConvertImmWordClassToSAPattern(ImmSubCat);
+   13.    ImmAllo                   $11
+   14.    ImmSubst                  $12
+   15.    Flat                      StripStructureMarkers(StrucLab);
+   16.    FlatClass                 ExtractWordClass(StrucLab);
+   17.    FlatSA                    ConvertFlatWordClassToSAPattern(StrucLab);
+   18.    Struc                     StripClassLabels(StrucLab);
+   19.    StrucLab                  $13
+   20.    StrucBrackLab             StripOrthographicInformation(StrucLab);
+   21.    StrucAllo                 $14
+   22.    StrucSubst                $15
+   23.    CompCnt                   CountMorpComponents(ImmSubCat);
+   24.    MorphCnt                  CountMorphemes(StrucLab);
+   25.    LevelCnt                  CountLevels(StrucLab);
+   26.    Sepa                      $16
+   
+Note that the field MorphNum (specifying the morphological analysis
+number) is no longer necessary -- parsing variants can be retrieved
+by selecting the appropriate columns in dml.cd (columns 6--16 for the
+parse preferred by CELEX, columns 17--27 for the first alternative
+parse, etc.).

@@ -1,0 +1,100 @@
+GERMAN MORPHOLOGY, LEMMAS
+
+The gml.cd file contains the following fields:
+
+   1.   IdNum
+   2.   Head
+   3.   Mann
+   4.   MorphStatus
+   5.   MorphCnt
+   6.   DerComp
+   7.   Comp
+   8.   Def
+   9.   Imm
+  10.   ImmClass
+  11.   ImmAllo
+  12.   ImmOpac
+  13.   ImmUml
+  14.   StrucLab
+  15.   StrucAllo
+  16.   StrucOpac
+  17.   StrucUml
+  18.   Sepa
+  19.   InflPar
+  20.   InflVar
+
+Those words which appear with alternative parsings are assigned 15
+fields for each extra parsing. For instance, the columns
+
+  21.   DerComp
+  22.   Comp
+  23.   Def
+  24.   Imm
+  25.   ImmClass
+  26.   ImmAllo
+  27.   ImmOpac
+  28.   ImmUml
+  29.   StrucLab
+  30.   StrucAllo
+  31.   StrucOpac
+  32.   StrucUml
+  33.   Sepa
+  34.   InflPar
+  35.   InflVar
+
+specify the second parsing, if present. The next parsing variant is
+specified in the columns 36--50, etc.
+
+
+The awk directory contains the following scripts:
+
+       script CountLevels(String):                      cntlevel.awk
+       script CountMorpComponents(String):              cntmc.awk
+       script CountMorphemes(String):                   cntmorph.awk
+       script ConvertImmWordClassToSAPattern(String):   icnvwcsa.awk
+       script ConvertFlatWordClassToSAPattern(String):  fcnvwcsa.awk
+       script ExtractWordClass(String):                 extrctwc.awk
+       script StripClassLabels(String):                 stripcls.awk
+       script StripOrthographicInformation(String):     striport.awk
+       script StripStructureMarkers(String):            stripstr.awk
+
+These scripts may be used to obtain those columns listed in the CELEX
+User Guide that do not appear in the above list, as follows:
+
+
+   GML-fields in CELEX.            GML-fields in CD-file.
+
+   1.   IdNum                      $1
+   2.   MorphStatus                $4
+   3.   MorphCnt                   $5
+   4.   MorphNum                   -
+   5.   DerComp                    $6
+   6.   Comp                       $7
+   7.   Def                        $8
+   8.   Imm                        $9
+   9.   ImmClass                   $10
+  10.   ImmSA                      ConvertImmWordClassToSAPattern(ImmClass);
+  11.   ImmAllo                    $11
+  12.   ImmOpac                    $12
+  13.   ImmUml                     $13
+  14.   Flat                       StripStructureMarkers(StrucLab);
+  15.   FlatClass                  ExtractWordClass(StrucLab);
+  16.   FlatSA                     ConvertFlatWordClassToSAPattern(StrucLab);
+  17.   Struc                      StripClassLabels(StrucLab);
+  18.   StrucLab                   $14
+  19.   StrucBracLab               StripOrthographicInformation(StrucLab);
+  20.   StrucAllo                  $15
+  21.   StrucOpac                  $16
+  22.   StrucUml                   $17
+  23.   CompCnt                    CountMorpComponents(ImmClass);
+  24.   MorCnt                     CountMorphemes(StrucLab);1
+  25.   LevelCnt                   CountLevels(StrucLab);
+  23.   Sepa                       $18
+  24.   InflPar                    $19
+  25.   InflVar                    $20
+      
+Note that the field MorphNum (specifying the morphological analysis
+number) is no longer necessary -- parsing variants can be retrieved
+by selecting the appropriate columns in gml.cd (columns 6--20 for the
+parse preferred by CELEX, columns 21--35 for the first alternative
+parse, etc.).

@@ -1,0 +1,85 @@
+DUTCH SYNTAX, LEMMAS
+
+The dsl.cd file contains the following fields:
+
+   1. IdNum
+   2. Head
+   3. Inl
+   4. ClassNum
+   5. GendNum
+   6. DeHetNum
+   7. PropNum
+   8. AuxNum
+   9. SubClassVNum
+  10. SubCatNum
+  11. AdvNum
+  12. CardOrdNum
+  13. SubClassPNum
+
+A script for obtaining the label markers for the columns 4--13 is
+available in the awk directory:
+
+  synlabel.awk 
+
+Synlabel is used as follows:
+
+  awk -f synlabel.awk <File> <Column> <LabelField> [<Column> <LabelField>...]
+
+<File> denotes the input file (dsl.cd), <LabelField> denotes the
+label to be obtained:
+
+   CL : Class
+   GE : Gend
+   DE : DeHet
+   PR : Prop
+   AU : Aux
+   SV : SubClassV
+   SC : SubCat
+   AD : Adv
+   CO : CardOrd 
+   SP : SubClassP
+
+and <Column> the column number of the appropriate numerical code.
+Running the script will automatically retrieve the IdNum and Head
+columns, and any other columns as specified on the command line by the
+user in the <Column> <LabelField> format. For instance, to obtain
+Class and Gender labels issue the command
+
+  awk -f synlabel.awk dsl.cd 4 CL 5 GE > your_result
+
+Calling synlabel without any arguments will prompt it to print its
+specifications of use.
+
+Should running of the synlabel awk script cause memory problems on
+your PC, it is advisable to try running the c-program 'synlabel' in
+the c subdirectory:
+
+   synlabel (Hewlett Packard UNIX binary)
+   synlabel.c (source)
+   synlabel.exe (MS-DOS executable)
+
+Synlabel is used as follows:
+
+   synlabel <File> <LabelField> <Column> [<LabelField> <Column>...]
+
+<File> denotes the input file (dsl.cd), <LabelField> denotes the
+label to be obtained:
+
+   CL : Class
+   GE : Gend
+   DE : DeHet
+   PR : Prop
+   AU : Aux
+   SV : SubClassV
+   SC : SubCat
+   AD : Adv
+   CO : CardOrd 
+   SP : SubClassP
+
+and <Column> the column number of the appropriate numerical code. For
+instance, to obtain Class labels issue the command
+
+  synlabel dsl.cd CL 4 > your_result
+
+Calling synlabel without any arguments will prompt it to print its
+specifications of use.

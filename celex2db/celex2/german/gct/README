@@ -1,0 +1,11 @@
+GERMAN MANNHEIM CORPUS TYPES
+
+The gct.cd file contains the following fields:
+
+  1. Type
+  2. Freq
+  3. Disp
+  4. FreqW
+  5. DispW
+  6. FreqS
+  7. DispS

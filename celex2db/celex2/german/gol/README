@@ -1,0 +1,60 @@
+GERMAN ORTHOGRAPHY, LEMMAS
+
+
+The gol.cd file contains the following fields:
+
+   1.    IdNum
+   2.    HeadDia
+   3.    Mann
+   4.    HeadSylDia
+   5.    HeadSylChg
+   6.    StemDia
+   7.    StemSylDia
+   8.    StemSylChg
+
+The fields marked with "Dia" may contain diacritics of various kinds.
+These diacritics have been coded as a sequence of two ASCII symbols, a
+diacritic marker followed by the hosting letter. The Eszett, however,
+is represented by a single dollar sign. The following conventions have
+been used:
+
+  diacritic symbol           diacritic sign
+        #                           '         (acute accent)
+        "                           "         (diaeresis (Umlaut))
+        $                           ss        (Eszett)
+
+The awk directory contains the following scripts:
+
+   script CountCharacters(String):               countchr.awk
+   script CountSyllables(String):                countsyl.awk
+   script ReverseString(String):                 reverse.awk
+   script SortString(String):                    sortstr.awk
+   script StripDiacritics(String):               stripdia.awk
+   script ToLower(String):                       tolower.awk
+
+
+These scripts may be used to obtain those columns listed in the CELEX
+User Guide that do not appear in the above list, as follows:
+
+   Fields in the CELEX User Guide.   Fields in gol.cd.
+
+   1.   IdNum                        $1
+   2.   Head                         StripDiacritics(HeadDia);
+   3.   HeadRev                      ReverseString(HeadDia);
+   4.   HeadDia                      $2
+   5.   HeadLow                      ToLower(HeadDia);
+   6.   HeadLowSort                  SortString(HeadDia);
+   7.   HeadLowSortDia               - (not derivable, as diacr. appear separately)
+   8.   HeadCnt                      CountCharacters(HeadDia);
+   9.   HeadSyl                      StripDiacritics(HeadSylDia);
+  10.   HeadSylDia                   $4
+  11.   HeadSylChg                   $5
+  12.   HeadSylCnt                   CountSyllables(HeadSylDia);
+  13.   Stem                         StripDiacritics(StemDia);
+  14.   StemRev                      ReverseString(StemDia);
+  15.   StemDia                      $6
+  16.   StemCnt                      CountCharacters(StemDia);
+  17.   StemSyl                      StripDiacritics(StemSylDia);
+  18.   StemSylDia                   $7
+  19.   StemSylChg                   $8
+  20.   StemSylCnt                   CountSyllables(StemSylDia);

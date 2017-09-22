@@ -1,0 +1,31 @@
+This directory contains the subdirectories:
+
+         gol       German Orthography, Lemmas
+                       (filesize gol.cd:  3,095,599 bytes)
+         gpl       German Phonology, Lemmas
+                       (filesize gpl.cd:  6,669,899 bytes) 
+         gml       German Morphology, Lemmas
+                       (filesize gml.cd:  4,941,770 bytes)
+         gsl       German Syntax, Lemmas
+                       (filesize gsl.cd:  2,537,557 bytes)
+         gfl       German Frequency, Lemmas
+                       (filesize gfl.cd:  2,155,299 bytes)
+
+         gow       German Orthography, Wordforms
+                       (filesize gow.cd: 15,932,928 bytes)
+         gpw       German Phonology, Wordforms
+                       (filesize gpw.cd: 28,982,785 bytes)
+         gmw       German Morphology, Wordforms
+                       (filesize gmw.cd: 12,342,460 bytes)
+         gfw       German Frequency, Wordforms
+                       (filesize gfw.cd: 17,283,964 bytes)
+
+         gct       German Corpus Types
+                       (filesize gct.cd:  7,481,411 bytes)
+
+and the PostScript files of the CELEX User Guide on German, in both
+European A4 (21c x 29.7c or 8.3 x 11.7 inches) and American letter
+format (8.5 x 11 inches):
+                   
+           gug_a4.ps   (filesize gug_a4.ps:  792,328 bytes)
+           gug_let.ps  (filesize gug_let.ps: 749,940 bytes)

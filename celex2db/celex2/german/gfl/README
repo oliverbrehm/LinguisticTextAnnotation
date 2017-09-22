@@ -1,0 +1,16 @@
+GERMAN FREQUENCY, LEMMAS
+
+The gfl.cd file contains the following fields:
+
+   1.   IdNum
+   2.   Head
+   3.   Mann
+   4.   MannDev
+   5.   MannMln
+   6.   MannLog
+   7.   MannW
+   8.   MannWMln
+   9.   MannWLog
+  10.   MannS
+  11.   MannSMln
+  12.   MannSLog

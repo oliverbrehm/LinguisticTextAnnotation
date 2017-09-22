@@ -1,0 +1,97 @@
+DUTCH ORTHOGRAPHY, LEMMAS
+
+
+The dol.cd file contains the following fields:
+
+   1.     IdNum
+   2.     HeadDia
+   3.     Inl
+   4.     OrthoCnt
+   5.     OrthoStatus
+   6.     InlSpellFreq
+   7.     InlSpellDev
+   8.     HeadSylDia
+   9.     StemDia
+  10.     StemSylDia
+  11.     AbStemDia
+
+Those words which appear with spelling variants (OrthoCnt > 1) are
+assigned eight extra columns for each new spelling. For instance, the columns
+
+  12.      HeadDia
+  13.      OrthoStatus
+  14.      InlSpellFreq
+  15.      InlSpellDev
+  16.      HeadSylDia
+  17.      StemDia
+  18.      StemSylDia
+  19.      AbStemDia
+
+specify the first non-preferred spelling, if present. The second
+non-preferred spelling, if present, is specified by columns 20--27, etc.
+
+The fields marked with "Dia" may contain diacritics of various kinds.
+These diacritics have been coded as a sequence of two ASCII symbols,
+a diacritic marker followed by the hosting letter. The following 
+conventions have been used:
+
+  diacritic symbol           diacritic sign     
+        #                           '         (acute accent)
+        `                           `         (grave accent)
+        "                           "         (diaeresis)
+        ^                           ^         (circumflex accent)
+        ,                           ,         (cedilla)
+        ~                           ~         (tilde)
+        @                           o         (ring)        
+
+
+The awk directory contains the following scripts:
+
+   script CountCharacters(String):               countchr.awk
+   script CountSyllables(String):                countsyl.awk
+   script ReverseString(String):                 reverse.awk
+   script SortString(String):                    sortstr.awk
+   script StripDiacritics(String):               stripdia.awk
+   script ToLower(String):                       tolower.awk
+
+
+These scripts may be used to obtain those columns listed in the CELEX
+User Guide that do not appear in the above list, as follows:
+
+
+   Fields in the CELEX User Guide.  Fields in dol.cd.
+
+   1.    IdNum                      $1
+   2.    OrthoCnt                   $4
+   3.    OrthoNum                   -
+   4.    OrthoStatus                $5
+   5.    InlSpellFreq               $6
+   6.    InlSpellDev                $7
+   7.    Head                       StripDiacritics(HeadDia);
+   8.    HeadRev                    ReverseString(HeadDia);
+   9.    HeadDia                    $2
+  10.    HeadLow                    ToLower(HeadDia);
+  11.    HeadLowSort                SortString(HeadDia);
+  12.    HeadCnt                    CountCharacters(HeadDia);
+  13.    HeadSyl                    StripDiacritics(HeadSylDia);
+  14.    HeadSylDia                 $8
+  15.    HeadSylCnt                 CountSyllables(HeadSylDia);
+  16.    Stem                       StripDiacritics(StemDia);
+  17.    StemRev                    ReverseString(StemDia);
+  18.    StemDia                    $9
+  19.    StemCnt                    CountCharacters(StemDia);
+  20.    StemSyl                    StripDiacritics(StemSylDia);
+  21.    StemSylDia                 $10
+  22.    StemSylCnt                 CountSyllables(StemSylDia);
+  23.    AbStem                     StripDiacritics(AbStemDia);
+  24.    AbStemDia                  $11
+  25.    AbStemCnt                  CountCharacters(AbStemDia);
+  
+
+Thus, the field "Head" is obtained by applying the awk script
+stripdia.awk to the second field in dol.cd.
+
+Note that the field OrthoNum (specifying the spelling number) is no
+longer necessary - the spelling variants can be retrieved by selecting
+the appropriate columns in dol.cd (columns 5--11 for the preferred
+spelling, columns 12--19 for the alternative spelling).

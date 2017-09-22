@@ -1,0 +1,9 @@
+DUTCH INL CORPUS TYPES
+
+The dct.cd file contains the following fields:
+
+   1. Type
+   2. Freq
+   3. Disp
+   4. Indet
+   5. Status

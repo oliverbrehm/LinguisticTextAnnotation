@@ -1,0 +1,51 @@
+GERMAN ORTHOGRAPHY, WORDFORMS
+
+
+The gow.cd file contains the following fields:
+
+   1.    IdNum
+   2.    WordDia
+   3.    Mann
+   4.    IdNumLemma
+   5.    WordSylDia
+   6.    WordSylChg
+
+The fields marked with "Dia" may contain diacritics of various kinds.
+These diacritics have been coded as a sequence of two ASCII symbols, a
+diacritic marker followed by the hosting letter. The Eszett, however,
+is represented by a single dollar sign. The following conventions have
+been used:
+
+  diacritic symbol           diacritic sign
+        #                           '       (acute accent)
+        "                           "       (diaeresis (Umlaut))
+        $                           ss      (Eszett)
+
+The awk directory contains the following scripts:
+
+   script CountCharacters(String):        countchr.awk
+   script CountSyllables(String):         countsyl.awk
+   script ReverseString(String):          reverse.awk
+   script SortString(String):             sortstr.awk
+   script StripDiacritics(String):        stripdia.awk
+   script ToLower(String):                tolower.awk
+
+These scripts may be used to obtain those columns listed in the CELEX
+User Guide that do not appear in the above list, as follows:
+
+   Fields in the CELEX Guide.      Fields in gow.cd.
+
+
+   1.    IdNum                     $1
+   2.    Word                      StripDiacritics(WordDia);
+   3.    WordRev                   ReverseString(WordDia);
+   4.    WordDia                   $2
+   5.    WordLow                   ToLower(WordDia);
+   6.    WordLowSort               SortString(WordDia);
+   7.    WordLowSortDia            - (not derivable, as diacr. appear separately)
+   8.    WordCnt                   CountCharacters(WordDia);
+   9.    WordSyl                   StripDiacritics(WordSylDia);
+  10.    WordSylDia                $5
+  11.    WordSylChg                $6
+  12.    WordSylCnt                CountSyllables(WordSylDia);
+  13.    IdNumLemma                $4

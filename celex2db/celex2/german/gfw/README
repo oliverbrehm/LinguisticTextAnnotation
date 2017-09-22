@@ -1,0 +1,17 @@
+GERMAN FREQUENCY, WORDFORMS
+
+The gfw.cd file contains the following fields:
+
+   1.   IdNum
+   2.   Word 
+   3.   IdNumLemma
+   4.   Mann
+   5.   MannDev
+   6.   MannMln
+   7.   MannLog
+   8.   MannW
+   9.   MannWMln
+  10.   MannWLog
+  11.   MannS
+  12.   MannSMln
+  13.   MannSLog

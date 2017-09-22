@@ -1,0 +1,11 @@
+DUTCH FREQUENCY, LEMMAS
+
+The dfl.cd file contains the following fields:
+
+1.    IdNum
+2.    Head
+3.    Inl
+4.    InlDev
+5.    InlMln
+6.    InlLog
+7.    Dict

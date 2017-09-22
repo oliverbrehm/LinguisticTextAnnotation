@@ -1,0 +1,24 @@
+DUTCH ABBREVIATIONS
+
+The dab.cd file contains the following fields:
+
+   1. Abbr
+   2. AbbrDia
+   3. Meaning
+   4. Inl
+   5. InlDev
+   6. InlMln
+   7. InlLog
+   8. OrthoCnt
+
+
+The field marked with "Dia" may contain diacritics of various kinds.
+These diacritics have been coded as a sequence of two ASCII symbols,
+a diacritic marker followed by the hosting letter. The degree sign,
+however, is NOT associated with a particular letter. The following
+conventions have been used:
+
+  diacritic symbol           diacritic sign
+
+	@                    (degree sign, can't be shown in standard ASCII)
+	"                           "        (diaeresis)

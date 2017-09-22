@@ -1,0 +1,37 @@
+DUTCH MORPHOLOGY, WORDFORMS
+
+The dmw.cd file contains the following fields:
+
+   1.   Idnum
+   2.   Word
+   3.   Inl
+   4.   IdNumLemma
+   5.   FlectType
+
+The awk directory contains the script 
+
+   script TypeToInflectionalFeatures(String):    type2fea.awk
+
+for reconstructing the 20 Inflectional Features fields outlined in the
+CELEX User Guide:
+  
+   1. Sepa
+   2. Sing
+   3. Plu
+   4. Dim
+   5. Gen
+   6. Dat
+   7. Pos
+   8. Comp
+   9. Sup
+  10. Suff_e
+  11. Inf
+  12. Part
+  13. Pres
+  14. Past
+  15. Sin1
+  16. Sin2
+  17. Inv
+  18. Sin3
+  19. Imp
+  20. Sub

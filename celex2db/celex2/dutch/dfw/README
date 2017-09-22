@@ -1,0 +1,11 @@
+DUTCH FREQUENCY, WORDFORMS
+
+The dfw.cd file contains the following fields:
+
+1.    IdNum
+2.    Word
+3.    IdNumLemma
+4.    Inl
+5.    InlDev
+6.    InlMln
+7.    InlLog

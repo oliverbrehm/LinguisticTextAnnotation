@@ -1,0 +1,35 @@
+This directory contains the subdirectories:
+
+           dol     Dutch Orthography, Lemmas
+                      (filesize dol.cd: 10,229,951 bytes)
+           dpl     Dutch Phonology, Lemmas
+                      (filesize dpl.cd: 16,300,823 bytes)
+           dml     Dutch Morphology, Lemmas
+                      (filesize dml.cd: 10,433,870 bytes)
+           dsl     Dutch Syntax, Lemmas
+                      (filesize dsl.cd:  4,092,534 bytes)
+           dfl     Dutch Frequency, Lemmas
+                      (filesize dfl.cd:  3,574,188 bytes)
+
+           dow     Dutch Orthography, Wordforms
+                      (filesize dow.cd: 19,185,443 bytes)
+           dpw     Dutch Phonology, Wordforms
+                      (filesize dpw.cd: 28,837,473 bytes)
+           dmw     Dutch Morphology, Wordforms
+                      (filesize dmw.cd: 11,159,555 bytes)
+           dfw     Dutch Frequency, Wordforms
+                      (filesize dfw.cd: 12,527,494 bytes)
+
+           dct     Dutch INL Corpus Types
+                      (filesize dct.cd: 4,107,513 bytes)
+           dab     Dutch Abbreviations
+                      (filesize dab.cd:    69,399 bytes)
+           dfs     Dutch Frequency, Syllables
+                      (filesize dfs.cd:   366,605 bytes)
+
+and the PostScript files of the CELEX User Guide on Dutch, in both
+European A4 (21c x 29.7c or 8.3 x 11.7 inches) and American letter
+format (8.5 x 11 inches):
+                   
+           dug_a4.ps   (filesize dug_a4.ps:  788,338 bytes)
+           dug_let.ps  (filesize dug_let.ps: 739,372 bytes)

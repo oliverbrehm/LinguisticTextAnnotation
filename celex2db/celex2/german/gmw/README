@@ -1,0 +1,46 @@
+GERMAN MORPHOLOGY, WORDFORMS
+
+The gmw.cd file contains the following fields:
+
+   1.   IdNum
+   2.   Word
+   3.   Mann
+   4.   IdNumLemma
+   5.   FlectType
+
+The awk directory contains the script
+
+   script TypeToInflectionalFeatures(String):	type2fea.awk
+
+fro reconstructing the 29 Inflectional Features fields outlined in the
+CELEX User Guide:
+
+   1.   Sepa                                
+   2.   Sing                                 
+   3.   Plu                                 
+   4.   Nom                                 
+   5.   Gen
+   6.   Dat
+   7.   Acc
+   8.   Pos
+   9.   Comp
+  10.   Sup
+  11.   Inf
+  12.   ZuInf
+  13.   Part
+  14.   Pres
+  15.   Past
+  16.   Sin1
+  17.   Sin2
+  18.   Sin3
+  19.   Plu13
+  20.   Plu2
+  21.   Ind
+  22.   Sub
+  23.   Imp
+  24.   Suff_e
+  25.   Suff_en
+  26.   Suff_er
+  27.   Suff_em
+  28.   Suff_es
+  29.   Suff_s

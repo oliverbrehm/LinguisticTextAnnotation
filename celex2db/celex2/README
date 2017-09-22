@@ -1,0 +1,747 @@
+The CD-ROM Version of the CELEX Lexical Database
+   
+                                                 Second Release, August 1995
+
+============================================================================
+============================================================================
+
+
+   
+   
+Table of Contents
+   
+ 1. CELEX
+ 2. The Databases
+ 3. 1995 Extensions & Revisions
+ 4. The User Guide
+ 5. Copyright
+ 6. Directory Structure
+ 7. On Using AWK to Process the Lexical Files
+ 8. File Sizes 
+ 9. Organization
+10. Original Sources of the CELEX Database
+   
+   
+
+============================================================================
+============================================================================
+
+
+   
+1. CELEX
+   
+CELEX is the Dutch Centre for Lexical Information. It was developed as a
+joint enterprise of the University of Nijmegen, the Institute for Dutch
+Lexicology in Leiden, the Max Planck Institute for Psycholinguistics in
+Nijmegen, and the Institute for Perception Research in Eindhoven. Over the
+years it has been funded mainly by the Netherlands Organization for
+Scientific Research (NWO) and the Dutch Ministry of Science and Education.
+CELEX is now part of the Max Planck Institute for Psycholinguistics.
+   
+
+
+============================================================================
+============================================================================
+   
+
+
+2. The Databases
+   
+This CD-ROM contains plain ASCII versions of the CELEX lexical databases
+of English (version 2.5), Dutch (version 3.1) and German (version 2.5).
+The original CELEX databases can be consulted interactively either by
+using the SQL*PLUS query language within an ORACLE RDBMS environment, or
+by means of the specially designed user interface FLEX. As the FLEX
+interface has been written to communicate with the underlying UNIX
+operating system and the ORACLE software, it is completely bound to this
+particular configuration and hence cannot be distributed separately and
+does not feature on the CD-ROM.
+
+To make for greater compatibility with other operating systems, the
+databases on the CD-ROM have not been tailored to fit any particular
+database management program. Instead, the information is presented in a
+series of plain ASCII files that can be queried with tools such as AWK and
+ICON. Unique identity numbers allow the linking of information from
+different files.
+
+As in the original databases, some kinds of information have to be
+computed on-line. Wherever necessary, AWK scripts have been provided to
+recover this information. Also, some C-programs have been included, along
+with their MS-DOS executables and HP-UX (Hewlett-Packard UNIX) binaries.
+README files specify the details of their use.
+   
+
+
+=============================================================================
+=============================================================================
+
+
+
+3. 1995 Extensions & Revisions
+
+
+- About 1000 new German lemma entries.
+
+- Revised German morphological parses, verb argument structures, and
+  inflectional paradigm codes.
+
+- Inclusion of a German Corpus Type Lexicon.
+
+- Frequency counts included in all lemma and wordform files for ease of
+  use.
+
+- Preferred spelling variants always given as main entries.
+
+- Syllable frequency counts for Dutch and English.
+
+- Full awk scripts supplied instead of isolated functions.
+
+- Provision of efficient, index-based C-program for joining wordform and
+  lemma files.
+
+- Complete version of the German Linguistic Guide.
+
+- User Guide files in both European A4 and American Letter PostScript
+  format.
+
+
+=============================================================================
+=============================================================================
+
+
+
+4. The User Guide
+   
+The CELEX User Guide describes in detail the kinds of information in the
+databases using unique labels for each column in the RDB. For instance,
+the syllabified phonological headword information for English lemmas, with
+stress markers, in the CPA character set, is referred to as "PhonStrsCPA".
+   
+The README files describing the columns of the lexical files on this
+CD-ROM use the same labels. In order to facilitate the use of this CD-ROM,
+the relevant sections in the User Guide on English, German and Dutch have
+been made available as PostScript files in both European A4 and American
+Letter format. Users preferring a bound hardcopy of the CELEX User Guide
+(Dfl 115,--) should send a request by electronic mail to
+   
+		celex@mpi.nl (INTERNET)
+   
+or by surface mail to
+   
+		Richard Piepenbrock (CELEX project manager)
+		Max Planck Institute for Psycholinguistics
+		P.O. Box 310
+		NL-6500 AH Nijmegen
+		THE NETHERLANDS
+
+P.S. For additional information (also on the on-line database version) and
+the latest news on updates and the like, you are invited to consult the
+CELEX homepage on the World Wide Web at 
+
+		http://www.kun.nl/celex
+
+
+
+============================================================================
+============================================================================
+
+
+
+5. Copyright
+   
+Copyright Centre for Lexical Information
+   
+LICENCE: The copyright holder grants to the purchaser of this CD-ROM
+unrestricted license to use all the lexical information included herein
+for research purposes only, subject to the following restrictions:
+   
+1. No onward distribution of the lexical data is allowed -- copies may 
+   be made only for use by the purchaser and her/his research group, for 
+   ease of use by that group, etc.;
+   
+2. The contribution of CELEX is acknowledged in any public presentation 
+   or publication of any work based on the lexicons. (*)
+   
+CELEX carries no warranty of any kind.
+
+
+(*) This CD-ROM should be referred to as: R. H. Baayen, R. Piepenbrock &
+L. Gulikers, The CELEX Lexical Database (CD-ROM). Linguistic Data
+Consortium, University of Pennsylvania, Philadelphia, PA, 1995.
+
+
+============================================================================
+============================================================================
+
+   
+
+6. Directory Structure
+   
+root:    README       (the README file you are reading now)
+   
+         english      (directory containing the English database)
+         german       (directory containing the German database)
+         dutch        (directory containing the Dutch database)
+   
+         awk          (directory containing awk scripts for joining
+                       columns of different files)
+         intro_a4.ps  (PostScript file with the introduction to CELEX of
+                       the CELEX User Guide, in European A4-format)
+         intro_let.ps (PostScript file with the introduction to CELEX of
+                       the CELEX User Guide, in American Letter format)
+   
+english: README
+   
+         eol          (directory, English Orthography, Lemmas)
+         epl          (directory, English Phonology, Lemmas)
+         eml          (directory, English Morphology, Lemmas)
+         esl          (directory, English Syntax, Lemmas)
+         efl          (directory, English Frequency, Lemmas)
+   
+         eow          (directory, English Orthography, Wordforms)
+         epw          (directory, English Phonology, Wordforms)
+         emw          (directory, English Morphology, Wordforms)
+         efw          (directory, English Frequency, Wordforms)
+   
+         ect          (directory, English Corpus Types)
+         efs          (directory, English Frequency, Syllables)
+   
+         eug_a4.ps    (PostScript file of the CELEX User Guide on English,
+                       in European A4-format)
+         eug_let.ps   (PostScript file of the CELEX User Guide on English,
+                       in American Letter format)
+
+german:  README
+   
+         gol          (directory, German Orthography, Lemmas)
+         gpl          (directory, German Phonology, Lemmas)
+         gml          (directory, German Morphology, Lemmas)
+         gsl          (directory, German Syntax, Lemmas)
+         gfl          (directory, German Frequency, Lemmas)
+   
+         gow          (directory, German Orthography, Wordforms)
+         gpw          (directory, German Phonology, Wordforms)
+         gmw          (directory, German Morphology, Wordforms)
+         gfw          (directory, German Frequency, Wordforms)
+   
+         gct          (directory, German Corpus Types)
+
+         gug_a4.ps    (PostScript file of the CELEX User Guide on German,
+                       in European A4-format)
+         gug_let.ps   (PostScript file of the CELEX User Guide on German,
+                       in American Letter format)
+
+dutch:   README
+   
+         dol          (directory, Dutch Orthography, Lemmas)
+         dpl          (directory, Dutch Phonology, Lemmas)
+         dml          (directory, Dutch Morphology, Lemmas)
+         dsl          (directory, Dutch Syntax, Lemmas)
+         dfl          (directory, Dutch Frequency, Lemmas)
+   
+         dow          (directory, Dutch Orthography, Wordforms)
+         dpw          (directory, Dutch Phonology, Wordforms)
+         dmw          (directory, Dutch Morphology, Wordforms)
+         dfw          (directory, Dutch Frequency, Wordforms)
+   
+         dct          (directory, Dutch Corpus Types)
+         dab          (directory, Dutch Abbreviations)
+         dfs          (directory, Dutch Frequency, Syllables)
+   
+         dug_a4.ps    (PostScript file of the CELEX User Guide on Dutch,
+                       in European A4-format)
+         dug_let.ps   (PostScript file of the CELEX User Guide on Dutch,
+                       in American Letter format)
+   
+Each of these directories has the following structure:
+   
+         README                    (a help file)
+         [egd][opmsf..][lw..].cd   (the database file)
+         awk                       (directory containing AWK scripts)
+         c                         (directory with a C program, if present)
+     
+
+   
+============================================================================
+============================================================================
+   
+   
+   
+7. On Using AWK to Process the Lexical Files
+   
+
+a. File Structure
+
+All lexicon files are characterized by the following properties:
+   
+(1) The field separator is the backslash ("\").
+(2) The record separator is the newline character. Due to the different
+    implementation of this character on various platforms (linefeed and/or
+    carriage return) records may run off the screen when displayed using
+    commands like 'type' or 'cat'. Reading (parts of) files into a
+    standard editor or retrieving them with the AWK 'print' statement will
+    solve this problem.
+(2) The first field contains the unique identity number IdNum, which
+    can be used to join columns of different lexicons.
+(3) Each file contains the standard spelling of all its entries in order to 
+    maintain immediate interpretability.
+(4) Note that fields may be empty (for instance, monomorphemic words have 
+    empty fields for the morphological constituency information).
+(5) Variants (spellings, pronunciation, alternative parsings) of the same 
+    lexical entry are always listed on a single line, fixed column positions
+    specifying the alternatives. Where this convention could not be followed,
+    separate files (described in the accompanying README files) with the 
+    additional variants have been added.
+   
+
+b. Tools for Processing the Files
+
+Columns can be selected from the lexical files using tools such as AWK
+(A.V.Aho, B.W.Kernigan & P.J.Weinberger, The AWK Programming Language, New
+York: Addison-Wesley, 1988) or ICON (R.E.Griswold & M.T.Griswold, The Icon
+Programming Language, Englewoods Cliffs, New Jersey: Prentice-Hall, 1990).
+As all AWK scripts on the CD have been interpreted and tested using GAWK
+(GNU AWK) version 2.15, patchlevel 5 on UNIX, and GAWK (GNU AWK) version
+2.15, patchlevel 6 (16 bit version) on MS-DOS, we recommend using this
+freely available version of AWK to recover the lexical data (although it
+should be stated that we have no particular interest in promoting GAWK or
+singing the praises of its authors!).
+
+GAWK is available in a number of versions from various ftp-sites:
+
+- OS/2 32-bit version
+     ftp-os2.cdrom.com:pub/os2/32bit/unix/gnuawk.zip
+
+- OS/2 16-bit version
+     ftp-os2.cdrom.com:pub/os2/16bit/unix/gawk2156.zip
+
+- DOS 16-bit, and OS/2 and DOS 32-bit version (gawk.exe, gawk-emx.exe)
+     oak.oakland.edu:SimTel/msdos/awk/
+  with executables in gawk2156.zip and sources in gawk215t.zip
+
+- The original GNU sources
+     prep.ai.mit.edu:pub/gnu/gawk-2.15.6.tar.gz
+
+Alternative sites of interest to European users are ftp.tu-ilmenau.de and
+ftp.uni-tuebingen.de (both in Germany), both under directory 'pub/gnu',
+and src.doc.ic.ac.uk (SunSITE London), under directory 'gnu'. Asian users
+may refer to ftp.uec.ac.jp/pub/wwfs/GNU in Tokyo, Japan.
+
+The complete manual (200 pages) for GNU awk is available with the sources.
+A printed manual is available from the Free Software Foundation. You can
+find information on GNU's manuals, disks, and the GNU project in the GNU's
+Bulletin, available on the newsgroup gnu.announce, or by sending a
+self-addressed stamped envelope ($0.52) to
+
+  Free Software Foundation
+  675 Massachusetts Avenue
+  Cambridge, MA 02139
+
+
+c. Computing the Representation of Missing Fields 
+   
+Many lexicon files on this CD-ROM do not contain all the columns specified
+in the CELEX User Guide. However, all missing fields can be recovered from
+the CD-ROM files using the AWK scripts in the awk directories, as
+specified in the corresponding README files. (We have opted for AWK rather
+than ICON in view of the greater availability of AWK as a standard tool of
+the UNIX operating system.) The use of AWK scripts rather than providing a
+full listing of all lexical information is motivated by the following
+considerations:
+
+   a. The original CELEX databases do not store all columns either, and 
+      similarly require on-line computation of lexical fields. 
+   b. The lexical files on CD-ROM never exceed 28 megabytes in size. If so 
+      required, any file can be downloaded from the CD-ROM for efficient 
+      local processing. If all columns had been fully spelled out, the files
+      would have been prohibitively large.
+   c. The lexical files on CD-ROM have a transparent column structure that 
+      can be inspected by UNIX utilities such as head, more, or less, and
+      even with a text editor such as vi or emacs, mostly without loss of 
+      transparency due to excessive line overflow. 
+   d. Accessing a CD-ROM is relatively time-consuming, suggesting that local
+      computation of derived information is to be preferred.
+
+Whenever on-line derivation of missing fields is required, users can run
+the ready-made AWK scripts (*) in the awk subdirectory of the corresponding
+lemma or wordform files. This is done as follows:
+
+   awk -f scriptname.awk LexiconFile LexField
+
+The LexField indicates the field in the lexicon file from which the
+additional representation should be computed, e.g.
+ 
+   awk -f sortstr.awk eol.cd 2
+
+to process the alphabetically sorted representation of the Headword
+spelling (HeadLowSort) from the HeadDia field (2).
+
+In the case of the phonological representation and the syntactic codes,
+extra arguments are required, which is specified in the READMEs of their
+respective subdirectories.
+
+Generally speaking, the scripts only yield the missing representation of
+one particular field or column, e.g. only the HeadLowSort and no other
+fields. This can be easily modified, however, by copying the script to
+your hard disk and adapting the 'printf' statement to include more fields,
+for example:
+
+printf("%s\n",LexInfo_1); => printf("%s\\%s\\%s\\%s\n",$1,$2,$3,LexInfo_1);
+
+to retrieve fields 1, 2 and 3 as well, each separated by backslashes
+(LexInfo_1 always refers to the LexField supplied on the command line, as
+the field that should be converted rather than just retrieved.
+
+
+(*) The first release of this CD-ROM contained only isolated AWK-functions
+without 'BEGIN'-segments or print-statements. The original functions still
+feature in the body of the current AWK-scripts, however, so they can be
+easily extracted and modified or combined to perform user-defined
+operations not 'pre-cooked' by us.
+
+
+d. Joining Files of Similar Lexical Status
+
+It is often necessary to combine information in files located in different
+directories. To join columns of different files, the unique identity
+numbers (IdNum) listed in the first field of every lexical file can serve
+as linking keys. PLEASE NOTE THAT NO OTHER FIELDS SHOULD BE USED!
+Homographs, homophones, and other spuriously identical fields may wreak
+havoc with your intended personal lexicon when other join keys are used.
+Also note that the wordform lexicons have TWO unique identity numbers, one
+providing a unique wordform description, to be used for linking wordform
+lexicons, the other providing a link to the lemma lexicons, allowing one
+to link wordforms with the lexical information on their corresponding
+lemmas.
+   
+An AWK script specifically designed to join columns of two (large) input
+files OF SIMILAR LEXICAL STATUS (two lemma files or two wordform files)
+can be found in the awk subdirectory of the present directory. The
+join.awk script is called as follows:
+   
+  awk -f join.awk file1 file2 LexField_file1 LexField_file2 > your_result
+   
+File1 and file2 denote the two input files. LexField_file1 and
+LexField_file2 specify the field numbers of the lexical information in
+file1 and file2 that is to be combined in the output file "your_result".
+This file has the format
+
+  IdNum \\ LexInfo_1 TAB LexInfo_2
+
+This format allows new information from a third file to be joined with the
+file "your_result":
+
+  awk -f join.awk your_result file3 2 LexField_file3 > your_result2
+
+will result in a file with the fields
+
+  IdNum \\ LexInfo_1 TAB LexInfo_2 TAB LexInfo_3
+
+In this way information from several lexicons can be combined by
+successive application of join.awk.
+
+For example, if the Dutch PhonStrsDISC column (field 4 in dpl.cd) is to be
+combined with the Immediate morphological segmentation Imm (field 9 of
+dml.cd) and the word category ClassNum (field 4 of dsl.cd), the join.awk
+script should then be called as follows:
+   
+  awk -f join.awk dpl.cd dml.cd 4 9 > tmp
+  awk -f join.awk tmp dsl.cd 2 4 > "your_result"
+  rm tmp
+   
+The join.awk script presupposes that both input files are sorted by their
+IdNum, with the IdNum being the first field, as is the case for all
+lexical files.
+
+
+d. Joining Files of Dissimilar Lexical Status
+
+Special care is required for joining a wordform lexicon with a lemma
+lexicon. The lemma unique identity numbers in the wordform lexicon
+(IdNumLemma) are NOT sorted numerically (these files are sorted by the
+wordform IdNum). Hence join.awk cannot be used. In order to join a
+wordform lexicon with a lemma lexicon, a C-program is included in the c
+subdirectory of the present directory. Using an AWK script for this
+purpose was found to be unfeasible, as this caused the system to run out
+of memory even when run on a UNIX machine.
+
+The program, joinwl.c, makes use of an index file recording the initial
+byte position of every single line in the lemma file, thus speeding up the
+retrieval process. It comes in TWO VERSIONS, joinwlle.c for so-called
+Little-Endian machines, and joinwlbe.c for Big-Endian machines. The Endian
+status of the computer depends on the way the processor interprets
+multi-byte data types, which (unfortunately!) is important as the byte
+offsets in the index files are given in four-byte values. You have to
+determine the Endian status of your machine BEFORE applying either the
+joinwlle.c or the joinwlbe.c program by running the endian.c program
+provided in the same directory.
+
+The index files, with the same name as the lemma lexicon and the extension
+'idx', such as 'dol.idx' for Dutch orthography, are provided alongside the
+lemma lexicons.
+   
+The program is called as follows:
+
+  joinwl(le|be) wordformfile lemmafile "wf_field[|wf_field]" "lm_field[|lm_field]"
+
+The wordformfile and the lemmafile here denote the two input files. The
+third argument should contain the numbers of one or more fields to be
+retrieved from the wordform file, while the fourth argument specifies the
+field numbers from the lemma file. For each argument, field numbers should
+be enclosed in double quotes, and separated by vertical bars. The result
+is written to an output file in your current directory with the name of
+the wordform file and the extension 'out'. Note that specification of the
+double quotes is obligatory, and that the wordform lexicon should be
+specified BEFORE the lemma lexicon.
+
+Thus, if the WordSylDia information of the Dutch wordform lexicon (field
+9) and its frequency (field 3) should be combined with the HeadSylDia
+information of the lemma lexicon (8) and its respective frequency count
+(3), the program should be called as follows:
+
+  joinwl(le|be) dow.cd dol.cd "9|3" "8|3"
+
+The output of this program is automatically written to the file 'dow.out'
+in your working directory.
+
+If combining the two files should fail due to platform-specific
+interpretation of the initial byte positions (on account of different
+newline characters e.g), or if you want to combine self-created files
+derived from the original files, you can generate an index yourself with
+the 'make_idx' program in the same directory. This should be run as
+follows:
+
+  make_idx lemmafile 1
+
+The '1' here denotes the field number of the unique IdNum key, which is
+specified as the first field by default.
+
+
+   
+============================================================================
+============================================================================
+
+
+
+8. File Sizes
+
+dutch/dab/dab.cd         69399 bytes
+dutch/dct/dct.cd       4107513 bytes
+dutch/dfl/dfl.cd       3574188 bytes
+dutch/dfs/dfs.cd        366605 bytes
+dutch/dfw/dfw.cd      12527494 bytes
+dutch/dml/dml.cd      10433870 bytes
+dutch/dmw/dmw.cd      11159555 bytes
+dutch/dol/dol.cd      10229951 bytes
+dutch/dow/dow.cd      19185443 bytes
+dutch/dpl/dpl.cd      16300823 bytes
+dutch/dpw/dpw.cd      28837473 bytes
+dutch/dsl/dsl.cd       4092534 bytes
+
+english/ect/ect.cd     5861603 bytes
+english/efl/efl.cd     2143469 bytes
+english/efs/efs.cd      263859 bytes
+english/efw/efw.cd     7158616 bytes
+english/eml/eml.cd     4918610 bytes
+english/emw/emw.cd     4936327 bytes
+english/eol/eol.cd     2068262 bytes
+english/eow/eow.cd     7351883 bytes
+english/epl/epl.cd     5480381 bytes
+english/epw/epw.cd    15567897 bytes
+english/esl/esl.cd     5560364 bytes
+
+german/gct/gct.cd      7481411 bytes
+german/gfl/gfl.cd      2155299 bytes
+german/gfw/gfw.cd     17283964 bytes
+german/gml/gml.cd      4941770 bytes
+german/gmw/gmw.cd     12342460 bytes
+german/gol/gol.cd      3095599 bytes
+german/gow/gow.cd     15932928 bytes
+german/gpl/gpl.cd      6669899 bytes
+german/gpw/gpw.cd     28982785 bytes
+german/gsl/gsl.cd      2537557 bytes
+                      -------------- +
+                     283619791 bytes  (283,6 meg)
+          
+   
+
+
+   
+============================================================================
+============================================================================
+
+
+
+9. Organization
+   
+
+Project Manager CELEX 1985-1992: H. Kerkman
+Project Manager CELEX 1993-    : R. Piepenbrock
+Original Programming Concept   : Dr. R. H. Baayen
+1995 Extensions & Revisions    : R. Piepenbrock & L. Gulikers, 
+                                 aided and abetted by H. Drexler
+Cover Design                   : I. Doehring
+   
+
+CELEX Board:
+   
+Dr. W. J. M. Levelt (Max Planck Institute for Psycholinguistics, chair)
+   
+Dr. R. Collier (Institute for Perception Research)
+Dr. R. Schreuder (Nijmegen University)
+Dr. P. van Sterkenburg (Institute for Dutch Lexicology)
+
+   
+
+============================================================================
+============================================================================
+
+
+
+10. Original Sources of the CELEX Database
+
+An overview of the sources used to compile the CELEX database, specified
+for each language.
+
+
+DUTCH  
+-----
+
+- Van Dale's Comprehensive Dictionary of Contemporary Dutch (1984):
+                            80,000 lemmata
+- Word List of the Dutch Language ('Groene Boekje') (1954), revised version:
+                            65,000 lemmata 
+- The most frequent lemmata from the text corpus of the Institute for
+  Dutch Lexicology (INL) (42,380,000 million words in all):
+                            15,000 lemmata
+
+Note that there is a considerable overlap between the two dictionary
+sources (of approx. 45,000 lemmata). Other lemmata were added to enable
+morphological decomposition of the basic set of lemmata.
+
+When compared with the INL text corpus, the coverage of CELEX-lemmata is
+95% of the total corpus. This figure is fairly skewed, because in order to
+reduce the bulk of the the INL corpus type list, all hapax legomena (which
+included many OCR (scanning) errors) were omitted and therefore cannot be
+retrieved from the corpus type list. The current corpus type list
+comprises 211,389 entries, as opposed to the original 321,000 inclusive of
+the hapax legomena.
+
+The INL corpus, in the version derived for calculating the CELEX
+frequencies, consists of 930 entire fiction and non-fiction books (approx.
+30% fiction, 70% non-fiction) published between 1970 and 1988. Newspapers,
+magazines, children's books, textbooks and specialist literature do not
+feature in the collection. The CELEX version is static, although the INL
+corpus continues to be expanded.
+
+(See S. Hazenberg (1994). Een Keur van Woorden. VU Amsterdam. (p. 36 ff.)
+and J.G. Kruyt (1995). 'Nationale Tekstcorpora in Internationaal
+Perspectief'. Forum der Letteren, 36-1, 47-58).
+
+
+ENGLISH 
+-------
+
+- Oxford Advanced Learner's Dictionary (1974):
+                            41,000 lemmata
+- Longman Dictionary of Contemporary English (1978):
+                            53,000 lemmata 
+
+Note that there is a considerable overlap between the two dictionary
+sources (of approx. 30,000 lemmata). Other lemmata were added to enable
+morphological decomposition of the basic set of lemmata.
+
+No extra lemmata have as yet been added from a text corpus. Nevertheless,
+when compared with the 17.9 million word corpus of Birmingham
+University/COBUILD, the coverage of CELEX-lemmata is 92% of the total
+corpus.
+
+The 17.9 million token COBUILD/Birmingham corpus, on which the CELEX
+frequencies have been based, contains some American English texts. These
+are exclusively written texts (from a total of 16.6m tokens), and not
+spoken ones (from a total of 1.3m). There are 284 written texts in all, 44
+of which are of indisputably American origin. These American texts make up
+15.4% of the total written corpus. Other texts are by authors originating
+from countries with other English dialects, or are difficult to classify,
+such as Alistair Cooke.
+
+Paradoxically, even when a text sample is of American origin, the spelling
+has nearly always been adapted to a British English standard, as the
+corpus was compiled in England where they had to make do with British
+English editions of these texts. Thus Irwin Shaw's 'Rich Man Poor Man'
+appears in a British English edition. In this respect, we were constrained
+by the limitations of the sources as offered to us.
+        
+As for the wordform and lemma-based frequencies, we have not taken the
+sources into account, as the disambiguation of highly frequent words would
+necessitate lengthy, labour-intensive rounds of coding. Therefore, we have
+taken random samples of these types, disambiguated these, and extrapolated
+the results for the total type frequency. This means we have lost the
+connection to distinct textual categories like 'newspaper' or 'American
+English'.
+        
+When a type is not ambiguous, however, you can go to the CD-ROM directory
+/english/ect, where the fifth field (FreqWA) of the file ect.cd gives you
+the exact written American frequency (the ect.cd file contains raw string
+frequencies only).
+        
+For the ambiguous types, it might be the case that the division BrE-AmE
+gives you some idea of the relative frequencies for each wordform. In most
+cases, clearly, this cannot be done with anything approaching certainty.
+        
+For a detailed account of the text samples making up the
+COBUILD/Birmingham corpus, see
+
+J.M. Sinclair (Ed.) (1987). Looking Up. London/Glasgow: Collins/COBUILD. 
+
+The corpus used by CELEX is an extended version of the Reserve Corpus
+described on p. 10 ff.
+
+
+GERMAN
+------
+
+- Bonnlex, tapes supplied by the Institute for Communication Research 
+  and Phonetics in Bonn
+        
+- Molex, tapes supplied by the Institute for German Language in 
+  Mannheim
+        
+- Noetic Circle Services (MIT) German spelling lexicon
+
+As all sources were genuine computer data rather than electronic versions
+(or typesetting tapes) of paper dictionaries as was the case with the
+sources for the other languages, and all contained a variety of flections,
+stems and lemmata, no figures can be given as to what lemmata derive from
+exactly which source. In most cases, inflectional data from one tape were
+merged with stem information from another.
+
+Other lemmata were added to enable morphological decomposition of the
+basic set of lemmata. No extra lemmata have as yet been added from a text
+corpus. When compared with the 6 million word corpus of the Institute for
+German Language at Mannheim, the coverage of CELEX lemmata is 83% of the
+total corpus.
+
+The corpus used by CELEX for deriving the German (as yetundisambiguated)
+lemma and wordform frequencies consists of 5.4 million German tokens from
+written texts like newspapers, fiction and non-fiction, and 600,000 tokens
+of transcribed speech. The former is a combination of the 'Mannheimer
+Korpus I', 'Mannheimer Korpus II' and the 'Bonner Zeitungskorpus 1', while
+the latter is known as the 'Freiburger Korpus'. All of these can also be
+consulted on request by remote login to the Institut fuer Deutsche Sprache
+in Mannheim through the COSMAS interface. The corpus is relatively
+ill-balanced, especially in view of its small size, since novels like
+Grass' 'Die Blechtrommel' and Boell's 'Ansichten eines Clowns' are
+included in their entirety. All texts in the corpus were published or
+recorded between 1949 - 1975.
+
+
+   
+============================================================================
+============================================================================
+   
+
+UNIX is a trademark of AT&T Bell Laboratories
+HP-UX is a trademark of Hewlett-Packard Company
+PostScript is a trademark of Adobe Systems Incorporated
+Oracle and SQL*PLUS are trademarks of Oracle Corporation

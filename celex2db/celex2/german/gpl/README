@@ -1,0 +1,115 @@
+GERMAN PHONOLOGY, LEMMAS
+
+
+The gpl.cd file contains the following fields:
+
+   1.      IdNum
+   2.      Head
+   3.      Mann
+   4.      PhonStrsDISC
+   5.      PhonSylBCLX
+   6.      PhonStrsStDISC
+   7.      PhonSylStBCLX
+   8.      PhonCVBr
+   9.      PhonStCVBr 
+  10.      PhonolSAM
+  11.      PhonolCLX
+
+
+The awk directory contains the following scripts:
+
+   script ConvertBrackets(String):                   convbrac.awk
+   script CountSyllables(String):                    countsyl.awk
+   script MakeStressPattern(String):                 mkstress.awk
+   script NumOfChar(String):                         numofchr.awk
+   script PhoneticTranscriptions(String):            phon.awk
+   script PhonStrsTranscriptions(String):            phonstrs.awk
+   script PhonSylTranscriptions(String):             phonsyl.awk
+
+For each of the scripts starting with 'phon*', an extra argument can
+be given on the command line (behind the program name, input filename
+and field number) to retrieve transcriptions in another phonetic
+alphabet notation than the basic DISC set. Thus, if you just want to
+derive plain phonetic transcriptions in the DISC set, the following
+command would suffice:
+
+     awk -f phon.awk gpl.cd 4 > outfile
+
+Otherwise, use any of the following:
+
+     awk -f phon.awk gpl.cd 4 SP > outfile      (for SAM-PA notation)
+     awk -f phon.awk gpl.cd 4 CX > outfile      (for CELEX notation)
+     awk -f phon.awk gpl.cd 4 CP > outfile      (for CPA notation)
+
+The same is true of scripts that work on the only other field in the
+basic DISC notation, viz. 6 (PhonStrsStDISC). If they allow an extra
+argument, this is indicated by means of the labels 'SP', 'CX' and 'CP'
+below.
+
+These scripts may be used to obtain those columns listed in the CELEX
+User Guide that do not appear in the above list, as follows:
+
+
+   GPL-fields in CELEX         GPL-fields in the CD-ROM file
+
+   1.      IdNum               $1
+   2.      PhonSAM             PhoneticTranscriptions(PhonStrsDISC) SP
+   3.      PhonCLX             PhoneticTranscriptions(PhonStrsDISC) CX
+   4.      PhonCPA             PhoneticTranscriptions(PhonStrsDISC) CP
+   5.      PhonDISC            PhoneticTranscriptions(PhonStrsDISC)
+   6.      PhonCnt             NumOfChar(PhonStrsDISC)
+   7.      PhonSylSAM          PhonSylTranscriptions(PhonStrsDISC) SP
+   8.      PhonSylCLX          PhonSylTranscriptions(PhonStrsDISC) CX
+   9.      PhonSylBCLX         $5
+   10.     PhonSylCPA          PhonSylTranscriptions(PhonStrsDISC) CP
+   11.     PhonSylDISC         PhonSylTranscriptions(PhonStrsDISC)
+   12.     SylCnt              CountSyllables(PhonStrsDISC)
+   13.     PhonStrsSAM         PhonStrsTranscriptions(PhonStrsDISC) SP
+   14.     PhonStrsCLX         PhonStrsTranscriptions(PhonStrsDISC) CX
+   15.     PhonStrsCPA         PhonStrsTranscriptions(PhonStrsDISC) CP
+   16.     PhonStrsDISC        $4
+   17.     StrsPat             MakeStressPattern(PhonStrsDISC)
+   18.     PhonStSAM           PhoneticTranscriptions(PhonStrsStDISC) SP
+   19.     PhonStCLX           PhoneticTranscriptions(PhonStrsStDISC) CX
+   20.     PhonStCPA           PhoneticTranscriptions(PhonStrsStDISC) CP
+   21.     PhonStDISC          PhoneticTranscriptions(PhonStrsStDISC) 
+   22.     PhonStCnt           NumOfChar(PhonStrsStDISC)
+   23.     PhonSylStSAM        PhonSylTranscriptions(PhonStrsStDISC) SP
+   24.     PhonSylStCLX        PhonSylTranscriptions(PhonStrsStDISC) CX
+   25.     PhonSylStBCLX       $7
+   26.     PhonSylStCPA        PhonSylTranscriptions(PhonStrsStDISC) CP
+   27.     PhonSylStDISC       PhonSylTranscriptions(PhonStrsStDISC)   
+   28.     StSylCnt            CountSyllables(PhonStrsStDISC)
+   29.     PhonStrsStSAM       PhonStrsTranscriptions(PhonStrsStDISC) SP
+   30.     PhonStrsStCLX       PhonStrsTranscriptions(PhonStrsStDISC) CX
+   31.     PhonStrsStCPA       PhonStrsTranscriptions(PhonStrsStDISC) CP
+   32.     PhonStrsStDISC      $6
+   33.     StStrsPat           MakeStressPattern(PhonStrsStDISC)
+   34.     PhonCV              ConvertBrackets(PhonCVBr)
+   35.     PhonCVBr            $8
+   36.     PhonStCV            ConvertBrackets(PhonStCVBr)
+   37.     PhonStCVBr          $9
+   38.     PhonolSAM           $10
+   39.     PhonolCLX           $11
+
+Should running of the awk scripts starting with 'phon*' cause memory
+problems on your PC, it is advisable to try running the c-program
+'chngrepr' in the c subdirectory:
+
+   chngrepr (Hewlett Packard UNIX binary)
+   chngrepr.c (source)
+   chngrepr.exe (MS-DOS executable)
+
+It is used as follows:
+
+   chngrepr <File> <Representation> <Field> [<Repr> <Field>...]
+
+Here <File> denotes the input lexicon file, <Representation> denotes
+the kind of phonetic alphabet required,
+      SP : SAM-PA
+      CX : CELEX
+      CP : CPA
+and <Field> the number of the column in <File> which contains the
+DISC representation. The first column is numbered 1. Fields should
+be separated by a '\'. The maximum number of pairs that chngrepr can
+convert in one call is 10.

@@ -1,0 +1,33 @@
+This directory contains the subdirectories:
+
+         eol       English Orthography, Lemmas
+                       (filesize eol.cd:  2,068,262 bytes)
+         epl       English Phonology, Lemmas
+                       (filesize epl.cd:  5,480,381 bytes)
+         eml       English Morphology, Lemmas
+                       (filesize eml.cd:  4,918,610 bytes)
+         esl       English Syntax, Lemmas
+                       (filesize esl.cd:  5,560,364 bytes)
+         efl       English Frequency, Lemmas
+                       (filesize efl.cd:  2,143,469 bytes)
+
+         eow       English Orthography, Wordforms
+                       (filesize eow.cd:  7,351,883 bytes)
+         epw       English Phonology, Wordforms
+                       (filesize epw.cd: 15,567,897 bytes)
+         emw       English Morphology, Wordforms
+                       (filesize emf.cd:  4,936,327 bytes)
+         efw       English Frequency, Wordforms
+                       (filesize efw.cd:  7,158,616 bytes)
+
+         ect       English Corpus Types
+                       (filesize ect.cd: 5,861,603 bytes)
+         efs       English Frequency, Syllables
+                       (filesize efs.cd:   263,859 bytes)
+
+and the PostScript files of the CELEX User Guide on English, in both
+European A4 (21c x 29.7c or 8.3 x 11.7 inches) and American letter
+format (8.5 x 11 inches):
+                   
+           eug_a4.ps   (filesize eug_a4.ps:  833,906 bytes)
+           eug_let.ps  (filesize eug_let.ps: 783,453 bytes)
