@@ -29,7 +29,12 @@ class TextAnalysisComponent implements OnInit {
   }
 
   void lookup() {
-    annotatedText = textAnalysisService.lookup(lookupText);
+    textAnalysisService.lookup(lookupText).then((text) {
+      annotatedText = text;
+    }, onError: (e) {
+      // TODO error properties
+      annotatedText = "Word not found.";
+    });
     lookupText = '';
   }
 }
