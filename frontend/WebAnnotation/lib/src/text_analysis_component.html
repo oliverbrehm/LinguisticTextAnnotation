@@ -1,0 +1,21 @@
+<!-- Components info: https://webdev.dartlang.org/components -->
+<div>
+    <material-input label="Word:"
+                    autoFocus floatingLabel style="width:80%"
+                    [(ngModel)]="lookupText"
+                    (keyup.enter)="lookup()">
+    </material-input>
+
+    <material-fab mini raised
+                  (trigger)="lookup()">
+        <glyph icon="add"></glyph>
+    </material-fab>
+</div>
+
+<p *ngIf="annotatedText.isEmpty">
+    Type text to look up.
+</p>
+
+<p *ngIf="annotatedText.isNotEmpty">
+    {{annotatedText}}
+</p>

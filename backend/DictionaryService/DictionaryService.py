@@ -25,7 +25,6 @@ class DictionaryService:
         cursor = db.cursor()
 
         # check if word already in DB
-
         row_exists_format = 'SELECT * FROM word WHERE (text="{text}")'
         row_exists_command = row_exists_format.format(text=word)
         cursor.execute(row_exists_command)
