@@ -1,21 +1,43 @@
 <!-- Components info: https://webdev.dartlang.org/components -->
-<div>
-    <material-input label="Word:"
+<div *ngIf="!analyzing && annotatedText == null">
+    <p>
+        Type text to look up.
+    </p>
+    <material-input multiline
+                    label="Text"
                     autoFocus floatingLabel style="width:80%"
-                    [(ngModel)]="lookupText"
-                    (keyup.enter)="lookup()">
+                    [(ngModel)]="lookupText">
     </material-input>
-
-    <material-fab mini raised
+    <br>
+    <material-button raised
                   (trigger)="lookup()">
-        <glyph icon="add"></glyph>
-    </material-fab>
+        Analyze
+    </material-button>
 </div>
 
-<p *ngIf="annotatedText.isEmpty">
-    Type text to look up.
-</p>
+<div *ngIf="analyzing">
+    Analyzing...
+</div>
 
-<p *ngIf="annotatedText.isNotEmpty">
-    {{annotatedText}}
-</p>
+<div *ngIf="!analyzing && annotatedText != null">
+    Original: <br> {{annotatedText.originalText}}
+    <br>
+    <br>
+    Annotated:
+    <br>
+    <br>
+
+    <div *ngFor="let word of annotatedText.words" style="display: inline" class="word">
+        <div *ngFor="let syllable of word.syllables"class="syllable">
+            <p *ngIf="syllable.stressed" style="display: inline" class="stressed">{{syllable.text}}</p>
+            <p *ngIf="!syllable.stressed" style="display: inline">{{syllable.text}}</p>
+        </div>
+        <p *ngIf="!word.analyzed" style="display: inline">{{word.text}}</p>
+    </div>
+
+    <br>
+    <material-button raised
+                     (trigger)="newText()">
+        New text
+    </material-button>
+</div>

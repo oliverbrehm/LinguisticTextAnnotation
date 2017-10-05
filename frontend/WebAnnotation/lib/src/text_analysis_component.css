@@ -1,0 +1,20 @@
+.word {
+    display: inline;
+    background-color: brown;
+    margin-left: 0.3em;
+    margin-right: 0.3em;
+    margin-bottom: 0.1em;
+}
+
+.unknown {
+    background-color: red;
+}
+
+.syllable {
+    display: inline;
+    background-color: blanchedalmond;
+}
+
+.stressed {
+    background-color: green;
+}

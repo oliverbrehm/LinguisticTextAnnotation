@@ -19,7 +19,12 @@ class TextAnalysisComponent implements OnInit {
   final TextAnalysisService textAnalysisService;
 
   String lookupText = '';
-  String annotatedText = '';
+
+  Text annotatedText;
+
+  String errorText = '';
+
+  bool analyzing = false;
 
   TextAnalysisComponent(this.textAnalysisService);
 
@@ -28,13 +33,32 @@ class TextAnalysisComponent implements OnInit {
 
   }
 
-  void lookup() {
-    textAnalysisService.lookup(lookupText).then((text) {
-      annotatedText = text;
+  void lookupWord() {
+    analyzing = true;
+    textAnalysisService.lookupWord(lookupText).then((text) {
+      annotatedText = new Text(new List<Word>());
+      analyzing = false;
     }, onError: (e) {
       // TODO error properties
-      annotatedText = "Word not found.";
+      errorText = "Word not found.";
+      analyzing = false;
     });
-    lookupText = '';
+  }
+
+  void lookup() {
+    analyzing = true;
+    textAnalysisService.lookupText(lookupText).then((response) {
+      annotatedText = response;
+      analyzing = false;
+    }, onError: (e) {
+      // TODO error properties
+      print(e.toString());
+      errorText = "Text could not be analyzed.";
+      analyzing = false;
+    });
+  }
+
+  void newText() {
+    annotatedText = null;
   }
 }
