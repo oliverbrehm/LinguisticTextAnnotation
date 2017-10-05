@@ -4,7 +4,6 @@ DATABASE_PATH = '../db/celex.db'
 
 
 class Word:
-
     def __init__(self, text, stress_pattern, hyphenation):
         self.text = text
         self.stress_pattern = stress_pattern
@@ -15,7 +14,6 @@ class Word:
 
 
 class DictionaryService:
-
     def __init__(self):
         pass
 
@@ -38,7 +36,7 @@ class DictionaryService:
                 VALUES ("{text}", "{stress_pattern}", "{hyphenation}");            
             """
         insert_command = insert_format.format(text=word.text, stress_pattern=word.stress_pattern,
-                                            hyphenation=word.hyphenation)
+                                              hyphenation=word.hyphenation)
         self.cursor.execute(insert_command)
 
         self.db.commit()
@@ -65,4 +63,19 @@ class DictionaryService:
         return response
 
     def query_text(self, text):
-        return ""
+        if not text:
+            return None
+
+        words = text.split() # split on all whitespaces
+        # TODO parse . , ? ...
+
+        analyzed = []
+
+        for word in words:
+            annotated = self.query_word(word)
+            if annotated is None:
+                analyzed.append({'type': 'not_found', 'data': word})
+            else:
+                analyzed.append({'type': 'annotated_word', 'data': annotated})
+
+        return analyzed

@@ -48,17 +48,32 @@ def invalidPacketId():
 @app.route('/', methods=['GET'])
 def say_hello():
     # return create_response(create_response(200, "Hello dictionary service."))
-    return "Hello dictionary service"
+    return "Dictionary service\n" \
+           "------------------\n" \
+           "Available routes:\n" \
+           "GET queryWord/<text>\n" \
+           "POST queryText, <text>"
 
 
 @app.route('/queryWord/<text>', methods=['GET'])
 def query_word(text):
     response = service.query_word(text)
-    print(response)
     if response is None:
         return create_error_response(404, "Word not found.")
-    else:
-        return create_response(200, response)
+
+    return create_response(200, response)
+
+
+@app.route('/queryText', methods=['POST'])
+def query_text():
+    text = request.form.get("text")
+    response = service.query_text(text)
+
+    if response is None:
+        # TODO status code
+        return create_error_response(404, "Error analyzing text.")
+
+    return create_response(200, response)
 
 
 def print_help():
