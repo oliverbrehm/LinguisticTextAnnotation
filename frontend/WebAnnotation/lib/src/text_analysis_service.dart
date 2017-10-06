@@ -14,11 +14,16 @@ class Syllable {
 
 class Word {
   String text;
-  bool analyzed;
+
+  bool unknown = false;
+  bool punctuation = false;
+  bool number = false;
+  bool notFound = false;
+  bool annotated = false;
 
   List<Syllable> syllables = [];
 
-  Word(this.text, this.analyzed);
+  Word(this.text);
 
   void addSyllable(String text, bool stressed) {
     this.syllables.add(new Syllable(text, stressed));
@@ -29,7 +34,6 @@ class Word {
 
     if(stressPattern.length != syllables.length) {
       // stress pattern does not match number of syllables
-      this.analyzed = false;
       return;
     }
 
@@ -44,9 +48,11 @@ class Word {
 class Text {
   String originalText;
 
-  List<Word> words;
+  List<Word> words = new List<Word>();
 
-  Text(this.words);
+  void addWord(Word word) {
+    words.add(word);
+  }
 }
 
 /// service description
@@ -69,20 +75,27 @@ class TextAnalysisService {
         return null;
       }
 
-      List<Word> words = new List<Word>();
+      Text annotatedText = new Text();
 
       for(var entry in response) {
-        if(entry['type'] == 'not_found') {
-          words.add(new Word(entry['data'], false));
-        } else if(entry['type'] == 'annotated_word') {
-          var data = entry['data'];
-          Word w = new Word(data['text'], true);
-          w.parseSyllables(data['hyphenation'], data['stress_pattern']);
-          words.add(w);
+        Word w = new Word(entry['word']);
+
+        switch(entry['type']) {
+          case 'unknown': w.unknown = true; break;
+          case 'number': w.number = true; break;
+          case 'punctuation': w.punctuation = true; break;
+          case 'not_found': w.notFound = true; break;
+          case 'annotated_word':
+            w.annotated = true;
+            var annotation = entry['annotation'];
+            w.parseSyllables(annotation['hyphenation'], annotation['stress_pattern']);
+            break;
+          default: continue;
         }
+
+        annotatedText.addWord(w);
       }
 
-      Text annotatedText = new Text(words);
       annotatedText.originalText = text;
 
       return annotatedText;

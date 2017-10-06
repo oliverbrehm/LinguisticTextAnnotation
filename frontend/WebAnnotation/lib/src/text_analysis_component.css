@@ -1,20 +1,29 @@
 .word {
     display: inline;
-    background-color: brown;
     margin-left: 0.3em;
     margin-right: 0.3em;
-    margin-bottom: 0.1em;
 }
 
-.unknown {
-    background-color: red;
+.word * {
+    display: inline;
+    line-height: 1.0;
 }
 
 .syllable {
-    display: inline;
-    background-color: blanchedalmond;
 }
 
 .stressed {
-    background-color: green;
+    background-color: palegreen;
+}
+
+.unstressed {
+    background-color: #ffebcd;
+}
+
+.notFound {
+    background-color: indianred;
+}
+
+.number {
+    background-color: cadetblue;
 }

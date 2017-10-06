@@ -1,7 +1,7 @@
 <!-- Components info: https://webdev.dartlang.org/components -->
 <div *ngIf="!analyzing && annotatedText == null">
     <p>
-        Type text to look up.
+        Bitte geben Sie einen Text ein.
     </p>
     <material-input multiline
                     label="Text"
@@ -11,33 +11,47 @@
     <br>
     <material-button raised
                   (trigger)="lookup()">
-        Analyze
+        Analysieren
     </material-button>
 </div>
 
 <div *ngIf="analyzing">
-    Analyzing...
+    <material-spinner ></material-spinner>Analysiere...
 </div>
 
 <div *ngIf="!analyzing && annotatedText != null">
-    Original: <br> {{annotatedText.originalText}}
-    <br>
-    <br>
-    Annotated:
+    <h2>Original</h2>
+    {{annotatedText.originalText}}
     <br>
     <br>
 
-    <div *ngFor="let word of annotatedText.words" style="display: inline" class="word">
-        <div *ngFor="let syllable of word.syllables"class="syllable">
-            <p *ngIf="syllable.stressed" style="display: inline" class="stressed">{{syllable.text}}</p>
-            <p *ngIf="!syllable.stressed" style="display: inline">{{syllable.text}}</p>
+    <h2>Annotiert</h2>
+    <div *ngFor="let word of annotatedText.words" class="word">
+        <div *ngIf="word.annotated">
+            <div *ngFor="let syllable of word.syllables"class="syllable">
+                <p *ngIf="syllable.stressed" class="stressed">{{syllable.text}}</p>
+                <p *ngIf="!syllable.stressed" class="unstressed">{{syllable.text}}</p>
+            </div>
         </div>
-        <p *ngIf="!word.analyzed" style="display: inline">{{word.text}}</p>
-    </div>
 
+        <p *ngIf="word.unknown">{{word.text}}</p>
+        <p *ngIf="word.notFound" class="notFound">{{word.text}}</p>
+        <p *ngIf="word.number" class="number">{{word.text}}</p>
+        <p *ngIf="word.punctuation">{{word.text}}</p>
+    </div>
     <br>
+    <br>
+
+    <h2>Einstellungen</h2>
+    <material-input label="Zeilenabstand" floatingLabel (keyup)="lineHeightChanged()" [(ngModel)]="lineHeightText"></material-input><br>
+    Betonte Silbe: <input #inputColorStressed type="color" [(ngModel)]="colorStressed" (input)="colorStressedChanged(inputColorStressed.value)"> {{colorStressed}}<br>
+    Unbetonte Silbe: <input #inputColorUnstressed type="color" [(ngModel)]="colorUnstressed" (input)="colorUnstressedChanged(inputColorUnstressed.value)"> {{colorUnstressed}}
+    <br>
+    <br>
+
+    <h2>Neu</h2>
     <material-button raised
                      (trigger)="newText()">
-        New text
+        Neuen Text eingeben
     </material-button>
 </div>

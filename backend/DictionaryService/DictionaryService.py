@@ -83,7 +83,6 @@ class DictionaryService:
                 return None
 
         response = {
-            'text': word,
             'stress_pattern': entry[1],
             'hyphenation': self.pyphen_dict.inserted(word) # TODO resolve question: hyphenation in database or in backend?
         }
@@ -101,19 +100,21 @@ class DictionaryService:
         analyzed = []
 
         for (word, tag) in taggedWords:
+            #print(word, tag); # DEBUG tags
+
             # don't analyze special tokens
             # part of speech tags: http://www.ims.uni-stuttgart.de/forschung/ressourcen/lexika/TagSets/stts-table.html
-            if tag is 'CARD':
-                analyzed.append({'type': 'number', 'data': word}); continue
-            if tag is '$,' or tag is '$.' or tag is '$(':
-                analyzed.append({'type': 'punctuation', 'data': word}); continue
-            if tag is 'XY':
-                analyzed.append({'type': 'no_word', 'data': word}); continue
+            if tag is 'CD':
+                analyzed.append({'type': 'number', 'word': word}); continue
+            if tag in ['.', ',']:
+                analyzed.append({'type': 'punctuation', 'word': word}); continue
+            if len(word) < 2 or tag is 'XY' or tag in ["''"]:
+                analyzed.append({'type': 'unknown', 'word': word}); continue
 
             annotated = self.query_word(word)
             if annotated is None:
-                analyzed.append({'type': 'not_found', 'data': word})
+                analyzed.append({'type': 'not_found', 'word': word})
             else:
-                analyzed.append({'type': 'annotated_word', 'data': annotated})
+                analyzed.append({'type': 'annotated_word', 'word': word, 'annotation': annotated})
 
         return analyzed
