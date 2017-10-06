@@ -1,4 +1,6 @@
 import sqlite3
+import nltk # natural language toolkit
+import pyphen
 
 DATABASE_PATH = '../db/celex.db'
 
@@ -15,7 +17,19 @@ class Word:
 
 class DictionaryService:
     def __init__(self):
-        pass
+        nltk.download('punkt')
+        nltk.download('averaged_perceptron_tagger')
+
+        # init pyphen
+        language = 'de_DE'
+
+        if language in pyphen.LANGUAGES:
+            self.pyphen_dict = pyphen.Pyphen(lang=language)
+        else:
+            print('language not found.')
+            self.pyphen_dict = pyphen.Pyphen()
+
+        pyphen.language_fallback(language + '_variant1')
 
     def add_word(self, word, stress_pattern, hyphenation):
         # create/open database
@@ -46,18 +60,32 @@ class DictionaryService:
         db = sqlite3.connect(DATABASE_PATH)
         cursor = db.cursor()
 
-        query_format = 'SELECT * FROM word WHERE (text="{text}")'
-        query_command = query_format.format(text=word)
-        cursor.execute(query_command)
+        # handle umlaut
+        query_text = word.replace("ä", "ae")\
+            .replace("ö", "oe")\
+            .replace("ü", "ue")\
+            .replace("Ä", "Ae")\
+            .replace("Ö", "Oe")\
+            .replace("Ü", "Ue")\
+            .replace("ß", "ss")
+
+        query = 'SELECT * FROM word WHERE (text="{text}")'.format(text=query_text)
+        cursor.execute(query)
         entry = cursor.fetchone()
 
         if entry is None or len(entry) is not 3:
-            return None
+            # try lower case
+            query = 'SELECT * FROM word WHERE (text="{text}")'.format(text=query_text.lower())
+            cursor.execute(query)
+            entry = cursor.fetchone()
+
+            if entry is None or len(entry) is not 3:
+                return None
 
         response = {
-            'text': entry[0],
+            'text': word,
             'stress_pattern': entry[1],
-            'hyphenation': entry[2]
+            'hyphenation': self.pyphen_dict.inserted(word) # TODO resolve question: hyphenation in database or in backend?
         }
 
         return response
@@ -66,12 +94,22 @@ class DictionaryService:
         if not text:
             return None
 
-        words = text.split() # split on all whitespaces
-        # TODO parse . , ? ...
+        # TODO german language?
+        words = nltk.word_tokenize(text)
+        taggedWords = nltk.pos_tag(words)
 
         analyzed = []
 
-        for word in words:
+        for (word, tag) in taggedWords:
+            # don't analyze special tokens
+            # part of speech tags: http://www.ims.uni-stuttgart.de/forschung/ressourcen/lexika/TagSets/stts-table.html
+            if tag is 'CARD':
+                analyzed.append({'type': 'number', 'data': word}); continue
+            if tag is '$,' or tag is '$.' or tag is '$(':
+                analyzed.append({'type': 'punctuation', 'data': word}); continue
+            if tag is 'XY':
+                analyzed.append({'type': 'no_word', 'data': word}); continue
+
             annotated = self.query_word(word)
             if annotated is None:
                 analyzed.append({'type': 'not_found', 'data': word})

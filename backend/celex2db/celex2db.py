@@ -81,14 +81,15 @@ for word in dictionary.words:
 
     current = current + 1
 
-    # check if word already in DB
+    # TODO this query takes too long as db size increases... workaround?
+    '''# check if word already in DB
     rowExistsFormat = 'SELECT * FROM word WHERE (text="{text}")'
     rowExistsCommand = rowExistsFormat.format(text=word.text)
     cursor.execute(rowExistsCommand)
     row = cursor.fetchone()
     if row is not None:
         numSkipped = numSkipped + 1
-        continue
+        continue'''
 
     # insert word
     insertFormat = """

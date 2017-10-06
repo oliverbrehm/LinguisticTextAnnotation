@@ -17,14 +17,16 @@ class Dictionary:
         # list of words
         self.words = []
 
+        # init pyphen
         language = 'de_DE'
 
-        if language not in pyphen.LANGUAGES:
+        if language in pyphen.LANGUAGES:
+            self.pyphen_dict = pyphen.Pyphen(lang=language)
+        else:
             print('language not found.')
+            self.pyphen_dict = pyphen.Pyphen()
 
         pyphen.language_fallback(language + '_variant1')
-
-        self.pyphen_dict = pyphen.Pyphen(lang=language)
 
     def add_word(self, text, phon_pattern):
         # compute stress pattern
