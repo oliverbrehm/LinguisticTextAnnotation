@@ -1,3 +1,21 @@
-<div>
-    <h1>Hello user account!</h1>
+<h1>User Account</h1>
+
+<div *ngIf="!loggedIn">
+    <form>
+        <material-input label="Email"
+                        autoFocus floatingLabel style="width:80%"
+                        [(ngModel)]="emailText">
+        </material-input><br>
+        <material-input label="Password" floatingLabel style="width:80%"
+                         [(ngModel)]="passwordText">
+        </material-input><br>
+        <material-button raised
+                         (trigger)="login()">
+            Login
+        </material-button>
+    </form>
+</div>
+
+<div *ngIf="loggedIn">
+    <h2>Logged in as {{userEmail}}</h2>
 </div>

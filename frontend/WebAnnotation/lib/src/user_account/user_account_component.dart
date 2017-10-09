@@ -20,10 +20,34 @@ import 'package:WebAnnotation/src/user_account/user_account_service.dart';
 class UserAccountComponent implements OnInit {
   final UserAccountService userAccountService;
 
+  String emailText = "";
+  String passwordText = "";
+
+  String userEmail = "";
+
+  bool loggedIn = false;
+
   UserAccountComponent(this.userAccountService);
 
   @override
   Future<Null> ngOnInit() async {
 
   }
+
+  void login() {
+    if(emailText.isEmpty || passwordText.isEmpty) {
+      return;
+    }
+
+    userAccountService.login(emailText, passwordText).then((response) {
+      userEmail = emailText;
+      loggedIn = true;
+    }, onError: (error) {
+      print("error logging in");
+      emailText = "";
+      passwordText = "";
+    });
+  }
+
+
 }
