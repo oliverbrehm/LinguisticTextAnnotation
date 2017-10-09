@@ -3,8 +3,12 @@
 
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
+import 'package:angular_router/angular_router.dart';
 
-import 'src/text_analysis_component.dart';
+import 'package:WebAnnotation/src/text_analysis/text_analysis_component.dart';
+import 'package:WebAnnotation/src/text_analysis/text_analysis_service.dart';
+import 'package:WebAnnotation/src/user_account/user_account_component.dart';
+import 'package:WebAnnotation/src/user_account/user_account_service.dart';
 
 // AngularDart info: https://webdev.dartlang.org/angular
 // Components info: https://webdev.dartlang.org/components
@@ -13,9 +17,20 @@ import 'src/text_analysis_component.dart';
   selector: 'my-app',
   styleUrls: const ['app_component.css'],
   templateUrl: 'app_component.html',
-  directives: const [materialDirectives, TextAnalysisComponent],
-  providers: const [materialProviders],
+  directives: const [ROUTER_DIRECTIVES, materialDirectives, TextAnalysisComponent, UserAccountComponent],
+  providers: const [ROUTER_PROVIDERS, materialProviders, TextAnalysisService, UserAccountService],
 )
+@RouteConfig(const [
+  const Route(
+      path: '/text_analysis',
+      name: 'TextAnalysis',
+      component: TextAnalysisComponent,
+      useAsDefault: true),
+  const Route(
+      path: '/user_account',
+      name: 'UserAccount',
+      component: UserAccountComponent)
+])
 class AppComponent {
-  // Nothing here yet. All logic is in TodoListComponent.
+
 }

@@ -45,7 +45,7 @@ class Word {
   }
 }
 
-class Text {
+class AnnotationText {
   String originalText;
 
   List<Word> words = new List<Word>();
@@ -63,7 +63,7 @@ class TextAnalysisService {
     return HttpRequest.getString(url);
   }
 
-  Future<Text> lookupText(String text) async {
+  Future<AnnotationText> lookupText(String text) async {
     String url = "http://localhost:8000/queryText";
 
     var data = {'text': text};
@@ -75,7 +75,7 @@ class TextAnalysisService {
         return null;
       }
 
-      Text annotatedText = new Text();
+      AnnotationText annotatedText = new AnnotationText();
 
       for(var entry in response) {
         Word w = new Word(entry['word']);

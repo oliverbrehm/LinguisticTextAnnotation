@@ -1,3 +1,8 @@
 <h1>Web Annotation App</h1>
 
-<text-analysis></text-analysis>
+<nav>
+    <a [routerLink]="['TextAnalysis']">Analyze Text</a>
+    <a [routerLink]="['UserAccount']">User Account</a>
+</nav>
+
+<router-outlet></router-outlet>

@@ -5,7 +5,7 @@ import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
 
-import 'text_analysis_service.dart';
+import 'package:WebAnnotation/src/text_analysis/text_analysis_service.dart';
 
 @Component(
   selector: 'text-analysis',
@@ -27,7 +27,7 @@ class TextAnalysisComponent implements OnInit {
   String colorStressed = '#98FB98';
   String colorUnstressed = '#FFEBCD';
 
-  Text annotatedText;
+  AnnotationText annotatedText;
 
 
   String errorText = '';
