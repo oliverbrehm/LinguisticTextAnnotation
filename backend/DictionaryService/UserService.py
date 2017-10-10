@@ -11,24 +11,14 @@ class User:
 
         self.texts = []
 
-    def is_active(self):
-        return True
-
-    def get_id(self):
-        return self.email
-
-    def is_authenticated(self):
-        return self.authenticated
-
-    def is_anonymous(self):
-        return False
-
 
 class UserService:
     def __init__(self):
         self.users = []
 
-        self.users.append(User("default", "password"))
+        user = User("test", "1234")
+        user.texts = ['text1 bla blub', 'text2 foo bar']
+        self.users.append(user)
 
     def get_user(self, email):
         for user in self.users:
@@ -41,21 +31,10 @@ class UserService:
         user = self.get_user(email)
 
         if not user:  # user not existing
-            return None
+            return False
 
         if password != user.password:  # wrong password
-            return None
-
-        user.authenticated = True
-
-        flask_login.login_user(user)
-
-        return user
-
-    def logout(self, user):
-        user.authenticated = False
-
-        flask_login.logout_user()
+            return False
 
         return True
 

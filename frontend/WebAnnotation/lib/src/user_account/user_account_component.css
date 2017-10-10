@@ -1,0 +1,13 @@
+.userText {
+    border: #6fb1ff 1px solid;
+}
+
+.infoMessage {
+    border: black solid 1px;
+    background-color: palegreen;
+}
+
+.errorMessage {
+    border: black solid 1px;
+    background-color: indianred;
+}

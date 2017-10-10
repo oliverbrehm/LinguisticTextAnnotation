@@ -4,6 +4,7 @@
 import sys
 import getopt
 import json
+import hashlib
 
 from DictionaryService import DictionaryService
 from UserService import UserService, User
@@ -11,12 +12,11 @@ from UserService import UserService, User
 from flask import Flask, request
 from flask import Response
 
-from flask_login import LoginManager
-import flask_login
+from flask_httpauth import HTTPBasicAuth
 
-app = Flask(__name__)  # Initialize flask
-login_manager = LoginManager()
-login_manager.init_app(app)
+app = Flask(__name__)
+
+auth = HTTPBasicAuth()
 
 dictionaryService = DictionaryService()
 userService = UserService()
@@ -26,6 +26,10 @@ def create_response(code, data={}):
     string = json.dumps(data)
     response = Response(response=string, status=code, mimetype="application/json")
     response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
+    response.headers['Access-Control-Max-Age'] = 1000
+    # note that '*' is not valid for Access-Control-Allow-Headers
+    response.headers['Access-Control-Allow-Headers'] = 'origin, x-csrftoken, content-type, accept'
     return response
 
 
@@ -33,9 +37,14 @@ def create_error_response(errcode, message):
     return create_response(errcode, {"error":str(message)})
 
 
-@login_manager.user_loader
-def user_loader(user_id):
-    return userService.get_user(user_id)
+@auth.get_password
+def get_pw(username):
+    user = userService.get_user(username)
+
+    if user:
+        return user.password
+
+    return None
 
 
 @app.route('/', methods=['GET'])
@@ -101,23 +110,15 @@ def user_login():
     return create_response(200)
 
 
-@app.route('/user/logout', methods=['POST'])
-@flask_login.login_required
-def user_logout():
-    user: User = flask_login.current_user
-    userService.logout(user)
-
-    return create_response(200)
-
 @app.route('/user/add_text', methods=['POST'])
-@flask_login.login_required
+@auth.login_required
 def user_add_text():
     text = request.form.get("text")
 
     if not text:
         return create_error_response(404, "Text not provided.")  # TODO check code
 
-    user: User = flask_login.current_user
+    user: User = userService.get_user(auth.username())
 
     if not userService.add_text(user, text):
         return create_error_response(404, "Error adding text")  # TODO check code
@@ -126,9 +127,9 @@ def user_add_text():
 
 
 @app.route('/user/get_texts', methods=['GET'])
-@flask_login.login_required
+@auth.login_required
 def user_get_texts():
-    user: User = flask_login.current_user
+    user: User = userService.get_user(auth.username())
 
     texts = userService.get_texts(user)
 
@@ -140,6 +141,7 @@ def user_get_texts():
 
 @app.route('/user/list', methods=['GET'])
 def user_list():
+    print("session: ", request.cookies.get('session'))
     return create_response(200, userService.list())
 
 
@@ -166,4 +168,4 @@ if __name__ == '__main__':
             sys.exit(1)
 
     app.secret_key = "ljgq34jgqwihgq3poi" # TODO
-    app.run(debug=True, port=port, host="0.0.0.0")
+    app.run(debug=True, port=port, host="dev.localhost")

@@ -1,5 +1,13 @@
 <h1>User Account</h1>
 
+<div *ngIf="infoMessage!=''" class="infoMessage">
+    {{infoMessage}}
+</div>
+
+<div *ngIf="errorMessage!=''" class="errorMessage">
+    {{errorMessage}}
+</div>
+
 <div *ngIf="!loggedIn">
     <form>
         <material-input label="Email"
@@ -13,9 +21,39 @@
                          (trigger)="login()">
             Login
         </material-button>
+        <material-button raised
+                         (trigger)="register()">
+            Register
+        </material-button>
     </form>
 </div>
 
 <div *ngIf="loggedIn">
     <h2>Logged in as {{userEmail}}</h2>
+
+    <div>
+        <h3>Text hinzufügen:</h3>
+
+        <material-input multiline
+                        label="Text"
+                        autoFocus floatingLabel style="width:80%"
+                        [(ngModel)]="newText">
+        </material-input>
+        <br>
+        <material-button raised
+                         (trigger)="addUserText()">
+            Hinzufügen
+        </material-button>
+    </div>
+
+    <material-button raised
+                     (trigger)="logout()">
+        Logout
+    </material-button>
+
+    <div *ngFor="let text of userTexts" class="userText">
+        <h2>Text</h2>
+        <p>{{text}}</p>
+        <br>
+    </div>
 </div>

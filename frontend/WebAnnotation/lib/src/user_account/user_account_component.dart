@@ -23,9 +23,15 @@ class UserAccountComponent implements OnInit {
   String emailText = "";
   String passwordText = "";
 
-  String userEmail = "";
+  String userListText = "";
+
+  String infoMessage = "";
+  String errorMessage = "";
 
   bool loggedIn = false;
+  String userEmail = "";
+  List<String> userTexts = [];
+  String newText = "";
 
   UserAccountComponent(this.userAccountService);
 
@@ -39,15 +45,66 @@ class UserAccountComponent implements OnInit {
       return;
     }
 
-    userAccountService.login(emailText, passwordText).then((response) {
-      userEmail = emailText;
-      loggedIn = true;
-    }, onError: (error) {
-      print("error logging in");
-      emailText = "";
-      passwordText = "";
+    userAccountService.login(emailText, passwordText).then((success) {
+      if(success) {
+        loggedIn = true;
+        userEmail = emailText;
+
+        this.queryUserTexts();
+      }
+      else {
+        errorMessage = "error logging in";
+        emailText = "";
+        passwordText = "";
+        loggedIn = false;
+      }
     });
   }
 
+  void userList() {
+    userAccountService.userList().then((users) {
+      userListText = users;
+    });
+  }
+
+  void queryUserTexts() {
+    userAccountService.queryTexts().then((texts) {
+      this.userTexts = texts;
+    });
+  }
+
+  void addUserText() {
+    if(this.newText.isEmpty) {
+      errorMessage = "Bitte Text eingeben.";
+      return;
+    }
+
+    userAccountService.addText(this.newText).then((success) {
+      if(success) {
+        infoMessage = "Added text.";
+        queryUserTexts();
+      }
+    });
+  }
+
+  void logout() {
+    userAccountService.logout();
+    infoMessage = "Succesfully logged out.";
+    this.loggedIn = false;
+  }
+
+  void register() {
+    if(emailText.isEmpty || passwordText.isEmpty) {
+      return;
+    }
+
+    userAccountService.register(emailText, passwordText).then((success) {
+      if(success) {
+        infoMessage = "Registrierung erfolgreich als " + emailText + ".";
+      } else {
+        errorMessage = "Registrierung nicht erfolgreich.";
+      }
+    });
+  }
 
 }
