@@ -20,6 +20,12 @@ class UserAccountService {
     return "http://" + this.email + ":" + this.password +"@" + url;
   }
 
+  Map<String, String> appendCredentials(Map<String, String> data) {
+    data['email'] = this.email;
+    data['password'] = this.password;
+    return data;
+  }
+
   Future<bool> login(String email, String password) async {
     String url = "http://dev.localhost:8000/user/login";
 
@@ -60,15 +66,11 @@ class UserAccountService {
 
     String url = basicAuthUrl("dev.localhost:8000/user/get_texts", this.email, this.password);
 
-    String authHeader = "Basic " + this.email + ":" + this.password;
+    var data = {};
+    data = appendCredentials(data);
 
-    var headers = {
-      'Authorization': authHeader
-    };
-
-    return HttpRequest.request(url, method: 'GET', withCredentials: true, requestHeaders: headers).then((request) {
-      //return JSON.decode(s)['texts'];
-      return [request.response];
+    return HttpRequest.postFormData(url, data).then((request) {
+      return JSON.decode(request.response)['texts'];
     });
   }
 
@@ -79,14 +81,15 @@ class UserAccountService {
   }
 
   Future<bool> addText(String text) async {
-    String url = basicAuthUrl("dev.localhost:8000/user/add_text", this.email, this.password);
-    print(url);
+    //String url = basicAuthUrl("dev.localhost:8000/user/add_text", this.email, this.password);
+    String url = "http://dev.localhost:8000/user/add_text";
 
     var data = {'text': text};
+    data = appendCredentials(data);
 
-    String authHeader = "Basic " + this.email + ":" + this.password;
-
-    return HttpRequest.request(url, method: 'POST', withCredentials: true, sendData: data, requestHeaders: {'Authorization': authHeader}).then((request) {
+    //String authHeader = "Basic " + this.email + ":" + this.password;
+    //return HttpRequest.request(url, method: 'POST', withCredentials: true, sendData: data, requestHeaders: {'Authorization': authHeader}).then((request) {
+    return HttpRequest.postFormData(url, data).then((request) {
       return true;
     }, onError: (error) {
       return false;

@@ -4,19 +4,15 @@
 import sys
 import getopt
 import json
-import hashlib
 
 from DictionaryService import DictionaryService
-from UserService import UserService, User
+from UserService import UserService, User, Authentication
 
 from flask import Flask, request
 from flask import Response
 
-from flask_httpauth import HTTPBasicAuth
 
 app = Flask(__name__)
-
-auth = HTTPBasicAuth()
 
 dictionaryService = DictionaryService()
 userService = UserService()
@@ -35,16 +31,6 @@ def create_response(code, data={}):
 
 def create_error_response(errcode, message):
     return create_response(errcode, {"error":str(message)})
-
-
-@auth.get_password
-def get_pw(username):
-    user = userService.get_user(username)
-
-    if user:
-        return user.password
-
-    return None
 
 
 @app.route('/', methods=['GET'])
@@ -96,29 +82,22 @@ def user_register():
 
 @app.route('/user/login', methods=['POST'])
 def user_login():
-    email = request.form.get("email")
-    password = request.form.get("password")
-
-    if not email or not password:
-        return create_error_response(404, "Email or password not provided.")  # TODO check code
-
-    user = userService.login(email, password)
-
-    if not user:
-        return create_error_response(404, "Wrong email or password")  # TODO check code (forbidden?)
+    user: User = userService.authenticate(Authentication.read(request))
+    print("user", user)
+    if not user: return create_error_response(401, "Invalid credentials.")
 
     return create_response(200)
 
 
 @app.route('/user/add_text', methods=['POST'])
-@auth.login_required
 def user_add_text():
+    user: User = userService.authenticate(Authentication.read(request))
+    if not user: return create_error_response(401, "Invalid credentials.")
+
     text = request.form.get("text")
 
     if not text:
         return create_error_response(404, "Text not provided.")  # TODO check code
-
-    user: User = userService.get_user(auth.username())
 
     if not userService.add_text(user, text):
         return create_error_response(404, "Error adding text")  # TODO check code
@@ -126,15 +105,12 @@ def user_add_text():
     return create_response(200)
 
 
-@app.route('/user/get_texts', methods=['GET'])
-@auth.login_required
+@app.route('/user/get_texts', methods=['POST'])
 def user_get_texts():
-    user: User = userService.get_user(auth.username())
+    user: User = userService.authenticate(Authentication.read(request))
+    if not user: return create_error_response(401, "Invalid credentials.")
 
     texts = userService.get_texts(user)
-
-    if not texts:
-        return create_error_response(404, "Error getting texts")  # TODO check code, error message
 
     return create_response(200, {'texts': texts})
 

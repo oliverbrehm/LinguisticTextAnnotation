@@ -1,7 +1,23 @@
-import flask_login
 
 DATABASE_PATH = '../db/user.db'
 
+class Authentication:
+    def __init__(self, email, password):
+        self.email = email
+        self.password = password
+
+    @staticmethod
+    def read(request):
+        if not request:
+            return None
+
+        email = request.form.get("email")
+        password = request.form.get("password")
+
+        if not email or not password:
+            return None
+
+        return Authentication(email, password)
 
 class User:
     def __init__(self, email, password):
@@ -27,16 +43,16 @@ class UserService:
 
         return None
 
-    def login(self, email, password):
-        user = self.get_user(email)
+    def authenticate(self, authentication: Authentication):
+        user = self.get_user(authentication.email)
 
         if not user:  # user not existing
-            return False
+            return None
 
-        if password != user.password:  # wrong password
-            return False
+        if authentication.password != user.password:  # wrong password
+            return None
 
-        return True
+        return user
 
     def register(self, email, password):
         user = self.get_user(email)

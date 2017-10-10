@@ -1,11 +1,11 @@
 <h1>User Account</h1>
 
-<div *ngIf="infoMessage!=''" class="infoMessage">
-    {{infoMessage}}
+<div *ngIf="infoMessageText!=''" class="infoMessage">
+    {{infoMessageText}}
 </div>
 
-<div *ngIf="errorMessage!=''" class="errorMessage">
-    {{errorMessage}}
+<div *ngIf="errorMessageText!=''" class="errorMessage">
+    {{errorMessageText}}
 </div>
 
 <div *ngIf="!loggedIn">

@@ -25,8 +25,16 @@ class UserAccountComponent implements OnInit {
 
   String userListText = "";
 
-  String infoMessage = "";
-  String errorMessage = "";
+  String infoMessageText = "";
+  String errorMessageText = "";
+  void infoMessage(String message) {
+    infoMessageText = message;
+    errorMessageText = "";
+  }
+  void errorMessage(String message) {
+    errorMessageText = message;
+    infoMessageText = "";
+  }
 
   bool loggedIn = false;
   String userEmail = "";
@@ -53,7 +61,7 @@ class UserAccountComponent implements OnInit {
         this.queryUserTexts();
       }
       else {
-        errorMessage = "error logging in";
+        errorMessage("error logging in");
         emailText = "";
         passwordText = "";
         loggedIn = false;
@@ -75,13 +83,13 @@ class UserAccountComponent implements OnInit {
 
   void addUserText() {
     if(this.newText.isEmpty) {
-      errorMessage = "Bitte Text eingeben.";
+      errorMessage("Bitte Text eingeben.");
       return;
     }
 
     userAccountService.addText(this.newText).then((success) {
       if(success) {
-        infoMessage = "Added text.";
+        infoMessage("Added text.");
         queryUserTexts();
       }
     });
@@ -89,7 +97,7 @@ class UserAccountComponent implements OnInit {
 
   void logout() {
     userAccountService.logout();
-    infoMessage = "Succesfully logged out.";
+    infoMessage("Succesfully logged out.");
     this.loggedIn = false;
   }
 
@@ -100,9 +108,9 @@ class UserAccountComponent implements OnInit {
 
     userAccountService.register(emailText, passwordText).then((success) {
       if(success) {
-        infoMessage = "Registrierung erfolgreich als " + emailText + ".";
+        infoMessage("Registrierung erfolgreich als " + emailText + ".");
       } else {
-        errorMessage = "Registrierung nicht erfolgreich.";
+        errorMessage("Registrierung nicht erfolgreich.");
       }
     });
   }
