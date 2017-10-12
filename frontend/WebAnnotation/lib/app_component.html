@@ -5,4 +5,17 @@
     <a [routerLink]="['UserAccount']">User Account</a>
 </nav>
 
+<h1>Counter</h1>
+
+<div>
+    Count: {{count}}
+    <button (click)="like()">Like</button>
+    <button (click)="dislike()">Dislike</button>
+    <br>
+    <br>
+    <input type="text" [(ngModel)]="testWord">
+    <button (click)="addTest()">addTest</button>
+    <br>
+</div>
+
 <router-outlet></router-outlet>

@@ -11,6 +11,13 @@ class Word:
     def to_string(self):
         return self.text + ", " + self.stress_pattern + ", " + self.hyphenation
 
+    def to_json(self):
+        return {
+            'text': self.text,
+            'stress_pattern': self.stress_pattern,
+            'hyphenation': self.hyphenation
+        }
+
 
 class Dictionary:
     def __init__(self):
