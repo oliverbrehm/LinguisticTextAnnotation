@@ -1,5 +1,13 @@
+import sqlalchemy
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 
-DATABASE_PATH = '../db/user.db'
+from sqlalchemy.orm import sessionmaker
+
+DATABASE_PATH = 'sqlite:///../db/user.db'
+
+Base = declarative_base()
+
 
 class Authentication:
     def __init__(self, email, password):
@@ -19,29 +27,36 @@ class Authentication:
 
         return Authentication(email, password)
 
-class User:
-    def __init__(self, email, password):
-        self.email = email
-        self.password = password
-        self.authenticated = False
 
-        self.texts = []
+class User(Base):
+
+    __tablename__ = 'user'
+
+    email = sqlalchemy.Column(sqlalchemy.String(256), primary_key=True)
+    password = sqlalchemy.Column(sqlalchemy.String(256))
+
+
+class UserText(Base):
+
+    __tablename__ = 'user_text'
+
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
+    text = sqlalchemy.Column(sqlalchemy.String(8192))
+
+    user_email = sqlalchemy.Column(sqlalchemy.String(256), sqlalchemy.ForeignKey('user.email'))
+    user = relationship(User)
 
 
 class UserService:
     def __init__(self):
-        self.users = []
-
-        user = User("test", "1234")
-        user.texts = ['text1 bla blub', 'text2 foo bar']
-        self.users.append(user)
+        self.engine = sqlalchemy.create_engine(DATABASE_PATH)
+        Base.metadata.bind = self.engine
+        Base.metadata.create_all(self.engine)
+        DBSession = sessionmaker(bind=self.engine)
+        self.session = DBSession()
 
     def get_user(self, email):
-        for user in self.users:
-            if user.email == email:
-                return user
-
-        return None
+        return self.session.query(User).filter(User.email == email).first()
 
     def authenticate(self, authentication: Authentication):
         user = self.get_user(authentication.email)
@@ -55,26 +70,38 @@ class UserService:
         return user
 
     def register(self, email, password):
-        user = self.get_user(email)
-        if user:  # user already registered
+        user = User(email=email, password=password)
+        try:
+            self.session.add(user)
+            self.session.commit()
+        except:
+            self.session.rollback()
             return False
-
-        user = User(email, password)
-        self.users.append(user)
 
         return True
 
     def add_text(self, user, text):
-        user.texts.append(text)
+        user_text = UserText(user=user, text=text)
+        self.session.add(user_text)
+        self.session.commit()
+
         return True
 
     def get_texts(self, user):
-        return user.texts
+        texts = self.session.query(UserText).filter(UserText.user == user).all()
+
+        text_list = []
+        for t in texts:
+            text_list.append(t.text)
+
+        return text_list
 
     def list(self):
+        users = self.session.query(User).all()
+
         user_list = []
 
-        for user in self.users:
+        for user in users:
             user_list.append({'user': user.email})
 
         return user_list

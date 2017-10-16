@@ -75,7 +75,7 @@ def user_register():
     response = userService.register(email, password)
 
     if not response:
-        create_error_response(404, "User already existing")
+        return create_error_response(404, "User already existing")
 
     return create_response(200)
 
