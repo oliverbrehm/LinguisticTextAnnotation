@@ -6,6 +6,8 @@ import 'dart:html';
 
 import 'dart:convert';
 
+import 'package:WebAnnotation/app_component.dart';
+
 
 /// service description
 @Injectable()
@@ -16,10 +18,6 @@ class UserAccountService {
 
   bool loggedIn = true;
 
-  String basicAuthUrl(String url, String username, String password) {
-    return "http://" + this.email + ":" + this.password +"@" + url;
-  }
-
   Map<String, String> appendCredentials(Map<String, String> data) {
     data['email'] = this.email;
     data['password'] = this.password;
@@ -27,7 +25,7 @@ class UserAccountService {
   }
 
   Future<bool> login(String email, String password) async {
-    String url = "http://dev.localhost:8000/user/login";
+    String url = AppComponent.SERVER_URL + "/user/login";
 
     var data = {'email': email, 'password': password};
 
@@ -52,7 +50,7 @@ class UserAccountService {
       return "";
     }
 
-    String url = basicAuthUrl("dev.localhost:8000/user/list", this.email, this.password);
+    String url = AppComponent.SERVER_URL + "/user/list";
 
     return HttpRequest.getString(url).then((s) {
       return s;
@@ -64,7 +62,7 @@ class UserAccountService {
       return [];
     }
 
-    String url = basicAuthUrl("dev.localhost:8000/user/get_texts", this.email, this.password);
+    String url = AppComponent.SERVER_URL + "/user/get_texts";
 
     var data = {};
     data = appendCredentials(data);
@@ -81,8 +79,7 @@ class UserAccountService {
   }
 
   Future<bool> addText(String text) async {
-    //String url = basicAuthUrl("dev.localhost:8000/user/add_text", this.email, this.password);
-    String url = "http://dev.localhost:8000/user/add_text";
+    String url = AppComponent.SERVER_URL + "/user/add_text";
 
     var data = {'text': text};
     data = appendCredentials(data);
@@ -97,7 +94,7 @@ class UserAccountService {
   }
 
   Future<bool> register(String email, String password) async {
-    String url = "http://dev.localhost:8000/user/register";
+    String url = AppComponent.SERVER_URL + "/user/register";
 
     var data = {'email': email, 'password': password};
 

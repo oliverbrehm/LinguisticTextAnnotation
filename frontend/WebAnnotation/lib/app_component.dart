@@ -36,6 +36,8 @@ import 'package:WebAnnotation/src/user_account/user_account_service.dart';
 ])
 class AppComponent implements OnInit {
 
+  static final SERVER_URL = "http://ec2-18-221-249-140.us-east-2.compute.amazonaws.com:8000";
+
   @override
   ngOnInit() async {
 

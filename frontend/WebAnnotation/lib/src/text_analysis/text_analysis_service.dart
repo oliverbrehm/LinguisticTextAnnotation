@@ -5,6 +5,8 @@ import 'package:angular/core.dart';
 
 import 'dart:html';
 
+import 'package:WebAnnotation/app_component.dart';
+
 class Syllable {
   String text;
   bool stressed;
@@ -59,12 +61,12 @@ class AnnotationText {
 @Injectable()
 class TextAnalysisService {
   Future<String> lookupWord(String text) async {
-    String url = "http://localhost:8000/queryWord/" + text;
+    String url = AppComponent.SERVER_URL + "/queryWord/" + text;
     return HttpRequest.getString(url);
   }
 
   Future<AnnotationText> lookupText(String text) async {
-    String url = "http://localhost:8000/queryText";
+    String url = AppComponent.SERVER_URL + "/queryText";
 
     var data = {'text': text};
 

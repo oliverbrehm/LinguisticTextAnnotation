@@ -82,7 +82,7 @@ def user_register():
 
 @app.route('/user/login', methods=['POST'])
 def user_login():
-    user: User = userService.authenticate(Authentication.read(request))
+    user = userService.authenticate(Authentication.read(request))
     print("user", user)
     if not user: return create_error_response(401, "Invalid credentials.")
 
@@ -91,7 +91,7 @@ def user_login():
 
 @app.route('/user/add_text', methods=['POST'])
 def user_add_text():
-    user: User = userService.authenticate(Authentication.read(request))
+    user = userService.authenticate(Authentication.read(request))
     if not user: return create_error_response(401, "Invalid credentials.")
 
     text = request.form.get("text")
@@ -107,7 +107,7 @@ def user_add_text():
 
 @app.route('/user/get_texts', methods=['POST'])
 def user_get_texts():
-    user: User = userService.authenticate(Authentication.read(request))
+    user = userService.authenticate(Authentication.read(request))
     if not user: return create_error_response(401, "Invalid credentials.")
 
     texts = userService.get_texts(user)
@@ -144,4 +144,4 @@ if __name__ == '__main__':
             sys.exit(1)
 
     app.secret_key = "ljgq34jgqwihgq3poi" # TODO
-    app.run(debug=True, port=port, host="dev.localhost")
+    app.run(debug=True, port=port, host="0.0.0.0")
