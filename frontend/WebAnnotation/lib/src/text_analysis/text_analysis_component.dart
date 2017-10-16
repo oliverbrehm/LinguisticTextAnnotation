@@ -6,6 +6,7 @@ import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
 
 import 'package:WebAnnotation/src/text_analysis/text_analysis_service.dart';
+import 'package:WebAnnotation/src/user_account/user_account_service.dart';
 
 @Component(
   selector: 'text-analysis',
@@ -20,6 +21,8 @@ import 'package:WebAnnotation/src/text_analysis/text_analysis_service.dart';
 )
 class TextAnalysisComponent implements OnInit {
   final TextAnalysisService textAnalysisService;
+  final UserAccountService userAccountService;
+
 
   String lookupText = '';
   String lineHeightText = '1.0';
@@ -36,7 +39,7 @@ class TextAnalysisComponent implements OnInit {
 
   double lineHeight = 1.0;
 
-  TextAnalysisComponent(this.textAnalysisService);
+  TextAnalysisComponent(this.textAnalysisService, this.userAccountService);
 
   @override
   Future<Null> ngOnInit() async {
@@ -61,6 +64,16 @@ class TextAnalysisComponent implements OnInit {
       lineHeightText = lineHeight.toString();
     }
     querySelectorAll(".word *").style.lineHeight = lineHeight.toString() + "em";
+  }
+
+  void saveText(String text) {
+    userAccountService.addText(text).then((success) {
+      if(success) {
+        // TODO
+      } else {
+
+      }
+    });
   }
 
   void colorStressedChanged(value) {

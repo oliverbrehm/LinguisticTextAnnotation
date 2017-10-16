@@ -14,19 +14,14 @@ import 'package:WebAnnotation/src/user_account/user_account_service.dart';
     CORE_DIRECTIVES,
     materialDirectives,
     formDirectives
-  ],
-  providers: const [UserAccountService],
+  ]
 )
 class UserAccountComponent implements OnInit {
   final UserAccountService userAccountService;
 
-  String emailText = "";
-  String passwordText = "";
-
-  String userListText = "";
-
   String infoMessageText = "";
   String errorMessageText = "";
+
   void infoMessage(String message) {
     infoMessageText = message;
     errorMessageText = "";
@@ -36,16 +31,30 @@ class UserAccountComponent implements OnInit {
     infoMessageText = "";
   }
 
-  bool loggedIn = false;
-  String userEmail = "";
+  String emailText = "";
+  String passwordText = "";
+
+  String userListText = "";
+
   List<String> userTexts = [];
+
   String newText = "";
 
   UserAccountComponent(this.userAccountService);
 
   @override
   Future<Null> ngOnInit() async {
+    if(this.loggedIn()) {
+      this.queryUserTexts();
+    }
+  }
 
+  bool loggedIn() {
+    return userAccountService.loggedIn;
+  }
+
+  String userEmail() {
+    return userAccountService.email;
   }
 
   void login() {
@@ -55,23 +64,12 @@ class UserAccountComponent implements OnInit {
 
     userAccountService.login(emailText, passwordText).then((success) {
       if(success) {
-        loggedIn = true;
-        userEmail = emailText;
-
         this.queryUserTexts();
       }
       else {
-        errorMessage("error logging in");
-        emailText = "";
+        errorMessage("Login fehlgeschlagen");
         passwordText = "";
-        loggedIn = false;
       }
-    });
-  }
-
-  void userList() {
-    userAccountService.userList().then((users) {
-      userListText = users;
     });
   }
 
@@ -89,16 +87,20 @@ class UserAccountComponent implements OnInit {
 
     userAccountService.addText(this.newText).then((success) {
       if(success) {
-        infoMessage("Added text.");
+        infoMessage("Text hinzugefügt.");
         queryUserTexts();
       }
     });
   }
 
+  void analyseText(String userText) {
+    // TODO link to analyse text
+    infoMessage("TODO link to: " + userText);
+  }
+
   void logout() {
     userAccountService.logout();
-    infoMessage("Succesfully logged out.");
-    this.loggedIn = false;
+    infoMessage("Logout erfolgreich.");
   }
 
   void register() {

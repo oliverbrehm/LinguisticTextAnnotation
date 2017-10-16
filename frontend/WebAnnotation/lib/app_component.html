@@ -1,8 +1,16 @@
-<h1>Web Annotation App</h1>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" [routerLink]="['TextAnalysis']">Linguistic Text Annotation</a>
 
-<nav>
-    <a [routerLink]="['TextAnalysis']">Analyze Text</a>
-    <a [routerLink]="['UserAccount']">User Account</a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav">
+            <a class="nav-link" [routerLink]="['TextAnalysis']">Analyze Text</a>
+            <a class="nav-link" [routerLink]="['UserAccount']">User Account</a>
+        </div>
+    </div>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 </nav>
 
 <router-outlet></router-outlet>

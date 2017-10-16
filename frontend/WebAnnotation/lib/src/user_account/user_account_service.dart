@@ -16,7 +16,7 @@ class UserAccountService {
   String email = "";
   String password = "";
 
-  bool loggedIn = true;
+  bool loggedIn = false;
 
   Map<String, String> appendCredentials(Map<String, String> data) {
     data['email'] = this.email;

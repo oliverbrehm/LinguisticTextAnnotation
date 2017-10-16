@@ -1,5 +1,6 @@
 .userText {
-    border: #6fb1ff 1px solid;
+    border: palegreen 3px solid;
+    margin: 2em;
 }
 
 .infoMessage {
@@ -10,4 +11,12 @@
 .errorMessage {
     border: black solid 1px;
     background-color: indianred;
+}
+
+.logoutArea {
+    background-color: indianred;
+}
+
+.newText {
+    background-color: blanchedalmond;
 }

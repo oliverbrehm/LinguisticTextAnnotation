@@ -25,7 +25,15 @@
     <h2>Original</h2>
     {{annotatedText.originalText}}
     <br>
-    <br>
+    <div *ngIf="userAccountService.loggedIn">
+        <material-button raised
+                         (trigger)="saveText(annotatedText.originalText)">
+            Text speichern
+        </material-button>
+
+    </div>
+
+    <br><br>
 
     <h2>Annotiert</h2>
     <div *ngFor="let word of annotatedText.words" class="word">
