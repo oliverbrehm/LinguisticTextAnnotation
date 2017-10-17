@@ -1,3 +1,8 @@
 :host {
     /* This is equivalent of the 'body' selector of a page. */
 }
+
+.navbar-default {
+    background-color: blanchedalmond;
+    border-color: #E7E7E7;
+}

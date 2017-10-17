@@ -1,12 +1,15 @@
 .userText {
-    border: palegreen 3px solid;
-    margin: 2em;
+    background-color: #d8ffee;
+    margin: 1em;
+    padding: 1.5em;
 }
 
 .logoutArea {
     background-color: indianred;
+    padding: 1.5em;
 }
 
 .newText {
     background-color: blanchedalmond;
+    padding: 1.5em;
 }

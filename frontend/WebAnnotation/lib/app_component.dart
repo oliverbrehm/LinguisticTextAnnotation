@@ -54,6 +54,14 @@ class AppComponent implements OnInit {
 
   }
 
+  String userText() {
+    if(userAccountService.loggedIn) {
+      return userAccountService.email;
+    }
+
+    return "Login";
+  }
+
   String info() {
     return appService.infoMessageText;
   }

@@ -60,12 +60,10 @@ class AnnotationText {
 /// service description
 @Injectable()
 class TextAnalysisService {
-  Future<String> lookupWord(String text) async {
-    String url = AppService.SERVER_URL + "/queryWord/" + text;
-    return HttpRequest.getString(url);
-  }
 
-  Future<AnnotationText> lookupText(String text) async {
+  AnnotationText annotatedText;
+
+  Future<bool> lookupText(String text) async {
     String url = AppService.SERVER_URL + "/queryText";
 
     var data = {'text': text};
@@ -74,10 +72,10 @@ class TextAnalysisService {
       var response = JSON.decode(request.responseText);
 
       if(response == null) {
-        return null;
+        return false;
       }
 
-      AnnotationText annotatedText = new AnnotationText();
+      this.annotatedText = new AnnotationText();
 
       for(var entry in response) {
         Word w = new Word(entry['word']);
@@ -100,7 +98,11 @@ class TextAnalysisService {
 
       annotatedText.originalText = text;
 
-      return annotatedText;
+      return true;
     });
+  }
+
+  void clearText() {
+    annotatedText = null;
   }
 }

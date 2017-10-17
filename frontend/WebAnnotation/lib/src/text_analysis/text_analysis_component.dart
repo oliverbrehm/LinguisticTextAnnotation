@@ -21,7 +21,7 @@ import 'package:WebAnnotation/src/user_account/user_account_service.dart';
     materialDirectives,
     formDirectives
   ],
-  providers: const [TextAnalysisService],
+  providers: const [],
 )
 class TextAnalysisComponent implements OnInit {
   final AppService appService;
@@ -36,8 +36,6 @@ class TextAnalysisComponent implements OnInit {
   String colorStressed = '#98FB98';
   String colorUnstressed = '#FFEBCD';
 
-  AnnotationText annotatedText;
-
   bool analyzing = false;
 
   double lineHeight = 1.0;
@@ -47,10 +45,14 @@ class TextAnalysisComponent implements OnInit {
   @override
   Future<Null> ngOnInit() async {
     var routerText = routeParams.get('text');
-    if(routerText.isNotEmpty) {
+    if(routerText != null && routerText.isNotEmpty) {
       lookupText = routerText;
       lookup();
     }
+  }
+
+  AnnotationText annotatedText() {
+    return textAnalysisService.annotatedText;
   }
 
   void lineHeightChanged() {
@@ -95,19 +97,16 @@ class TextAnalysisComponent implements OnInit {
   void lookup() {
     appService.clearMessage();
     analyzing = true;
-    textAnalysisService.lookupText(lookupText).then((response) {
-      annotatedText = response;
+    textAnalysisService.lookupText(lookupText).then((success) {
       analyzing = false;
-    }, onError: (e) {
-      // TODO error properties
-      print(e.toString());
-      appService.errorMessage("Der Text konnte nicht analysiert werden.");
-      analyzing = false;
+      if(!success) {
+        appService.errorMessage("Der Text konnte nicht analysiert werden.");
+      }
     });
   }
 
   void newText() {
     appService.clearMessage();
-    annotatedText = null;
+    textAnalysisService.clearText();
   }
 }
