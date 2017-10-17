@@ -6,8 +6,7 @@ import 'dart:html';
 
 import 'dart:convert';
 
-import 'package:WebAnnotation/app_component.dart';
-
+import 'package:WebAnnotation/app_service.dart';
 
 /// service description
 @Injectable()
@@ -25,7 +24,7 @@ class UserAccountService {
   }
 
   Future<bool> login(String email, String password) async {
-    String url = AppComponent.SERVER_URL + "/user/login";
+    String url = AppService.SERVER_URL + "/user/login";
 
     var data = {'email': email, 'password': password};
 
@@ -50,7 +49,7 @@ class UserAccountService {
       return "";
     }
 
-    String url = AppComponent.SERVER_URL + "/user/list";
+    String url = AppService.SERVER_URL + "/user/list";
 
     return HttpRequest.getString(url).then((s) {
       return s;
@@ -62,7 +61,7 @@ class UserAccountService {
       return [];
     }
 
-    String url = AppComponent.SERVER_URL + "/user/get_texts";
+    String url = AppService.SERVER_URL + "/user/get_texts";
 
     var data = {};
     data = appendCredentials(data);
@@ -79,7 +78,7 @@ class UserAccountService {
   }
 
   Future<bool> addText(String text) async {
-    String url = AppComponent.SERVER_URL + "/user/add_text";
+    String url = AppService.SERVER_URL + "/user/add_text";
 
     var data = {'text': text};
     data = appendCredentials(data);
@@ -94,7 +93,7 @@ class UserAccountService {
   }
 
   Future<bool> register(String email, String password) async {
-    String url = AppComponent.SERVER_URL + "/user/register";
+    String url = AppService.SERVER_URL + "/user/register";
 
     var data = {'email': email, 'password': password};
 

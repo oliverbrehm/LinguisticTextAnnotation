@@ -13,4 +13,12 @@
     </button>
 </nav>
 
+<div *ngIf="info()!=''" class="alert alert-success alert-dismissable">
+    {{info()}}<br>
+</div>
+
+<div *ngIf="error()!=''" class="alert alert-danger alert-dismissable">
+    {{error()}}<br>
+</div>
+
 <router-outlet></router-outlet>

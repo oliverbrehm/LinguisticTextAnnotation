@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
+import 'package:angular_router/angular_router.dart';
 
+import 'package:WebAnnotation/app_service.dart';
 import 'package:WebAnnotation/src/user_account/user_account_service.dart';
 
 @Component(
@@ -17,19 +19,11 @@ import 'package:WebAnnotation/src/user_account/user_account_service.dart';
   ]
 )
 class UserAccountComponent implements OnInit {
+
+  final AppService appService;
   final UserAccountService userAccountService;
 
-  String infoMessageText = "";
-  String errorMessageText = "";
-
-  void infoMessage(String message) {
-    infoMessageText = message;
-    errorMessageText = "";
-  }
-  void errorMessage(String message) {
-    errorMessageText = message;
-    infoMessageText = "";
-  }
+  final Router router;
 
   String emailText = "";
   String passwordText = "";
@@ -40,7 +34,7 @@ class UserAccountComponent implements OnInit {
 
   String newText = "";
 
-  UserAccountComponent(this.userAccountService);
+  UserAccountComponent(this.appService, this.userAccountService, this.router);
 
   @override
   Future<Null> ngOnInit() async {
@@ -58,6 +52,7 @@ class UserAccountComponent implements OnInit {
   }
 
   void login() {
+    appService.clearMessage();
     if(emailText.isEmpty || passwordText.isEmpty) {
       return;
     }
@@ -67,7 +62,7 @@ class UserAccountComponent implements OnInit {
         this.queryUserTexts();
       }
       else {
-        errorMessage("Login fehlgeschlagen");
+        appService.errorMessage("Login fehlgeschlagen");
         passwordText = "";
       }
     });
@@ -80,39 +75,41 @@ class UserAccountComponent implements OnInit {
   }
 
   void addUserText() {
+    appService.clearMessage();
     if(this.newText.isEmpty) {
-      errorMessage("Bitte Text eingeben.");
+      appService.errorMessage("Bitte Text eingeben.");
       return;
     }
 
     userAccountService.addText(this.newText).then((success) {
       if(success) {
-        infoMessage("Text hinzugefügt.");
+        appService.infoMessage("Text hinzugefügt.");
         queryUserTexts();
       }
     });
   }
 
   void analyseText(String userText) {
-    // TODO link to analyse text
-    infoMessage("TODO link to: " + userText);
+    router.navigate(['TextAnalysisParam', {'text': userText}]);
   }
 
   void logout() {
+    appService.clearMessage();
     userAccountService.logout();
-    infoMessage("Logout erfolgreich.");
+    appService.infoMessage("Logout erfolgreich.");
   }
 
   void register() {
+    appService.clearMessage();
     if(emailText.isEmpty || passwordText.isEmpty) {
       return;
     }
 
     userAccountService.register(emailText, passwordText).then((success) {
       if(success) {
-        infoMessage("Registrierung erfolgreich als " + emailText + ".");
+        appService.infoMessage("Registrierung erfolgreich als " + emailText + ".");
       } else {
-        errorMessage("Registrierung nicht erfolgreich.");
+        appService.errorMessage("Registrierung nicht erfolgreich.");
       }
     });
   }

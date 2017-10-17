@@ -4,9 +4,13 @@ import 'dart:html';
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
+import 'package:angular_router/angular_router.dart';
 
+
+import 'package:WebAnnotation/app_service.dart';
 import 'package:WebAnnotation/src/text_analysis/text_analysis_service.dart';
 import 'package:WebAnnotation/src/user_account/user_account_service.dart';
+
 
 @Component(
   selector: 'text-analysis',
@@ -20,9 +24,11 @@ import 'package:WebAnnotation/src/user_account/user_account_service.dart';
   providers: const [TextAnalysisService],
 )
 class TextAnalysisComponent implements OnInit {
+  final AppService appService;
   final TextAnalysisService textAnalysisService;
   final UserAccountService userAccountService;
 
+  final RouteParams routeParams;
 
   String lookupText = '';
   String lineHeightText = '1.0';
@@ -32,18 +38,19 @@ class TextAnalysisComponent implements OnInit {
 
   AnnotationText annotatedText;
 
-
-  String errorText = '';
-
   bool analyzing = false;
 
   double lineHeight = 1.0;
 
-  TextAnalysisComponent(this.textAnalysisService, this.userAccountService);
+  TextAnalysisComponent(this.appService, this.textAnalysisService, this.userAccountService, this.routeParams);
 
   @override
   Future<Null> ngOnInit() async {
-
+    var routerText = routeParams.get('text');
+    if(routerText.isNotEmpty) {
+      lookupText = routerText;
+      lookup();
+    }
   }
 
   void lineHeightChanged() {
@@ -67,11 +74,12 @@ class TextAnalysisComponent implements OnInit {
   }
 
   void saveText(String text) {
+    appService.clearMessage();
     userAccountService.addText(text).then((success) {
       if(success) {
-        // TODO
+        appService.infoMessage("Text hinzugefügt.");
       } else {
-
+        appService.errorMessage("Fehler beim speichern des Texts.");
       }
     });
   }
@@ -85,6 +93,7 @@ class TextAnalysisComponent implements OnInit {
   }
 
   void lookup() {
+    appService.clearMessage();
     analyzing = true;
     textAnalysisService.lookupText(lookupText).then((response) {
       annotatedText = response;
@@ -92,12 +101,13 @@ class TextAnalysisComponent implements OnInit {
     }, onError: (e) {
       // TODO error properties
       print(e.toString());
-      errorText = "Text could not be analyzed.";
+      appService.errorMessage("Der Text konnte nicht analysiert werden.");
       analyzing = false;
     });
   }
 
   void newText() {
+    appService.clearMessage();
     annotatedText = null;
   }
 }
