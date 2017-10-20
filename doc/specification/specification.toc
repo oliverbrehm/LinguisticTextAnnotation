@@ -1,0 +1,20 @@
+\select@language {ngerman}
+\select@language {ngerman}
+\contentsline {section}{\numberline {0.1}Requirements}{3}{section.0.1}
+\contentsline {paragraph}{\nonumberline Text Analyse}{3}{section*.2}
+\contentsline {paragraph}{\nonumberline Anpassung der annotierten Darstellung}{3}{section*.3}
+\contentsline {paragraph}{\nonumberline Export der annotierten Darstellung}{3}{section*.4}
+\contentsline {paragraph}{\nonumberline Verwaltung von User Accounts}{3}{section*.5}
+\contentsline {paragraph}{\nonumberline Behandlung unbekannter W\IeC {\"o}rter}{3}{section*.6}
+\contentsline {paragraph}{\nonumberline Bestimmung der Segmentierung unbekannter W\IeC {\"o}rter}{3}{section*.7}
+\contentsline {paragraph}{\nonumberline Speicherung von Nutzer Segmentierungen}{3}{section*.8}
+\contentsline {paragraph}{\nonumberline Speicherung von Annotationskonfigurationen}{3}{section*.9}
+\contentsline {paragraph}{\nonumberline Auswahl einer Annotationskonfiguration f\IeC {\"u}r einen Text}{4}{section*.10}
+\contentsline {paragraph}{\nonumberline Speicherung von Nutzertexten}{4}{section*.11}
+\contentsline {paragraph}{\nonumberline Auflistung von Nuetzertexten}{4}{section*.12}
+\contentsline {paragraph}{\nonumberline expert user functions}{4}{section*.13}
+\contentsline {section}{\numberline {0.2}Software Komponenten}{5}{section.0.2}
+\contentsline {subsection}{\numberline {0.2.1}\IeC {\"U}berblick}{5}{subsection.0.2.1}
+\contentsline {subsection}{\numberline {0.2.2}Komponenten}{5}{subsection.0.2.2}
+\contentsline {section}{\numberline {0.3}Datenmodell}{7}{section.0.3}
+\contentsline {section}{\numberline {0.4}User Interface}{9}{section.0.4}

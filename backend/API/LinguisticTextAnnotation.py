@@ -6,7 +6,7 @@ import getopt
 import json
 
 from DictionaryService import DictionaryService
-from UserService import UserService, User, Authentication
+from UserService import UserService, Authentication
 
 from flask import Flask, request
 from flask import Response
@@ -45,7 +45,9 @@ def say_hello():
 
 @app.route('/queryWord/<text>', methods=['GET'])
 def query_word(text):
-    response = dictionaryService.query_word(text)
+    user = userService.authenticate(Authentication.read(request))
+    # TODO better method than to pass userService as a parameter?
+    response = dictionaryService.query_word(text, userService, user)
     if response is None:
         return create_error_response(404, "Word not found.")
 
@@ -54,14 +56,70 @@ def query_word(text):
 
 @app.route('/queryText', methods=['POST'])
 def query_text():
+    user = userService.authenticate(Authentication.read(request))
     text = request.form.get("text")
-    response = dictionaryService.query_text(text)
+
+    print('user: ', user)
+
+    # TODO better method than to pass userService as a parameter?
+    response = dictionaryService.query_text(text, userService, user)
 
     if response is None:
         # TODO status code
         return create_error_response(404, "Error analyzing text.")
 
     return create_response(200, response)
+
+
+@app.route('/user/add_word', methods=['POST'])
+def user_add_word():
+    user = userService.authenticate(Authentication.read(request))
+    if not user: return create_error_response(401, "Invalid credentials.")
+
+    text = request.form.get("text")
+    stress_pattern = request.form.get("stress_pattern")
+    hyphenation = request.form.get("hyphenation")
+
+    if not text or not stress_pattern or not hyphenation:
+        return create_error_response(404, "Data not provided.")
+
+    success = userService.add_word(user, text, stress_pattern, hyphenation)
+
+    if not success:
+        return create_error_response(404, "Error adding word.")
+
+    return create_response(200)
+
+
+@app.route('/user/configuration/add', methods=['POST'])
+def user_add_configuration():
+    user = userService.authenticate(Authentication.read(request))
+    if not user: return create_error_response(401, "Invalid credentials.")
+
+    name = request.form.get("name")
+    stressed_color = request.form.get("stressed_color")
+    unstressed_color = request.form.get("unstressed_color")
+    line_height = request.form.get("line_height")
+
+    if not name or not stressed_color or not unstressed_color or not line_height:
+        return create_error_response(404, "Data not provided.")
+
+    success = userService.add_configuration(user, name, stressed_color, unstressed_color, line_height)
+
+    if not success:
+        return create_error_response(404, "Error adding configuration.")
+
+    return create_response(200)
+
+
+@app.route('/user/configuration/list', methods=['POST'])
+def user_get_configurations():
+    user = userService.authenticate(Authentication.read(request))
+    if not user: return create_error_response(401, "Invalid credentials.")
+
+    configurations = userService.get_configurations(user)
+
+    return create_response(200, {'configurations': configurations})
 
 
 @app.route('/user/register', methods=['POST'])
@@ -83,13 +141,12 @@ def user_register():
 @app.route('/user/login', methods=['POST'])
 def user_login():
     user = userService.authenticate(Authentication.read(request))
-    print("user", user)
     if not user: return create_error_response(401, "Invalid credentials.")
 
     return create_response(200)
 
 
-@app.route('/user/add_text', methods=['POST'])
+@app.route('/user/text/add', methods=['POST'])
 def user_add_text():
     user = userService.authenticate(Authentication.read(request))
     if not user: return create_error_response(401, "Invalid credentials.")
@@ -105,7 +162,7 @@ def user_add_text():
     return create_response(200)
 
 
-@app.route('/user/get_texts', methods=['POST'])
+@app.route('/user/text/list', methods=['POST'])
 def user_get_texts():
     user = userService.authenticate(Authentication.read(request))
     if not user: return create_error_response(401, "Invalid credentials.")

@@ -41,10 +41,53 @@ class UserText(Base):
     __tablename__ = 'user_text'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
+
     text = sqlalchemy.Column(sqlalchemy.String(8192))
 
     user_email = sqlalchemy.Column(sqlalchemy.String(256), sqlalchemy.ForeignKey('user.email'))
     user = relationship(User)
+
+
+class TextConfiguration(Base):
+
+    __tablename__ = 'text_config'
+
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
+
+    name = sqlalchemy.Column(sqlalchemy.String(128))
+    stressed_color = sqlalchemy.Column(sqlalchemy.String(9))
+    unstressed_color = sqlalchemy.Column(sqlalchemy.String(9))
+    line_height = sqlalchemy.Column(sqlalchemy.Float)
+
+    user_email = sqlalchemy.Column(sqlalchemy.String(256), sqlalchemy.ForeignKey('user.email'))
+    user = relationship(User)
+
+    def json(self):
+        return {
+            "stressed_color": self.stressed_color,
+            "unstressed_color": self.unstressed_color,
+            "line_height": self.line_height
+        }
+
+
+class UserWord(Base):
+
+    __tablename__ = 'user_word'
+
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
+
+    text = sqlalchemy.Column(sqlalchemy.String(128))
+    stress_pattern = sqlalchemy.Column(sqlalchemy.String(32))
+    hyphenation = sqlalchemy.Column(sqlalchemy.String(128))
+
+    user_email = sqlalchemy.Column(sqlalchemy.String(256), sqlalchemy.ForeignKey('user.email'))
+    user = relationship(User)
+
+    def json(self):
+        return {
+            "stress_pattern": self.stress_pattern,
+            "hyphenation": self.hyphenation
+        }
 
 
 class UserService:
@@ -58,7 +101,10 @@ class UserService:
     def get_user(self, email):
         return self.session.query(User).filter(User.email == email).first()
 
-    def authenticate(self, authentication: Authentication):
+    def authenticate(self, authentication):
+        if not authentication:
+            return None
+
         user = self.get_user(authentication.email)
 
         if not user:  # user not existing
@@ -87,6 +133,21 @@ class UserService:
 
         return True
 
+    def add_word(self, user, text, stress_pattern, hyphenation):
+        user_word = UserWord(user=user, text=text, stress_pattern=stress_pattern, hyphenation=hyphenation)
+        self.session.add(user_word)
+        self.session.commit()
+
+        return True
+
+    def add_configuration(self, user, name, stressed_color, unstressed_color, line_height):
+        configuration = TextConfiguration(user=user, name=name, stressed_color=stressed_color,
+                                          unstressed_color= unstressed_color, line_height=line_height)
+        self.session.add(configuration)
+        self.session.commit()
+
+        return True
+
     def get_texts(self, user):
         texts = self.session.query(UserText).filter(UserText.user == user).all()
 
@@ -95,6 +156,22 @@ class UserService:
             text_list.append(t.text)
 
         return text_list
+
+    def get_configurations(self, user):
+        configurations = self.session.query(TextConfiguration).filter(TextConfiguration.user == user).all()
+
+        configuration_list = []
+        for c in configurations:
+            configuration_list.append(c.json())
+
+        return configuration_list
+
+    def get_word(self, user, text):
+        word = self.session.query(UserWord).filter(UserWord.user == user).filter(UserWord.text == text).first()
+        if word is None:
+            return None
+
+        return word.json()
 
     def list(self):
         users = self.session.query(User).all()

@@ -55,7 +55,7 @@ class DictionaryService:
 
         self.db.commit()
 
-    def query_word(self, word):
+    def query_word(self, word, user_service, user):
         # create/open database
         db = sqlite3.connect(DATABASE_PATH)
         cursor = db.cursor()
@@ -69,6 +69,22 @@ class DictionaryService:
             .replace("Ü", "Ue")\
             .replace("ß", "ss")
 
+        print('user2: ', user)
+
+        # first query user words (local preferences)
+        if user_service and user:
+            print('budums: ', query_text)
+
+            word = user_service.get_word(user, query_text)
+
+            # try lower case
+            if word is None:
+                word = user_service.get_word(user, query_text.lower())
+
+            if word is not None:
+                return word
+
+        # if not found in user database, search the global word database
         query = 'SELECT * FROM word WHERE (text="{text}")'.format(text=query_text)
         cursor.execute(query)
         entry = cursor.fetchone()
@@ -84,14 +100,15 @@ class DictionaryService:
 
         response = {
             'stress_pattern': entry[1],
-            'hyphenation': self.pyphen_dict.inserted(word) # TODO resolve question: hyphenation in database or in backend?
+            'hyphenation': entry[2]# self.pyphen_dict.inserted(word) # TODO resolve question: hyphenation in database or in backend?
         }
 
         return response
 
-    def query_text(self, text):
+    def query_text(self, text, user_service, user):
         if not text:
             return None
+        print('user1: ', user)
 
         # TODO german language?
         words = nltk.word_tokenize(text)
@@ -105,16 +122,16 @@ class DictionaryService:
             # don't analyze special tokens
             # part of speech tags: http://www.ims.uni-stuttgart.de/forschung/ressourcen/lexika/TagSets/stts-table.html
             if tag is 'CD':
-                analyzed.append({'type': 'number', 'word': word}); continue
+                analyzed.append({'type': 'number', 'text': word}); continue
             if tag in ['.', ',']:
-                analyzed.append({'type': 'punctuation', 'word': word}); continue
+                analyzed.append({'type': 'punctuation', 'text': word}); continue
             if len(word) < 2 or tag is 'XY' or tag in ["''"]:
-                analyzed.append({'type': 'unknown', 'word': word}); continue
+                analyzed.append({'type': 'unknown', 'text': word}); continue
 
-            annotated = self.query_word(word)
+            annotated = self.query_word(word, user_service, user)
             if annotated is None:
-                analyzed.append({'type': 'not_found', 'word': word})
+                analyzed.append({'type': 'not_found', 'text': word})
             else:
-                analyzed.append({'type': 'annotated_word', 'word': word, 'annotation': annotated})
+                analyzed.append({'type': 'annotated_word', 'text': word, 'annotation': annotated})
 
         return analyzed

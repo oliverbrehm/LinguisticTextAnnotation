@@ -1,0 +1,73 @@
+\documentclass[twoside,12pt,a4paper]{scrreprt}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{babelbib}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{graphicx} % Zum Einbinden von Grafiken
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true,linkcolor=Black,citecolor=MidnightBlue,urlcolor=MidnightBlue]{hyperref}
+\usepackage[all]{hypcap}
+\usepackage{pgfplots} \pgfplotsset{compat=1.9}
+\usepackage{helvet} % Schönere SansSerif-Schrift
+\usepackage{times}  % Schönere Serif-Schrift
+
+\usepackage{blindtext} % sollte am Ende nicht mehr benötigt werden ;)
+
+\pagestyle{headings}
+
+\graphicspath{ {figures/} } % Pfad-Prefix für einzubindende Grafiken. Es sind auch mehrere Pfade möglich, diese müssen jeweils in eigenen {Klammern} stehen.
+
+\setkomafont{disposition}{\normalcolor\bfseries} % überall Serifen verwenden
+% oder
+%\renewcommand{\familydefault}{\sfdefault} % überall Sans-Serif verwenden
+
+% PDF-Optionen (werden in den Dateieigenschaften angezeigt)
+\hypersetup{
+pdftitle={Entwicklung einer Webanwendung zur Annotation spezifischer linguistischer Merkmale in Fließtexten},
+pdfauthor={Oliver Brehm},
+pdfsubject={Masterarbeit Infromatik},
+pdfpagelayout=TwoColumnRight
+}
+
+%%% Eigene Makros
+\newcommand{\qq}[1]{\glqq #1\grqq} % \qq{Text in Anführungszeichen}
+
+\begin{document}
+
+%%% Titelseite
+\begin{titlepage}
+\begin{center}
+\LARGE Eberhard Karls Universität Tübingen\\
+\large Mathematisch-Naturwissenschaftliche Fakultät \\
+Wilhelm-Schickard-Institut für Informatik\\
+[3cm]
+\huge LinguisticTextAnnotation\\
+[2cm]
+\Large\textbf{Specification}\\
+[1.5cm]
+\large Oliver Brehm\\
+[0.5cm]
+31.01.2017\\
+\vfill
+
+\end{center}
+\end{titlepage}
+
+\tableofcontents\label{toc}
+\cleardoublepage
+
+\input{chapters/requirements.tex}
+\cleardoublepage
+
+\input{chapters/components.tex}
+\cleardoublepage
+
+\input{chapters/data_model.tex}
+\cleardoublepage
+
+\input{chapters/user_interface.tex}
+\cleardoublepage
+
+\end{document}
