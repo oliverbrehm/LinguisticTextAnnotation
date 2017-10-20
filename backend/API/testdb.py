@@ -1,6 +1,8 @@
 import UserService
+import DictionaryService
 
 userService = UserService.UserService()
+dictionaryService = DictionaryService.DictionaryService()
 
 #userService.register('test', 'blub')
 
@@ -17,3 +19,5 @@ print(str(user.email))
 #print(users)
 
 #userService.engine.execute("DROP TABLE IF EXISTS text_config")
+
+dictionaryService.add_word('test4', '01', 'test-4')

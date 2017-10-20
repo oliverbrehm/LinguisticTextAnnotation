@@ -59,8 +59,6 @@ def query_text():
     user = userService.authenticate(Authentication.read(request))
     text = request.form.get("text")
 
-    print('user: ', user)
-
     # TODO better method than to pass userService as a parameter?
     response = dictionaryService.query_text(text, userService, user)
 
@@ -174,7 +172,6 @@ def user_get_texts():
 
 @app.route('/user/list', methods=['GET'])
 def user_list():
-    print("session: ", request.cookies.get('session'))
     return create_response(200, userService.list())
 
 

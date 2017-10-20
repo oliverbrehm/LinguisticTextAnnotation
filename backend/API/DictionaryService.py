@@ -2,17 +2,29 @@ import sqlite3
 import nltk # natural language toolkit
 import pyphen
 
-DATABASE_PATH = '../db/celex.db'
+import sqlalchemy
+from sqlalchemy.ext.declarative import declarative_base
+
+from sqlalchemy.orm import sessionmaker
+
+DATABASE_PATH = 'sqlite:///../db/celex.db'
+
+Base = declarative_base()
 
 
-class Word:
-    def __init__(self, text, stress_pattern, hyphenation):
-        self.text = text
-        self.stress_pattern = stress_pattern
-        self.hyphenation = hyphenation
+class Word(Base):
 
-    def to_string(self):
-        return self.text + ", " + self.stress_pattern + ", " + self.hyphenation
+    __tablename__ = 'word'
+
+    text = sqlalchemy.Column(sqlalchemy.String(128), primary_key=True)
+    stress_pattern = sqlalchemy.Column(sqlalchemy.String(32))
+    hyphenation = sqlalchemy.Column(sqlalchemy.String(128))
+
+    def json(self):
+        return {
+            "stress_pattern": self.stress_pattern,
+            "hyphenation": self.hyphenation
+        }
 
 
 class DictionaryService:
@@ -31,35 +43,27 @@ class DictionaryService:
 
         pyphen.language_fallback(language + '_variant1')
 
-    def add_word(self, word, stress_pattern, hyphenation):
-        # create/open database
-        db = sqlite3.connect(DATABASE_PATH)
-        cursor = db.cursor()
+        # init sqlalchemy
+        self.engine = sqlalchemy.create_engine(DATABASE_PATH)
+        Base.metadata.bind = self.engine
+        Base.metadata.create_all(self.engine)
+        DBSession = sessionmaker(bind=self.engine)
+        self.session = DBSession()
 
-        # check if word already in DB
-        row_exists_format = 'SELECT * FROM word WHERE (text="{text}")'
-        row_exists_command = row_exists_format.format(text=word)
-        cursor.execute(row_exists_command)
-        row = cursor.fetchone()
-        if row is not None:
+    def add_word(self, word, stress_pattern, hyphenation):
+        # insert word
+        user_word = Word(text=word, stress_pattern=stress_pattern, hyphenation=hyphenation)
+
+        try:
+            self.session.add(user_word)
+            self.session.commit()
+        except:
+            self.session.rollback()
             return False
 
-        # insert word
-        insert_format = """
-                INSERT INTO word (text, stress_pattern, hyphenation)
-                VALUES ("{text}", "{stress_pattern}", "{hyphenation}");            
-            """
-        insert_command = insert_format.format(text=word.text, stress_pattern=word.stress_pattern,
-                                              hyphenation=word.hyphenation)
-        self.cursor.execute(insert_command)
-
-        self.db.commit()
+        return True
 
     def query_word(self, word, user_service, user):
-        # create/open database
-        db = sqlite3.connect(DATABASE_PATH)
-        cursor = db.cursor()
-
         # handle umlaut
         query_text = word.replace("ä", "ae")\
             .replace("ö", "oe")\
@@ -69,12 +73,8 @@ class DictionaryService:
             .replace("Ü", "Ue")\
             .replace("ß", "ss")
 
-        print('user2: ', user)
-
         # first query user words (local preferences)
         if user_service and user:
-            print('budums: ', query_text)
-
             word = user_service.get_word(user, query_text)
 
             # try lower case
@@ -85,30 +85,20 @@ class DictionaryService:
                 return word
 
         # if not found in user database, search the global word database
-        query = 'SELECT * FROM word WHERE (text="{text}")'.format(text=query_text)
-        cursor.execute(query)
-        entry = cursor.fetchone()
+        word = self.session.query(Word).filter(Word.text == query_text).first()
 
-        if entry is None or len(entry) is not 3:
+        if word is None:
             # try lower case
-            query = 'SELECT * FROM word WHERE (text="{text}")'.format(text=query_text.lower())
-            cursor.execute(query)
-            entry = cursor.fetchone()
+            word = self.session.query(Word).filter(Word.text == query_text.lower()).first()
 
-            if entry is None or len(entry) is not 3:
-                return None
+        if word is None:
+            return None
 
-        response = {
-            'stress_pattern': entry[1],
-            'hyphenation': entry[2]# self.pyphen_dict.inserted(word) # TODO resolve question: hyphenation in database or in backend?
-        }
-
-        return response
+        return word.json()
 
     def query_text(self, text, user_service, user):
         if not text:
             return None
-        print('user1: ', user)
 
         # TODO german language?
         words = nltk.word_tokenize(text)
