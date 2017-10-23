@@ -19,7 +19,8 @@
 
 <div *ngIf="analyzing">
     <h1>Text Analyse</h1>
-    <material-spinner ></material-spinner>Analysiere...
+    <material-spinner ></material-spinner><br>
+    Analysiere...
 </div>
 
 <div class="container" *ngIf="!analyzing && annotatedText() != null">
@@ -38,10 +39,17 @@
                 </div>
 
                 <p *ngIf="word.unknown">{{word.text}}</p>
-                <p *ngIf="word.notFound" class="notFound">{{word.text}}</p>
+                <p *ngIf="word.notFound" class="notFound" (click)="unknownWordClicked(word)">{{word.text}}</p>
                 <p *ngIf="word.number" class="number">{{word.text}}</p>
                 <p *ngIf="word.punctuation">{{word.text}}</p>
             </div>
+
+            <br><br>
+            <material-button raised
+                             (trigger)="startWordReview()">
+                Unbekannte Wörter klären
+            </material-button>
+            (oder direkt auf das Wort klicken)
         </div>
     </div>
 

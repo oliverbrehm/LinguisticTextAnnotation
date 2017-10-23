@@ -29,6 +29,7 @@ class TextAnalysisComponent implements OnInit {
   final UserAccountService userAccountService;
 
   final RouteParams routeParams;
+  final Router router;
 
   String lookupText = '';
   String lineHeightText = '1.0';
@@ -40,7 +41,7 @@ class TextAnalysisComponent implements OnInit {
 
   double lineHeight = 1.0;
 
-  TextAnalysisComponent(this.appService, this.textAnalysisService, this.userAccountService, this.routeParams);
+  TextAnalysisComponent(this.appService, this.textAnalysisService, this.userAccountService, this.router, this.routeParams);
 
   @override
   Future<Null> ngOnInit() async {
@@ -53,6 +54,10 @@ class TextAnalysisComponent implements OnInit {
 
   AnnotationText annotatedText() {
     return textAnalysisService.annotatedText;
+  }
+
+  void unknownWordClicked(Word word) {
+    router.navigate(['WordReview', {'word': word.text}]);
   }
 
   void lineHeightChanged() {
@@ -86,6 +91,16 @@ class TextAnalysisComponent implements OnInit {
     });
   }
 
+  void startWordReview() {
+    Word w = textAnalysisService.nextMissingWord();
+    if(w == null) {
+      appService.infoMessage("Keine unbekannten Wörter.");
+      return;
+    }
+
+    unknownWordClicked(w);
+  }
+
   void colorStressedChanged(value) {
     querySelectorAll(".stressed").style.backgroundColor = value;
   }
@@ -97,8 +112,10 @@ class TextAnalysisComponent implements OnInit {
   void lookup() {
     appService.clearMessage();
     analyzing = true;
-    textAnalysisService.lookupText(lookupText).then((success) {
+    var userData = userAccountService.appendCredentials({});
+    textAnalysisService.lookupText(lookupText, userData).then((success) {
       analyzing = false;
+
       if(!success) {
         appService.errorMessage("Der Text konnte nicht analysiert werden.");
       }

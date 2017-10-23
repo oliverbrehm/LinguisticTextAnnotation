@@ -173,6 +173,16 @@ class UserService:
 
         return word.json()
 
+    def list_words(self, user):
+        words = self.session.query(UserWord).all()
+
+        word_list = []
+
+        for word in words:
+            word_list.append(word.json())
+
+        return word_list
+
     def list(self):
         users = self.session.query(User).all()
 

@@ -12,12 +12,17 @@ user = userService.get_user('oliver')
 
 print(str(user.email))
 
-#texts = userService.get_texts(user)
-#print(texts)
+#userService.add_word(user, 'test9', '01', 'test-9')
 
-#users = userService.get_word(user, 'test1')
-#print(users)
+words = userService.list_words(user)
+print(words)
 
-#userService.engine.execute("DROP TABLE IF EXISTS text_config")
+resp = dictionaryService.query_word('im', userService, user)
+print(resp)
 
-dictionaryService.add_word('test4', '01', 'test-4')
+#word = userService.get_word(user, 'im')
+#print(word)
+
+#userService.engine.execute("DROP TABLE IF EXISTS user_word")
+
+#dictionaryService.add_word('test4', '01', 'test-4')

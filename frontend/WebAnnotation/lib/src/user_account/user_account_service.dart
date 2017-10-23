@@ -18,8 +18,10 @@ class UserAccountService {
   bool loggedIn = false;
 
   Map<String, String> appendCredentials(Map<String, String> data) {
-    data['email'] = this.email;
-    data['password'] = this.password;
+    if(loggedIn) {
+      data['email'] = this.email;
+      data['password'] = this.password;
+    }
     return data;
   }
 
@@ -61,7 +63,7 @@ class UserAccountService {
       return [];
     }
 
-    String url = AppService.SERVER_URL + "/user/get_texts";
+    String url = AppService.SERVER_URL + "/user/text/list";
 
     var data = {};
     data = appendCredentials(data);
@@ -78,13 +80,30 @@ class UserAccountService {
   }
 
   Future<bool> addText(String text) async {
-    String url = AppService.SERVER_URL + "/user/add_text";
+    String url = AppService.SERVER_URL + "/user/test/add";
 
     var data = {'text': text};
     data = appendCredentials(data);
 
     //String authHeader = "Basic " + this.email + ":" + this.password;
     //return HttpRequest.request(url, method: 'POST', withCredentials: true, sendData: data, requestHeaders: {'Authorization': authHeader}).then((request) {
+    return HttpRequest.postFormData(url, data).then((request) {
+      return true;
+    }, onError: (error) {
+      return false;
+    });
+  }
+
+  Future<bool> addWord(String text, String hyphenation, String stressPattern) {
+    String url = AppService.SERVER_URL + "/user/add_word";
+
+    var data = {
+      'text': text,
+      'hyphenation': hyphenation,
+      'stress_pattern': stressPattern
+    };
+    data = appendCredentials(data);
+
     return HttpRequest.postFormData(url, data).then((request) {
       return true;
     }, onError: (error) {

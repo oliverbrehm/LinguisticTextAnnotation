@@ -10,6 +10,7 @@ import 'package:WebAnnotation/src/text_analysis/text_analysis_component.dart';
 import 'package:WebAnnotation/src/text_analysis/text_analysis_service.dart';
 import 'package:WebAnnotation/src/user_account/user_account_component.dart';
 import 'package:WebAnnotation/src/user_account/user_account_service.dart';
+import 'package:WebAnnotation/src/word_review/word_review_component.dart';
 import 'package:WebAnnotation/app_service.dart';
 
 // AngularDart info: https://webdev.dartlang.org/angular
@@ -19,7 +20,7 @@ import 'package:WebAnnotation/app_service.dart';
   selector: 'my-app',
   styleUrls: const ['app_component.css'],
   templateUrl: 'app_component.html',
-  directives: const [CORE_DIRECTIVES, ROUTER_DIRECTIVES, materialDirectives, formDirectives, TextAnalysisComponent, UserAccountComponent],
+  directives: const [CORE_DIRECTIVES, ROUTER_DIRECTIVES, materialDirectives, formDirectives, TextAnalysisComponent, UserAccountComponent, WordReviewComponent],
   providers: const [ROUTER_PROVIDERS, materialProviders, TextAnalysisService, UserAccountService, AppService],
 )
 @RouteConfig(const [
@@ -32,6 +33,10 @@ import 'package:WebAnnotation/app_service.dart';
       path: '/text_analysis/:text',
       name: 'TextAnalysisParam',
       component: TextAnalysisComponent),
+  const Route(
+      path: '/word_review/:word',
+      name: 'WordReview',
+      component: WordReviewComponent),
   const Route(
       path: '/user_account',
       name: 'UserAccount',

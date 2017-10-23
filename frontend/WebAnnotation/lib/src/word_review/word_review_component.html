@@ -1,0 +1,42 @@
+<h1>Word review</h1>
+
+<div *ngIf="busyAdding">
+    <h1>Text Analyse</h1>
+    <material-spinner ></material-spinner><br>
+    Wort hinzufügen...
+</div>
+
+<div *ngIf="!busyAdding">
+    <div *ngIf="word != ''">
+        <p>Wort: {{word}}</p><br>
+
+        Manuelle segmentierung:<br>
+        <material-input multiline
+                        label="Silbentrennung"
+                        autoFocus floatingLabel style="width:80%"
+                        [(ngModel)]="hyphenationText">
+        </material-input>
+        <br>
+
+        <material-input multiline
+                        label="Betonungsmuster"
+                        autoFocus floatingLabel style="width:80%"
+                        [(ngModel)]="stressPatternText">
+        </material-input>
+        <br>
+        <br>
+        <material-button raised
+                         (trigger)="nextWordClicked()">
+            Speichern und nächstes Wort
+        </material-button>
+        <br>
+        <material-button raised
+                         (trigger)="doneButtonClicked()">
+            Zurück zum Text
+        </material-button>
+    </div>
+
+    <div *ngIf="word == ''">
+        no word given
+    </div>
+</div>

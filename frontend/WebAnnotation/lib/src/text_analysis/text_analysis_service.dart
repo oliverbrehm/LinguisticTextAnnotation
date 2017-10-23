@@ -45,6 +45,14 @@ class Word {
       this.addSyllable(syllables[i], stressed);
     }
   }
+
+  void clearType() {
+    unknown = false;
+    punctuation = false;
+    number = false;
+    notFound = false;
+    annotated = false;
+  }
 }
 
 class AnnotationText {
@@ -63,10 +71,11 @@ class TextAnalysisService {
 
   AnnotationText annotatedText;
 
-  Future<bool> lookupText(String text) async {
+  Future<bool> lookupText(String text, var userData) async {
     String url = AppService.SERVER_URL + "/queryText";
 
-    var data = {'text': text};
+    var data = userData;
+    data['text'] = text;
 
     return HttpRequest.postFormData(url, data).then((request) {
       var response = JSON.decode(request.responseText);
@@ -78,7 +87,7 @@ class TextAnalysisService {
       this.annotatedText = new AnnotationText();
 
       for(var entry in response) {
-        Word w = new Word(entry['word']);
+        Word w = new Word(entry['text']);
 
         switch(entry['type']) {
           case 'unknown': w.unknown = true; break;
@@ -104,5 +113,29 @@ class TextAnalysisService {
 
   void clearText() {
     annotatedText = null;
+  }
+
+  Word nextMissingWord() {
+    for(Word w in annotatedText.words) {
+      if(w.notFound) {
+        return w;
+      }
+    }
+
+    return null;
+  }
+
+  void updateWord(String word, String hyphenation, String stressPattern) {
+    if(annotatedText == null) {
+      return;
+    }
+
+    for(Word w in annotatedText.words) {
+      if(w.text == word) {
+        w.parseSyllables(hyphenation, stressPattern);
+        w.clearType();
+        w.annotated = true;
+      }
+    }
   }
 }
