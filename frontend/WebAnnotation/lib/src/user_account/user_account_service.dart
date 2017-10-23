@@ -80,7 +80,7 @@ class UserAccountService {
   }
 
   Future<bool> addText(String text) async {
-    String url = AppService.SERVER_URL + "/user/test/add";
+    String url = AppService.SERVER_URL + "/user/text/add";
 
     var data = {'text': text};
     data = appendCredentials(data);

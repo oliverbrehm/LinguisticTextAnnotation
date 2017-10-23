@@ -125,3 +125,26 @@ class DictionaryService:
                 analyzed.append({'type': 'annotated_word', 'text': word, 'annotation': annotated})
 
         return analyzed
+
+    def query_segmentation(self, word):
+        hyphenation = self.pyphen_dict.inserted(word)
+        syllables = hyphenation.split("-")
+
+        print(len(syllables))
+
+        # no stress pattern available, mock first syllable stressed
+        stress_pattern = "1"
+        for s in range(1, len(syllables)):
+            stress_pattern = stress_pattern + "0"
+
+        # TODO implement more methods for segmentation (MARY...)
+        response = [
+            {
+                'origin': 'pyphen',
+                'hyphenation': hyphenation,
+                'stress_pattern': stress_pattern
+            }
+        ]
+
+        return response
+

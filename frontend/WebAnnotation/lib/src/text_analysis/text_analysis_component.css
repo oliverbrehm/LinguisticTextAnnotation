@@ -27,9 +27,3 @@
 .number {
     background-color: cadetblue;
 }
-
-.bordered {
-    border: dotted 2px blanchedalmond;
-    padding: 1em;
-    margin: 0.5em;
-}

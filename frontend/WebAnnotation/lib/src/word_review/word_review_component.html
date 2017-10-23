@@ -1,30 +1,42 @@
-<h1>Word review</h1>
-
 <div *ngIf="busyAdding">
     <h1>Text Analyse</h1>
     <material-spinner ></material-spinner><br>
     Wort hinzufügen...
 </div>
 
-<div *ngIf="!busyAdding">
-    <div *ngIf="word != ''">
-        <p>Wort: {{word}}</p><br>
+<div *ngIf="!busyAdding" class="container">
+    <h2>Manuelle Analyse: {{word}}</h2>
 
-        Manuelle segmentierung:<br>
-        <material-input multiline
-                        label="Silbentrennung"
-                        autoFocus floatingLabel style="width:80%"
-                        [(ngModel)]="hyphenationText">
-        </material-input>
-        <br>
+    <div class="row">
+        <div class="col-md-5 bordered">
+            <h3>Silbentrennung</h3>
+            <material-input multiline
+                            (keyup)="hyphenationChanged()"
+                            autoFocus floatingLabel style="width:80%"
+                            [(ngModel)]="hyphenationText">
+            </material-input>
+            <br>
+            <p>(Silben mit "-" trennen)</p>
+        </div>
 
-        <material-input multiline
-                        label="Betonungsmuster"
-                        autoFocus floatingLabel style="width:80%"
-                        [(ngModel)]="stressPatternText">
-        </material-input>
-        <br>
-        <br>
+        <div class="col-md bordered">
+            <h3>Betonungsmuster</h3>
+            <ul class="segmentationList">
+                <li *ngFor="let s of syllables; let i = index" class="segmentationList-item {{s.selected ? 'segmentationList-active' : ''}}" (click)="syllableSelected(i)">{{s.text}}</li>
+            </ul>
+            <p>(betonte Silbe durch Klicken auswählen)</p>
+        </div>
+    </div>
+
+    <div class="row bordered">
+        <h3>Vorschläge</h3>
+        <ul>
+            <li>TODO pyphen</li>
+            <li>TODO MARY...</li>
+        </ul>
+    </div>
+
+    <div class="row">
         <material-button raised
                          (trigger)="nextWordClicked()">
             Speichern und nächstes Wort
@@ -34,9 +46,5 @@
                          (trigger)="doneButtonClicked()">
             Zurück zum Text
         </material-button>
-    </div>
-
-    <div *ngIf="word == ''">
-        no word given
     </div>
 </div>

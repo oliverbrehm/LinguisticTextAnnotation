@@ -35,12 +35,7 @@ def create_error_response(errcode, message):
 
 @app.route('/', methods=['GET'])
 def say_hello():
-    # return create_response(create_response(200, "Hello dictionary service."))
-    return "Dictionary service\n" \
-           "------------------\n" \
-           "Available routes:\n" \
-           "GET queryWord/<text>\n" \
-           "POST queryText, <text>"
+    return "LinguisticTextAnnotation API"
 
 
 @app.route('/queryWord/<text>', methods=['GET'])
@@ -68,6 +63,16 @@ def query_text():
 
     return create_response(200, response)
 
+
+@app.route('/querySegmentation/<word>', methods=['GET'])
+def query_segmentation(word):
+    response = dictionaryService.query_segmentation(word)
+
+    if response is None:
+        # TODO status code
+        return create_error_response(404, "Error analyzing text.")
+
+    return create_response(200, response)
 
 @app.route('/user/add_word', methods=['POST'])
 def user_add_word():

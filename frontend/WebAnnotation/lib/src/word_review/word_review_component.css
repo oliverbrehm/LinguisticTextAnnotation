@@ -1,0 +1,16 @@
+.segmentationList {
+
+}
+
+.segmentationList-item {
+    display: inline-block;
+    background-color: blanchedalmond;
+    padding: 0.5em;
+    margin: 0.2em;
+    font-size: larger;
+}
+
+.segmentationList-active {
+    text-decoration: underline;
+    background-color: palegreen;
+}
