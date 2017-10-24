@@ -20,8 +20,14 @@ class Word(Base):
     stress_pattern = sqlalchemy.Column(sqlalchemy.String(32))
     hyphenation = sqlalchemy.Column(sqlalchemy.String(128))
 
+    def __init__(self, text, stress_pattern, hyphenation):
+        self.text = text
+        self.stress_pattern = stress_pattern
+        self.hyphenation = hyphenation
+
     def json(self):
         return {
+            "text": self.text,
             "stress_pattern": self.stress_pattern,
             "hyphenation": self.hyphenation
         }
@@ -50,6 +56,13 @@ class DictionaryService:
         DBSession = sessionmaker(bind=self.engine)
         self.session = DBSession()
 
+    @staticmethod
+    def preprocess_entry(entry):
+        return entry.lower() \
+            .replace("ä", "ae") \
+            .replace("ö", "oe") \
+            .replace("ü", "ue")
+
     def add_word(self, word, stress_pattern, hyphenation):
         # insert word
         user_word = Word(text=word, stress_pattern=stress_pattern, hyphenation=hyphenation)
@@ -57,7 +70,11 @@ class DictionaryService:
         try:
             self.session.add(user_word)
             self.session.commit()
-        except:
+        except sqlite3.IntegrityError:
+            print('Word ', word, 'already in Database.')
+            self.session.rollback()
+            return False
+        except Exception as e:
             self.session.rollback()
             return False
 
@@ -65,31 +82,17 @@ class DictionaryService:
 
     def query_word(self, word, user_service, user):
         # handle umlaut
-        query_text = word.replace("ä", "ae")\
-            .replace("ö", "oe")\
-            .replace("ü", "ue")\
-            .replace("Ä", "Ae")\
-            .replace("Ö", "Oe")\
-            .replace("Ü", "Ue")\
-            .replace("ß", "ss")
+        query_text = DictionaryService.preprocess_entry(word)
 
         # first query user words (local preferences)
         if user_service and user:
             word = user_service.get_word(user, query_text)
-
-            # try lower case
-            if word is None:
-                word = user_service.get_word(user, query_text.lower())
 
             if word is not None:
                 return word
 
         # if not found in user database, search the global word database
         word = self.session.query(Word).filter(Word.text == query_text).first()
-
-        if word is None:
-            # try lower case
-            word = self.session.query(Word).filter(Word.text == query_text.lower()).first()
 
         if word is None:
             return None
@@ -100,7 +103,7 @@ class DictionaryService:
         if not text:
             return None
 
-        # TODO german language?
+        # TODO german language? not working well for extra characters liek -, ', ...
         words = nltk.word_tokenize(text)
         taggedWords = nltk.pos_tag(words)
 
@@ -147,4 +150,3 @@ class DictionaryService:
         ]
 
         return response
-

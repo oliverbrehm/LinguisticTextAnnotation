@@ -4,6 +4,8 @@ from sqlalchemy.orm import relationship
 
 from sqlalchemy.orm import sessionmaker
 
+from DictionaryService import DictionaryService
+
 DATABASE_PATH = 'sqlite:///../db/user.db'
 
 Base = declarative_base()
@@ -134,6 +136,9 @@ class UserService:
         return True
 
     def add_word(self, user, text, stress_pattern, hyphenation):
+        text = DictionaryService.preprocess_entry(text)
+        hyphenation = DictionaryService.preprocess_entry(hyphenation)
+
         user_word = UserWord(user=user, text=text, stress_pattern=stress_pattern, hyphenation=hyphenation)
         self.session.add(user_word)
         self.session.commit()

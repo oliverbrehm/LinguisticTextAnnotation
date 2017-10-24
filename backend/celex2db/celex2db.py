@@ -1,7 +1,8 @@
-import celex2
+# import celex2db.writeJSON as WriteJSON
+# import celex2db.writeFirebase as WriteFirebase
+
+import celex
 import writeSQLite
-import writeFirebase
-import writeJSON
 
 # frequency of status output
 STEP_SIZE = 1000
@@ -10,21 +11,21 @@ STEP_SIZE = 1000
 gpwFile = open("./celex2/german/gpw/gpw.cd")
 
 # create model
-dictionary = celex2.Dictionary()
+dictionary = celex.Dictionary()
 
 # parse celex2 file
 print("--- parsing celex2 file ---")
 maxLines = 1000000
-#maxLines = 20
 current = 0
 numParsed = 0
+numErrors = 0
 while True:
     line = gpwFile.readline()
     if not line:
         break
 
     if current > 0 and current % STEP_SIZE == 0:
-        print("parsed " + str(numParsed) + " words...")
+        print("parsed " + str(numParsed) + " words...", "ERRORS:", numErrors)
 
     current = current + 1
 
@@ -36,22 +37,23 @@ while True:
     text = components[1]
     phon = components[4]
 
-    dictionary.add_word(text, phon)
+    if not dictionary.add_word(text, phon):
+        numErrors = numErrors + 1
 
     # read only max lines
     numParsed = numParsed + 1
     if current >= maxLines:
         break
 
-print("parsed " + str(numParsed) + " words...")
+print("parsed " + str(numParsed) + " words...", "ERRORS:", numErrors)
 
 # write to json file
-writeJSON.write_json(dictionary, STEP_SIZE)
+# WriteJSON.write_json(dictionary, STEP_SIZE)
 
 # write to firebase
-# writeFirebase.write_firebase(dictionary, STEP_SIZE)
+# WriteFirebase.write_firebase(dictionary, STEP_SIZE)
 
 # write to SQLite database
-# writeSQLite.write_sqlite(dictionary, STEP_SIZE)
+writeSQLite.write_sqlite(dictionary, STEP_SIZE)
 
 print("--- DONE ---")

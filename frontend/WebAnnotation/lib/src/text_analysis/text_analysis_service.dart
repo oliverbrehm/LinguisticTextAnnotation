@@ -31,19 +31,40 @@ class Word {
     this.syllables.add(new Syllable(text, stressed));
   }
 
-  void parseSyllables(String hyphenation, String stressPattern) {
+  bool parseSyllables(String hyphenation, String stressPattern) {
     List<String> syllables = hyphenation.split("-");
 
     if(stressPattern.length != syllables.length) {
       // stress pattern does not match number of syllables
-      return;
+      return false;
+    }
+    
+    // use the given hyphenation as hint, but use the original text
+    // in order to keep capitalization of original
+    String remaining = this.text;
+    for(int i = 0; i < syllables.length; i++) {
+      String lookupSyllable = syllables[i];
+      lookupSyllable = lookupSyllable.replaceAll("ae", "ä")
+          .replaceAll("oe", "ö")
+          .replaceAll("ue", "ü");
+      
+      String syllable = remaining.substring(0, lookupSyllable.length);
+      print(lookupSyllable + ", " + syllable);
+
+      if(syllable.toLowerCase() != lookupSyllable)  {
+        // this should match, but if it does not, use lookup as fallback
+        syllable = lookupSyllable;
+      }
+
+      remaining = remaining.substring(lookupSyllable.length);
+      print("remaining: " + remaining);
+
+      String c = stressPattern.substring(i, i + 1);
+      bool stressed = (c == "1");
+      this.addSyllable(syllable, stressed);
     }
 
-    for(int i = 0; i < syllables.length; i++) {
-      String c = stressPattern.substring(i, i + 1);
-      bool stressed =  c == "1";
-      this.addSyllable(syllables[i], stressed);
-    }
+    return true;
   }
 
   void clearType() {
@@ -103,9 +124,12 @@ class TextAnalysisService {
           case 'punctuation': w.punctuation = true; break;
           case 'not_found': w.notFound = true; break;
           case 'annotated_word':
-            w.annotated = true;
             var annotation = entry['annotation'];
-            w.parseSyllables(annotation['hyphenation'], annotation['stress_pattern']);
+            if(w.parseSyllables(annotation['hyphenation'], annotation['stress_pattern'])) {
+              w.annotated = true;
+            } else {
+              w.notFound = true;
+            }
             break;
           default: continue;
         }
