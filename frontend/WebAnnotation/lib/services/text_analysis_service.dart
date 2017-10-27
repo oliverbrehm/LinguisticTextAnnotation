@@ -86,14 +86,6 @@ class AnnotationText {
   }
 }
 
-class Segmentation {
-  String origin;
-  String hyphenation;
-  String stressPattern;
-
-  Segmentation(this.origin, this.hyphenation, this.stressPattern);
-}
-
 /// service description
 @Injectable()
 class TextAnalysisService {
@@ -169,27 +161,5 @@ class TextAnalysisService {
         w.annotated = true;
       }
     }
-  }
-
-  List<Segmentation> segmentationProposals = null;
-
-  Future<bool> getSegmentationProposals(String word) async {
-    String url = AppService.SERVER_URL + "/querySegmentation/" + word;
-
-    return HttpRequest.getString(url).then((String response) {
-      var segmentations = JSON.decode(response);
-
-      this.segmentationProposals = [];
-
-      for(var s in segmentations) {
-        Segmentation seg = new Segmentation(s['origin'], s['hyphenation'], s['stress_pattern']);
-        this.segmentationProposals.add(seg);
-      }
-
-      return true;
-    }).catchError((error) {
-      print('error querying segmentation proposals: ' + error.toString());
-      return false;
-    });
   }
 }

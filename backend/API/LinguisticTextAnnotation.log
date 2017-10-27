@@ -1,0 +1,14 @@
+[nltk_data] Downloading package punkt to /Users/oliver/nltk_data...
+[nltk_data]   Package punkt is already up-to-date!
+[nltk_data] Downloading package averaged_perceptron_tagger to
+[nltk_data]     /Users/oliver/nltk_data...
+[nltk_data]   Package averaged_perceptron_tagger is already up-to-
+[nltk_data]       date!
+[{'origin': 'Pyphen', 'source': 'Source: Pyphen', 'hyphenation': 'Wurst-sa-lat', 'stress_pattern': '100'}]
+[{'origin': 'Pyphen', 'source': 'Source: Pyphen', 'hyphenation': 'Wurst-sa-lat', 'stress_pattern': '100'}]
+[nltk_data] Downloading package punkt to /Users/oliver/nltk_data...
+[nltk_data]   Package punkt is already up-to-date!
+[nltk_data] Downloading package averaged_perceptron_tagger to
+[nltk_data]     /Users/oliver/nltk_data...
+[nltk_data]   Package averaged_perceptron_tagger is already up-to-
+[nltk_data]       date!

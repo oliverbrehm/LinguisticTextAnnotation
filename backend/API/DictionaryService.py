@@ -1,6 +1,9 @@
 import sqlite3
 import nltk # natural language toolkit
 import pyphen
+import requests
+
+import xml.etree.ElementTree as ET
 
 import sqlalchemy
 from sqlalchemy.ext.declarative import declarative_base
@@ -10,6 +13,22 @@ from sqlalchemy.orm import sessionmaker
 DATABASE_PATH = 'sqlite:///../db/celex.db'
 
 Base = declarative_base()
+
+
+class Segmentation:
+    def __init__(self, origin, source, hyphenation, stress_pattern):
+        self.origin = origin
+        self.source = source
+        self.hyphenation = hyphenation
+        self.stress_pattern = stress_pattern
+
+    def json(self):
+        return {
+            "origin": self.origin,
+            "source": self.source,
+            "hyphenation": self.hyphenation,
+            "stress_pattern": self.stress_pattern,
+        }
 
 
 class Word(Base):
@@ -130,23 +149,83 @@ class DictionaryService:
         return analyzed
 
     def query_segmentation(self, word):
+        segmentations = []
+
+        # MARY TTS
+        url = 'http://mary.dfki.de:59125/process?INPUT_TEXT=' + word + \
+              '&INPUT_TYPE=TEXT&OUTPUT_TYPE=ACOUSTPARAMS&LOCALE=de'
+        response = requests.get(url, timeout=5)
+
+        if response:
+            print(response)
+
+            stress_pattern, hyphenation = self.parse_mary_xml(word, response.text)
+
+            if stress_pattern:
+                segmentation_mary = Segmentation("MARY TTS", "Source: MARY TTS", hyphenation, stress_pattern)
+                segmentations.append(segmentation_mary.json())
+
+        # pyphen: no stress pattern available, default first syllable stressed
         hyphenation = self.pyphen_dict.inserted(word)
         syllables = hyphenation.split("-")
-
-        print(len(syllables))
-
-        # no stress pattern available, mock first syllable stressed
         stress_pattern = "1"
         for s in range(1, len(syllables)):
             stress_pattern = stress_pattern + "0"
 
-        # TODO implement more methods for segmentation (MARY...)
-        response = [
-            {
-                'origin': 'pyphen',
-                'hyphenation': hyphenation,
-                'stress_pattern': stress_pattern
-            }
-        ]
+        segmentation_pyphen = Segmentation("Pyphen", "Source: Pyphen", hyphenation, stress_pattern)
+        segmentations.append(segmentation_pyphen.json())
 
-        return response
+        print(segmentations)
+
+        return segmentations
+
+    def parse_mary_xml(self, queryWord, xmlText):
+        print(xmlText)
+
+        root = ET.fromstring(xmlText)
+
+        stress_pattern = ""
+        hyphenation = ""
+
+        if not root:
+            print('root not found')
+            return ("", "")
+
+        wordElement = root[0][0][0][0] # root: maryxml[0] -> p[0] -> s[0] -> phrase[0] -> t (== Word)
+        print(wordElement)
+
+        if not wordElement:
+            print('word not found')
+            return ("", "")
+
+        # TODO REMOVE hyphenation_remaining = queryWord
+
+        for syllable in wordElement:
+            stressed = syllable.get('stress')
+            if stressed == "1":
+                stress_pattern = stress_pattern + "1"
+            else:
+                stress_pattern = stress_pattern + "0"
+
+            # TODO extract hyphenation from phonesm?
+            # own algorithm or P2G converter...?
+            '''
+            phon:str = syllable.get('ph')
+            phon = phon.replace(' ', '').replace('?', '')
+            print('phon', phon)
+            syllable_text = hyphenation_remaining[0:len(phon)]
+            print('syllable_text', syllable_text)
+
+            if len(phon) < len(hyphenation_remaining):
+                hyphenation_remaining = hyphenation_remaining[len(phon):]
+
+            if hyphenation:
+                hyphenation = hyphenation + '-'
+
+            hyphenation = hyphenation + syllable_text
+            '''
+
+            # fallback: use pyphen and hope it matches
+            hyphenation = self.pyphen_dict.inserted(queryWord)
+
+        return stress_pattern, hyphenation

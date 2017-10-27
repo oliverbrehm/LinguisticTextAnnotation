@@ -6,12 +6,13 @@ import 'package:angular_components/angular_components.dart';
 import 'package:angular_router/angular_router.dart';
 import 'package:angular_forms/angular_forms.dart';
 
-import 'package:WebAnnotation/src/text_analysis/text_analysis_component.dart';
-import 'package:WebAnnotation/src/text_analysis/text_analysis_service.dart';
-import 'package:WebAnnotation/src/user_account/user_account_component.dart';
-import 'package:WebAnnotation/src/user_account/user_account_service.dart';
-import 'package:WebAnnotation/src/word_review/word_review_component.dart';
+import 'package:WebAnnotation/components/text_analysis/text_analysis_component.dart';
+import 'package:WebAnnotation/services/text_analysis_service.dart';
+import 'package:WebAnnotation/components/user_account/user_account_component.dart';
+import 'package:WebAnnotation/services/user_account_service.dart';
+import 'package:WebAnnotation/components/word_review/word_review_component.dart';
 import 'package:WebAnnotation/app_service.dart';
+import 'package:WebAnnotation/services/segmentation_proposal_service.dart';
 
 // AngularDart info: https://webdev.dartlang.org/angular
 // Components info: https://webdev.dartlang.org/components
@@ -21,7 +22,7 @@ import 'package:WebAnnotation/app_service.dart';
   styleUrls: const ['app_component.css'],
   templateUrl: 'app_component.html',
   directives: const [CORE_DIRECTIVES, ROUTER_DIRECTIVES, materialDirectives, formDirectives, TextAnalysisComponent, UserAccountComponent, WordReviewComponent],
-  providers: const [ROUTER_PROVIDERS, materialProviders, TextAnalysisService, UserAccountService, AppService],
+  providers: const [ROUTER_PROVIDERS, materialProviders, TextAnalysisService, UserAccountService, AppService, SegmentationProposalService],
 )
 @RouteConfig(const [
   const Route(

@@ -6,7 +6,7 @@ import 'package:angular_forms/angular_forms.dart';
 import 'package:angular_router/angular_router.dart';
 
 import 'package:WebAnnotation/app_service.dart';
-import 'package:WebAnnotation/src/user_account/user_account_service.dart';
+import 'package:WebAnnotation/services/user_account_service.dart';
 
 @Component(
   selector: 'user-account',

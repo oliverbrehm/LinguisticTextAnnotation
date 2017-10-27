@@ -8,8 +8,8 @@ import 'package:angular_router/angular_router.dart';
 
 
 import 'package:WebAnnotation/app_service.dart';
-import 'package:WebAnnotation/src/text_analysis/text_analysis_service.dart';
-import 'package:WebAnnotation/src/user_account/user_account_service.dart';
+import 'package:WebAnnotation/services/text_analysis_service.dart';
+import 'package:WebAnnotation/services/user_account_service.dart';
 
 
 @Component(
@@ -31,7 +31,7 @@ class TextAnalysisComponent implements OnInit {
   final RouteParams routeParams;
   final Router router;
 
-  String lookupText = '';
+  String lookupText = 'Kreidefelsen';
   String lineHeightText = '1.0';
 
   String colorStressed = '#98FB98';

@@ -22,18 +22,10 @@
         <div class="col-md bordered">
             <h3>Betonungsmuster</h3>
             <ul class="segmentationList">
-                <li *ngFor="let s of syllables; let i = index" class="segmentationList-item {{s.selected ? 'segmentationList-active' : ''}}" (click)="syllableSelected(i)">{{s.text}}</li>
+                <li *ngFor="let s of currentSegmentation.syllables; let i = index" class="segmentationList-item segmentationList-hover {{s.selected ? 'segmentationList-active' : ''}}" (click)="syllableSelected(i)">{{s.text}}</li>
             </ul>
             <p>(betonte Silbe durch Klicken auswählen)</p>
         </div>
-    </div>
-
-    <div class="row bordered">
-        <h3>Vorschläge</h3>
-        <ul>
-            <li>TODO pyphen</li>
-            <li>TODO MARY...</li>
-        </ul>
     </div>
 
     <div class="row">
@@ -46,5 +38,19 @@
                          (trigger)="doneButtonClicked()">
             Zurück zum Text
         </material-button>
+    </div>
+
+    <div class="row bordered" style="display: block">
+        <h3>Vorschläge</h3>
+
+
+        <ul style="display: block" class="list-group">
+            <li *ngFor="let segmentationProposal of segmentationProposals()" (click)="proposalSelected(segmentationProposal)" class="list-group-item list-group-item-action">
+                {{segmentationProposal.origin}} ({{segmentationProposal.source}})
+                <ul class="segmentationList">
+                    <li *ngFor="let s of segmentationProposal.segmentation.syllables; let i = index" class="segmentationList-item segmentationList-small {{s.selected ? 'segmentationList-active' : ''}}">{{s.text}}</li>
+                </ul>
+            </li>
+        </ul>
     </div>
 </div>

@@ -10,7 +10,15 @@
     font-size: larger;
 }
 
+.segmentationList-small {
+    font-size: smaller;
+}
+
 .segmentationList-active {
     text-decoration: underline;
+    background-color: palegreen;
+}
+
+.segmentationList-hover:hover {
     background-color: palegreen;
 }

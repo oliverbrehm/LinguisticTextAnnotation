@@ -74,6 +74,7 @@ def query_segmentation(word):
 
     return create_response(200, response)
 
+
 @app.route('/user/add_word', methods=['POST'])
 def user_add_word():
     user = userService.authenticate(Authentication.read(request))
