@@ -71,12 +71,31 @@
         </div>
 
         <div class="col-md bordered">
-            <h2>Original</h2>
-            {{annotatedText().originalText}}
+            <h2>Text</h2>
+            <material-input multiline
+                            label="Text"
+                            autoFocus floatingLabel style="width:80%"
+                            [(ngModel)]="lookupText">
+            </material-input>
             <br>
+
+            <material-button raised
+                             (trigger)="lookup()">
+                Analysieren
+            </material-button>
+            <br>
+
             <div *ngIf="userAccountService.loggedIn">
+                <br>
+                <h3>Titel</h3>
+                <material-input label="Titel"
+                                autoFocus floatingLabel style="width:80%"
+                                [(ngModel)]="textTitle">
+                </material-input>
+                <br>
+
                 <material-button raised
-                                 (trigger)="saveText(annotatedText().originalText)">
+                                 (trigger)="saveText()">
                     Text speichern
                 </material-button>
             </div>

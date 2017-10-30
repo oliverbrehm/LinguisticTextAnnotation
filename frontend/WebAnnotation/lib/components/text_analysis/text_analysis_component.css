@@ -24,6 +24,11 @@
     background-color: indianred;
 }
 
+.notFound:hover {
+    cursor: pointer;
+    background-color: red;
+}
+
 .number {
     background-color: cadetblue;
 }

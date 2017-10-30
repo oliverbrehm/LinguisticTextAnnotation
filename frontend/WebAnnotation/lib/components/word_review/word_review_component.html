@@ -43,6 +43,9 @@
     <div class="row bordered" style="display: block">
         <h3>Vorschläge</h3>
 
+        <div *ngIf="loadingProposals">
+            <material-spinner ></material-spinner><br>
+        </div>
 
         <ul style="display: block" class="list-group">
             <li *ngFor="let segmentationProposal of segmentationProposals()" (click)="proposalSelected(segmentationProposal)" class="list-group-item list-group-item-action">

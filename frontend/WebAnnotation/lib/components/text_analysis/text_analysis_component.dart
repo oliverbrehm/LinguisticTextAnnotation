@@ -32,6 +32,7 @@ class TextAnalysisComponent implements OnInit {
   final Router router;
 
   String lookupText = 'Kreidefelsen';
+  String textTitle = '';
   String lineHeightText = '1.0';
 
   String colorStressed = '#98FB98';
@@ -49,6 +50,8 @@ class TextAnalysisComponent implements OnInit {
     if(routerText != null && routerText.isNotEmpty) {
       lookupText = routerText;
       lookup();
+    } else if(textAnalysisService.annotatedText != null) {
+      lookupText = textAnalysisService.annotatedText.originalText;
     }
   }
 
@@ -80,9 +83,12 @@ class TextAnalysisComponent implements OnInit {
     querySelectorAll(".word *").style.lineHeight = lineHeight.toString() + "em";
   }
 
-  void saveText(String text) {
+  void saveText() {
+    String title = textTitle;
+    String text = lookupText;
+
     appService.clearMessage();
-    userAccountService.addText(text).then((success) {
+    userAccountService.addText(title, text).then((success) {
       if(success) {
         appService.infoMessage("Text hinzugefügt.");
       } else {

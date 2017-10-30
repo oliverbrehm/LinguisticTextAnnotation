@@ -44,10 +44,18 @@ class UserText(Base):
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
 
+    title = sqlalchemy.Column(sqlalchemy.String(128))
     text = sqlalchemy.Column(sqlalchemy.String(8192))
 
     user_email = sqlalchemy.Column(sqlalchemy.String(256), sqlalchemy.ForeignKey('user.email'))
     user = relationship(User)
+
+    def json(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'text': self.text
+        }
 
 
 class TextConfiguration(Base):
@@ -66,6 +74,7 @@ class TextConfiguration(Base):
 
     def json(self):
         return {
+            "id": self.id,
             "stressed_color": self.stressed_color,
             "unstressed_color": self.unstressed_color,
             "line_height": self.line_height
@@ -87,6 +96,8 @@ class UserWord(Base):
 
     def json(self):
         return {
+            "id": self.id,
+            "text": self.text,
             "stress_pattern": self.stress_pattern,
             "hyphenation": self.hyphenation
         }
@@ -128,10 +139,23 @@ class UserService:
 
         return True
 
-    def add_text(self, user, text):
-        user_text = UserText(user=user, text=text)
+    def add_text(self, user, title, text):
+        user_text = UserText(user=user, title=title, text=text)
         self.session.add(user_text)
         self.session.commit()
+
+        return True
+
+    def delete_text(self, text_id):
+        n_id = int(text_id)
+
+        try:
+            user_text = self.session.query(UserText).filter(UserText.id == n_id).first()
+            self.session.delete(user_text)
+            self.session.commit()
+        except Exception as e:
+            print(e)
+            return False
 
         return True
 
@@ -145,6 +169,19 @@ class UserService:
 
         return True
 
+    def delete_word(self, word_id):
+        n_id = int(word_id)
+
+        try:
+            user_word = self.session.query(UserWord).filter(UserWord.id == n_id).first()
+            self.session.delete(user_word)
+            self.session.commit()
+        except Exception as e:
+            print(e)
+            return False
+
+        return True
+
     def add_configuration(self, user, name, stressed_color, unstressed_color, line_height):
         configuration = TextConfiguration(user=user, name=name, stressed_color=stressed_color,
                                           unstressed_color= unstressed_color, line_height=line_height)
@@ -153,12 +190,25 @@ class UserService:
 
         return True
 
+    def delete_configuration(self, conf_id):
+        n_id = int(conf_id)
+
+        try:
+            text_config = self.session.query(TextConfiguration).filter(TextConfiguration.id == n_id).first()
+            self.session.delete(text_config)
+            self.session.commit()
+        except Exception as e:
+            print(e)
+            return False
+
+        return True
+
     def get_texts(self, user):
         texts = self.session.query(UserText).filter(UserText.user == user).all()
 
         text_list = []
         for t in texts:
-            text_list.append(t.text)
+            text_list.append(t.json())
 
         return text_list
 
@@ -179,7 +229,7 @@ class UserService:
         return word.json()
 
     def list_words(self, user):
-        words = self.session.query(UserWord).all()
+        words = self.session.query(UserWord).filter(User.email == user.email).all()
 
         word_list = []
 

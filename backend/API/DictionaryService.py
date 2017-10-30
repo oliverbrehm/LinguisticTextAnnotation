@@ -154,16 +154,20 @@ class DictionaryService:
         # MARY TTS
         url = 'http://mary.dfki.de:59125/process?INPUT_TEXT=' + word + \
               '&INPUT_TYPE=TEXT&OUTPUT_TYPE=ACOUSTPARAMS&LOCALE=de'
-        response = requests.get(url, timeout=5)
 
-        if response:
-            print(response)
+        try:
+            response = requests.get(url, timeout=3)
 
-            stress_pattern, hyphenation = self.parse_mary_xml(word, response.text)
+            if response:
+                print(response)
 
-            if stress_pattern:
-                segmentation_mary = Segmentation("MARY TTS", "Source: MARY TTS", hyphenation, stress_pattern)
-                segmentations.append(segmentation_mary.json())
+                stress_pattern, hyphenation = self.parse_mary_xml(word, response.text)
+
+                if stress_pattern:
+                    segmentation_mary = Segmentation("MARY TTS", "Source: MARY TTS", hyphenation, stress_pattern)
+                    segmentations.append(segmentation_mary.json())
+        except requests.exceptions.ReadTimeout:
+            print('Timout querying MARY TTS.')
 
         # pyphen: no stress pattern available, default first syllable stressed
         hyphenation = self.pyphen_dict.inserted(word)

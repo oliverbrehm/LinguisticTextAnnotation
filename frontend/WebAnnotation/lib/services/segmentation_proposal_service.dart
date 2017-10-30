@@ -59,7 +59,7 @@ class SegmentationProposalService {
   Future<bool> querySegmentationProposals(String word) async {
     this.segmentationProposals = [];
 
-    String url = AppService.SERVER_URL + "/querySegmentation/" + word;
+    String url = AppService.SERVER_URL + "/query/segmentation/" + word;
 
     return HttpRequest.getString(url).then((String response) {
       var backendProposals = JSON.decode(response);

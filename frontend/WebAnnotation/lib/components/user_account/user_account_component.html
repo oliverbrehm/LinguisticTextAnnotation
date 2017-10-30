@@ -21,35 +21,41 @@
 
 <div *ngIf="loggedIn()">
     <h2>Hallo {{userEmail()}}!</h2>
-
-    <br>
-
-    <div class="newText">
-        <h3>Text hinzufügen:</h3>
-
-        <material-input multiline
-                        label="Text"
-                        autoFocus floatingLabel style="width:80%"
-                        [(ngModel)]="newText">
-        </material-input>
-        <br>
-        <material-button raised
-                         (trigger)="addUserText()">
-            Hinzufügen
-        </material-button>
-    </div>
-
     <br>
 
     <h2>Gespeicherte Texte</h2>
-    <div *ngFor="let text of userTexts" class="userText">
-        <p>{{text}}</p>
-        <material-button raised
-                         (trigger)="analyseText(text)">
-            Verwenden
-        </material-button>
-    </div>
 
+    <ul>
+        <li *ngFor="let t of userTexts()">
+            <span class="textTitle" (click)="t.toggle()">{{t.title}}</span>
+            <div *ngIf="t.expanded" class="userText">
+                <h3>{{t.title}}</h3>
+                <p>{{t.text}}</p>
+                <material-button raised
+                                 (trigger)="analyseText(t)">
+                    Verwenden
+                </material-button>
+
+                <material-button raised
+                                 (trigger)="deleteText(t)">
+                    Löschen
+                </material-button>
+            </div>
+        </li>
+    </ul>
+    <br>
+
+    <h2>Manuelle Einträge</h2>
+
+    <ul>
+        <li *ngFor="let w of userWords()">
+            {{w.text}} | {{w.hyphenation}} | {{w.stressPattern}}
+            <material-button raised
+                             (trigger)="deleteUserWord(w)">
+                Löschen
+            </material-button>
+        </li>
+    </ul>
     <br>
 
     <div class="logoutArea">

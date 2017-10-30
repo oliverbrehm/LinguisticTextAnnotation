@@ -28,18 +28,13 @@ class UserAccountComponent implements OnInit {
   String emailText = "";
   String passwordText = "";
 
-  String userListText = "";
-
-  List<String> userTexts = [];
-
-  String newText = "";
-
   UserAccountComponent(this.appService, this.userAccountService, this.router);
 
   @override
   Future<Null> ngOnInit() async {
     if(this.loggedIn()) {
-      this.queryUserTexts();
+      queryUserTexts();
+      queryUserWords();
     }
   }
 
@@ -60,6 +55,7 @@ class UserAccountComponent implements OnInit {
     userAccountService.login(emailText, passwordText).then((success) {
       if(success) {
         this.queryUserTexts();
+        this.queryUserWords();
       }
       else {
         appService.errorMessage("Login fehlgeschlagen");
@@ -68,29 +64,51 @@ class UserAccountComponent implements OnInit {
     });
   }
 
-  void queryUserTexts() {
-    userAccountService.queryTexts().then((texts) {
-      this.userTexts = texts;
-    });
+  List<UserText> userTexts() {
+    return userAccountService.userTexts;
   }
 
-  void addUserText() {
-    appService.clearMessage();
-    if(this.newText.isEmpty) {
-      appService.errorMessage("Bitte Text eingeben.");
-      return;
-    }
+  List<UserWord> userWords() {
+    return userAccountService.userWords;
+  }
 
-    userAccountService.addText(this.newText).then((success) {
-      if(success) {
-        appService.infoMessage("Text hinzugefügt.");
-        queryUserTexts();
+  void queryUserTexts() {
+    userAccountService.queryTexts().then((success) {
+      if(!success) {
+        appService.errorMessage("Abrufen der User Texte fehlgeschlagen.");
       }
     });
   }
 
-  void analyseText(String userText) {
-    router.navigate(['TextAnalysisParam', {'text': userText}]);
+  void analyseText(UserText userText) {
+    String text = userText.text;
+    router.navigate(['TextAnalysisParam', {'text': text}]);
+  }
+
+  void deleteText(UserText userText) {
+    String title = userText.title;
+
+    userAccountService.deleteText(userText).then((success) {
+      if(!success) {
+        appService.errorMessage("Error deleting text " + title);
+      }
+    });
+  }
+
+  void queryUserWords() {
+    userAccountService.queryWords().then((success) {
+      if(!success) {
+        appService.errorMessage("Abrufen der User Wörter fehlgeschlagen.");
+      }
+    });
+  }
+
+  void deleteUserWord(UserWord userWord) {
+    userAccountService.deleteWord(userWord).then((success) {
+      if(!success) {
+        appService.errorMessage("Löschen des Wortes " + userWord.text +" fehlgeschlagen.");
+      }
+    });
   }
 
   void logout() {

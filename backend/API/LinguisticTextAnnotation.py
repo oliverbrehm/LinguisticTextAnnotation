@@ -34,11 +34,11 @@ def create_error_response(errcode, message):
 
 
 @app.route('/', methods=['GET'])
-def say_hello():
+def api_intro():
     return "LinguisticTextAnnotation API"
 
 
-@app.route('/queryWord/<text>', methods=['GET'])
+@app.route('/query/word/<text>', methods=['GET'])
 def query_word(text):
     user = userService.authenticate(Authentication.read(request))
     # TODO better method than to pass userService as a parameter?
@@ -49,7 +49,7 @@ def query_word(text):
     return create_response(200, response)
 
 
-@app.route('/queryText', methods=['POST'])
+@app.route('/query/text', methods=['POST'])
 def query_text():
     user = userService.authenticate(Authentication.read(request))
     text = request.form.get("text")
@@ -64,7 +64,7 @@ def query_text():
     return create_response(200, response)
 
 
-@app.route('/querySegmentation/<word>', methods=['GET'])
+@app.route('/query/segmentation/<word>', methods=['GET'])
 def query_segmentation(word):
     response = dictionaryService.query_segmentation(word)
 
@@ -75,7 +75,7 @@ def query_segmentation(word):
     return create_response(200, response)
 
 
-@app.route('/user/add_word', methods=['POST'])
+@app.route('/user/word/add', methods=['POST'])
 def user_add_word():
     user = userService.authenticate(Authentication.read(request))
     if not user: return create_error_response(401, "Invalid credentials.")
@@ -93,6 +93,32 @@ def user_add_word():
         return create_error_response(404, "Error adding word.")
 
     return create_response(200)
+
+
+@app.route('/user/word/delete', methods=['POST'])
+def user_delete_word():
+    user = userService.authenticate(Authentication.read(request))
+    if not user: return create_error_response(401, "Invalid credentials.")
+
+    wordId = request.form.get("id")
+
+    if not wordId:
+        return create_error_response(404, "Word id not provided.")  # TODO check code
+
+    if not userService.delete_word(wordId):
+        return create_error_response(404, "Error deleting text")  # TODO check code
+
+    return create_response(200)
+
+
+@app.route('/user/word/list', methods=['POST'])
+def user_get_words():
+    user = userService.authenticate(Authentication.read(request))
+    if not user: return create_error_response(401, "Invalid credentials.")
+
+    user_words = userService.list_words(user)
+
+    return create_response(200, {'user_words': user_words})
 
 
 @app.route('/user/configuration/add', methods=['POST'])
@@ -126,6 +152,68 @@ def user_get_configurations():
     return create_response(200, {'configurations': configurations})
 
 
+@app.route('/user/configuration/delete', methods=['POST'])
+def user_delete_configuration():
+    user = userService.authenticate(Authentication.read(request))
+    if not user: return create_error_response(401, "Invalid credentials.")
+
+    configId = request.form.get("id")
+
+    if not configId:
+        return create_error_response(404, "Configuration id not provided.")  # TODO check code
+
+    if not userService.delete_word(configId):
+        return create_error_response(404, "Error deleting configuration.")  # TODO check code
+
+    return create_response(200)
+
+
+@app.route('/user/text/add', methods=['POST'])
+def user_add_text():
+    user = userService.authenticate(Authentication.read(request))
+    if not user: return create_error_response(401, "Invalid credentials.")
+
+    title = request.form.get("title")
+    text = request.form.get("text")
+
+    if not text:
+        return create_error_response(404, "Text not provided.")  # TODO check code
+
+    if not title:
+        return create_error_response(404, "Title not provided.")  # TODO check code
+
+    if not userService.add_text(user, title, text):
+        return create_error_response(404, "Error adding text")  # TODO check code
+
+    return create_response(200)
+
+
+@app.route('/user/text/delete', methods=['POST'])
+def user_delete_text():
+    user = userService.authenticate(Authentication.read(request))
+    if not user: return create_error_response(401, "Invalid credentials.")
+
+    textId = request.form.get("id")
+
+    if not textId:
+        return create_error_response(404, "Text id not provided.")  # TODO check code
+
+    if not userService.delete_text(textId):
+        return create_error_response(404, "Error deleting text")  # TODO check code
+
+    return create_response(200)
+
+
+@app.route('/user/text/list', methods=['POST'])
+def user_get_texts():
+    user = userService.authenticate(Authentication.read(request))
+    if not user: return create_error_response(401, "Invalid credentials.")
+
+    texts = userService.get_texts(user)
+
+    return create_response(200, {'texts': texts})
+
+
 @app.route('/user/register', methods=['POST'])
 def user_register():
     email = request.form.get("email")
@@ -148,32 +236,6 @@ def user_login():
     if not user: return create_error_response(401, "Invalid credentials.")
 
     return create_response(200)
-
-
-@app.route('/user/text/add', methods=['POST'])
-def user_add_text():
-    user = userService.authenticate(Authentication.read(request))
-    if not user: return create_error_response(401, "Invalid credentials.")
-
-    text = request.form.get("text")
-
-    if not text:
-        return create_error_response(404, "Text not provided.")  # TODO check code
-
-    if not userService.add_text(user, text):
-        return create_error_response(404, "Error adding text")  # TODO check code
-
-    return create_response(200)
-
-
-@app.route('/user/text/list', methods=['POST'])
-def user_get_texts():
-    user = userService.authenticate(Authentication.read(request))
-    if not user: return create_error_response(401, "Invalid credentials.")
-
-    texts = userService.get_texts(user)
-
-    return create_response(200, {'texts': texts})
 
 
 @app.route('/user/list', methods=['GET'])

@@ -93,7 +93,7 @@ class TextAnalysisService {
   AnnotationText annotatedText;
 
   Future<bool> lookupText(String text, var userData) async {
-    String url = AppService.SERVER_URL + "/queryText";
+    String url = AppService.SERVER_URL + "/query/text";
 
     var data = userData;
     data['text'] = text;

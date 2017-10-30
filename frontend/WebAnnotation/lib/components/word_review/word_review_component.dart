@@ -25,6 +25,7 @@ class WordReviewComponent implements OnInit {
   String word;
 
   bool busyAdding = false;
+  bool loadingProposals = false;
 
   String hyphenationText = "";
   String currentHyphenation = "";
@@ -56,6 +57,7 @@ class WordReviewComponent implements OnInit {
 
     this.setSegmentation(this.word, 0);
 
+    this.loadingProposals = true;
     this.segmentationProposalService.querySegmentationProposals(this.word).then((success) {
       if(!success || segmentationProposals() == null ||
           segmentationProposals().length == 0) {
@@ -64,6 +66,8 @@ class WordReviewComponent implements OnInit {
         // apply first proposal as default
         this.applySegmentationProposal(segmentationProposals()[0]);
       }
+
+      this.loadingProposals = false;
     });
   }
 
