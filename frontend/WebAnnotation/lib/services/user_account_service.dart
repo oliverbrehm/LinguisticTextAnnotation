@@ -81,7 +81,7 @@ class UserAccountService {
   }
 
   Future<bool> login(String email, String password) async {
-    String url = AppService.SERVER_URL + "/user/login";
+    String url = AppService.SERVER_URL + "/user/authenticate";
 
     var data = {'email': email, 'password': password};
 
