@@ -1,5 +1,5 @@
-<div *ngIf="busyAdding">
-    <h1>Text Analyse</h1>
+<div class="container" *ngIf="busyAdding">
+    <h2>Manuelle Analyse</h2>
     <material-spinner ></material-spinner><br>
     Wort hinzufügen...
 </div>
@@ -31,7 +31,7 @@
     <div class="row">
         <material-button raised
                          (trigger)="nextWordClicked()">
-            Speichern und nächstes Wort
+            Speichern
         </material-button>
         <br>
         <material-button raised
@@ -39,6 +39,7 @@
             Zurück zum Text
         </material-button>
     </div>
+    <br>
 
     <div class="row bordered" style="display: block">
         <h3>Vorschläge</h3>

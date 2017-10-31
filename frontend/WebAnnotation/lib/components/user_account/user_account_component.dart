@@ -132,4 +132,7 @@ class UserAccountComponent implements OnInit {
     });
   }
 
+  void deleteAccount() {
+    appService.errorMessage("deleteAccount: TODO");
+  }
 }

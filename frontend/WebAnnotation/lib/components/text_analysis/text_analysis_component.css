@@ -13,11 +13,11 @@
 }
 
 .stressed {
-    background-color: palegreen;
+    background-color: #4DADE8;
 }
 
 .unstressed {
-    background-color: #ffebcd;
+    background-color: blanchedalmond;
 }
 
 .notFound {
@@ -26,9 +26,18 @@
 
 .notFound:hover {
     cursor: pointer;
-    background-color: red;
+    background-color: #6DCDF8;
 }
 
 .number {
     background-color: cadetblue;
+}
+
+#analysisInputText {
+    padding: 1.0em;
+    margin: 0.5em;
+}
+
+#analysisInputText:hover {
+    background-color: blanchedalmond;
 }

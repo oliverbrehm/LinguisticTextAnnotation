@@ -1,23 +1,34 @@
 <!-- Components info: https://webdev.dartlang.org/components -->
 
-<div *ngIf="!analyzing && annotatedText() == null">
-    <h1>Text Analyse</h1>
-    <p>
+<div class="container" *ngIf="!analyzing && annotatedText() == null">
+    <div class="row">
+        <h1>Text Analyse</h1>
+    </div>
+
+    <div class="row">
         Bitte geben Sie einen Text ein.
-    </p>
-    <material-input multiline
-                    label="Text"
-                    autoFocus floatingLabel style="width:80%"
-                    [(ngModel)]="lookupText">
-    </material-input>
-    <br>
-    <material-button raised
-                  (trigger)="lookup()">
-        Analysieren
-    </material-button>
+    </div>
+
+    <div class="row">
+        <material-input class="bordered"
+                        id="analysisInputText"
+                        multiline
+                        label="Text"
+                        rows="10"
+                        autoFocus floatingLabel style="width:80%"
+                        [(ngModel)]="lookupText">
+        </material-input>
+    </div>
+
+    <div class="row">
+        <material-button raised
+                         (trigger)="lookup()">
+            Analysieren
+        </material-button>
+    </div>
 </div>
 
-<div *ngIf="analyzing">
+<div class="container" *ngIf="analyzing">
     <h1>Text Analyse</h1>
     <material-spinner ></material-spinner><br>
     Analysiere...

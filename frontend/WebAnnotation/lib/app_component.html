@@ -1,5 +1,5 @@
-<nav id="navigation" class="navbar navbar-expand-lg navbar-default bg-default fixed-top">
-    <a class="navbar-brand" [routerLink]="['TextAnalysis']">Linguistic Text Annotation</a>
+<nav id="navigation" class="navbar navbar-expand-lg navbar-default fixed-top bg-s-light">
+    <a class="navbar-brand c-p" [routerLink]="['TextAnalysis']">Linguistic Text Annotation</a>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <div class="nav navbar-nav">
@@ -17,12 +17,16 @@
     </button>
 </nav>
 
-<div *ngIf="info()!=''" class="alert alert-success alert-dismissable">
-    {{info()}}<br>
-</div>
+<div class="container">
+    <div *ngIf="info()!=''" class="alert alert-success alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        {{info()}}
+    </div>
 
-<div *ngIf="error()!=''" class="alert alert-danger alert-dismissable">
-    {{error()}}<br>
+    <div *ngIf="error()!=''" class="alert alert-danger alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Fehler:</strong> {{error()}}
+    </div>
 </div>
 
 <router-outlet></router-outlet>

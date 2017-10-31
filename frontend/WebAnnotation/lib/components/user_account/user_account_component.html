@@ -1,67 +1,90 @@
-<div *ngIf="!loggedIn()">
+<div class="container" *ngIf="!loggedIn()">
     <h2>Login</h2>
-    <form>
-        <material-input label="Email"
-                        autoFocus floatingLabel style="width:80%"
-                        [(ngModel)]="emailText">
-        </material-input><br>
-        <material-input label="Password" floatingLabel style="width:80%"
-                         [(ngModel)]="passwordText">
-        </material-input><br>
-        <material-button raised
-                         (trigger)="login()">
-            Login
-        </material-button>
-        <material-button raised
-                         (trigger)="register()">
-            Register
-        </material-button>
-    </form>
+
+    <div class="bordered">
+        <form>
+            <material-input label="Email"
+                            autoFocus floatingLabel style="width:80%"
+                            [(ngModel)]="emailText">
+            </material-input><br>
+            <material-input label="Password" floatingLabel style="width:80%"
+                            [(ngModel)]="passwordText">
+            </material-input><br>
+            <material-button raised
+                             (trigger)="login()">
+                Login
+            </material-button>
+            <material-button raised
+                             (trigger)="register()">
+                Register
+            </material-button>
+        </form>
+    </div>
 </div>
 
-<div *ngIf="loggedIn()">
-    <h2>Hallo {{userEmail()}}!</h2>
+<div class="container" *ngIf="loggedIn()">
+    <div class="bordered">
+        <h2>Hallo {{userEmail()}}!</h2>
+        Hier kannst Du gespeicherte Texte, manuelle Wörterbuch Einträge und Dein Konto verwalten.
+    </div>
     <br>
 
-    <h2>Gespeicherte Texte</h2>
+    <div>
+        <h2>Gespeicherte Texte</h2>
 
-    <ul>
-        <li *ngFor="let t of userTexts()">
-            <span class="textTitle" (click)="t.toggle()">{{t.title}}</span>
-            <div *ngIf="t.expanded" class="userText">
-                <h3>{{t.title}}</h3>
-                <p>{{t.text}}</p>
-                <material-button raised
-                                 (trigger)="analyseText(t)">
-                    Verwenden
-                </material-button>
+        <ul class="list-group">
+            <li *ngFor="let t of userTexts()" class="list-group-item">
+                <span *ngIf="!t.expanded" class="link" (click)="t.toggle()">{{t.title}}</span>
+                <span *ngIf="t.expanded" class="link" (click)="t.toggle()">Verbergen</span>
+                <div *ngIf="t.expanded" style="padding: 1em">
+                    <h3>{{t.title}}</h3>
+                    <p>{{t.text}}</p>
+                    <material-button raised
+                                     (trigger)="analyseText(t)">
+                        Verwenden
+                    </material-button>
 
+                    <material-button raised
+                                     class="c-alert"
+                                     (trigger)="deleteText(t)">
+                        Löschen
+                    </material-button>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <br>
+
+    <div>
+        <h2>Manuelle Einträge</h2>
+
+        <ul class="list-group">
+            <li *ngFor="let w of userWords()" class="list-group-item">
+                <span>{{w.text}} | {{w.hyphenation}} | {{w.stressPattern}}</span>
                 <material-button raised
-                                 (trigger)="deleteText(t)">
+                                 class="c-alert"
+                                 (trigger)="deleteUserWord(w)"
+                                 style="text-align: right">
                     Löschen
                 </material-button>
-            </div>
-        </li>
-    </ul>
+            </li>
+        </ul>
+    </div>
     <br>
 
-    <h2>Manuelle Einträge</h2>
+    <div class="bordered">
+        <h2>Benutzerkonto</h2>
 
-    <ul>
-        <li *ngFor="let w of userWords()">
-            {{w.text}} | {{w.hyphenation}} | {{w.stressPattern}}
-            <material-button raised
-                             (trigger)="deleteUserWord(w)">
-                Löschen
-            </material-button>
-        </li>
-    </ul>
-    <br>
-
-    <div class="logoutArea">
         <material-button raised
+                         class="c-alert"
                          (trigger)="logout()">
             Logout
+        </material-button>
+
+        <material-button raised
+                         class="c-alert"
+                         (trigger)="deleteAccount()">
+            Konto löschen
         </material-button>
     </div>
 </div>

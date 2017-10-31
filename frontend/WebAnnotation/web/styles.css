@@ -8,6 +8,7 @@ body {
   margin: 0 auto;
   padding: 5vw;
   margin-top: 2em;
+  background-color: #FBFEFF;
 }
 
 * {
@@ -15,7 +16,66 @@ body {
 }
 
 .bordered {
-  border: dotted 3px blanchedalmond;
+  border: dotted 2px #4DE8D0;
   padding: 1em;
-  margin: 0.5em;
+  margin: 0.2em;
+}
+
+a {
+  color: #5491FF;
+}
+
+a:hover {
+  color: #6DCDF8;
+}
+
+.link {
+  color: #5491FF;
+  cursor: pointer;
+}
+
+.link:hover {
+  color: #6DCDF8;
+}
+
+/* color scheme */
+.c-p1 {
+  color: #5491FF;
+}
+
+.c-p2 {
+ color: #6DCDF8;
+}
+
+.c-light {
+  color: #FBFEFF;
+}
+
+.c-s {
+  color: #4DE8D0;
+}
+
+.c-alert {
+  color: indianred;
+}
+
+/* color scheme background */
+.bg-p1 {
+  background-color: #5491FF;
+}
+
+.bg-p2 {
+  background-color: #6DCDF8;
+}
+
+.bg-light {
+  background-color: #FBFEFF;
+}
+
+.bg-s {
+  background-color: #4DE8D0;
+}
+
+.bg-alert {
+  background-color: indianred;
 }

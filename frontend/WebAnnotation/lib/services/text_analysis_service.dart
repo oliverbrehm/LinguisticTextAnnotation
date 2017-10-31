@@ -132,6 +132,8 @@ class TextAnalysisService {
       annotatedText.originalText = text;
 
       return true;
+    }, onError: (error) {
+      return false;
     });
   }
 
