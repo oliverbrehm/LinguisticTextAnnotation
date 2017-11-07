@@ -150,6 +150,28 @@ def user_add_configuration():
     return create_response(201)
 
 
+@app.route('/user/configuration/update', methods=['POST'])
+def user_update_configuration():
+    user = userService.authenticate(Authentication.read(request))
+    if not user: return create_error_response(403, "Invalid credentials.")
+
+    configuration_id = request.form.get("id")
+    name = request.form.get("name")
+    stressed_color = request.form.get("stressed_color")
+    unstressed_color = request.form.get("unstressed_color")
+    line_height = request.form.get("line_height")
+
+    if not name or not stressed_color or not unstressed_color or not line_height:
+        return create_error_response(400, "Data not provided.")
+
+    success = userService.update_configuration(configuration_id, name, stressed_color, unstressed_color, line_height)
+
+    if not success:
+        return create_error_response(404, "Configuration to be updated not found.")
+
+    return create_response(201)
+
+
 @app.route('/user/configuration/list', methods=['POST'])
 def user_get_configurations():
     user = userService.authenticate(Authentication.read(request))
@@ -173,7 +195,7 @@ def user_delete_configuration():
     if not configId:
         return create_error_response(400, "Configuration id not provided.")
 
-    if not userService.delete_word(configId):
+    if not userService.delete_configuration(configId):
         return create_error_response(404, "Error deleting configuration.")
 
     return create_response(204)

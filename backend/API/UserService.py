@@ -75,6 +75,7 @@ class TextConfiguration(Base):
     def json(self):
         return {
             "id": self.id,
+            "name": self.name,
             "stressed_color": self.stressed_color,
             "unstressed_color": self.unstressed_color,
             "line_height": self.line_height
@@ -186,6 +187,23 @@ class UserService:
         configuration = TextConfiguration(user=user, name=name, stressed_color=stressed_color,
                                           unstressed_color= unstressed_color, line_height=line_height)
         self.session.add(configuration)
+        self.session.commit()
+
+        return True
+
+    def update_configuration(self, configuration_id, name, stressed_color, unstressed_color, line_height):
+        n_id = int(configuration_id)
+
+        configuration = self.session.query(TextConfiguration).filter(TextConfiguration.id == n_id).first()
+
+        if not configuration:
+            return False
+
+        configuration.name = name
+        configuration.stressed_color = stressed_color
+        configuration.unstressed_color = unstressed_color
+        configuration.line_height = line_height
+
         self.session.commit()
 
         return True

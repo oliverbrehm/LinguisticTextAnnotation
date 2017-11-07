@@ -61,12 +61,9 @@
         <ul class="list-group">
             <li *ngFor="let w of userWords()" class="list-group-item">
                 <span>{{w.text}} | {{w.hyphenation}} | {{w.stressPattern}}</span>
-                <material-button raised
-                                 class="c-alert"
-                                 (trigger)="deleteUserWord(w)"
-                                 style="text-align: right">
-                    Löschen
-                </material-button>
+                <button type="button" class="close delete-button" aria-label="Wort löschen" (click)="deleteUserWord(w)">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </li>
         </ul>
     </div>

@@ -33,14 +33,13 @@ class TextAnalysisComponent implements OnInit {
 
   String lookupText = 'Kreidefelsen';
   String textTitle = '';
-  String lineHeightText = '1.0';
+  String newConfigurationName = 'Neue Vorlage';
 
-  String colorStressed = '#98FB98';
-  String colorUnstressed = '#FFEBCD';
+  String lineHeightText = "30"; // == 0.3 -> integer numbers for input [10 - 60] map to [1.0 - 6.0]
+
+  TextConfiguration selectedConfiguration = new TextConfiguration(-1, "", '#98FB98', '#FFEBCD', 2.5);
 
   bool analyzing = false;
-
-  double lineHeight = 1.0;
 
   TextAnalysisComponent(this.appService, this.textAnalysisService, this.userAccountService, this.router, this.routeParams);
 
@@ -52,6 +51,15 @@ class TextAnalysisComponent implements OnInit {
       lookup();
     } else if(textAnalysisService.annotatedText != null) {
       lookupText = textAnalysisService.annotatedText.originalText;
+      new Future.delayed(const Duration(microseconds: 100), () => applyCurrentConfiguration());
+    }
+
+    if(userAccountService.loggedIn) {
+      userAccountService.queryTextConfigurations().then((success) {
+        if (!success) {
+          print("WARNING: could not load text configurations");
+        }
+      });
     }
   }
 
@@ -59,36 +67,98 @@ class TextAnalysisComponent implements OnInit {
     return textAnalysisService.annotatedText;
   }
 
+  List<TextConfiguration> textConfigurations() {
+    return userAccountService.textConfigurations;
+  }
+
+  void applyCurrentConfiguration() {
+    querySelectorAll(".word *").style.lineHeight =
+        selectedConfiguration.line_height.toString() + "em";
+    querySelectorAll(".stressed").style.backgroundColor =
+        selectedConfiguration.stressed_color;
+    querySelectorAll(".unstressed").style.backgroundColor =
+        selectedConfiguration.unstressed_color;
+    lineHeightText =
+        (selectedConfiguration.line_height * 10).toInt().toString();
+  }
+
+  void configurationSelected(TextConfiguration configuration) {
+    newConfigurationName = configuration.name;
+    selectedConfiguration = new TextConfiguration.copy(configuration);
+
+    applyCurrentConfiguration();
+  }
+
+  void saveConfiguration() {
+    if(selectedConfiguration.name == newConfigurationName) {
+      userAccountService.updateTextConfiguration(selectedConfiguration).then((success) {
+        if(!success) {
+          appService.errorMessage("Vorlage konnte nicht gespeichert werden.");
+        } else {
+          appService.infoMessage("Vorlage gespeichert.");
+        }
+      });
+    } else {
+      selectedConfiguration.name = newConfigurationName;
+      userAccountService.addTextConfiguration(selectedConfiguration).then((success) {
+        if(!success) {
+          appService.errorMessage("Neue Vorlage konnte nicht angelegt werden.");
+        } else {
+          appService.infoMessage("Neue Vorlage angelegt.");
+          userAccountService.textConfigurations.add(selectedConfiguration);
+        }
+      });
+    }
+  }
+
+  void deleteConfiguration(TextConfiguration configuration) {
+    userAccountService.deleteTextConfiguration(configuration).then((success) {
+      if(!success) {
+        appService.errorMessage("Vorlage konnte nicht gelöscht werden.");
+      } else {
+        appService.infoMessage("Vorlage gelöscht.");
+        userAccountService.queryTextConfigurations().then((success) {
+          if (!success) {
+            print("WARNING: could not load text configurations");
+          }
+        });
+      }
+    });
+  }
+
   void unknownWordClicked(Word word) {
-    router.navigate(['WordReview', {'word': word.text}]);
+    if(userAccountService.loggedIn) {
+      router.navigate(['WordReview', {'word': word.text}]);
+    } else {
+      router.navigate(['UserAccount']);
+      appService.infoMessage('Sie müssen eingeloggt sein, um Wörter hinzuzufügen.');
+    }
   }
 
   void lineHeightChanged() {
     double lh = double.parse(lineHeightText, (error) {
       print(error);
-      lineHeightText = lineHeight.toString();
       return;
     });
 
-    if(lh == null) {
-      lineHeightText = lineHeight.toString();
-      return;
-    }
+    selectedConfiguration.line_height = lh / 10.0;
 
-    lineHeight = lh;
-    if(lineHeight > 5.0) {
-      lineHeight = 5.0;
-      lineHeightText = lineHeight.toString();
-    }
-    querySelectorAll(".word *").style.lineHeight = lineHeight.toString() + "em";
+    applyCurrentConfiguration();
   }
 
   void saveText() {
-    String title = textTitle;
-    String text = lookupText;
+    if(textTitle.isEmpty) {
+      appService.errorMessage("Bitte Titel eingeben.");
+      return;
+    }
+
+    if(lookupText.isEmpty) {
+      appService.errorMessage("Bitte Text eingeben.");
+      return;
+    }
 
     appService.clearMessage();
-    userAccountService.addText(title, text).then((success) {
+    userAccountService.addText(textTitle, lookupText).then((success) {
       if(success) {
         appService.infoMessage("Text hinzugefügt.");
       } else {
@@ -108,11 +178,13 @@ class TextAnalysisComponent implements OnInit {
   }
 
   void colorStressedChanged(value) {
-    querySelectorAll(".stressed").style.backgroundColor = value;
+    selectedConfiguration.stressed_color = value;
+    applyCurrentConfiguration();
   }
 
   void colorUnstressedChanged(value) {
-    querySelectorAll(".unstressed").style.backgroundColor = value;
+    selectedConfiguration.unstressed_color = value;
+    applyCurrentConfiguration();
   }
 
   void lookup() {
@@ -124,6 +196,8 @@ class TextAnalysisComponent implements OnInit {
 
       if(!success) {
         appService.errorMessage("Der Text konnte nicht analysiert werden.");
+      } else {
+        new Future.delayed(const Duration(microseconds: 100), () => applyCurrentConfiguration());
       }
     });
   }

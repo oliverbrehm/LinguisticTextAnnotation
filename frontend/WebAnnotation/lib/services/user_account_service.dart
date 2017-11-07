@@ -36,21 +36,31 @@ class UserWord {
 class TextConfiguration {
   int id;
 
+  String name;
+
   String stressed_color;
   String unstressed_color;
-  String line_height;
 
-  TextConfiguration(this.id, this.stressed_color, this.unstressed_color, this.line_height);
+  double line_height;
+
+  TextConfiguration(this.id, this.name, this.stressed_color, this.unstressed_color, this.line_height);
+
+  TextConfiguration.copy(TextConfiguration c) {
+    this.id = c.id;
+    this.name = c.name;
+    this.stressed_color = c.stressed_color;
+    this.unstressed_color = c.unstressed_color;
+    this.line_height = c.line_height;
+  }
 }
 
 /// service description
 @Injectable()
 class UserAccountService {
 
-  String email = "";
-  String password = "";
-
-  bool loggedIn = false;
+  String email = "oliver";
+  String password = "1234";
+  bool loggedIn = true;
 
   List<UserText> userTexts = [];
   List<UserWord> userWords = [];
@@ -258,17 +268,97 @@ class UserAccountService {
   // TextConfiguration
   //----------------------------------------------------------------------------
   Future<bool> queryTextConfigurations() async {
-    // TODO
-    return true;
+    if (!loggedIn) {
+      return false;
+    }
+
+    String url = AppService.SERVER_URL + "/user/configuration/list";
+
+    var data = {};
+    data = appendCredentials(data);
+
+    return HttpRequest.postFormData(url, data).then((request) {
+      var configurations = JSON.decode(request.response)['configurations'];
+
+      textConfigurations = [];
+
+      for (var c in configurations) {
+        int id = c['id'];
+        String name = c['name'];
+        String stressed_color = c['stressed_color'];
+        String unstressed_color = c['unstressed_color'];
+        double line_height = c['line_height'];
+        
+        textConfigurations.add(new TextConfiguration(id, name, stressed_color, unstressed_color, line_height));
+      }
+
+      return true;
+    }, onError: (error) {
+      return false;
+    });
   }
 
-  Future<bool> addTextConfiguration() async {
-    // TODO
-    return true;
+  Future<bool> addTextConfiguration(TextConfiguration configuration) async {
+    if (!loggedIn) {
+      return false;
+    }
+
+    String url = AppService.SERVER_URL + "/user/configuration/add";
+
+    var data = {
+      'name': configuration.name,
+      'stressed_color': configuration.stressed_color,
+      'unstressed_color': configuration.unstressed_color,
+      'line_height': configuration.line_height.toString()
+    };
+    data = appendCredentials(data);
+
+    return HttpRequest.postFormData(url, data).then((request) {
+      return true;
+    }, onError: (error) {
+      return false;
+    });
   }
 
-  Future<bool> deleteTextConfiguration() async {
-    // TODO
-    return true;
+  Future<bool> updateTextConfiguration(TextConfiguration configuration) async {
+    if (!loggedIn) {
+      return false;
+    }
+
+    String url = AppService.SERVER_URL + "/user/configuration/update";
+
+    var data = {
+      'id': configuration.id.toString(),
+      'name': configuration.name,
+      'stressed_color': configuration.stressed_color,
+      'unstressed_color': configuration.unstressed_color,
+      'line_height': configuration.line_height.toString()
+    };
+    data = appendCredentials(data);
+
+    return HttpRequest.postFormData(url, data).then((request) {
+      return true;
+    }, onError: (error) {
+      return false;
+    });
+  }
+
+  Future<bool> deleteTextConfiguration(TextConfiguration configuration) async {
+    if (!loggedIn) {
+      return false;
+    }
+
+    String url = AppService.SERVER_URL + "/user/configuration/delete";
+
+    var data = {
+      'id': configuration.id.toString()
+    };
+    data = appendCredentials(data);
+
+    return HttpRequest.postFormData(url, data).then((request) {
+      return true;
+    }, onError: (error) {
+      return false;
+    });
   }
 }

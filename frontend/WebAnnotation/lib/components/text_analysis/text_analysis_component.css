@@ -12,16 +12,9 @@
 .syllable {
 }
 
-.stressed {
-    background-color: #4DADE8;
-}
-
-.unstressed {
-    background-color: blanchedalmond;
-}
-
 .notFound {
     background-color: indianred;
+    text-decoration: underline;
 }
 
 .notFound:hover {
