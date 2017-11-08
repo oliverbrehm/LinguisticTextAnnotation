@@ -1,15 +1,19 @@
 .word {
-    display: inline;
-    margin-left: 0.3em;
-    margin-right: 0.3em;
+    display: inline-block;
+    margin-left: 0.0em;
+    margin-right: 0;
+    padding: 0;
+    margin-bottom: 1.0em;
 }
 
 .word * {
-    display: inline;
-    line-height: 1.0;
+    display: inline-block;
 }
 
 .syllable {
+    display: inline-block;
+    margin: 0;
+    padding:0;
 }
 
 .notFound {

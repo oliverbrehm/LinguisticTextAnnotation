@@ -40,17 +40,37 @@ class TextConfiguration {
 
   String stressed_color;
   String unstressed_color;
+  String word_background;
 
+  double font_size;
   double line_height;
+  double syllable_distance;
+  double word_distance;
 
-  TextConfiguration(this.id, this.name, this.stressed_color, this.unstressed_color, this.line_height);
+  bool use_background;
+  bool highlight_foreground;
+  bool stressed_bold;
+
+  TextConfiguration(this.id, this.name, this.stressed_color, this.unstressed_color,
+      this.word_background, this.font_size, this.line_height, this.word_distance,
+      this.syllable_distance, this.use_background, this.highlight_foreground, this.stressed_bold);
 
   TextConfiguration.copy(TextConfiguration c) {
     this.id = c.id;
     this.name = c.name;
+
     this.stressed_color = c.stressed_color;
     this.unstressed_color = c.unstressed_color;
+    this.word_background = c.word_background;
+
+    this.font_size = c.font_size;
     this.line_height = c.line_height;
+    this.syllable_distance = c.syllable_distance;
+    this.word_distance = c.word_distance;
+
+    this.use_background = c.use_background;
+    this.highlight_foreground = c.highlight_foreground;
+    this.stressed_bold = c.stressed_bold;
   }
 }
 
@@ -288,8 +308,22 @@ class UserAccountService {
         String stressed_color = c['stressed_color'];
         String unstressed_color = c['unstressed_color'];
         double line_height = c['line_height'];
-        
-        textConfigurations.add(new TextConfiguration(id, name, stressed_color, unstressed_color, line_height));
+
+        // TODO
+        String word_background = '#FFFFFF';
+
+        double word_distance = 0.3;
+        double syllable_distance = 0.1;
+        double font_size = 1.0;
+
+        bool use_background = false;
+        bool highlight_foreground = false;
+        bool stressed_bold = true;
+
+        textConfigurations.add(new TextConfiguration(id, name, stressed_color,
+            word_background, unstressed_color, font_size, line_height,
+            word_distance, syllable_distance, use_background,
+            highlight_foreground, stressed_bold));
       }
 
       return true;

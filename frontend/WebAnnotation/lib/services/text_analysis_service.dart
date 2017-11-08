@@ -49,7 +49,6 @@ class Word {
           .replaceAll("ue", "ü");
       
       String syllable = remaining.substring(0, lookupSyllable.length);
-      print(lookupSyllable + ", " + syllable);
 
       if(syllable.toLowerCase() != lookupSyllable)  {
         // this should match, but if it does not, use lookup as fallback
@@ -57,7 +56,6 @@ class Word {
       }
 
       remaining = remaining.substring(lookupSyllable.length);
-      print("remaining: " + remaining);
 
       String c = stressPattern.substring(i, i + 1);
       bool stressed = (c == "1");

@@ -40,19 +40,19 @@
 
     <div class="row">
         <div class="col bordered">
-            <div *ngFor="let word of annotatedText().words" class="word">
-                <div *ngIf="word.annotated">
-                    <div *ngFor="let syllable of word.syllables"class="syllable">
-                        <p *ngIf="syllable.stressed" class="stressed">{{syllable.text}}</p>
-                        <p *ngIf="!syllable.stressed" class="unstressed">{{syllable.text}}</p>
-                    </div>
-                </div>
+            <span *ngFor="let word of annotatedText().words">
+                <span *ngIf="word.annotated" class="word">
+                    <span *ngFor="let syllable of word.syllables"class="syllable">
+                        <span *ngIf="syllable.stressed" class="stressed">{{syllable.text}}</span>
+                        <span *ngIf="!syllable.stressed" class="unstressed">{{syllable.text}}</span>
+                    </span>
+                </span>
 
-                <p *ngIf="word.unknown">{{word.text}}</p>
-                <p *ngIf="word.notFound" class="notFound" (click)="unknownWordClicked(word)">{{word.text}}</p>
-                <p *ngIf="word.number" class="number">{{word.text}}</p>
-                <p *ngIf="word.punctuation">{{word.text}}</p>
-            </div>
+                <span *ngIf="word.unknown" class="word">{{word.text}}</span>
+                <span *ngIf="word.notFound" class="notFound word" (click)="unknownWordClicked(word)">{{word.text}}</span>
+                <span *ngIf="word.number" class="number word">{{word.text}}</span>
+                <span *ngIf="word.punctuation">{{word.text}}</span>
+            </span>
 
             <br><br>
             <material-button raised
@@ -69,32 +69,81 @@
             <h2>Einstellungen</h2>
 
             <div class="bordered">
-
-                Zeilenabstand:
-                <div class="input-group">
-                    <input type="text" disabled value="{{selectedConfiguration.line_height}}" class="form-control"/>
-                    <span id="slidecontainer" style="padding-left: 0.5em; padding-top: 0.5em;">
-                        <input type="range" min="10" max="60" [(ngModel)]="lineHeightText" (change)="lineHeightChanged()" class="slider" id="myRange">
-                    </span>
-
-                </div>
-
-                Betonte Silbe:
+                Betonte Silbe:<br>
+                <input type="checkbox" (change)="stressedBoldChanged($event)" />Fett<br>
                 <div class="input-group">
                     <input type="text" disabled value="{{selectedConfiguration.stressed_color}}" class="form-control" />
                     <span class="form-control">
                         <input #inputColorStressed type="color" [(ngModel)]="selectedConfiguration.stressed_color"
-                            (input)="colorStressedChanged(inputColorStressed.value)">
+                            (input)="applyCurrentConfiguration()">
                     </span>
-
                 </div>
+                <br>
 
                 Unbetonte Silbe:
                 <div class="input-group">
                     <input type="text" disabled value="{{selectedConfiguration.unstressed_color}}" class="form-control" />
                     <span class="form-control">
                         <input #inputColorUnstressed type="color" [(ngModel)]="selectedConfiguration.unstressed_color"
-                               (input)="colorUnstressedChanged(inputColorUnstressed.value)">
+                               (input)="applyCurrentConfiguration()">
+                    </span>
+                </div>
+                <br>
+
+                Wort Hintergrundfarbe:<br>
+                <input type="checkbox"  (change)="useWordBackgroundChanged($event)" />Aktivieren<br>
+                <div *ngIf="selectedConfiguration.use_background" class="input-group">
+                    <input type="text" disabled value="{{selectedConfiguration.word_background}}" class="form-control" />
+                    <span class="form-control">
+                        <input #inputColorWordBackground type="color" [(ngModel)]="selectedConfiguration.word_background"
+                               (input)="applyCurrentConfiguration()">
+                    </span>
+                </div>
+                <br>
+
+                Silbe hervorheben:<br>
+                <input type="radio" name="radioSyllableColor" value="foreground"
+                       (click)="radioSyllableColorChanged($event)"/>Vordergrundfarbe<br>
+                <input type="radio" name="radioSyllableColor" value="background"
+                       (click)="radioSyllableColorChanged($event)" checked />Hintergrundfarbe<br>
+                <br>
+
+                Schriftgröße:
+                <div class="input-group">
+                    <input type="text" disabled value="{{selectedConfiguration.font_size}}" class="form-control"/>
+                    <span style="padding-left: 0.5em; padding-top: 0.5em;">
+                        <input type="range" min="8" max="32" [(ngModel)]="fontSizeValue"
+                               (input)="fontSizeSliderMoved($event)" (change)="applyCurrentConfiguration()" class="slider">
+                    </span>
+                </div>
+                <br>
+
+                Silbenabstand:
+                <div class="input-group">
+                    <input type="text" disabled value="{{selectedConfiguration.syllable_distance}}" class="form-control"/>
+                    <span style="padding-left: 0.5em; padding-top: 0.5em;">
+                        <input type="range" min="0" max="8" [(ngModel)]="syllableDistanceValue"
+                           (input)="syllableDistanceSliderMoved($event)" (change)="applyCurrentConfiguration()" class="slider">
+                    </span>
+                </div>
+                <br>
+
+                Wort abstand:
+                <div class="input-group">
+                    <input type="text" disabled value="{{selectedConfiguration.word_distance}}" class="form-control"/>
+                    <span style="padding-left: 0.5em; padding-top: 0.5em;">
+                        <input type="range" min="2" max="20" [(ngModel)]="wordDistanceValue"
+                           (input)="wordDistanceSliderMoved($event)" (change)="applyCurrentConfiguration()" class="slider">
+                    </span>
+                </div>
+                <br>
+
+                Zeilenabstand:
+                <div class="input-group">
+                    <input type="text" disabled value="{{selectedConfiguration.line_height}}" class="form-control"/>
+                    <span style="padding-left: 0.5em; padding-top: 0.5em;">
+                        <input type="range" min="10" max="40" [(ngModel)]="lineHeightValue"
+                               (input)="lineHeightSliderMoved($event)" (change)="applyCurrentConfiguration()" class="slider" id="myRange">
                     </span>
                 </div>
             </div>
