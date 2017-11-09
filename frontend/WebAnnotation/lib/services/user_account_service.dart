@@ -1,38 +1,12 @@
 import 'package:angular/core.dart';
 
 import 'dart:async';
-
 import 'dart:html';
-
-import 'dart:convert';
 
 import 'package:WebAnnotation/app_service.dart';
 import 'package:WebAnnotation/services/model/TextConfiguration.dart';
-
-class UserText {
-  int id;
-
-  String title;
-  String text;
-
-  bool expanded = false;
-
-  void toggle() {
-    expanded = !expanded;
-  }
-
-  UserText(this.id, this.title, this.text);
-}
-
-class UserWord {
-  int id;
-
-  String text;
-  String stressPattern;
-  String hyphenation;
-
-  UserWord(this.id, this.text, this.stressPattern, this.hyphenation);
-}
+import 'package:WebAnnotation/services/model/UserText.dart';
+import 'package:WebAnnotation/services/model/UserWord.dart';
 
 /// service description
 @Injectable()
@@ -46,17 +20,12 @@ class UserAccountService {
   List<UserWord> userWords = [];
   List<TextConfiguration> textConfigurations = [];
 
-  Map<String, String> appendCredentials(Map<String, String> data) {
-    if (loggedIn) {
-      data['email'] = this.email;
-      data['password'] = this.password;
-    }
-    return data;
+  Map<String, String> credentials() {
+    return {
+      'email': this.email,
+      'password': this.password
+    };
   }
-
-  //----------------------------------------------------------------------------
-  // User
-  //----------------------------------------------------------------------------
 
   Future<bool> register(String email, String password) async {
     String url = AppService.SERVER_URL + "/user/register";
@@ -112,66 +81,31 @@ class UserAccountService {
   //----------------------------------------------------------------------------
   // UserText
   //----------------------------------------------------------------------------
-
   Future<bool> queryTexts() async {
     if (!loggedIn) {
       return false;
     }
 
-    String url = AppService.SERVER_URL + "/user/text/list";
-
-    var data = {};
-    data = appendCredentials(data);
-
-    return HttpRequest.postFormData(url, data).then((request) {
-      var texts = JSON.decode(request.response)['texts'];
-
-      this.userTexts = [];
-
-      for (var t in texts) {
-        int id = t['id'];
-        String title = t['title'];
-        String text = t['text'];
-
-        this.userTexts.add(new UserText(id, title, text));
+    return UserText.query(credentials()).then((textList) {
+      if(textList != null) {
+        this.userTexts = textList;
+        return true;
       }
 
-      return true;
-    }, onError: (error) {
       return false;
     });
   }
 
   Future<bool> addText(String title, String text) async {
-    String url = AppService.SERVER_URL + "/user/text/add";
-
-    var data = {
-      'title': title,
-      'text': text
-    };
-    data = appendCredentials(data);
-
-    //String authHeader = "Basic " + this.email + ":" + this.password;
-    //return HttpRequest.request(url, method: 'POST', withCredentials: true, sendData: data, requestHeaders: {'Authorization': authHeader}).then((request) {
-    return HttpRequest.postFormData(url, data).then((request) {
-      return true;
-    }, onError: (error) {
-      return false;
-    });
+    return UserText.add(title, text, credentials());
   }
 
   Future<bool> deleteText(UserText userText) async {
-    String url = AppService.SERVER_URL + "/user/text/delete";
-
-    var data = {
-      'id': userText.id.toString()
-    };
-    data = appendCredentials(data);
-
-    return HttpRequest.postFormData(url, data).then((request) {
-      this.userTexts.remove(userText);
-      return true;
-    }, onError: (error) {
+    return userText.delete(credentials()).then((success) {
+      if(success) {
+        this.userTexts.remove(userText);
+        return true;
+      }
 
       return false;
     });
@@ -180,66 +114,33 @@ class UserAccountService {
   //----------------------------------------------------------------------------
   // UserWord
   //----------------------------------------------------------------------------
-  Future<bool> addWord(String text, String hyphenation,
-      String stressPattern) async {
-    String url = AppService.SERVER_URL + "/user/word/add";
-
-    var data = {
-      'text': text,
-      'hyphenation': hyphenation,
-      'stress_pattern': stressPattern
-    };
-    data = appendCredentials(data);
-
-    return HttpRequest.postFormData(url, data).then((request) {
-      return true;
-    }, onError: (error) {
-      return false;
-    });
-  }
-
   Future<bool> queryWords() async {
     if (!loggedIn) {
       return false;
     }
 
-    String url = AppService.SERVER_URL + "/user/word/list";
-
-    var data = {};
-    data = appendCredentials(data);
-
-    return HttpRequest.postFormData(url, data).then((request) {
-      var words = JSON.decode(request.response)['user_words'];
-
-      this.userWords = [];
-
-      for (var t in words) {
-        int id = t['id'];
-        String text = t['text'];
-        String stress_pattern = t['stress_pattern'];
-        String hyphenation = t['hyphenation'];
-
-        this.userWords.add(new UserWord(id, text, stress_pattern, hyphenation));
+    return UserWord.query(credentials()).then((wordList) {
+      if(wordList != null) {
+        this.userWords = wordList;
+        return true;
       }
 
-      return true;
-    }, onError: (error) {
       return false;
     });
   }
 
+  Future<bool> addWord(String text, String hyphenation,
+      String stressPattern) async {
+    return UserWord.add(text, hyphenation, stressPattern, credentials());
+  }
+
   Future<bool> deleteWord(UserWord userWord) async {
-    String url = AppService.SERVER_URL + "/user/word/delete";
+    return userWord.delete(credentials()).then((success) {
+      if(success) {
+        this.userWords.remove(userWord);
+        return true;
+      }
 
-    var data = {
-      'id': userWord.id.toString()
-    };
-    data = appendCredentials(data);
-
-    return HttpRequest.postFormData(url, data).then((request) {
-      this.userWords.remove(userWord);
-      return true;
-    }, onError: (error) {
       return false;
     });
   }
@@ -252,107 +153,25 @@ class UserAccountService {
       return false;
     }
 
-    String url = AppService.SERVER_URL + "/user/configuration/list";
-
-    var data = {};
-    data = appendCredentials(data);
-
-    return HttpRequest.postFormData(url, data).then((request) {
-      var configurations = JSON.decode(request.response)['configurations'];
-
-      textConfigurations = [];
-
-      for (var c in configurations) {
-        int id = c['id'];
-        String name = c['name'];
-        String stressed_color = c['stressed_color'];
-        String unstressed_color = c['unstressed_color'];
-        double line_height = c['line_height'];
-
-        // TODO
-        String word_background = '#FFFFFF';
-
-        double word_distance = 0.3;
-        double syllable_distance = 0.1;
-        double font_size = 1.0;
-
-        bool use_background = false;
-        bool highlight_foreground = false;
-        bool stressed_bold = true;
-
-        textConfigurations.add(new TextConfiguration(id, name, stressed_color,
-            word_background, unstressed_color, font_size, line_height,
-            word_distance, syllable_distance, use_background,
-            highlight_foreground, stressed_bold));
+    return TextConfiguration.queryTextConfigurations(credentials()).then((configurations) {
+      if(configurations != null) {
+        this.textConfigurations = configurations;
+        return true;
       }
 
-      return true;
-    }, onError: (error) {
       return false;
     });
   }
 
   Future<bool> addTextConfiguration(TextConfiguration configuration) async {
-    if (!loggedIn) {
-      return false;
-    }
-
-    String url = AppService.SERVER_URL + "/user/configuration/add";
-
-    var data = {
-      'name': configuration.name,
-      'stressed_color': configuration.stressed_color,
-      'unstressed_color': configuration.unstressed_color,
-      'line_height': configuration.line_height.toString()
-    };
-    data = appendCredentials(data);
-
-    return HttpRequest.postFormData(url, data).then((request) {
-      return true;
-    }, onError: (error) {
-      return false;
-    });
+    return TextConfiguration.add(configuration, credentials());
   }
 
   Future<bool> updateTextConfiguration(TextConfiguration configuration) async {
-    if (!loggedIn) {
-      return false;
-    }
-
-    String url = AppService.SERVER_URL + "/user/configuration/update";
-
-    var data = {
-      'id': configuration.id.toString(),
-      'name': configuration.name,
-      'stressed_color': configuration.stressed_color,
-      'unstressed_color': configuration.unstressed_color,
-      'line_height': configuration.line_height.toString()
-    };
-    data = appendCredentials(data);
-
-    return HttpRequest.postFormData(url, data).then((request) {
-      return true;
-    }, onError: (error) {
-      return false;
-    });
+    return configuration.update(credentials());
   }
 
   Future<bool> deleteTextConfiguration(TextConfiguration configuration) async {
-    if (!loggedIn) {
-      return false;
-    }
-
-    String url = AppService.SERVER_URL + "/user/configuration/delete";
-
-    var data = {
-      'id': configuration.id.toString()
-    };
-    data = appendCredentials(data);
-
-    return HttpRequest.postFormData(url, data).then((request) {
-      return true;
-    }, onError: (error) {
-      return false;
-    });
+    return configuration.delete(credentials());
   }
 }

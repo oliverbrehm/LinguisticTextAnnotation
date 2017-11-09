@@ -1,0 +1,24 @@
+<div>
+    <h2>Gespeicherte Texte</h2>
+
+    <ul class="list-group">
+        <li *ngFor="let t of userTexts()" class="list-group-item">
+            <span *ngIf="!t.expanded" class="link" (click)="t.toggle()">{{t.title}}</span>
+            <span *ngIf="t.expanded" class="link" (click)="t.toggle()">Verbergen</span>
+            <div *ngIf="t.expanded" style="padding: 1em">
+                <h3>{{t.title}}</h3>
+                <p>{{t.text}}</p>
+                <material-button raised
+                                 (trigger)="analyseText(t)">
+                    Verwenden
+                </material-button>
+
+                <material-button raised
+                                 class="c-alert"
+                                 (trigger)="deleteText(t)">
+                    Löschen
+                </material-button>
+            </div>
+        </li>
+    </ul>
+</div>

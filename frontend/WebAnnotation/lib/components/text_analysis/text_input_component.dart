@@ -60,7 +60,7 @@ class TextInputComponent implements OnInit {
   // TODO CLEANUP copy code from text_analysis_component
   void lookup() {
     appService.clearMessage();
-    var userData = userAccountService.appendCredentials({});
+    var userData = userAccountService.credentials();
     textAnalysisService.lookup(userData).then((success) {
       if(!success) {
         appService.errorMessage("Der Text konnte nicht analysiert werden.");
