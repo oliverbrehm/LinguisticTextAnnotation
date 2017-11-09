@@ -6,97 +6,34 @@ import 'package:angular/core.dart';
 import 'dart:html';
 
 import 'package:WebAnnotation/app_service.dart';
-
-class Syllable {
-  String text;
-  bool stressed;
-
-  Syllable(this.text, this.stressed);
-}
-
-class Word {
-  String text;
-
-  bool unknown = false;
-  bool punctuation = false;
-  bool number = false;
-  bool notFound = false;
-  bool annotated = false;
-
-  List<Syllable> syllables = [];
-
-  Word(this.text);
-
-  void addSyllable(String text, bool stressed) {
-    this.syllables.add(new Syllable(text, stressed));
-  }
-
-  bool parseSyllables(String hyphenation, String stressPattern) {
-    List<String> syllables = hyphenation.split("-");
-
-    if(stressPattern.length != syllables.length) {
-      // stress pattern does not match number of syllables
-      return false;
-    }
-    
-    // use the given hyphenation as hint, but use the original text
-    // in order to keep capitalization of original
-    String remaining = this.text;
-    for(int i = 0; i < syllables.length; i++) {
-      String lookupSyllable = syllables[i];
-      lookupSyllable = lookupSyllable.replaceAll("ae", "ä")
-          .replaceAll("oe", "ö")
-          .replaceAll("ue", "ü");
-      
-      String syllable = remaining.substring(0, lookupSyllable.length);
-
-      if(syllable.toLowerCase() != lookupSyllable)  {
-        // this should match, but if it does not, use lookup as fallback
-        syllable = lookupSyllable;
-      }
-
-      remaining = remaining.substring(lookupSyllable.length);
-
-      String c = stressPattern.substring(i, i + 1);
-      bool stressed = (c == "1");
-      this.addSyllable(syllable, stressed);
-    }
-
-    return true;
-  }
-
-  void clearType() {
-    unknown = false;
-    punctuation = false;
-    number = false;
-    notFound = false;
-    annotated = false;
-  }
-}
-
-class AnnotationText {
-  String originalText;
-
-  List<Word> words = new List<Word>();
-
-  void addWord(Word word) {
-    words.add(word);
-  }
-}
+import 'package:WebAnnotation/services/model/TextConfiguration.dart';
+import 'package:WebAnnotation/services/model/Word.dart';
+import 'package:WebAnnotation/services/model/AnnotationText.dart';
 
 /// service description
 @Injectable()
 class TextAnalysisService {
 
+  bool analyzing = false;
+
+  String lookupText = 'Kreidefelsen sind wahnsinnig toll.';
+
   AnnotationText annotatedText;
 
-  Future<bool> lookupText(String text, var userData) async {
+  TextConfiguration selectedConfiguration = new TextConfiguration(-1, "",
+      '#4DE8D0', '#FFEBCD', '#FFFFFF', 16.0, 1.5, 0.2, 0.4, false, false, true);
+
+  Future<bool> lookup(var userData) async {
     String url = AppService.SERVER_URL + "/query/text";
 
     var data = userData;
-    data['text'] = text;
+    data['text'] = lookupText;
+
+    analyzing = true;
 
     return HttpRequest.postFormData(url, data).then((request) {
+      analyzing = false;
+
       var response = JSON.decode(request.responseText);
 
       if(response == null) {
@@ -127,10 +64,11 @@ class TextAnalysisService {
         annotatedText.addWord(w);
       }
 
-      annotatedText.originalText = text;
+      annotatedText.originalText = lookupText;
 
       return true;
     }, onError: (error) {
+      analyzing = false;
       return false;
     });
   }
@@ -139,27 +77,50 @@ class TextAnalysisService {
     annotatedText = null;
   }
 
-  Word nextMissingWord() {
-    for(Word w in annotatedText.words) {
-      if(w.notFound) {
-        return w;
-      }
-    }
+  void applyCurrentConfiguration() {
+    new Future.delayed(const Duration(microseconds: 100), () {
+      querySelectorAll(".word").style.fontSize =
+          selectedConfiguration.font_size.toString() + "px";
+      querySelectorAll(".word").style.marginBottom =
+          (selectedConfiguration.line_height - 1.0).toString() + "em";
+      querySelectorAll(".word").style.marginRight =
+          selectedConfiguration.word_distance.toString() + "em";
+      querySelectorAll(".syllable").style.marginRight =
+          selectedConfiguration.syllable_distance.toString() + "em";
 
-    return null;
+      if(selectedConfiguration.stressed_bold) {
+        querySelectorAll(".stressed").style.fontWeight = 'bold';
+      } else {
+        querySelectorAll(".stressed").style.fontWeight = 'normal';
+      }
+
+      if(selectedConfiguration.highlight_foreground) {
+        querySelectorAll(".stressed").style.color =
+            selectedConfiguration.stressed_color;
+        querySelectorAll(".unstressed").style.color =
+            selectedConfiguration.unstressed_color;
+      } else {
+        querySelectorAll(".stressed").style.backgroundColor =
+            selectedConfiguration.stressed_color;
+        querySelectorAll(".unstressed").style.backgroundColor =
+            selectedConfiguration.unstressed_color;
+      }
+
+      if(selectedConfiguration.use_background) {
+        querySelectorAll(".word").style.backgroundColor =
+            selectedConfiguration.word_background;
+      } else {
+        querySelectorAll(".word").style.backgroundColor = '#FFFFFF';
+      }
+    });
   }
 
-  void updateWord(String word, String hyphenation, String stressPattern) {
-    if(annotatedText == null) {
-      return;
-    }
+  void resetColors() {
+    querySelectorAll(".stressed").style.backgroundColor = '#FFFFFF';
+    querySelectorAll(".unstressed").style.backgroundColor = '#FFFFFF';
+    querySelectorAll(".word").style.backgroundColor = '#FFFFFF';
 
-    for(Word w in annotatedText.words) {
-      if(w.text == word) {
-        w.parseSyllables(hyphenation, stressPattern);
-        w.clearType();
-        w.annotated = true;
-      }
-    }
+    querySelectorAll(".stressed").style.color = '#000000';
+    querySelectorAll(".unstressed").style.color = '#000000';
   }
 }

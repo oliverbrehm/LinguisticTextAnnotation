@@ -16,9 +16,9 @@
 
 .segmentationList-active {
     text-decoration: underline;
-    background-color: palegreen;
+    background-color: #4DE8D0;
 }
 
 .segmentationList-hover:hover {
-    background-color: palegreen;
+    background-color: #4DE8D0;
 }

@@ -30,6 +30,10 @@
     background-color: cadetblue;
 }
 
+.textpreview {
+    background-color: white;
+}
+
 #analysisInputText {
     padding: 1.0em;
     margin: 0.5em;

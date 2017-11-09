@@ -9,6 +9,7 @@ import 'package:WebAnnotation/app_service.dart';
 import 'package:WebAnnotation/services/user_account_service.dart';
 import 'package:WebAnnotation/services/text_analysis_service.dart';
 import 'package:WebAnnotation/services/segmentation_proposal_service.dart' as SPS;
+import 'package:WebAnnotation/services/model/Word.dart';
 
 @Component(
     selector: 'word-review',
@@ -31,6 +32,9 @@ class WordReviewComponent implements OnInit {
   String currentHyphenation = "";
   int selectedIndex = 0;
 
+  String previousWord = null;
+  String nextWord = null;
+
   SPS.Segmentation currentSegmentation;
 
   final Router router;
@@ -49,6 +53,10 @@ class WordReviewComponent implements OnInit {
     return this.segmentationProposalService.segmentationProposals;
   }
 
+  int numWordsLeft() {
+    return textAnalysisService.annotatedText.numberOfUnknownWords();
+  }
+
   @override
   Future<Null> ngOnInit() async {
     this.word = routeParams.get('word');
@@ -56,6 +64,9 @@ class WordReviewComponent implements OnInit {
     this.currentHyphenation = this.hyphenationText;
 
     this.setSegmentation(this.word, 0);
+
+    this.previousWord = textAnalysisService.annotatedText.previousWordTo(this.word);
+    this.nextWord = textAnalysisService.annotatedText.nextWordTo(this.word);
 
     this.loadingProposals = true;
     this.segmentationProposalService.querySegmentationProposals(this.word).then((success) {
@@ -116,17 +127,21 @@ class WordReviewComponent implements OnInit {
 
     this.userAccountService.addWord(word, hyphenation, stressPattern).then((bool success) {
       if(success) {
-        this.textAnalysisService.updateWord(word, hyphenation, stressPattern);
+        this.textAnalysisService.annotatedText.updateWord(word, hyphenation, stressPattern);
 
-        Word w = textAnalysisService.nextMissingWord();
-        if(w == null) {
-          // no more unknown words, back to text
-          router.navigate(['TextAnalysis']);
-          return;
+        if(nextWord != null) {
+          gotoWord(nextWord);
+        } else {
+          // find first unknown word
+          Word w = textAnalysisService.annotatedText.nextMissingWord();
+          if(w == null) {
+            // no more unknown words, back to text
+            router.navigate(['TextAnalysis']);
+            return;
+          }
+
+          gotoWord(w.text);
         }
-
-        // navigate to next unknown word
-        router.navigate(['WordReview', {'word': w.text}]);
       } else {
         appService.errorMessage("Fehler beim hinzufügen des Wortes zur"
             "lokalen Datenbank.");
@@ -134,6 +149,10 @@ class WordReviewComponent implements OnInit {
 
       busyAdding = false;
     });
+  }
+
+  void gotoWord(String word) {
+    router.navigate(['WordReview', {'word': word}]);
   }
 
   void hyphenationChanged() {

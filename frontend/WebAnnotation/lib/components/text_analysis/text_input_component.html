@@ -1,0 +1,42 @@
+<div class="bordered">
+    <h2>Text</h2>
+
+    <material-input multiline
+                    label="Text"
+                    rows="5"
+                    autoFocus floatingLabel style="width:100%"
+                    [(ngModel)]="textAnalysisService.lookupText">
+    </material-input>
+    <br>
+
+    <material-button raised
+                     (trigger)="lookup()">
+        Neu analysieren
+    </material-button>
+</div>
+<br>
+
+<div *ngIf="userAccountService.loggedIn" class="bordered">
+    <h3>Text speichern</h3>
+    Speichere den aktuellen Text, er kann dann auf der Benutzer Seite aufgerufen und wiederverwendet werden.
+    <material-input label="Titel"
+                    autoFocus floatingLabel style="width:100%"
+                    [(ngModel)]="textTitle">
+    </material-input>
+    <br>
+
+    <material-button raised
+                     (trigger)="saveText()">
+        Speichern
+    </material-button>
+</div>
+<br>
+
+<div class="bordered">
+    <h3>Neu</h3>
+    <material-button raised
+                     (trigger)="newText()">
+        Neuen Text eingeben
+    </material-button><br>
+    Aktuelle Analyse verwerfen und neuen Text eingeben.
+</div>

@@ -1,0 +1,114 @@
+<div class="bordered">
+    <h2>Einstellungen</h2>
+
+    Betonte Silbe:<br>
+    <input type="checkbox" (change)="stressedBoldChanged($event)" />Fett<br>
+    <div class="input-group">
+        <input type="text" disabled value="{{selectedConfiguration().stressed_color}}" class="form-control" />
+        <span class="form-control">
+                <input #inputColorStressed type="color" [(ngModel)]="selectedConfiguration().stressed_color"
+                       (input)="applyCurrentConfiguration()">
+            </span>
+    </div>
+    <br>
+
+    Unbetonte Silbe:
+    <div class="input-group">
+        <input type="text" disabled value="{{selectedConfiguration().unstressed_color}}" class="form-control" />
+        <span class="form-control">
+                <input #inputColorUnstressed type="color" [(ngModel)]="selectedConfiguration().unstressed_color"
+                       (input)="applyCurrentConfiguration()">
+            </span>
+    </div>
+    <br>
+
+    Wort Hintergrundfarbe:<br>
+    <input type="checkbox"  (change)="useWordBackgroundChanged($event)" />Aktivieren<br>
+    <div *ngIf="selectedConfiguration().use_background" class="input-group">
+        <input type="text" disabled value="{{selectedConfiguration().word_background}}" class="form-control" />
+        <span class="form-control">
+                <input #inputColorWordBackground type="color" [(ngModel)]="selectedConfiguration().word_background"
+                       (input)="applyCurrentConfiguration()">
+            </span>
+    </div>
+    <br>
+
+    Silbe hervorheben:<br>
+    <input type="radio" name="radioSyllableColor" value="foreground"
+           (click)="radioSyllableColorChanged($event)"/>Vordergrundfarbe<br>
+    <input type="radio" name="radioSyllableColor" value="background"
+           (click)="radioSyllableColorChanged($event)" checked />Hintergrundfarbe<br>
+    <br>
+
+    Schriftgröße:
+    <div class="input-group">
+        <input type="text" disabled value="{{selectedConfiguration().font_size}}" class="form-control"/>
+        <span style="padding-left: 0.5em; padding-top: 0.5em;">
+                <input type="range" min="8" max="32" [(ngModel)]="fontSizeValue"
+                       (input)="fontSizeSliderMoved($event)" (change)="applyCurrentConfiguration()" class="slider">
+            </span>
+    </div>
+    <br>
+
+    Silbenabstand:
+    <div class="input-group">
+        <input type="text" disabled value="{{selectedConfiguration().syllable_distance}}" class="form-control"/>
+        <span style="padding-left: 0.5em; padding-top: 0.5em;">
+                <input type="range" min="0" max="8" [(ngModel)]="syllableDistanceValue"
+                       (input)="syllableDistanceSliderMoved($event)" (change)="applyCurrentConfiguration()" class="slider">
+            </span>
+    </div>
+    <br>
+
+    Wort abstand:
+    <div class="input-group">
+        <input type="text" disabled value="{{selectedConfiguration().word_distance}}" class="form-control"/>
+        <span style="padding-left: 0.5em; padding-top: 0.5em;">
+                <input type="range" min="2" max="20" [(ngModel)]="wordDistanceValue"
+                       (input)="wordDistanceSliderMoved($event)" (change)="applyCurrentConfiguration()" class="slider">
+            </span>
+    </div>
+    <br>
+
+    Zeilenabstand:
+    <div class="input-group">
+        <input type="text" disabled value="{{selectedConfiguration().line_height}}" class="form-control"/>
+        <span style="padding-left: 0.5em; padding-top: 0.5em;">
+                <input type="range" min="10" max="40" [(ngModel)]="lineHeightValue"
+                       (input)="lineHeightSliderMoved($event)" (change)="applyCurrentConfiguration()" class="slider" id="myRange">
+    </span>
+    </div>
+</div>
+
+<br>
+
+<div *ngIf="userAccountService.loggedIn && textConfigurations() != null" class="bordered">
+    <h3>Vorlagen</h3>
+    Klicke auf eine Vorlage in der Liste um sie auf den aktuellen Text anzuwenden.<br>
+
+    <div *ngIf="textConfigurations().length < 1">
+        <strong>- Es gibt noch eine Vorlagen -</strong>
+    </div>
+
+    <material-select class="bordered-list">
+        <material-select-item *ngFor="let c of textConfigurations()"
+                              (trigger)="configurationSelected(c)">
+            {{c.name}}
+            <button type="button" class="close delete-button" aria-label="Vorlage löschen" (click)="deleteConfiguration(c)">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </material-select-item>
+    </material-select>
+    <br>
+
+    <material-input label="Vorlagenname"
+                    autoFocus floatingLabel style="width:80%"
+                    [(ngModel)]="newConfigurationName">
+    </material-input>
+
+    <material-button raised
+                     (trigger)="saveConfiguration()">
+        Vorlage speichern
+    </material-button><br>
+    Speichere die aktuelle Vorlage um sie wiederzuverwenden.
+</div>
