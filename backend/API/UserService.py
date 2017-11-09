@@ -65,9 +65,19 @@ class TextConfiguration(Base):
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
 
     name = sqlalchemy.Column(sqlalchemy.String(128))
+
     stressed_color = sqlalchemy.Column(sqlalchemy.String(9))
     unstressed_color = sqlalchemy.Column(sqlalchemy.String(9))
+    word_background = sqlalchemy.Column(sqlalchemy.String(9))
+
     line_height = sqlalchemy.Column(sqlalchemy.Float)
+    word_distance = sqlalchemy.Column(sqlalchemy.Float)
+    syllable_distance = sqlalchemy.Column(sqlalchemy.Float)
+    font_size = sqlalchemy.Column(sqlalchemy.Float)
+
+    use_background = sqlalchemy.Column(sqlalchemy.Boolean)
+    highlight_foreground = sqlalchemy.Column(sqlalchemy.Boolean)
+    stressed_bold = sqlalchemy.Column(sqlalchemy.Boolean)
 
     user_email = sqlalchemy.Column(sqlalchemy.String(256), sqlalchemy.ForeignKey('user.email'))
     user = relationship(User)
@@ -76,9 +86,19 @@ class TextConfiguration(Base):
         return {
             "id": self.id,
             "name": self.name,
+
             "stressed_color": self.stressed_color,
             "unstressed_color": self.unstressed_color,
-            "line_height": self.line_height
+            "word_background": self.word_background,
+
+            "line_height": self.line_height,
+            "word_distance": self.word_distance,
+            "syllable_distance": self.syllable_distance,
+            "font_size": self.font_size,
+
+            "use_background": self.use_background,
+            "highlight_foreground": self.highlight_foreground,
+            "stressed_bold": self.stressed_bold
         }
 
 
@@ -183,26 +203,44 @@ class UserService:
 
         return True
 
-    def add_configuration(self, user, name, stressed_color, unstressed_color, line_height):
+    def add_configuration(self, user, name, stressed_color, unstressed_color, word_background, word_distance,
+                          syllable_distance, font_size, use_background, highlight_foreground, stressed_bold,
+                          line_height):
+        # TODO check how booleans are mapped, does not work
         configuration = TextConfiguration(user=user, name=name, stressed_color=stressed_color,
-                                          unstressed_color= unstressed_color, line_height=line_height)
+                                          unstressed_color= unstressed_color, word_background=word_background,
+                                          word_distance=word_distance, syllable_distance=syllable_distance,
+                                          use_background=use_background, highlight_foreground=highlight_foreground,
+                                          stressed_bold=stressed_bold, font_size=font_size, line_height=line_height)
         self.session.add(configuration)
         self.session.commit()
 
         return True
 
-    def update_configuration(self, configuration_id, name, stressed_color, unstressed_color, line_height):
+    def update_configuration(self, configuration_id, name, stressed_color, unstressed_color, word_background,
+                             word_distance, syllable_distance, font_size, use_background, highlight_foreground,
+                             stressed_bold, line_height):
         n_id = int(configuration_id)
 
-        configuration = self.session.query(TextConfiguration).filter(TextConfiguration.id == n_id).first()
+        configuration:TextConfiguration = self.session.query(TextConfiguration).filter(TextConfiguration.id == n_id).first()
 
         if not configuration:
             return False
 
         configuration.name = name
+
         configuration.stressed_color = stressed_color
         configuration.unstressed_color = unstressed_color
+        configuration.word_background = word_background
+
         configuration.line_height = line_height
+        configuration.word_distance = word_distance
+        configuration.syllable_distance = syllable_distance
+        configuration.font_size = font_size
+
+        configuration.use_background = use_background
+        configuration.highlight_foreground = highlight_foreground
+        configuration.stressed_bold = stressed_bold
 
         self.session.commit()
 

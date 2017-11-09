@@ -79,6 +79,8 @@ class TextAnalysisService {
 
   void applyCurrentConfiguration() {
     new Future.delayed(const Duration(microseconds: 100), () {
+      resetColors();
+
       querySelectorAll(".word").style.fontSize =
           selectedConfiguration.font_size.toString() + "px";
       querySelectorAll(".word").style.marginBottom =

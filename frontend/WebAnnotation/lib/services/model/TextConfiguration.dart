@@ -44,6 +44,26 @@ class TextConfiguration {
     this.stressed_bold = c.stressed_bold;
   }
 
+  Map<String, String> json() {
+    return {
+      'id': this.id.toString(),
+      'name': this.name,
+
+      'stressed_color': this.stressed_color,
+      'unstressed_color': this.unstressed_color,
+      'word_background': this.word_background,
+
+      'line_height': this.line_height.toString(),
+      'word_distance': this.word_distance.toString(),
+      'syllable_distance': this.syllable_distance.toString(),
+      'font_size': this.font_size.toString(),
+
+      'use_background': this.use_background.toString(),
+      'highlight_foreground': this.highlight_foreground.toString(),
+      'stressed_bold': this.stressed_bold.toString()
+    };
+  }
+
   static Future<List<TextConfiguration>> queryTextConfigurations(var credentials) async {
     String url = AppService.SERVER_URL + "/user/configuration/list";
 
@@ -57,20 +77,19 @@ class TextConfiguration {
       for (var c in configurations) {
         int id = c['id'];
         String name = c['name'];
+
         String stressed_color = c['stressed_color'];
         String unstressed_color = c['unstressed_color'];
+        String word_background = c['word_background'];
+
         double line_height = c['line_height'];
+        double word_distance = c['word_distance'];
+        double syllable_distance = c['syllable_distance'];
+        double font_size = c['font_size'];
 
-        // TODO
-        String word_background = '#FFFFFF';
-
-        double word_distance = 0.3;
-        double syllable_distance = 0.1;
-        double font_size = 1.0;
-
-        bool use_background = false;
-        bool highlight_foreground = false;
-        bool stressed_bold = true;
+        bool use_background = c['use_background'];
+        bool highlight_foreground = c['highlight_foreground'];
+        bool stressed_bold = c['stressed_bold'];
 
         textConfigurations.add(new TextConfiguration(id, name, stressed_color,
             word_background, unstressed_color, font_size, line_height,
@@ -87,12 +106,7 @@ class TextConfiguration {
   static Future<bool> add(TextConfiguration configuration, var credentials) async {
     String url = AppService.SERVER_URL + "/user/configuration/add";
 
-    var data = {
-      'name': configuration.name,
-      'stressed_color': configuration.stressed_color,
-      'unstressed_color': configuration.unstressed_color,
-      'line_height': configuration.line_height.toString()
-    };
+    var data = configuration.json();
     data.addAll(credentials);
 
     return HttpRequest.postFormData(url, data).then((request) {
@@ -105,13 +119,7 @@ class TextConfiguration {
   Future<bool> update(var credentials) async {
     String url = AppService.SERVER_URL + "/user/configuration/update";
 
-    var data = {
-      'id': this.id.toString(),
-      'name': this.name,
-      'stressed_color': this.stressed_color,
-      'unstressed_color': this.unstressed_color,
-      'line_height': this.line_height.toString()
-    };
+    var data = this.json();
     data.addAll(credentials);
 
     return HttpRequest.postFormData(url, data).then((request) {

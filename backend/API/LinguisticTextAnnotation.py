@@ -123,7 +123,7 @@ def user_get_words():
 
     user_words = userService.list_words(user)
 
-    if not user_words:
+    if user_words is None:
         return create_error_response(404, "Error getting user words.")
 
     return create_response(200, {'user_words': user_words})
@@ -135,14 +135,26 @@ def user_add_configuration():
     if not user: return create_error_response(403, "Invalid credentials.")
 
     name = request.form.get("name")
+
     stressed_color = request.form.get("stressed_color")
     unstressed_color = request.form.get("unstressed_color")
-    line_height = request.form.get("line_height")
+    word_background = request.form.get('word_background')
 
-    if not name or not stressed_color or not unstressed_color or not line_height:
+    line_height = request.form.get("line_height")
+    word_distance = request.form.get('word_distance')
+    syllable_distance = request.form.get('syllable_distance')
+    font_size = request.form.get('font_size')
+
+    use_background = request.form.get('use_background')
+    highlight_foreground = request.form.get('highlight_foreground')
+    stressed_bold = request.form.get('stressed_bold')
+
+    if not name or not stressed_color or not unstressed_color or not word_background or not line_height \
+            or not word_distance or not syllable_distance or not font_size or not use_background \
+            or not highlight_foreground or not stressed_bold:
         return create_error_response(400, "Data not provided.")
 
-    success = userService.add_configuration(user, name, stressed_color, unstressed_color, line_height)
+    success = userService.add_configuration(user, name, stressed_color, unstressed_color, word_background, word_distance, syllable_distance, font_size, use_background, highlight_foreground, stressed_bold, line_height)
 
     if not success:
         return create_error_response(404, "Error adding configuration.")
@@ -157,14 +169,26 @@ def user_update_configuration():
 
     configuration_id = request.form.get("id")
     name = request.form.get("name")
+
     stressed_color = request.form.get("stressed_color")
     unstressed_color = request.form.get("unstressed_color")
-    line_height = request.form.get("line_height")
+    word_background = request.form.get('word_background')
 
-    if not name or not stressed_color or not unstressed_color or not line_height:
+    line_height = request.form.get("line_height")
+    word_distance = request.form.get('word_distance')
+    syllable_distance = request.form.get('syllable_distance')
+    font_size = request.form.get('font_size')
+
+    use_background = request.form.get('use_background')
+    highlight_foreground = request.form.get('highlight_foreground')
+    stressed_bold = request.form.get('stressed_bold')
+
+    if not name or not stressed_color or not unstressed_color or not word_background or not line_height \
+            or not word_distance or not syllable_distance or not font_size or not use_background \
+            or not highlight_foreground or not stressed_bold:
         return create_error_response(400, "Data not provided.")
 
-    success = userService.update_configuration(configuration_id, name, stressed_color, unstressed_color, line_height)
+    success = userService.update_configuration(configuration_id, name, stressed_color, unstressed_color, word_background, word_distance, syllable_distance, font_size, use_background, highlight_foreground, stressed_bold, line_height)
 
     if not success:
         return create_error_response(404, "Configuration to be updated not found.")
@@ -179,7 +203,7 @@ def user_get_configurations():
 
     configurations = userService.get_configurations(user)
 
-    if not configurations:
+    if configurations is None:
         return create_error_response(404, "Error getting configurations.")
 
     return create_response(200, {'configurations': configurations})
@@ -244,7 +268,7 @@ def user_get_texts():
 
     texts = userService.get_texts(user)
 
-    if not texts:
+    if texts is None:
         return create_error_response(404, "Error getting texts.")
 
     return create_response(200, {'texts': texts})
