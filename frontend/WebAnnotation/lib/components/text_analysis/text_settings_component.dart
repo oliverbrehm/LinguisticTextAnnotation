@@ -73,6 +73,12 @@ class TextSettingsComponent implements OnInit {
           appService.errorMessage("Vorlage konnte nicht gespeichert werden.");
         } else {
           appService.infoMessage("Vorlage gespeichert.");
+
+          userAccountService.queryTextConfigurations().then((success) {
+            if (!success) {
+              print("WARNING: could not load text configurations");
+            }
+          });
         }
       });
     } else {
@@ -82,7 +88,12 @@ class TextSettingsComponent implements OnInit {
           appService.errorMessage("Neue Vorlage konnte nicht angelegt werden.");
         } else {
           appService.infoMessage("Neue Vorlage angelegt.");
-          userAccountService.textConfigurations.add(selectedConfiguration());
+
+          userAccountService.queryTextConfigurations().then((success) {
+            if (!success) {
+              print("WARNING: could not load text configurations");
+            }
+          });
         }
       });
     }
@@ -97,6 +108,8 @@ class TextSettingsComponent implements OnInit {
         userAccountService.queryTextConfigurations().then((success) {
           if (!success) {
             print("WARNING: could not load text configurations");
+          } else {
+            selectedConfiguration().name = "";
           }
         });
       }

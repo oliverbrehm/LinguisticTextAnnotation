@@ -92,7 +92,7 @@ class TextConfiguration {
         bool stressed_bold = c['stressed_bold'];
 
         textConfigurations.add(new TextConfiguration(id, name, stressed_color,
-            word_background, unstressed_color, font_size, line_height,
+            unstressed_color, word_background, font_size, line_height,
             word_distance, syllable_distance, use_background,
             highlight_foreground, stressed_bold));
       }

@@ -35,8 +35,6 @@ class SegmentationProposal {
         continue;
       }
 
-      print("segments: " + wordSegmentation.length.toString() + ", stresspattern: " + this.stressPattern + ",len:" + this.stressPattern.length.toString());
-
       bool stressed = false;
       if(i < stressPattern.length) {
         stressed = (this.stressPattern[i] == "1");

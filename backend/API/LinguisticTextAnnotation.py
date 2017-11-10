@@ -18,6 +18,10 @@ app = Flask(__name__)
 dictionaryService = DictionaryService()
 userService = UserService()
 
+def map_boolean(value):
+    if value is True or value == 'True' or value == 'true' or value == 1:
+        return True
+    return False
 
 def create_response(code, data={}):
     response_string = json.dumps(data)
@@ -145,16 +149,17 @@ def user_add_configuration():
     syllable_distance = request.form.get('syllable_distance')
     font_size = request.form.get('font_size')
 
-    use_background = request.form.get('use_background')
-    highlight_foreground = request.form.get('highlight_foreground')
-    stressed_bold = request.form.get('stressed_bold')
+    use_background = map_boolean(request.form.get('use_background'))
+    highlight_foreground = map_boolean(request.form.get('highlight_foreground'))
+    stressed_bold = map_boolean(request.form.get('stressed_bold'))
 
     if not name or not stressed_color or not unstressed_color or not word_background or not line_height \
-            or not word_distance or not syllable_distance or not font_size or not use_background \
-            or not highlight_foreground or not stressed_bold:
+            or not word_distance or not syllable_distance or not font_size:
         return create_error_response(400, "Data not provided.")
 
-    success = userService.add_configuration(user, name, stressed_color, unstressed_color, word_background, word_distance, syllable_distance, font_size, use_background, highlight_foreground, stressed_bold, line_height)
+    success = userService.add_configuration(user, name, stressed_color, unstressed_color, word_background,
+                                            word_distance, syllable_distance, font_size, use_background,
+                                            highlight_foreground, stressed_bold, line_height)
 
     if not success:
         return create_error_response(404, "Error adding configuration.")
@@ -179,16 +184,17 @@ def user_update_configuration():
     syllable_distance = request.form.get('syllable_distance')
     font_size = request.form.get('font_size')
 
-    use_background = request.form.get('use_background')
-    highlight_foreground = request.form.get('highlight_foreground')
-    stressed_bold = request.form.get('stressed_bold')
+    use_background = map_boolean(request.form.get('use_background'))
+    highlight_foreground = map_boolean(request.form.get('highlight_foreground'))
+    stressed_bold = map_boolean(request.form.get('stressed_bold'))
 
     if not name or not stressed_color or not unstressed_color or not word_background or not line_height \
-            or not word_distance or not syllable_distance or not font_size or not use_background \
-            or not highlight_foreground or not stressed_bold:
+            or not word_distance or not syllable_distance or not font_size:
         return create_error_response(400, "Data not provided.")
 
-    success = userService.update_configuration(configuration_id, name, stressed_color, unstressed_color, word_background, word_distance, syllable_distance, font_size, use_background, highlight_foreground, stressed_bold, line_height)
+    success = userService.update_configuration(configuration_id, name, stressed_color, unstressed_color,
+                                               word_background, word_distance, syllable_distance, font_size,
+                                               use_background, highlight_foreground, stressed_bold, line_height)
 
     if not success:
         return create_error_response(404, "Configuration to be updated not found.")

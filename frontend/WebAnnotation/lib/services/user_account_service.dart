@@ -20,6 +20,10 @@ class UserAccountService {
   List<UserWord> userWords = [];
   List<TextConfiguration> textConfigurations = [];
 
+  bool queryingTexts = false;
+  bool queryingWords = false;
+  bool queryingConfigurations = false;
+
   Map<String, String> credentials() {
     return {
       'email': this.email,
@@ -86,7 +90,11 @@ class UserAccountService {
       return false;
     }
 
+    this.queryingTexts = true;
+
     return UserText.query(credentials()).then((textList) {
+      this.queryingTexts = false;
+
       if(textList != null) {
         this.userTexts = textList;
         return true;
@@ -119,7 +127,11 @@ class UserAccountService {
       return false;
     }
 
+    this.queryingWords = true;
+
     return UserWord.query(credentials()).then((wordList) {
+      this.queryingWords = false;
+
       if(wordList != null) {
         this.userWords = wordList;
         return true;
@@ -153,7 +165,11 @@ class UserAccountService {
       return false;
     }
 
+    this.queryingConfigurations = true;
+
     return TextConfiguration.queryTextConfigurations(credentials()).then((configurations) {
+      this.queryingConfigurations = false;
+
       if(configurations != null) {
         this.textConfigurations = configurations;
         return true;

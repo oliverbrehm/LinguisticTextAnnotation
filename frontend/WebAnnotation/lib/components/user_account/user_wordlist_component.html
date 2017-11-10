@@ -1,12 +1,22 @@
 <div>
     <h2>Manuelle Einträge</h2>
 
-    <ul class="list-group">
-        <li *ngFor="let w of userWords()" class="list-group-item">
-            <span>{{w.text}} | {{w.hyphenation}} | {{w.stressPattern}}</span>
-            <button type="button" class="close delete-button" aria-label="Wort löschen" (click)="deleteUserWord(w)">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </li>
-    </ul>
+    <div *ngIf="userAccountService.queryingWords">
+        <material-spinner ></material-spinner><br>
+    </div>
+
+    <div *ngIf="!userAccountService.queryingWords">
+        <div *ngIf="userWords().length == 0">
+            - keine Einträge -
+        </div>
+
+        <ul class="list-group">
+            <li *ngFor="let w of userWords()" class="list-group-item">
+                <span>{{w.text}} | {{w.hyphenation}} | {{w.stressPattern}}</span>
+                <button type="button" class="close delete-button" aria-label="Wort löschen" (click)="deleteUserWord(w)">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </li>
+        </ul>
+    </div>
 </div>

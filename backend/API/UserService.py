@@ -206,7 +206,6 @@ class UserService:
     def add_configuration(self, user, name, stressed_color, unstressed_color, word_background, word_distance,
                           syllable_distance, font_size, use_background, highlight_foreground, stressed_bold,
                           line_height):
-        # TODO check how booleans are mapped, does not work
         configuration = TextConfiguration(user=user, name=name, stressed_color=stressed_color,
                                           unstressed_color= unstressed_color, word_background=word_background,
                                           word_distance=word_distance, syllable_distance=syllable_distance,
@@ -215,6 +214,7 @@ class UserService:
         self.session.add(configuration)
         self.session.commit()
 
+        # TODO maybe return id here (also other add methods), so that frontend does not have to reload the list
         return True
 
     def update_configuration(self, configuration_id, name, stressed_color, unstressed_color, word_background,
@@ -273,6 +273,7 @@ class UserService:
 
         configuration_list = []
         for c in configurations:
+            print("response:", c.use_background)
             configuration_list.append(c.json())
 
         return configuration_list

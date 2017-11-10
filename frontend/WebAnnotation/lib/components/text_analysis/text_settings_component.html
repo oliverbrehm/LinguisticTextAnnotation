@@ -2,7 +2,7 @@
     <h2>Einstellungen</h2>
 
     Betonte Silbe:<br>
-    <input type="checkbox" (change)="stressedBoldChanged($event)" />Fett<br>
+    <input type="checkbox" [(ngModel)]="selectedConfiguration().stressed_bold" (change)="stressedBoldChanged($event)" />Fett<br>
     <div class="input-group">
         <input type="text" disabled value="{{selectedConfiguration().stressed_color}}" class="form-control" />
         <span class="form-control">
@@ -23,7 +23,7 @@
     <br>
 
     Wort Hintergrundfarbe:<br>
-    <input type="checkbox"  (change)="useWordBackgroundChanged($event)" />Aktivieren<br>
+    <input type="checkbox" [(ngModel)]="selectedConfiguration().use_background" (change)="useWordBackgroundChanged($event)" />Aktivieren<br>
     <div *ngIf="selectedConfiguration().use_background" class="input-group">
         <input type="text" disabled value="{{selectedConfiguration().word_background}}" class="form-control" />
         <span class="form-control">
@@ -35,9 +35,11 @@
 
     Silbe hervorheben:<br>
     <input type="radio" name="radioSyllableColor" value="foreground"
-           (click)="radioSyllableColorChanged($event)"/>Vordergrundfarbe<br>
+           (click)="radioSyllableColorChanged($event)"
+           ng-checked="selectedConfiguration().highlight_foreground"/>Vordergrundfarbe<br>
     <input type="radio" name="radioSyllableColor" value="background"
-           (click)="radioSyllableColorChanged($event)" checked />Hintergrundfarbe<br>
+           (click)="radioSyllableColorChanged($event)"
+           ng-checked="!selectedConfiguration().highlight_foreground" />Hintergrundfarbe<br>
     <br>
 
     Schriftgröße:
@@ -84,21 +86,28 @@
 
 <div *ngIf="userAccountService.loggedIn && textConfigurations() != null" class="bordered">
     <h3>Vorlagen</h3>
-    Klicke auf eine Vorlage in der Liste um sie auf den aktuellen Text anzuwenden.<br>
 
-    <div *ngIf="textConfigurations().length < 1">
-        <strong>- Es gibt noch eine Vorlagen -</strong>
+    <div *ngIf="userAccountService.queryingConfigurations">
+        <material-spinner ></material-spinner><br>
     </div>
 
-    <material-select class="bordered-list">
-        <material-select-item *ngFor="let c of textConfigurations()"
-                              (trigger)="configurationSelected(c)">
-            {{c.name}}
-            <button type="button" class="close delete-button" aria-label="Vorlage löschen" (click)="deleteConfiguration(c)">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </material-select-item>
-    </material-select>
+    <div *ngIf="!userAccountService.queryingConfigurations">
+        Klicke auf eine Vorlage in der Liste um sie auf den aktuellen Text anzuwenden.<br>
+
+        <div *ngIf="textConfigurations().length == 0">
+            <strong>- Es gibt noch eine Vorlagen -</strong>
+        </div>
+
+        <material-select class="bordered-list">
+            <material-select-item *ngFor="let c of textConfigurations()"
+                                  (trigger)="configurationSelected(c)">
+                {{c.name}}
+                <button type="button" class="close delete-button" aria-label="Vorlage löschen" (click)="deleteConfiguration(c)">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </material-select-item>
+        </material-select>
+    </div>
     <br>
 
     <material-input label="Vorlagenname"
