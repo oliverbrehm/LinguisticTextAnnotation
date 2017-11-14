@@ -16,7 +16,7 @@ class TextAnalysisService {
 
   bool analyzing = false;
 
-  String lookupText = 'Kreidefelsen sind wahnsinnig toll.';
+  String lookupText = '';
 
   AnnotationText annotatedText;
 
@@ -46,16 +46,17 @@ class TextAnalysisService {
         Word w = new Word(entry['text']);
 
         switch(entry['type']) {
-          case 'unknown': w.unknown = true; break;
-          case 'number': w.number = true; break;
-          case 'punctuation': w.punctuation = true; break;
-          case 'not_found': w.notFound = true; break;
+          case 'unknown': w.type = WordType.Ignored; break;
+          case 'number': w.type = WordType.Number; break;
+          case 'punctuation': w.type = WordType.Punctuation; break;
+          case 'not_found': w.type = WordType.NotFound; break;
           case 'annotated_word':
             var annotation = entry['annotation'];
-            if(w.parseSyllables(annotation['hyphenation'], annotation['stress_pattern'])) {
-              w.annotated = true;
+            if(w.parseHyphenationUsingOriginalText(annotation['hyphenation'])
+                && w.parseStressPattern(annotation['stress_pattern'])) {
+              w.type = WordType.Annotated;
             } else {
-              w.notFound = true;
+              w.type = WordType.NotFound;
             }
             break;
           default: continue;

@@ -11,7 +11,7 @@ class AnnotationText {
 
   Word nextMissingWord() {
     for(Word w in this.words) {
-      if(w.notFound) {
+      if(w.type == WordType.NotFound) {
         return w;
       }
     }
@@ -22,9 +22,9 @@ class AnnotationText {
   void updateWord(String word, String hyphenation, String stressPattern) {
     for(Word w in this.words) {
       if(w.text == word) {
-        w.parseSyllables(hyphenation, stressPattern);
-        w.clearType();
-        w.annotated = true;
+        w.parseHyphenationUsingOriginalText(hyphenation);
+        w.parseStressPattern(stressPattern);
+        w.type = WordType.Annotated;
       }
     }
   }
@@ -33,7 +33,7 @@ class AnnotationText {
     int n = 0;
 
     for(Word w in this.words) {
-      if(w.notFound) {
+      if(w.type == WordType.NotFound) {
         n++;
       }
     }
@@ -45,7 +45,7 @@ class AnnotationText {
     String previous;
 
     for(Word w in this.words) {
-      if(w.notFound) {
+      if(w.type == WordType.NotFound) {
         if(w.text == word) {
           return previous;
         }
@@ -61,7 +61,7 @@ class AnnotationText {
     bool found = false;
 
     for(Word w in this.words) {
-      if(w.notFound) {
+      if(w.type == WordType.NotFound) {
         if(found) {
           return w.text;
         }
@@ -73,5 +73,15 @@ class AnnotationText {
     }
 
     return null;
+  }
+
+  void editWord(Word word) {
+    for(Word w in words) {
+      w.editing = false;
+    }
+
+    if(word != null) {
+      word.editing = true;
+    }
   }
 }

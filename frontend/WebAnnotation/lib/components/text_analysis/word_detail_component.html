@@ -1,0 +1,33 @@
+<div>
+    <button type="button" class="close delete-button" aria-label="Popup schließen" (click)="closePopup()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+
+    <p style="text-decoration: underline"><strong>{{word.text}}</strong></p>
+
+
+    <input type="radio" name="annotationType" value="annotated"
+           (click)="radioAnnotatedChanged($event)"
+           ng-checked="word.isAnnotated()"> annotieren
+
+    <input type="radio" name="annotationType" value="ignored"
+           (click)="radioAnnotatedChanged($event)"
+           ng-checked="word.isIgnored()" > ignorieren<br>
+    <br>
+
+    <div *ngIf="word.isAnnotated()">
+        Betonungsmuster:
+        <ul class="segmentationList">
+            <li *ngFor="let s of word.syllables" class="segmentationList-item segmentationList-small segmentationList-hover {{s.stressed ? 'segmentationList-active' : ''}}" (click)="syllableSelected(s)">{{s.text}}</li>
+            | <li class="segmentationList-item segmentationList-small segmentationList-hover {{!word.hasStress() ? 'segmentationList-active' : ''}}" (click)="removeStress()">[Unbetont]</li>
+        </ul><br>
+
+        Silbentrennung:
+        <material-input multiline
+                        (keyup)="hyphenationChanged()"
+                        autoFocus floatingLabel style="width:80%"
+                        [(ngModel)]="hyphenationText">
+        </material-input><br>
+        (Silben mit "-" trennen)
+    </div>
+</div>

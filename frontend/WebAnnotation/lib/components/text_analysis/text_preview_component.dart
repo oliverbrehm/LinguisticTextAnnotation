@@ -1,7 +1,11 @@
 import 'package:angular/angular.dart';
+import 'dart:html';
+
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
 import 'package:angular_router/angular_router.dart';
+
+import 'package:WebAnnotation/components/text_analysis/word_detail_component.dart';
 
 import 'package:WebAnnotation/app_service.dart';
 import 'package:WebAnnotation/services/text_analysis_service.dart';
@@ -16,7 +20,8 @@ import 'package:WebAnnotation/services/model/AnnotationText.dart';
   directives: const [
     CORE_DIRECTIVES,
     materialDirectives,
-    formDirectives
+    formDirectives,
+    WordDetailComponent
   ],
   providers: const [],
 )
@@ -57,5 +62,10 @@ class TextPreviewComponent implements OnInit {
       router.navigate(['UserAccount']);
       appService.infoMessage('Sie müssen eingeloggt sein, um Wörter hinzuzufügen.');
     }
+  }
+
+  void editWord(Word word) {
+    print('edit WORD');
+    annotatedText().editWord(word);
   }
 }

@@ -1,0 +1,33 @@
+/* Popup container */
+.popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+/* The actual popup (appears on top) */
+.popup-content {
+    width: 20em;
+    background-color: #FBFEFF;
+    color: #000000;
+    text-align: center;
+    border-radius: 0.5em;
+    border: 1px solid #292929;
+    padding: 0.5em;
+    position: absolute;
+    z-index: 1;
+    top: 125%;
+    left: -9em;
+}
+
+/* Popup arrow */
+.popup-content::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #292929 transparent;
+}

@@ -1,3 +1,11 @@
+enum WordType {
+  Ignored,
+  Annotated,
+  NotFound,
+  Punctuation,
+  Number
+}
+
 class Syllable {
   String text;
   bool stressed;
@@ -8,32 +16,73 @@ class Syllable {
 class Word {
   String text;
 
-  bool unknown = false;
-  bool punctuation = false;
-  bool number = false;
-  bool notFound = false;
-  bool annotated = false;
+  WordType type = WordType.Ignored;
 
   List<Syllable> syllables = [];
 
+  bool editing = false;
+
   Word(this.text);
+
+  bool isIgnored() {
+    return this.type == WordType.Ignored;
+  }
+
+  bool isAnnotated() {
+    return this.type == WordType.Annotated;
+  }
+
+  bool isNotFound() {
+    return this.type == WordType.NotFound;
+  }
+
+  bool isNumber() {
+    return this.type == WordType.Number;
+  }
+
+  bool isPunctuation() {
+    return this.type == WordType.Punctuation;
+  }
 
   void addSyllable(String text, bool stressed) {
     this.syllables.add(new Syllable(text, stressed));
   }
 
-  bool parseSyllables(String hyphenation, String stressPattern) {
-    List<String> syllables = hyphenation.split("-");
-
-    if(stressPattern.length != syllables.length) {
-      // stress pattern does not match number of syllables
-      return false;
+  bool hasStress() {
+    for(Syllable s in syllables) {
+      if(s.stressed) {
+        return true;
+      }
     }
+
+    return false;
+  }
+
+  void removeStress() {
+    for(Syllable s in syllables) {
+      s.stressed = false;
+    }
+  }
+
+  void setStressedSyllable(Syllable syllable) {
+    for(Syllable s in this.syllables) {
+      s.stressed = false;
+    }
+
+    if(syllable != null) {
+      syllable.stressed = true;
+    }
+  }
+
+  bool parseHyphenationUsingOriginalText(String hyphenation) {
+    this.syllables = [];
+
+    List<String> syllables = hyphenation.split("-");
 
     // use the given hyphenation as hint, but use the original text
     // in order to keep capitalization of original
     String remaining = this.text;
-    for(int i = 0; i < syllables.length; i++) {
+    for (int i = 0; i < syllables.length; i++) {
       String lookupSyllable = syllables[i];
       lookupSyllable = lookupSyllable.replaceAll("ae", "ä")
           .replaceAll("oe", "ö")
@@ -41,26 +90,65 @@ class Word {
 
       String syllable = remaining.substring(0, lookupSyllable.length);
 
-      if(syllable.toLowerCase() != lookupSyllable)  {
+      if (syllable.toLowerCase() != lookupSyllable) {
         // this should match, but if it does not, use lookup as fallback
         syllable = lookupSyllable;
       }
 
       remaining = remaining.substring(lookupSyllable.length);
 
-      String c = stressPattern.substring(i, i + 1);
-      bool stressed = (c == "1");
-      this.addSyllable(syllable, stressed);
+      if(syllable.length > 0) {
+        this.addSyllable(syllable, false);
+      }
     }
 
     return true;
   }
 
-  void clearType() {
-    unknown = false;
-    punctuation = false;
-    number = false;
-    notFound = false;
-    annotated = false;
+  bool parseHyphenation(String hyphenation) {
+    this.syllables = [];
+
+    List<String> syllables = hyphenation.split("-");
+
+    for (String s in syllables) {
+      if(s.length > 0) {
+        this.addSyllable(s, false);
+      }
+    }
+
+    return true;
+  }
+
+  bool parseStressPattern(String stressPattern) {
+    if(stressPattern.length != syllables.length) {
+      // stress pattern does not match number of syllables
+      return false;
+    }
+
+    for (int i = 0; i < syllables.length; i++) {
+      String c = stressPattern.substring(i, i + 1);
+      bool stressed = (c == "1");
+      if(stressed) {
+        syllables[i].stressed = true;
+        return true;
+      }
+    }
+
+    // no stress found
+    return true;
+  }
+
+  String getHyphenation() {
+    String h = "";
+
+    for (int i = 0; i < syllables.length; i++) {
+      if(i > 0) {
+        h += "-";
+      }
+
+      h += syllables[i].text;
+    }
+
+    return h;
   }
 }

@@ -42,3 +42,28 @@
 #analysisInputText:hover {
     background-color: blanchedalmond;
 }
+
+.segmentationList {
+
+}
+
+.segmentationList-item {
+    display: inline-block;
+    background-color: blanchedalmond;
+    padding: 0.5em;
+    margin: 0.2em;
+    font-size: larger;
+}
+
+.segmentationList-small {
+    font-size: smaller;
+}
+
+.segmentationList-active {
+    text-decoration: underline;
+    background-color: #4DE8D0;
+}
+
+.segmentationList-hover:hover {
+    background-color: #4DE8D0;
+}
