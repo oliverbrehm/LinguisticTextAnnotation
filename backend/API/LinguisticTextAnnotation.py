@@ -9,16 +9,22 @@ import datetime
 from DictionaryService import DictionaryService
 from UserService import UserService, Authentication
 from VerificationService import VerificationService
+from Database import Database
 
 from flask import Flask, request
 from flask import Response
 
+DB_WORDS_PATH = 'sqlite:///../db/celex.db'
+DB_USERS_PATH = 'sqlite:///../db/user.db'
 
 app = Flask(__name__)
 
-dictionaryService = DictionaryService()
-userService = UserService()
-verificationService = VerificationService()
+wordsDatabase = Database(DB_WORDS_PATH)
+userDatabase = Database(DB_USERS_PATH)
+
+dictionaryService = DictionaryService(wordsDatabase)
+userService = UserService(userDatabase)
+verificationService = VerificationService(userDatabase)
 
 def map_boolean(value):
     if value is True or value == 'True' or value == 'true' or value == 1:
@@ -318,11 +324,11 @@ def query_verification():
     if word is None:
         return create_error_response(404, "No words to verify.")
 
-    resp = {'word': str(word)}
+    resp = {'word': word}
 
     num_words = verificationService.num_words()
     if num_words is not None:
-        resp['num_words']: str(num_words)
+        resp['num_words'] = num_words
 
     return create_response(200, resp)
 
@@ -358,7 +364,20 @@ def user_register():
     if not email or not password:
         return create_error_response(400, "Email or password not provided.")
 
-    response = userService.register(email, password)
+    first_name = request.form.get("first_name")
+    if not first_name:
+        return create_error_response(400, "First name not provided.")
+
+    last_name = request.form.get("last_name")
+    if not last_name:
+        return create_error_response(400, "Last name not provided.")
+
+    s_is_expert = request.form.get("is_expert")
+    if s_is_expert is None:
+        return create_error_response(400, "Expert status not provided.")
+    is_expert = map_boolean(s_is_expert)
+
+    response = userService.register(email, password, first_name, last_name, is_expert)
 
     if not response:
         return create_error_response(404, "User already existing.")

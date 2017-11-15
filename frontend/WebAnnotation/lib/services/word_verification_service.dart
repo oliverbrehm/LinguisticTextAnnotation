@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:angular/core.dart';
 
 import 'dart:async';
@@ -12,17 +13,45 @@ import 'package:WebAnnotation/services/model/UserWord.dart';
 @Injectable()
 class WordVerificationService {
 
+  int numWords = -1;
+
   WordVerificationService();
 
-  Future<int> getNumberOfWordsRemaining() async {
-    return new Future.delayed(const Duration(seconds: 1), () => 0);
+  Future<String> getNextWord(var userData) async {
+    String url = AppService.SERVER_URL + "/user/verification/query";
+
+    return HttpRequest.postFormData(url, userData).then((request) {
+      var response = JSON.decode(request.response);
+
+      var word = response['word'];
+
+      numWords = -1;
+      if(response.containsKey('num_words')) {
+        numWords = response['num_words'].toInt();
+      }
+
+      return word['text'];
+    }, onError: (error) {
+      return null;
+    });
   }
 
-  Future<String> getNextWord() async {
-    return new Future.delayed(const Duration(seconds: 1), () => "Kreidefelsen");
-  }
+  Future<bool> submitSegmentation(var userData, String word,
+      String stressPattern, String hyphenation) async {
 
-  Future<bool> submitSegmentation() async {
-    return new Future.delayed(const Duration(seconds: 1), () => false);
+      var data =  {
+        'word': word,
+        'stress_pattern': stressPattern,
+        'hyphenation': hyphenation
+      };
+      data.addAll(userData);
+
+      String url = AppService.SERVER_URL + "/user/verification/submit";
+
+      return HttpRequest.postFormData(url, data).then((request) {
+        return true;
+      }, onError: (error) {
+        return false;
+      });
   }
 }

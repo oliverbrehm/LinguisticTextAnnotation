@@ -9,8 +9,7 @@ from UserService import UserService, User, UserWord
 
 DATABASE_PATH = 'sqlite:///../db/user.db'
 
-Base = declarative_base()
-
+from Database import Base as Base
 
 class VerificationProposal(Base):
 
@@ -40,7 +39,7 @@ class AddedEntry(Base):
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
 
-    word_id = sqlalchemy.Column(sqlalchemy.String(256), sqlalchemy.ForeignKey('word.id'))
+    word_text = sqlalchemy.Column(sqlalchemy.String(256), sqlalchemy.ForeignKey('word.text'))
     word = relationship(Word)
 
     def __init__(self):
@@ -51,19 +50,33 @@ class AddedEntry(Base):
 
 
 class VerificationService:
-    def __init__(self):
-        # init sqlalchemy
-        self.engine = sqlalchemy.create_engine(DATABASE_PATH)
-        Base.metadata.bind = self.engine
-        Base.metadata.create_all(self.engine)
-        DBSession = sessionmaker(bind=self.engine)
-        self.session = DBSession()
+    def __init__(self, database):
+        self.database = database
 
     def next_word(self):
-        pass  # TODO
+        word = self.database.session.query(UserWord).first()
+        if word is None:
+            return None
+
+        return word.json()
 
     def num_words(self):
-        pass  # TODO
+        num = self.database.session.query(UserWord).count()
+        print('num:', num)
+        return num
 
     def submit(self, user, word, stress_pattern, hyphenation):
+        #  add verification proposal
+
+        #  check all verification proposals for that UserWord
+
+        #  if condition matched (enough votes):
+            #  add word in global db
+
+            #  create AddedEntry
+
+            #  remove all proposals
+
+            #  remove UserWord
+
         pass  # TODO

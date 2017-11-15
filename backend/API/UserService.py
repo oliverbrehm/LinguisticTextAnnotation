@@ -1,14 +1,9 @@
 import sqlalchemy
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
-
-from sqlalchemy.orm import sessionmaker
 
 from DictionaryService import DictionaryService
 
-DATABASE_PATH = 'sqlite:///../db/user.db'
-
-Base = declarative_base()
+from Database import Base as Base
 
 
 class Authentication:
@@ -37,6 +32,11 @@ class User(Base):
     email = sqlalchemy.Column(sqlalchemy.String(256), primary_key=True)
     password = sqlalchemy.Column(sqlalchemy.String(256))
 
+    first_name = sqlalchemy.Column(sqlalchemy.String(256))
+    last_name = sqlalchemy.Column(sqlalchemy.String(256))
+
+    is_admin = sqlalchemy.Column(sqlalchemy.Boolean)
+    is_expert = sqlalchemy.Column(sqlalchemy.Boolean)
 
 class UserText(Base):
 
@@ -125,15 +125,11 @@ class UserWord(Base):
 
 
 class UserService:
-    def __init__(self):
-        self.engine = sqlalchemy.create_engine(DATABASE_PATH)
-        Base.metadata.bind = self.engine
-        Base.metadata.create_all(self.engine)
-        DBSession = sessionmaker(bind=self.engine)
-        self.session = DBSession()
+    def __init__(self, database):
+        self.database = database
 
     def get_user(self, email):
-        return self.session.query(User).filter(User.email == email).first()
+        return self.database.session.query(User).filter(User.email == email).first()
 
     def authenticate(self, authentication):
         if not authentication:
@@ -149,21 +145,22 @@ class UserService:
 
         return user
 
-    def register(self, email, password):
-        user = User(email=email, password=password)
+    def register(self, email, password, first_name, last_name, is_expert):
+        user = User(email=email, password=password, first_name=first_name, last_name=last_name, is_expert=is_expert,
+            is_admin=False)
         try:
-            self.session.add(user)
-            self.session.commit()
+            self.database.session.add(user)
+            self.database.session.commit()
         except:
-            self.session.rollback()
+            self.database.session.rollback()
             return False
 
         return True
 
     def add_text(self, user, title, text):
         user_text = UserText(user=user, title=title, text=text)
-        self.session.add(user_text)
-        self.session.commit()
+        self.database.session.add(user_text)
+        self.database.session.commit()
 
         return True
 
@@ -171,9 +168,9 @@ class UserService:
         n_id = int(text_id)
 
         try:
-            user_text = self.session.query(UserText).filter(UserText.id == n_id).first()
-            self.session.delete(user_text)
-            self.session.commit()
+            user_text = self.database.session.query(UserText).filter(UserText.id == n_id).first()
+            self.database.session.delete(user_text)
+            self.database.session.commit()
         except Exception as e:
             print(e)
             return False
@@ -185,8 +182,8 @@ class UserService:
         hyphenation = DictionaryService.preprocess_entry(hyphenation)
 
         user_word = UserWord(user=user, text=text, stress_pattern=stress_pattern, hyphenation=hyphenation)
-        self.session.add(user_word)
-        self.session.commit()
+        self.database.session.add(user_word)
+        self.database.session.commit()
 
         return True
 
@@ -194,9 +191,9 @@ class UserService:
         n_id = int(word_id)
 
         try:
-            user_word = self.session.query(UserWord).filter(UserWord.id == n_id).first()
-            self.session.delete(user_word)
-            self.session.commit()
+            user_word = self.database.session.query(UserWord).filter(UserWord.id == n_id).first()
+            self.database.session.delete(user_word)
+            self.database.session.commit()
         except Exception as e:
             print(e)
             return False
@@ -211,8 +208,8 @@ class UserService:
                                           word_distance=word_distance, syllable_distance=syllable_distance,
                                           use_background=use_background, highlight_foreground=highlight_foreground,
                                           stressed_bold=stressed_bold, font_size=font_size, line_height=line_height)
-        self.session.add(configuration)
-        self.session.commit()
+        self.database.session.add(configuration)
+        self.database.session.commit()
 
         # TODO maybe return id here (also other add methods), so that frontend does not have to reload the list
         return True
@@ -222,7 +219,7 @@ class UserService:
                              stressed_bold, line_height):
         n_id = int(configuration_id)
 
-        configuration:TextConfiguration = self.session.query(TextConfiguration).filter(TextConfiguration.id == n_id).first()
+        configuration:TextConfiguration = self.database.session.query(TextConfiguration).filter(TextConfiguration.id == n_id).first()
 
         if not configuration:
             return False
@@ -242,7 +239,7 @@ class UserService:
         configuration.highlight_foreground = highlight_foreground
         configuration.stressed_bold = stressed_bold
 
-        self.session.commit()
+        self.database.session.commit()
 
         return True
 
@@ -250,9 +247,9 @@ class UserService:
         n_id = int(conf_id)
 
         try:
-            text_config = self.session.query(TextConfiguration).filter(TextConfiguration.id == n_id).first()
-            self.session.delete(text_config)
-            self.session.commit()
+            text_config = self.database.session.query(TextConfiguration).filter(TextConfiguration.id == n_id).first()
+            self.database.session.delete(text_config)
+            self.database.session.commit()
         except Exception as e:
             print(e)
             return False
@@ -260,7 +257,7 @@ class UserService:
         return True
 
     def get_texts(self, user):
-        texts = self.session.query(UserText).filter(UserText.user == user).all()
+        texts = self.database.session.query(UserText).filter(UserText.user == user).all()
 
         text_list = []
         for t in texts:
@@ -269,7 +266,7 @@ class UserService:
         return text_list
 
     def get_configurations(self, user):
-        configurations = self.session.query(TextConfiguration).filter(TextConfiguration.user == user).all()
+        configurations = self.database.session.query(TextConfiguration).filter(TextConfiguration.user == user).all()
 
         configuration_list = []
         for c in configurations:
@@ -279,14 +276,14 @@ class UserService:
         return configuration_list
 
     def get_word(self, user, text):
-        word = self.session.query(UserWord).filter(UserWord.user == user).filter(UserWord.text == text).first()
+        word = self.database.session.query(UserWord).filter(UserWord.user == user).filter(UserWord.text == text).first()
         if word is None:
             return None
 
         return word.json()
 
     def list_words(self, user):
-        words = self.session.query(UserWord).filter(User.email == user.email).all()
+        words = self.database.session.query(UserWord).filter(User.email == user.email).all()
 
         word_list = []
 
@@ -296,7 +293,7 @@ class UserService:
         return word_list
 
     def list(self):
-        users = self.session.query(User).all()
+        users = self.database.session.query(User).all()
 
         user_list = []
 

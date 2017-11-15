@@ -14,6 +14,10 @@ class UserAccountService {
 
   String email = "";
   String password = "";
+
+  String firstName = "";
+  String lastName = "";
+
   bool loggedIn = false;
 
   List<UserText> userTexts = [];
@@ -34,7 +38,18 @@ class UserAccountService {
   Future<bool> register(String email, String password) async {
     String url = AppService.SERVER_URL + "/user/register";
 
-    var data = {'email': email, 'password': password};
+    // TODO get first and last name
+    String firstName = "horst";
+    String lastName = 'peter-klaus-richard';
+    bool isExpert = false;
+
+    var data = {
+      'email': email,
+      'password': password,
+      'first_name': firstName,
+      'last_name': lastName,
+      'is_expert': isExpert.toString()
+    };
 
     return HttpRequest.postFormData(url, data).then((request) {
       return true;
@@ -52,6 +67,10 @@ class UserAccountService {
       this.email = email;
       this.password = password;
       this.loggedIn = true;
+
+      // TODO get first and last name
+      this.firstName = 'hans';
+      this.lastName = 'wurst';
 
       return true;
     }

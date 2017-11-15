@@ -6,14 +6,8 @@ import requests
 import xml.etree.ElementTree as ET
 
 import sqlalchemy
-from sqlalchemy.ext.declarative import declarative_base
 
-from sqlalchemy.orm import sessionmaker
-
-DATABASE_PATH = 'sqlite:///../db/celex.db'
-
-Base = declarative_base()
-
+from Database import Base as Base
 
 class Segmentation:
     def __init__(self, origin, source, hyphenation, stress_pattern):
@@ -53,7 +47,9 @@ class Word(Base):
 
 
 class DictionaryService:
-    def __init__(self):
+    def __init__(self, database):
+        self.database = database
+
         nltk.download('punkt')
         nltk.download('averaged_perceptron_tagger')
 
@@ -68,13 +64,6 @@ class DictionaryService:
 
         pyphen.language_fallback(language + '_variant1')
 
-        # init sqlalchemy
-        self.engine = sqlalchemy.create_engine(DATABASE_PATH)
-        Base.metadata.bind = self.engine
-        Base.metadata.create_all(self.engine)
-        DBSession = sessionmaker(bind=self.engine)
-        self.session = DBSession()
-
     @staticmethod
     def preprocess_entry(entry):
         return entry.lower() \
@@ -87,14 +76,14 @@ class DictionaryService:
         user_word = Word(text=word, stress_pattern=stress_pattern, hyphenation=hyphenation)
 
         try:
-            self.session.add(user_word)
-            self.session.commit()
+            self.database.session.add(user_word)
+            self.database.session.commit()
         except sqlite3.IntegrityError:
             print('Word ', word, 'already in Database.')
-            self.session.rollback()
+            self.database.session.rollback()
             return False
         except Exception as e:
-            self.session.rollback()
+            self.database.session.rollback()
             return False
 
         return True
@@ -111,7 +100,7 @@ class DictionaryService:
                 return word
 
         # if not found in user database, search the global word database
-        word = self.session.query(Word).filter(Word.text == query_text).first()
+        word = self.database.session.query(Word).filter(Word.text == query_text).first()
 
         if word is None:
             return None

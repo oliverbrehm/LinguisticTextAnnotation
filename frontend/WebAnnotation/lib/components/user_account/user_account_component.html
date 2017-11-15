@@ -4,7 +4,7 @@
 
 <div class="container" *ngIf="userAccountService.loggedIn">
     <div class="bordered">
-        <h2>Hallo {{userEmail()}}!</h2>
+        <h2>Hallo {{userFullName()}} ({{userEmail()}})!</h2>
         Hier kannst Du gespeicherte Texte, manuelle Wörterbuch Einträge und Dein Konto verwalten.
     </div>
     <br>

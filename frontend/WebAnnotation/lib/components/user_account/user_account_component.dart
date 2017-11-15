@@ -40,6 +40,10 @@ class UserAccountComponent implements OnInit {
     return userAccountService.email;
   }
 
+  String userFullName() {
+    return userAccountService.firstName + " " + userAccountService.lastName;
+  }
+
   void logout() {
     appService.clearMessage();
     userAccountService.logout();

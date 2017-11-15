@@ -34,7 +34,7 @@ enum WordVerificationComponentState {
 )
 class WordVerificationComponent implements OnInit {
 
-  String word = 'Beispiel';
+  String word = '';
 
   WordVerificationComponentState state = WordVerificationComponentState.UserInput;
 
@@ -84,13 +84,17 @@ class WordVerificationComponent implements OnInit {
     return "Expert";
   }
 
-  String numWords() {
-    return "0";
+  String wordsLeft() {
+    int numWords = wordVerificationService.numWords;
+    if(numWords > -1) {
+      return numWords.toString();
+    }
+    return "?";
   }
 
   void queryWord() {
     state = WordVerificationComponentState.Querying;
-    wordVerificationService.getNextWord().then((result) {
+    wordVerificationService.getNextWord(userAccountService.credentials()).then((result) {
       if(result != null) {
         this.word = result;
         this.state = WordVerificationComponentState.UserInput;
@@ -103,7 +107,13 @@ class WordVerificationComponent implements OnInit {
 
   void submitWord() {
     state = WordVerificationComponentState.Submitting;
-    wordVerificationService.submitSegmentation().then((success) {
+
+    String text = 'Neueintrag';
+    String stressPatern = '100';
+    String hyphenation = 'Neu-ein-trag';
+
+    wordVerificationService.submitSegmentation(userAccountService.credentials(),
+        text, stressPatern, hyphenation).then((success) {
       if(!success) {
         appService.errorMessage("Vorschlag konnte nicht gesendet werden.");
       }
