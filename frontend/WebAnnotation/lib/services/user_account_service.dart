@@ -12,9 +12,9 @@ import 'package:WebAnnotation/services/model/UserWord.dart';
 @Injectable()
 class UserAccountService {
 
-  String email = "oliver";
-  String password = "1234";
-  bool loggedIn = true;
+  String email = "";
+  String password = "";
+  bool loggedIn = false;
 
   List<UserText> userTexts = [];
   List<UserWord> userWords = [];

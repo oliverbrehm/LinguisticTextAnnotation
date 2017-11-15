@@ -14,6 +14,8 @@ import 'package:WebAnnotation/services/user_account_service.dart';
 import 'package:WebAnnotation/components/word_review/word_review_component.dart';
 import 'package:WebAnnotation/app_service.dart';
 import 'package:WebAnnotation/services/segmentation_proposal_service.dart';
+import 'package:WebAnnotation/components/word_verification/word_verification_component.dart';
+import 'package:WebAnnotation/components/home/home_component.dart';
 
 // AngularDart info: https://webdev.dartlang.org/angular
 // Components info: https://webdev.dartlang.org/components
@@ -22,15 +24,22 @@ import 'package:WebAnnotation/services/segmentation_proposal_service.dart';
   selector: 'my-app',
   styleUrls: const ['app_component.css'],
   templateUrl: 'app_component.html',
-  directives: const [CORE_DIRECTIVES, ROUTER_DIRECTIVES, materialDirectives, formDirectives, TextAnalysisComponent, UserAccountComponent, WordReviewComponent],
-  providers: const [ROUTER_PROVIDERS, materialProviders, TextAnalysisService, UserAccountService, AppService, SegmentationProposalService],
+  directives: const [CORE_DIRECTIVES, ROUTER_DIRECTIVES, materialDirectives,
+  formDirectives, TextAnalysisComponent, UserAccountComponent,
+  WordReviewComponent, WordVerificationComponent, HomeComponent],
+  providers: const [ROUTER_PROVIDERS, materialProviders, TextAnalysisService,
+  UserAccountService, AppService, SegmentationProposalService],
 )
 @RouteConfig(const [
   const Route(
+      path: '/home',
+      name: 'Home',
+      component: HomeComponent,
+      useAsDefault: true),
+  const Route(
       path: '/text_analysis',
       name: 'TextAnalysis',
-      component: TextAnalysisComponent,
-      useAsDefault: true),
+      component: TextAnalysisComponent),
   const Route(
       path: '/text_analysis/:text',
       name: 'TextAnalysisParam',
@@ -40,13 +49,17 @@ import 'package:WebAnnotation/services/segmentation_proposal_service.dart';
       name: 'WordReview',
       component: WordReviewComponent),
   const Route(
+      path: '/word_verification/',
+      name: 'WordVerification',
+      component: WordVerificationComponent),
+  const Route(
       path: '/user_account',
       name: 'UserAccount',
       component: UserAccountComponent),
   const Route(
       path: '/**',
       name: 'NotFound',
-      component: TextAnalysisComponent)
+      component: HomeComponent)
 ])
 class AppComponent implements OnInit {
 

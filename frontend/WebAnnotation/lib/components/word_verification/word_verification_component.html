@@ -1,0 +1,41 @@
+<div class="container" *ngIf="notLoggedIn()">
+    <h2>Verifikation</h2>
+    Um bei der Verifikation mitzuhelfen, musst Du als Benutzer eingeloggt sein.<br>
+    <a [routerLink]="['UserAccount']">Einloggen oder Konto erstellen</a>
+</div>
+
+<div class="container" *ngIf="busySubmitting()">
+    <h2>Verifikation</h2>
+    <material-spinner ></material-spinner><br>
+    Vorschlag senden...
+</div>
+
+<div class="container" *ngIf="busyQuerying()">
+    <h2>Verifikation</h2>
+    <material-spinner ></material-spinner><br>
+    Wort laden...
+</div>
+
+<div class="container" *ngIf="hadError()">
+    <h2>Fehler</h2>
+    <material-button raised
+                     (trigger)="queryWord()">
+        Erneut versuchen
+    </material-button>
+</div>
+
+<div class="container" *ngIf="awaitingUserInput()">
+    <div class="row bordered">
+        <div class="col">
+            <h2>Verifikation: {{word}}</h2>
+
+            User level: {{userLevel()}}<br>
+            Number of words for verification: {{numWords()}}<br>
+
+            <material-button raised
+                             (trigger)="submitWord()">
+                Abschicken
+            </material-button>
+        </div>
+    </div>
+</div>
