@@ -8,6 +8,7 @@ import datetime
 
 from DictionaryService import DictionaryService
 from UserService import UserService, Authentication
+from VerificationService import VerificationService
 
 from flask import Flask, request
 from flask import Response
@@ -17,6 +18,7 @@ app = Flask(__name__)
 
 dictionaryService = DictionaryService()
 userService = UserService()
+verificationService = VerificationService()
 
 def map_boolean(value):
     if value is True or value == 'True' or value == 'true' or value == 1:
@@ -47,6 +49,12 @@ def api_intro():
 def test_error():
     print(thiswillcauseanerror)
     return create_response(201)
+
+
+''' ---------------------------------------------------------
+    Text analysis
+    --------------------------------------------------------- '''
+
 
 @app.route('/query/word/<text>', methods=['GET'])
 def query_word(text):
@@ -82,6 +90,11 @@ def query_segmentation(word):
         return create_error_response(404, "Error querying segmentation.")
 
     return create_response(200, response)
+
+
+''' ---------------------------------------------------------
+    User Words
+    --------------------------------------------------------- '''
 
 
 @app.route('/user/word/add', methods=['POST'])
@@ -131,6 +144,11 @@ def user_get_words():
         return create_error_response(404, "Error getting user words.")
 
     return create_response(200, {'user_words': user_words})
+
+
+''' ---------------------------------------------------------
+    Text configuration
+    --------------------------------------------------------- '''
 
 
 @app.route('/user/configuration/add', methods=['POST'])
@@ -231,6 +249,11 @@ def user_delete_configuration():
     return create_response(204)
 
 
+''' ---------------------------------------------------------
+    User Texts
+    --------------------------------------------------------- '''
+
+
 @app.route('/user/text/add', methods=['POST'])
 def user_add_text():
     user = userService.authenticate(Authentication.read(request))
@@ -280,6 +303,53 @@ def user_get_texts():
     return create_response(200, {'texts': texts})
 
 
+''' ---------------------------------------------------------
+    Word verification
+    --------------------------------------------------------- '''
+
+
+@app.route('/user/verification/query', methods=['POST'])
+def query_verification():
+    user = userService.authenticate(Authentication.read(request))
+    if not user: return create_error_response(403, "Invalid credentials.")
+
+    word = verificationService.next_word()
+
+    if word is None:
+        return create_error_response(404, "No words to verify.")
+
+    resp = {'word': str(word)}
+
+    num_words = verificationService.num_words()
+    if num_words is not None:
+        resp['num_words']: str(num_words)
+
+    return create_response(200, resp)
+
+
+@app.route('/user/verification/submit', methods=['POST'])
+def submit_verification():
+    user = userService.authenticate(Authentication.read(request))
+    if not user: return create_error_response(403, "Invalid credentials.")
+
+    word = request.form.get("word")
+    stress_pattern = request.form.get("stress_pattern")
+    hyphenation = request.form.get("hyphenation")
+
+    if not word or not stress_pattern or not hyphenation:
+        return create_error_response(400, "Data not provided.")
+
+    if not verificationService.submit(user, word, stress_pattern, hyphenation):
+        return create_error_response(404, "Unable to submit proposal.")
+
+    return create_response(201)
+
+
+''' ---------------------------------------------------------
+    User functions
+    --------------------------------------------------------- '''
+
+
 @app.route('/user/register', methods=['POST'])
 def user_register():
     email = request.form.get("email")
@@ -314,6 +384,11 @@ def user_list():
     return create_response(200, {'users': users})
 
 
+''' ---------------------------------------------------------
+    Logging and error handling
+    --------------------------------------------------------- '''
+
+
 @app.after_request
 def after_request(response):
     app.logger.info("Request on: " + str(datetime.datetime.now()) + str(request) + " | Response: " + str(response))
@@ -333,6 +408,11 @@ def internal_error(exception):
                      + str(exception)
                      + "\n*****************\n\n")
     return create_error_response(500, exception)
+
+
+''' ---------------------------------------------------------
+    Flask app
+    --------------------------------------------------------- '''
 
 
 def print_help():
