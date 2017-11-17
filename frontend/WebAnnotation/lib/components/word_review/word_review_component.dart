@@ -5,20 +5,23 @@ import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
 import 'package:angular_router/angular_router.dart';
 
+import 'package:WebAnnotation/components/segmentation_selection/segmentation_selection_component.dart';
+
 import 'package:WebAnnotation/app_service.dart';
 import 'package:WebAnnotation/services/user_account_service.dart';
 import 'package:WebAnnotation/services/text_analysis_service.dart';
-import 'package:WebAnnotation/services/segmentation_proposal_service.dart' as SPS;
+import 'package:WebAnnotation/services/segmentation_proposal_service.dart';
 import 'package:WebAnnotation/services/model/Word.dart';
+import 'package:WebAnnotation/services/segmentation_service.dart';
 
 @Component(
     selector: 'word-review',
-    styleUrls: const ['word_review_component.css'],
     templateUrl: 'word_review_component.html',
     directives: const [
       CORE_DIRECTIVES,
       materialDirectives,
-      formDirectives
+      formDirectives,
+      SegmentationSelectionComponent
     ]
 )
 class WordReviewComponent implements OnInit {
@@ -28,29 +31,23 @@ class WordReviewComponent implements OnInit {
   bool busyAdding = false;
   bool loadingProposals = false;
 
-  String hyphenationText = "";
-  String currentHyphenation = "";
-  int selectedIndex = 0;
-
   String previousWord = null;
   String nextWord = null;
-
-  SPS.Segmentation currentSegmentation;
 
   final Router router;
   final RouteParams routeParams;
   final TextAnalysisService textAnalysisService;
   final AppService appService;
   final UserAccountService userAccountService;
-  final SPS.SegmentationProposalService segmentationProposalService;
+  final SegmentationProposalService segmentationProposalService;
+
+  List<Segmentation> segmentations;
+
+  @ViewChild(SegmentationSelectionComponent)
+  SegmentationSelectionComponent segmentationSelection;
 
   WordReviewComponent(this.router, this.routeParams, this.appService,
       this.textAnalysisService, this.userAccountService, this.segmentationProposalService) {
-    this.setSegmentation("loading", 0);
-  }
-
-  List<SPS.SegmentationProposal> segmentationProposals() {
-    return this.segmentationProposalService.segmentationProposals;
   }
 
   int numWordsLeft() {
@@ -60,56 +57,27 @@ class WordReviewComponent implements OnInit {
   @override
   Future<Null> ngOnInit() async {
     this.word = routeParams.get('word');
-    this.hyphenationText = word;
-    this.currentHyphenation = this.hyphenationText;
-
-    this.setSegmentation(this.word, 0);
-
-    this.previousWord = textAnalysisService.annotatedText.previousWordTo(this.word);
-    this.nextWord = textAnalysisService.annotatedText.nextWordTo(this.word);
 
     this.loadingProposals = true;
-    this.segmentationProposalService.querySegmentationProposals(this.word).then((success) {
-      if(!success || segmentationProposals() == null ||
-          segmentationProposals().length == 0) {
+
+    this.segmentationProposalService.wordText = this.word;
+    this.segmentationProposalService.query().then((success) {
+      if (!success) {
         appService.errorMessage("Unable to retrieve segmentation proposals.");
       } else {
-        // apply first proposal as default
-        this.applySegmentationProposal(segmentationProposals()[0]);
+        this.segmentations = segmentationProposalService.segmentationProposals();
+
+        // delay to next detection cycle
+        new Future.delayed(const Duration(microseconds: 100), () {
+          this.segmentationSelection.loadDefault();
+        });
       }
 
       this.loadingProposals = false;
     });
-  }
 
-  void applySegmentationProposal(SPS.SegmentationProposal segmentationProposal) {
-    if(segmentationProposal == null) {
-      return;
-    }
-
-    this.currentSegmentation = segmentationProposal.segmentation;
-
-    this.currentHyphenation = segmentationProposal.hyphenation;
-    this.hyphenationText = segmentationProposal.hyphenation;
-  }
-
-  void setSegmentation(String hyphenation, int stressed) {
-    var segments = hyphenation.split('-');
-    var syllables = [];
-
-    for(int i = 0; i < segments.length; i++) {
-      if(i == stressed) {
-        syllables.add(new SPS.Syllable(segments[i], true));
-      } else {
-        syllables.add(new SPS.Syllable(segments[i], false));
-      }
-    }
-
-    this.currentSegmentation = new SPS.Segmentation(syllables);
-  }
-
-  void proposalSelected(SPS.SegmentationProposal segmentation) {
-    applySegmentationProposal(segmentation);
+    this.previousWord = textAnalysisService.annotatedText.previousWordTo(this.word);
+    this.nextWord = textAnalysisService.annotatedText.nextWordTo(this.word);
   }
 
   void nextWordClicked() {
@@ -117,15 +85,13 @@ class WordReviewComponent implements OnInit {
 
     busyAdding = true;
 
-    String hyphenation = currentHyphenation;
+    Word segmentationWord = segmentationSelection.segmentationWord;
 
-    // extract stress pattern
-    String stressPattern = "";
-    for(var s in this.currentSegmentation.syllables) {
-      stressPattern = stressPattern + (s.selected ? "1" : "0");
-    }
+    String hyphenation = segmentationWord.getHyphenation();
+    String stressPattern = segmentationWord.getStressPattern();
 
-    this.userAccountService.addWord(word, hyphenation, stressPattern).then((bool success) {
+    this.userAccountService.addWord(word, hyphenation, stressPattern)
+        .then((bool success) {
       if(success) {
         this.textAnalysisService.annotatedText.updateWord(word, hyphenation, stressPattern);
 
@@ -153,23 +119,6 @@ class WordReviewComponent implements OnInit {
 
   void gotoWord(String word) {
     router.navigate(['WordReview', {'word': word}]);
-  }
-
-  void hyphenationChanged() {
-    // test valid input (string without - marks should be identical to word)
-    String testOriginal = hyphenationText.replaceAll("-", "");
-    if(testOriginal != word) {
-      hyphenationText = currentHyphenation;
-    } else {
-      currentHyphenation = hyphenationText;
-    }
-
-    this.setSegmentation(currentHyphenation, selectedIndex);
-  }
-
-  void syllableSelected(int i) {
-    this.selectedIndex = i;
-    this.setSegmentation(currentHyphenation, selectedIndex);
   }
 
   void doneButtonClicked() {

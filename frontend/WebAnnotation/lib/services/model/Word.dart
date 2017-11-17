@@ -151,4 +151,18 @@ class Word {
 
     return h;
   }
+
+  String getStressPattern() {
+    String s = "";
+
+    for (int i = 0; i < syllables.length; i++) {
+      if(syllables[i].stressed) {
+        s += "1";
+      } else {
+        s += "0";
+      }
+    }
+
+    return s;
+  }
 }

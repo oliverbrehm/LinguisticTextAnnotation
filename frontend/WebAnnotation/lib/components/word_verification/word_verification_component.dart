@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:WebAnnotation/components/segmentation_selection/segmentation_selection_component.dart';
+import 'package:WebAnnotation/services/segmentation_service.dart';
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
@@ -8,9 +10,8 @@ import 'package:angular_router/angular_router.dart';
 import 'package:WebAnnotation/app_service.dart';
 import 'package:WebAnnotation/services/user_account_service.dart';
 import 'package:WebAnnotation/services/text_analysis_service.dart';
-import 'package:WebAnnotation/services/segmentation_proposal_service.dart' as SPS;
 import 'package:WebAnnotation/services/model/Word.dart';
-import 'package:WebAnnotation/services/word_verification_service.dart';
+import 'package:WebAnnotation/services/segmentation_verification_service.dart';
 
 enum WordVerificationComponentState {
   NotLoggedIn,
@@ -22,34 +23,39 @@ enum WordVerificationComponentState {
 
 @Component(
     selector: 'word-verification',
-    styleUrls: const ['word_verification.css'],
     templateUrl: 'word_verification_component.html',
     directives: const [
       CORE_DIRECTIVES,
       materialDirectives,
       formDirectives,
-      ROUTER_DIRECTIVES
+      ROUTER_DIRECTIVES,
+      SegmentationSelectionComponent
     ],
-    providers: const [WordVerificationService]
+    providers: const []
 )
 class WordVerificationComponent implements OnInit {
 
-  String word = '';
-
   WordVerificationComponentState state = WordVerificationComponentState.UserInput;
+
+  bool loadingProposals = false;
+
+  String word = "";
+
+  List<Segmentation> segmentations;
 
   final Router router;
   final RouteParams routeParams;
   final TextAnalysisService textAnalysisService;
   final AppService appService;
   final UserAccountService userAccountService;
-  final SPS.SegmentationProposalService segmentationProposalService;
-
-  final WordVerificationService wordVerificationService;
+  final SegmentationVerificationService segmentationVerificationService;
 
   WordVerificationComponent(this.router, this.routeParams, this.appService,
       this.textAnalysisService, this.userAccountService,
-      this.segmentationProposalService, this.wordVerificationService);
+      this.segmentationVerificationService);
+
+  @ViewChild(SegmentationSelectionComponent)
+  SegmentationSelectionComponent segmentationSelection;
 
   @override
   ngOnInit() {
@@ -85,7 +91,7 @@ class WordVerificationComponent implements OnInit {
   }
 
   String wordsLeft() {
-    int numWords = wordVerificationService.numWords;
+    int numWords = segmentationVerificationService.numberOfVerificationWords();
     if(numWords > -1) {
       return numWords.toString();
     }
@@ -94,10 +100,16 @@ class WordVerificationComponent implements OnInit {
 
   void queryWord() {
     state = WordVerificationComponentState.Querying;
-    wordVerificationService.getNextWord(userAccountService.credentials()).then((result) {
-      if(result != null) {
-        this.word = result;
+    segmentationVerificationService.userData = userAccountService.credentials();
+    segmentationVerificationService.query().then((success) {
+      if(success) {
         this.state = WordVerificationComponentState.UserInput;
+        this.segmentations = segmentationVerificationService.segmentationProposals();
+
+        // delay to next detection cycle
+        new Future.delayed(const Duration(microseconds: 100), () {
+          this.segmentationSelection.loadDefault();
+        });
       } else {
         appService.errorMessage("Wort konnte nicht geladen werden.");
         this.state = WordVerificationComponentState.Error;
@@ -112,8 +124,9 @@ class WordVerificationComponent implements OnInit {
     String stressPatern = '100';
     String hyphenation = 'Neu-ein-trag';
 
-    wordVerificationService.submitSegmentation(userAccountService.credentials(),
-        text, stressPatern, hyphenation).then((success) {
+    Word segmentationWord = segmentationVerificationService.verificationWord;
+    segmentationVerificationService.submitVerification(userAccountService.credentials(),
+        segmentationWord).then((success) {
       if(!success) {
         appService.errorMessage("Vorschlag konnte nicht gesendet werden.");
       }

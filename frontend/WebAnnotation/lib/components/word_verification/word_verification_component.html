@@ -26,16 +26,23 @@
 
 <div class="container" *ngIf="awaitingUserInput()">
     <div class="row bordered">
-        <div class="col">
+        <div>
             <h2>Verifikation: {{word}}</h2>
 
             User level: {{userLevel()}}<br>
             Number of words for verification: {{wordsLeft()}}<br>
-
-            <material-button raised
-                             (trigger)="submitWord()">
-                Abschicken
-            </material-button>
         </div>
+    </div>
+
+    <segmentation-selection [loadingProposals]="loadingProposals"
+                            [word]="word"
+                            [segmentations]="segmentations">
+    </segmentation-selection>
+
+    <div class="row bordered">
+        <material-button raised
+                              (trigger)="submitWord()">
+        Abschicken
+    </material-button>
     </div>
 </div>

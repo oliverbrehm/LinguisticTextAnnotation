@@ -16,6 +16,7 @@ import 'package:WebAnnotation/app_service.dart';
 import 'package:WebAnnotation/services/segmentation_proposal_service.dart';
 import 'package:WebAnnotation/components/word_verification/word_verification_component.dart';
 import 'package:WebAnnotation/components/home/home_component.dart';
+import 'package:WebAnnotation/services/segmentation_verification_service.dart';
 
 // AngularDart info: https://webdev.dartlang.org/angular
 // Components info: https://webdev.dartlang.org/components
@@ -28,7 +29,7 @@ import 'package:WebAnnotation/components/home/home_component.dart';
   formDirectives, TextAnalysisComponent, UserAccountComponent,
   WordReviewComponent, WordVerificationComponent, HomeComponent],
   providers: const [ROUTER_PROVIDERS, materialProviders, TextAnalysisService,
-  UserAccountService, AppService, SegmentationProposalService],
+  UserAccountService, AppService, SegmentationProposalService, SegmentationVerificationService],
 )
 @RouteConfig(const [
   const Route(

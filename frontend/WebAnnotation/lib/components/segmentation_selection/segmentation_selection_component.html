@@ -1,0 +1,39 @@
+<div class="row">
+    <div class="col-md-7">
+        <div class="row bordered">
+            <h3>Betonungsmuster</h3>
+            <ul class="segmentationList">
+                <li *ngFor="let s of segmentationWord.syllables; let i = index" class="segmentationList-item segmentationList-hover {{s.stressed ? 'segmentationList-active' : ''}}" (click)="syllableSelected(i)">{{s.text}}</li>
+            </ul>
+            <p>(betonte Silbe durch Klicken auswählen)</p>
+        </div>
+
+        <div class="row bordered">
+            <h3>Silbentrennung</h3>
+            <material-input multiline
+                            (keyup)="hyphenationChanged()"
+                            autoFocus floatingLabel style="width:80%"
+                            [(ngModel)]="hyphenationText">
+            </material-input>
+            <br>
+            <p>(Silben mit "-" trennen)</p>
+        </div>
+    </div>
+
+    <div class="col-md bordered">
+        <h3>Vorschläge</h3>
+
+        <div *ngIf="loadingProposals">
+            <material-spinner ></material-spinner><br>
+        </div>
+
+        <ul style="display: block" class="list-group">
+            <li *ngFor="let segmentationProposal of segmentationProposals()" (click)="proposalSelected(segmentationProposal)" class="list-group-item list-group-item-action">
+                {{segmentationProposal.origin}} ({{segmentationProposal.source}})
+                <ul class="segmentationList">
+                    <li *ngFor="let s of segmentationProposal.word.syllables; let i = index" class="segmentationList-item segmentationList-small {{s.stressed ? 'segmentationList-active' : ''}}">{{s.text}}</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

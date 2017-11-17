@@ -5,66 +5,38 @@ import 'dart:convert';
 import 'package:angular/core.dart';
 
 import 'package:WebAnnotation/app_service.dart';
+import 'package:WebAnnotation/services/segmentation_service.dart';
 
-class Syllable {
-  String text;
-  bool selected;
-
-  Syllable(this.text, this.selected);
-}
-
-class Segmentation {
-  List<Syllable> syllables;
-  Segmentation(this.syllables);
-}
-
-class SegmentationProposal {
-  String origin;
-  String source;
-  String hyphenation;
-  String stressPattern;
-
-  Segmentation segmentation;
-
-  SegmentationProposal(this.origin, this.source, this.hyphenation, this.stressPattern) {
-    var syllables = [];
-    var wordSegmentation = hyphenation.split("-");
-    int i = 0;
-    for(var s in wordSegmentation) {
-      if(s.isEmpty) {
-        continue;
-      }
-
-      bool stressed = false;
-      if(i < stressPattern.length) {
-        stressed = (this.stressPattern[i] == "1");
-      }
-
-      syllables.add(new Syllable(s, stressed));
-
-      i++;
-    }
-
-    this.segmentation = new Segmentation(syllables);
-  }
-}
+import 'package:WebAnnotation/services/model/Word.dart';
 
 /// service description
 @Injectable()
-class SegmentationProposalService {
-  List<SegmentationProposal> segmentationProposals = [];
+class SegmentationProposalService extends SegmentationService {
 
-  Future<bool> querySegmentationProposals(String word) async {
-    this.segmentationProposals = [];
+  SegmentationProposalService(): super();
 
-    String url = AppService.SERVER_URL + "/query/segmentation/" + word;
+  /**
+   * queries segmentation proposals for a given word (String)
+   *
+   * segmentations can be retrieved using segmentationProposals()
+   */
+  @override
+  Future<bool> query() async {
+    if(wordText == null) {
+      print('ERROR: set wordText first');
+      return false;
+    }
+
+    this.segmentations = [];
+
+    String url = AppService.SERVER_URL + "/query/segmentation/" + wordText;
 
     return HttpRequest.getString(url).then((String response) {
       var backendProposals = JSON.decode(response);
 
       for(var s in backendProposals) {
-        SegmentationProposal seg = new SegmentationProposal(s['origin'], s['source'], s['hyphenation'], s['stress_pattern']);
-        this.segmentationProposals.add(seg);
+        Segmentation seg = new Segmentation(s['text'], s['origin'], s['source'], s['hyphenation'], s['stress_pattern']);
+        this.segmentations.add(seg);
       }
 
       return true;

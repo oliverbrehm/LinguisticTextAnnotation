@@ -10,7 +10,8 @@ import sqlalchemy
 from Database import Base as Base
 
 class Segmentation:
-    def __init__(self, origin, source, hyphenation, stress_pattern):
+    def __init__(self, text, origin, source, hyphenation, stress_pattern):
+        self.text = text
         self.origin = origin
         self.source = source
         self.hyphenation = hyphenation
@@ -18,6 +19,7 @@ class Segmentation:
 
     def json(self):
         return {
+            "text": self.text,
             "origin": self.origin,
             "source": self.source,
             "hyphenation": self.hyphenation,
@@ -153,7 +155,7 @@ class DictionaryService:
                 stress_pattern, hyphenation = self.parse_mary_xml(word, response.text)
 
                 if stress_pattern:
-                    segmentation_mary = Segmentation("MARY TTS", "Source: MARY TTS", hyphenation, stress_pattern)
+                    segmentation_mary = Segmentation(word, "MARY TTS", "Source: MARY TTS", hyphenation, stress_pattern)
                     segmentations.append(segmentation_mary.json())
         except requests.exceptions.ReadTimeout:
             print('Timout querying MARY TTS.')
@@ -165,7 +167,7 @@ class DictionaryService:
         for s in range(1, len(syllables)):
             stress_pattern = stress_pattern + "0"
 
-        segmentation_pyphen = Segmentation("Pyphen", "Source: Pyphen", hyphenation, stress_pattern)
+        segmentation_pyphen = Segmentation(word, "Pyphen", "Source: Pyphen", hyphenation, stress_pattern)
         segmentations.append(segmentation_pyphen.json())
 
         print(segmentations)
