@@ -27,9 +27,13 @@ class SegmentationSelectionComponent implements OnInit {
   String hyphenationText = "";
 
   String _currentHyphenation = "";
-  int _selectedIndex = 0;
+  String _currentStressPattern = "";
 
   Word segmentationWord;
+
+  final AppService appService;
+
+  SegmentationSelectionComponent(this.appService);
 
   @Input()
   bool loadingProposals;
@@ -42,20 +46,25 @@ class SegmentationSelectionComponent implements OnInit {
 
   @override
   ngOnInit() {
-    if(word == null) {
-      segmentationWord = new Word("");
-      print('segmentation-selection: word == null');
-    } else {
-      segmentationWord = new Word(word);
-    }
+    segmentationWord = new Word("");
 
-    hyphenationText = segmentationWord.text;
-    _currentHyphenation = hyphenationText;
+    print('init');
 
-    updateSegmentation();
+    new Future.delayed(const Duration(microseconds: 100), () {
+      if(word != null) {
+        print('word: ' + word);
+        segmentationWord = new Word(word);
+
+        hyphenationText = segmentationWord.text;
+        _currentHyphenation = hyphenationText;
+
+        updateSegmentation();
+      }
+    });
   }
 
   void loadDefault() {
+    print('load default');
     if(segmentations != null && segmentations.length > 0) {
       applySegmentationProposal(segmentations.first);
     } else {
@@ -70,7 +79,7 @@ class SegmentationSelectionComponent implements OnInit {
   void hyphenationChanged() {
     // test valid input (string without - marks should be identical to word)
     String testOriginal = hyphenationText.replaceAll("-", "");
-    if(testOriginal != _currentHyphenation) {
+    if(testOriginal != segmentationWord.text) {
       hyphenationText = _currentHyphenation;
     } else {
       _currentHyphenation = hyphenationText;
@@ -78,8 +87,14 @@ class SegmentationSelectionComponent implements OnInit {
     }
   }
 
-  void syllableSelected(int i) {
-    _selectedIndex = i;
+  void syllableSelected(int index) {
+    // extract stress pattern
+    var segments = _currentHyphenation.split('-');
+    _currentStressPattern = "";
+    for(int i = 0; i < segments.length; i++) {
+      _currentStressPattern = _currentStressPattern + ((i == index) ? "1" : "0");
+    }
+
     this.updateSegmentation();
   }
 
@@ -88,23 +103,20 @@ class SegmentationSelectionComponent implements OnInit {
       return;
     }
 
+    print('apply proposal');
+
+    segmentationWord.text = segmentationProposal.text;
     _currentHyphenation = segmentationProposal.hyphenation;
     hyphenationText = segmentationProposal.hyphenation;
+    _currentStressPattern = segmentationProposal.stressPattern;
 
     updateSegmentation();
   }
 
   void updateSegmentation() {
-    // extract stress pattern
-    var segments = _currentHyphenation.split('-');
-    String stressPattern = "";
-    for(int i = 0; i < segments.length; i++) {
-      stressPattern = stressPattern + ((i == _selectedIndex) ? "1" : "0");
-    }
-
     this.segmentationWord = new Word(segmentationWord.text);
     this.segmentationWord.parseHyphenation(_currentHyphenation);
-    this.segmentationWord.parseStressPattern(stressPattern);
+    this.segmentationWord.parseStressPattern(_currentStressPattern);
   }
 
   void proposalSelected(Segmentation segmentation) {

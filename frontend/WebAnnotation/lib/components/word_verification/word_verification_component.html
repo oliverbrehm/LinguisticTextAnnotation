@@ -27,7 +27,7 @@
 <div class="container" *ngIf="awaitingUserInput()">
     <div class="row bordered">
         <div>
-            <h2>Verifikation: {{word}}</h2>
+            <h2>Verifikation: {{currentWord}}</h2>
 
             User level: {{userLevel()}}<br>
             Number of words for verification: {{wordsLeft()}}<br>
@@ -35,7 +35,6 @@
     </div>
 
     <segmentation-selection [loadingProposals]="loadingProposals"
-                            [word]="word"
                             [segmentations]="segmentations">
     </segmentation-selection>
 

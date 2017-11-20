@@ -16,9 +16,10 @@ class Syllable {
 class Word {
   String text;
 
-  WordType type = WordType.Ignored;
-
+  // syllables in cleartext, containing umlaut and upper case letters
   List<Syllable> syllables = [];
+
+  WordType type = WordType.Ignored;
 
   bool editing = false;
 

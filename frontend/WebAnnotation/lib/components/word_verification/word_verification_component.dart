@@ -39,9 +39,9 @@ class WordVerificationComponent implements OnInit {
 
   bool loadingProposals = false;
 
-  String word = "";
-
   List<Segmentation> segmentations;
+
+  String currentWord = '';
 
   final Router router;
   final RouteParams routeParams;
@@ -106,6 +106,10 @@ class WordVerificationComponent implements OnInit {
         this.state = WordVerificationComponentState.UserInput;
         this.segmentations = segmentationVerificationService.segmentationProposals();
 
+        if(segmentations != null && segmentations.length > 0) {
+          this.currentWord = segmentations.first.text;
+        }
+
         // delay to next detection cycle
         new Future.delayed(const Duration(microseconds: 100), () {
           this.segmentationSelection.loadDefault();
@@ -119,10 +123,6 @@ class WordVerificationComponent implements OnInit {
 
   void submitWord() {
     state = WordVerificationComponentState.Submitting;
-
-    String text = 'Neueintrag';
-    String stressPatern = '100';
-    String hyphenation = 'Neu-ein-trag';
 
     Word segmentationWord = segmentationVerificationService.verificationWord;
     segmentationVerificationService.submitVerification(userAccountService.credentials(),

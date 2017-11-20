@@ -25,4 +25,11 @@ class AppService {
     errorMessageText = "";
     infoMessageText = "";
   }
+
+  String decodeWord(String src) {
+    String result = src.replaceAll("ä", "ae")
+        .replaceAll("ö", "oe")
+        .replaceAll("ü", "ue");
+    return result.toLowerCase();
+  }
 }
