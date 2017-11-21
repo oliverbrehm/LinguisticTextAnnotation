@@ -22,7 +22,7 @@ def write_sqlite(dictionary, step_size):
 
         current = current + 1
 
-        if dictionary_service.add_word(word.text, word.stress_pattern, word.hyphenation):
+        if dictionary_service.add_word(word.text, word.stress_pattern, word.hyphenation, bulk_add=True):
             num_added = num_added + 1
         else:
             num_skipped = num_skipped + 1

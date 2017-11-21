@@ -103,8 +103,9 @@ class WordVerificationComponent implements OnInit {
     segmentationVerificationService.userData = userAccountService.credentials();
     segmentationVerificationService.query().then((success) {
       if(success) {
-        this.state = WordVerificationComponentState.UserInput;
         this.segmentations = segmentationVerificationService.segmentationProposals();
+
+        this.state = WordVerificationComponentState.UserInput;
 
         if(segmentations != null && segmentations.length > 0) {
           this.currentWord = segmentations.first.text;
@@ -115,7 +116,6 @@ class WordVerificationComponent implements OnInit {
           this.segmentationSelection.loadDefault();
         });
       } else {
-        appService.errorMessage("Wort konnte nicht geladen werden.");
         this.state = WordVerificationComponentState.Error;
       }
     });

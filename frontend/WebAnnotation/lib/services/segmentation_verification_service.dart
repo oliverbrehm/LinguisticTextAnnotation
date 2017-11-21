@@ -19,6 +19,7 @@ class SegmentationVerificationService extends SegmentationService {
 
   int _numWords = -1;
   Word verificationWord = null;
+  int _wordId = -1;
 
   int numberOfVerificationWords() {
     return _numWords;
@@ -45,6 +46,11 @@ class SegmentationVerificationService extends SegmentationService {
         _numWords = response['num_words'].toInt();
       }
 
+      _wordId = -1;
+      if(word.containsKey('id')) {
+        _wordId = word['id'].toInt();
+      }
+
       String wordText = word['text'];
       String hyphenation = word['hyphenation'];
       String stressPattern = word['stress_pattern'];
@@ -59,13 +65,14 @@ class SegmentationVerificationService extends SegmentationService {
 
       return true;
     }, onError: (error) {
+      // TODO check if 404 then no error, just empty list
       return false;
     });
   }
 
   Future<bool> submitVerification(var userData, Word segmentation) async {
-
     var data =  {
+      'id': _wordId.toString(),
       'word': segmentation.text,
       'stress_pattern': segmentation.getStressPattern(),
       'hyphenation': segmentation.getHyphenation()

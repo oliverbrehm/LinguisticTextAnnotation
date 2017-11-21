@@ -120,7 +120,8 @@ class UserWord(Base):
             "id": self.id,
             "text": self.text,
             "stress_pattern": self.stress_pattern,
-            "hyphenation": self.hyphenation
+            "hyphenation": self.hyphenation,
+            "user": self.user_email # TODO the user email should not be passed for security reasons
         }
 
 
@@ -283,7 +284,17 @@ class UserService:
         return word.json()
 
     def list_words(self, user):
-        words = self.database.session.query(UserWord).filter(User.email == user.email).all()
+        words = self.database.session.query(UserWord).filter(UserWord.user == user).all()
+
+        word_list = []
+
+        for word in words:
+            word_list.append(word.json())
+
+        return word_list
+
+    def list_all_words(self):
+        words = self.database.session.query(UserWord).all()
 
         word_list = []
 

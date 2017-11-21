@@ -3,9 +3,12 @@ import nltk # natural language toolkit
 import pyphen
 import requests
 
+from datetime import datetime
+
 import xml.etree.ElementTree as ET
 
 import sqlalchemy
+from sqlalchemy.orm import relationship
 
 from Database import Base as Base
 
@@ -48,6 +51,24 @@ class Word(Base):
         }
 
 
+class AddedEntry(Base):
+    __tablename__ = 'added_entry'
+
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
+
+    time_added = sqlalchemy.Column(sqlalchemy.TIMESTAMP, default=datetime.utcnow, nullable=False)
+
+    word_text = sqlalchemy.Column(sqlalchemy.String(256), sqlalchemy.ForeignKey('word.text'))
+    word = relationship(Word)
+
+    def json(self):
+        return {
+            'id': self.id,
+            'word': self.word_text,
+            'time_added': str(self.time_added)
+        }
+
+
 class DictionaryService:
     def __init__(self, database):
         self.database = database
@@ -73,22 +94,47 @@ class DictionaryService:
             .replace("ö", "oe") \
             .replace("ü", "ue")
 
-    def add_word(self, word, stress_pattern, hyphenation):
+    def add_word(self, word, stress_pattern, hyphenation, bulk_add=False):
         # insert word
-        user_word = Word(text=word, stress_pattern=stress_pattern, hyphenation=hyphenation)
+        db_word = Word(text=word, stress_pattern=stress_pattern, hyphenation=hyphenation)
 
         try:
-            self.database.session.add(user_word)
+            self.database.session.add(db_word)
             self.database.session.commit()
         except sqlite3.IntegrityError:
             print('Word ', word, 'already in Database.')
             self.database.session.rollback()
-            return False
+            return
         except Exception as e:
+            print(e)
             self.database.session.rollback()
-            return False
+            return
 
-        return True
+        if bulk_add:
+            # do not create added entries for bulk adding (creating the database)
+            return db_word
+
+        # create added entry
+        entry = AddedEntry(word=db_word)
+
+        try:
+            self.database.session.add(entry)
+            self.database.session.commit()
+        except Exception as e:
+            print('error adding AddedEntry')
+            print(e)
+            self.database.session.rollback()
+
+        return db_word
+
+    def list_added_entries(self):
+        entries = self.database.session.query(AddedEntry).all()
+        result = []
+
+        for e in entries:
+            result.append(e.json())
+
+        return result
 
     def query_word(self, word, user_service, user):
         # handle umlaut

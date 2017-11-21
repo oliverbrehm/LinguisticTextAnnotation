@@ -115,9 +115,9 @@ def user_add_word():
     if not text or not stress_pattern or not hyphenation:
         return create_error_response(400, "Data not provided.")
 
-    success = userService.add_word(user, text, stress_pattern, hyphenation)
+    db_word = userService.add_word(user, text, stress_pattern, hyphenation)
 
-    if not success:
+    if not db_word:
         return create_error_response(404, "Error adding word.")
 
     return create_response(201)
@@ -319,7 +319,7 @@ def query_verification():
     user = userService.authenticate(Authentication.read(request))
     if not user: return create_error_response(403, "Invalid credentials.")
 
-    word = verificationService.next_word()
+    word = verificationService.next_word(user)
 
     if word is None:
         return create_error_response(404, "No words to verify.")
@@ -338,14 +338,18 @@ def submit_verification():
     user = userService.authenticate(Authentication.read(request))
     if not user: return create_error_response(403, "Invalid credentials.")
 
-    word = request.form.get("word")
+    word_id = request.form.get("id")
+
+    if not word_id:
+        return create_error_response(400, "Word id not provided.")
+
     stress_pattern = request.form.get("stress_pattern")
     hyphenation = request.form.get("hyphenation")
 
-    if not word or not stress_pattern or not hyphenation:
+    if not stress_pattern or not hyphenation:
         return create_error_response(400, "Data not provided.")
 
-    if not verificationService.submit(user, word, stress_pattern, hyphenation):
+    if not verificationService.submit(user, word_id, stress_pattern, hyphenation, dictionaryService):
         return create_error_response(404, "Unable to submit proposal.")
 
     return create_response(201)
