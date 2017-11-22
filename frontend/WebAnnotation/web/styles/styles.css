@@ -31,6 +31,13 @@ body {
   margin: 0.2em;
 }
 
+.warning-box {
+  border: dotted 1px indianred;
+  background-color: #ffA090;
+  padding: 0.6em;
+  margin: 1em;
+}
+
 a {
   color: #5491FF;
 }

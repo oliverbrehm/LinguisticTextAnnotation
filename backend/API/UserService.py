@@ -38,6 +38,15 @@ class User(Base):
     is_admin = sqlalchemy.Column(sqlalchemy.Boolean)
     is_expert = sqlalchemy.Column(sqlalchemy.Boolean)
 
+    def json(self):
+        return {
+            'email': self.email,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'is_admin': self.is_admin,
+            'is_expert': self.is_expert
+        }
+
 class UserText(Base):
 
     __tablename__ = 'user_text'

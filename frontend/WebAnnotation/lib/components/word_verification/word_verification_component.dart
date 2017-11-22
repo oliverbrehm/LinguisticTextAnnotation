@@ -87,7 +87,15 @@ class WordVerificationComponent implements OnInit {
   }
 
   String userLevel() {
-    return "Expert";
+    if(userAccountService.isAdmin) {
+      return "Administrator";
+    }
+
+    if(userAccountService.isExpert) {
+      return "Experte";
+    }
+
+    return "Benutzer";
   }
 
   String wordsLeft() {

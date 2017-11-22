@@ -58,19 +58,4 @@ class UserLoginComponent implements OnInit {
       }
     });
   }
-
-  void register() {
-    appService.clearMessage();
-    if(emailText.isEmpty || passwordText.isEmpty) {
-      return;
-    }
-
-    userAccountService.register(emailText, passwordText).then((success) {
-      if(success) {
-        appService.infoMessage("Registrierung erfolgreich als " + emailText + ".");
-      } else {
-        appService.errorMessage("Registrierung nicht erfolgreich.");
-      }
-    });
-  }
 }

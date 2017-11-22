@@ -394,7 +394,7 @@ def user_authenticate():
     user = userService.authenticate(Authentication.read(request))
     if not user: return create_error_response(401, "Invalid credentials.")
 
-    return create_response(204)
+    return create_response(200, {'user': user.json()})
 
 
 @app.route('/user/list', methods=['GET'])
