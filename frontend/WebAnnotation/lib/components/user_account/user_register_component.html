@@ -1,0 +1,46 @@
+<div class="container">
+    <h2>Konto erstellen</h2>
+
+    <div class="bordered">
+        <form>
+            <h3>Konto</h3>
+            <material-input #emailInput label="Email" type="email"
+                            autoFocus floatingLabel style="width:80%"
+                            [(ngModel)]="emailText" (blur)="validateEmail()">
+            </material-input><br>
+            <material-input #passwordInput label="Password" type="password" displayBottomPanel
+                            floatingLabel style="width:80%"
+                            [(ngModel)]="passwordText" (blur)="validatePassword()">
+            </material-input><br>
+
+            <div class="warning-box">
+                Achtung: Bei der App handelt es sich um einen Prototypen, bitte verwenden Sie für die Registrierung
+                keine sicherheitskritischen Passwörter!
+            </div>
+            <br>
+
+            <h3>Informationen</h3>
+            Vor- und Nachname werden bei der Verifizierung angezeigt, wenn Sie einen Vorschlag abschicken.<br>
+            <material-input #firstNameInput label="Vorname"
+                            autoFocus floatingLabel style="width:80%"
+                            [(ngModel)]="firstNameText" (blur)="validateFirstName()">
+            </material-input><br>
+            <material-input #lastNameInput label="Nachname" floatingLabel style="width:80%"
+                            [(ngModel)]="lastNameText" (blur)="validateLastName()">
+            </material-input><br>
+
+            <div class="warning-box">
+                <div style="text-decoration: underline; font-weight: bold">Expertenkonto</div>
+                <material-checkbox label="Expertenkonto anlegen" [(ngModel)]="expertChecked"></material-checkbox><br>
+                Für Lerntherapheuten, Linguisten etc. Stimmen von Experten erhalten bei der Verifizierung neuer Wörter
+                ein größeres Gewicht.
+            </div>
+            <br>
+
+            <material-button raised
+                             (trigger)="register()">
+                Registrieren
+            </material-button>
+        </form>
+    </div>
+</div>

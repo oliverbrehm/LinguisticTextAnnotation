@@ -6,16 +6,12 @@
                         autoFocus floatingLabel style="width:80%"
                         [(ngModel)]="emailText">
         </material-input><br>
-        <material-input label="Password" floatingLabel style="width:80%"
+        <material-input label="Password" type="password" floatingLabel style="width:80%"
                         [(ngModel)]="passwordText">
         </material-input><br>
         <material-button raised
                          (trigger)="login()">
             Login
-        </material-button>
-        <material-button raised
-                         (trigger)="register()">
-            Register
         </material-button>
     </form>
 </div>

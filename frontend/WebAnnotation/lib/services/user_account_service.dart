@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:angular/core.dart';
 
 import 'dart:async';
@@ -18,6 +19,9 @@ class UserAccountService {
   String firstName = "";
   String lastName = "";
 
+  bool isExpert = false;
+  bool isAdmin = false;
+
   bool loggedIn = false;
 
   List<UserText> userTexts = [];
@@ -35,13 +39,8 @@ class UserAccountService {
     };
   }
 
-  Future<bool> register(String email, String password) async {
+  Future<bool> register(String email, String password, String firstName, String lastName, bool isExpert) async {
     String url = AppService.SERVER_URL + "/user/register";
-
-    // TODO get first and last name
-    String firstName = "horst";
-    String lastName = 'peter-klaus-richard';
-    bool isExpert = false;
 
     var data = {
       'email': email,
@@ -68,9 +67,14 @@ class UserAccountService {
       this.password = password;
       this.loggedIn = true;
 
+      var user = JSON.decode(request.response)['user'];
+
       // TODO get first and last name
-      this.firstName = 'hans';
-      this.lastName = 'wurst';
+      this.firstName = user['first_name'];
+      this.lastName = user['last_name'];
+
+      this.isExpert = user['is_expert'];
+      this.isAdmin = user['is_admin'];
 
       return true;
     }
