@@ -19,13 +19,13 @@
 </nav>
 
 <div class="container">
-    <div *ngIf="info()!=''" class="alert alert-success alert-dismissable">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <div *ngIf="info()!=''" class="alert alert-success">
+        <a class="close" (click)="appService.clearMessage()" aria-label="close">&times;</a>
         {{info()}}
     </div>
 
-    <div *ngIf="error()!=''" class="alert alert-danger alert-dismissable">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <div *ngIf="error()!=''" class="alert alert-danger">
+        <a class="close" (click)="appService.clearMessage()" aria-label="close">&times;</a>
         <strong>Fehler:</strong> {{error()}}
     </div>
 </div>

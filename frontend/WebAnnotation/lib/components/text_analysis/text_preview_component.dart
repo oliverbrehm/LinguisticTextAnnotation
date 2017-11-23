@@ -44,6 +44,10 @@ class TextPreviewComponent implements OnInit {
     return textAnalysisService.annotatedText;
   }
 
+  bool hasUnknownWords() {
+    return textAnalysisService.annotatedText.nextMissingWord() == null;
+  }
+
   void startWordReview() {
     // search first unknown word
     Word w = textAnalysisService.annotatedText.nextMissingWord();
@@ -67,5 +71,23 @@ class TextPreviewComponent implements OnInit {
   void editWord(Word word) {
     print('edit WORD');
     annotatedText().editWord(word);
+  }
+  
+  void showPrint() {
+    window.print();
+  }
+  
+  void copyToClipboard() {
+    var annotationText = querySelector("#annotationText");
+    window.getSelection().selectAllChildren(annotationText);
+
+    if(!document.execCommand("copy")) {
+      appService.errorMessage("Fehler beim kopieren. Bitte markieren Sie den "
+          "Text und kopieren diesen manuell (Strg+C).");
+    } else {
+      appService.infoMessage("Der Text wurde in die Zwischenablage kopiert.");
+    }
+
+    window.getSelection().removeAllRanges();
   }
 }

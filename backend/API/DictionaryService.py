@@ -12,6 +12,7 @@ from sqlalchemy.orm import relationship
 
 from Database import Base as Base
 
+
 class Segmentation:
     def __init__(self, text, origin, source, hyphenation, stress_pattern):
         self.text = text
@@ -193,7 +194,7 @@ class DictionaryService:
               '&INPUT_TYPE=TEXT&OUTPUT_TYPE=ACOUSTPARAMS&LOCALE=de'
 
         try:
-            response = requests.get(url, timeout=3)
+            response = requests.get(url, timeout=2)  # 2 second timeout
 
             if response:
                 print(response)
@@ -215,8 +216,6 @@ class DictionaryService:
 
         segmentation_pyphen = Segmentation(word, "Pyphen", "Source: Pyphen", hyphenation, stress_pattern)
         segmentations.append(segmentation_pyphen.json())
-
-        print(segmentations)
 
         return segmentations
 

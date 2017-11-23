@@ -44,6 +44,7 @@ a {
 
 a:hover {
   color: #6DCDF8;
+  cursor: pointer;
 }
 
 .link {
@@ -95,4 +96,36 @@ a:hover {
 
 .bg-alert {
   background-color: indianred;
+}
+
+
+@media print {
+  body *, .navbar {
+    display: none;
+  }
+
+  .textPreview, my-app, text-analysis, text-preview {
+    display: block;
+  }
+
+  .annotationText {
+    display: block;
+    background-color: white;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 15px;
+  }
+
+  .annotationText * {
+    display: inline-block;
+  }
+
+  .notFound, .number {
+    background-color: white;
+    text-decoration: none;
+  }
 }

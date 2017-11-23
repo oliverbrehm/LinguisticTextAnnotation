@@ -6,7 +6,7 @@ import getopt
 import json
 import datetime
 
-from DictionaryService import DictionaryService
+from DictionaryService import DictionaryService, Segmentation
 from UserService import UserService, Authentication
 from VerificationService import VerificationService
 from Database import Database
@@ -319,16 +319,33 @@ def query_verification():
     user = userService.authenticate(Authentication.read(request))
     if not user: return create_error_response(403, "Invalid credentials.")
 
-    word = verificationService.next_word(user)
+    user_word = verificationService.next_word(user)
 
-    if word is None:
+    if user_word is None:
         return create_error_response(404, "No words to verify.")
 
+    word = user_word.json()
     resp = {'word': word}
 
     num_words = verificationService.num_words()
     if num_words is not None:
         resp['num_words'] = num_words
+
+    segmentations = []
+
+    verification_proposals = verificationService.proposals_for_word(user_word)
+    if verification_proposals is not None:
+        for p in verification_proposals:
+            s = Segmentation(word['text'], p.user.first_name + " " + p.user.last_name, "Benutzer"
+                             , p.hyphenation, p.stress_pattern)
+            segmentations.append(s.json())
+
+    segmentation_proposals = dictionaryService.query_segmentation(word['text'])
+    if segmentation_proposals is not None:
+        segmentations = segmentations + segmentation_proposals
+
+    if segmentations is not None:
+        resp['segmentations'] = segmentations
 
     return create_response(200, resp)
 

@@ -130,7 +130,8 @@ class UserWord(Base):
             "text": self.text,
             "stress_pattern": self.stress_pattern,
             "hyphenation": self.hyphenation,
-            "user": self.user_email # TODO the user email should not be passed for security reasons
+            "user_first_name": self.user.first_name,
+            "user_last_name": self.user.last_name
         }
 
 

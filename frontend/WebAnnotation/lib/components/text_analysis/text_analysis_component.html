@@ -37,13 +37,13 @@
 <!--
     analysed text view with settings
  -->
-<div class="container" *ngIf="!textAnalysisService.analyzing && annotatedText() != null">
-    <div class="row">
+<div class="container textPreview" *ngIf="!textAnalysisService.analyzing && annotatedText() != null">
+    <div class="row textPreview">
         <div class="col-md-4">
             <text-settings></text-settings>
         </div>
 
-        <div class="col-md">
+        <div class="col-md textPreview">
             <text-preview></text-preview>
             <br>
 

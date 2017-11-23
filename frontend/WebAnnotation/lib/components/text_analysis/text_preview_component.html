@@ -1,30 +1,46 @@
-<div class="bordered textpreview">
+<div class="bordered textPreview">
     <h2>Vorschau</h2>
 
-    <span *ngFor="let word of annotatedText().words">
-        <span *ngIf="word.isAnnotated()" class="word popup">
-            <span *ngFor="let syllable of word.syllables"class="syllable" (click)="editWord(word)">
-                <span *ngIf="syllable.stressed" class="stressed">{{syllable.text}}</span>
-                <span *ngIf="!syllable.stressed" class="unstressed">{{syllable.text}}</span>
+    <div id="annotationText" class="annotationText">
+        <span *ngFor="let word of annotatedText().words">
+            <span *ngIf="word.isAnnotated()" class="word popup">
+                <span *ngFor="let syllable of word.syllables"class="syllable" (click)="editWord(word)">
+                    <span *ngIf="syllable.stressed" class="stressed">{{syllable.text}}</span>
+                    <span *ngIf="!syllable.stressed" class="unstressed">{{syllable.text}}</span>
+                </span>
+
+                <word-detail *ngIf="word.editing" class="popup-content" [word]="word"></word-detail>
             </span>
 
-            <word-detail *ngIf="word.editing" class="popup-content" [word]="word"></word-detail>
+            <span *ngIf="word.isIgnored()" class="word popup">
+                <span (click)="editWord(word)">{{word.text}}</span>
+                <word-detail *ngIf="word.editing" class="popup-content" [word]="word"></word-detail>
+            </span>
+            <span *ngIf="word.isNotFound()" class="notFound word" (click)="wordReview(word)">{{word.text}}</span>
+            <span *ngIf="word.isNumber()" class="number word">{{word.text}}</span>
+            <span *ngIf="word.isPunctuation()">{{word.text}}</span>
         </span>
+    </div>
 
-        <span *ngIf="word.isIgnored()" class="word popup">
-            <span (click)="editWord(word)">{{word.text}}</span>
-            <word-detail *ngIf="word.editing" class="popup-content" [word]="word"></word-detail>
-        </span>
-        <span *ngIf="word.isNotFound()" class="notFound word" (click)="wordReview(word)">{{word.text}}</span>
-        <span *ngIf="word.isNumber()" class="number word">{{word.text}}</span>
-        <span *ngIf="word.isPunctuation()">{{word.text}}</span>
-    </span><br>
-    <br>
+    <div>
+        <br>
+        <material-button raised
+                         (trigger)="showPrint()">
+            Drucken
+        </material-button>
 
-    <material-button raised
-                     (trigger)="startWordReview()">
-        Unbekannte Wörter klären
-    </material-button>
-    (oder direkt auf das Wort klicken)
+        <material-button raised
+                         (trigger)="copyToClipboard()">
+            Kopieren (Zwischenablage)
+        </material-button>
+    </div>
 
+    <div *ngIf="hasUnknownWords()">
+        <br>
+        <material-button raised
+                         (trigger)="startWordReview()">
+            Unbekannte Wörter klären
+        </material-button>
+        (oder direkt auf das Wort klicken)
+    </div>
 </div>

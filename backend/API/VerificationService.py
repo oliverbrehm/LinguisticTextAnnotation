@@ -60,15 +60,23 @@ class VerificationService:
             # search for first word where no proposal from user exists
             proposal = self.database.session.query(VerificationProposal)\
                 .filter(VerificationProposal.user_word == w).filter(VerificationProposal.user == user).first()
+
             if proposal is None:
-                # no proposal exists for that user and word
-                return w.json()
+                # no proposal exists for that user and wor
+                return w
 
         return None
 
     def num_words(self):
         num = self.database.session.query(UserWord).count()
         return num
+
+    def proposals_for_word(self, user_word):
+        # get proposals for user_word
+        proposals = self.database.session.query(VerificationProposal)\
+            .filter(VerificationProposal.user_word == user_word).all()
+
+        return proposals
 
     def submit(self, user, word_id, stress_pattern, hyphenation, dictionaryService):
         user_word = self.database.session.query(UserWord).filter(UserWord.id == word_id).first()
