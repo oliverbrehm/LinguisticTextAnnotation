@@ -41,32 +41,32 @@ class AnnotationText {
     return n;
   }
 
-  String previousWordTo(String word) {
-    String previous;
+  Word previousWordTo(Word word) {
+    Word previous;
 
     for(Word w in this.words) {
       if(w.type == WordType.NotFound) {
-        if(w.text == word) {
+        if(w == word) {
           return previous;
         }
 
-        previous = w.text;
+        previous = w;
       }
     }
 
     return null;
   }
 
-  String nextWordTo(String word) {
+  Word nextWordTo(Word word) {
     bool found = false;
 
     for(Word w in this.words) {
       if(w.type == WordType.NotFound) {
         if(found) {
-          return w.text;
+          return w;
         }
 
-        if(w.text == word) {
+        if(w == word) {
           found = true;
         }
       }

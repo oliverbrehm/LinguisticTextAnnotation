@@ -26,13 +26,13 @@ import 'package:WebAnnotation/services/segmentation_service.dart';
 )
 class WordReviewComponent implements OnInit {
 
-  String word;
+  Word word;
 
   bool busyAdding = false;
   bool loadingProposals = false;
 
-  String previousWord = null;
-  String nextWord = null;
+  Word previousWord = null;
+  Word nextWord = null;
 
   final Router router;
   final RouteParams routeParams;
@@ -56,11 +56,19 @@ class WordReviewComponent implements OnInit {
 
   @override
   Future<Null> ngOnInit() async {
-    this.word = routeParams.get('word');
+    int wordIndex = int.parse(routeParams.get('wordIndex'));
 
+    this.word = textAnalysisService.annotatedText.words[wordIndex];
+
+    loadProposals();
+  }
+
+  void loadProposals() {
     this.loadingProposals = true;
 
-    this.segmentationProposalService.wordText = this.word;
+    this.segmentations = [];
+
+    this.segmentationProposalService.wordText = this.word.text;
     this.segmentationProposalService.query().then((success) {
       if (!success) {
         appService.errorMessage("Unable to retrieve segmentation proposals.");
@@ -83,6 +91,8 @@ class WordReviewComponent implements OnInit {
   void nextWordClicked() {
     appService.clearMessage();
 
+    segmentationSelection.reset();
+
     busyAdding = true;
 
     Word segmentationWord = segmentationSelection.segmentationWord;
@@ -90,24 +100,12 @@ class WordReviewComponent implements OnInit {
     String hyphenation = segmentationWord.getHyphenation();
     String stressPattern = segmentationWord.getStressPattern();
 
-    this.userAccountService.addWord(word, hyphenation, stressPattern)
+    this.userAccountService.addWord(word.text, hyphenation, stressPattern)
         .then((bool success) {
       if(success) {
-        this.textAnalysisService.annotatedText.updateWord(word, hyphenation, stressPattern);
+        this.textAnalysisService.annotatedText.updateWord(word.text, hyphenation, stressPattern);
 
-        if(nextWord != null) {
-          gotoWord(nextWord);
-        } else {
-          // find first unknown word
-          Word w = textAnalysisService.annotatedText.nextMissingWord();
-          if(w == null) {
-            // no more unknown words, back to text
-            router.navigate(['TextAnalysis']);
-            return;
-          }
-
-          gotoWord(w.text);
-        }
+        gotoNextWord();
       } else {
         appService.errorMessage("Fehler beim hinzufügen des Wortes zur"
             "lokalen Datenbank.");
@@ -117,8 +115,31 @@ class WordReviewComponent implements OnInit {
     });
   }
 
-  void gotoWord(String word) {
-    router.navigate(['WordReview', {'word': word}]);
+  void gotoNextWord() {
+    if(nextWord != null) {
+      gotoWord(nextWord);
+    } else {
+      // find first unknown word
+      Word w = textAnalysisService.annotatedText.nextMissingWord();
+      if(w == null) {
+        // no more unknown words, back to text
+        router.navigate(['TextAnalysis']);
+        return;
+      }
+
+      gotoWord(w);
+    }
+  }
+
+  void ignoreClicked() {
+    segmentationSelection.reset();
+    this.word.type = WordType.Ignored;
+    gotoNextWord();
+  }
+
+  void gotoWord(Word word) {
+    this.word = word;
+    loadProposals();
   }
 
   void doneButtonClicked() {

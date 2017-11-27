@@ -37,7 +37,7 @@ class TextPreviewComponent implements OnInit {
 
   @override
   ngOnInit() {
-    // TODO: implement ngOnInit
+
   }
 
   AnnotationText annotatedText() {
@@ -61,7 +61,7 @@ class TextPreviewComponent implements OnInit {
 
   void wordReview(Word word) {
     if(userAccountService.loggedIn) {
-      router.navigate(['WordReview', {'word': word.text}]);
+      router.navigate(['WordReview', {'wordIndex': textAnalysisService.annotatedText.words.indexOf(word).toString()}]);
     } else {
       router.navigate(['UserAccount']);
       appService.infoMessage('Sie müssen eingeloggt sein, um Wörter hinzuzufügen.');

@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-7">
-        <div class="row bordered">
+        <div class="bordered">
             <h3>Betonungsmuster</h3>
             <ul class="segmentationList">
                 <li *ngFor="let s of segmentationWord.syllables; let i = index" class="segmentationList-item segmentationList-hover {{s.stressed ? 'segmentationList-active' : ''}}" (click)="syllableSelected(i)">{{s.text}}</li>
@@ -8,7 +8,7 @@
             <p>(betonte Silbe durch Klicken auswählen)</p>
         </div>
 
-        <div class="row bordered">
+        <div class="bordered">
             <h3>Silbentrennung</h3>
             <material-input multiline
                             (keyup)="hyphenationChanged()"

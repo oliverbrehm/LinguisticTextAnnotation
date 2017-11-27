@@ -11,7 +11,7 @@ import 'package:WebAnnotation/services/model/Word.dart';
 import 'package:WebAnnotation/services/model/AnnotationText.dart';
 
 abstract class TextAnalysisObserver {
-  void update();
+  void textUpdated();
 }
 
 /// service description
@@ -50,6 +50,10 @@ class TextAnalysisService {
 
       for(var entry in response) {
         Word w = new Word(entry['text']);
+
+        // default annotation, overwritten if type == annotated_word
+        w.parseHyphenationUsingOriginalText(w.text);
+        w.parseStressPattern("0");
 
         switch(entry['type']) {
           case 'unknown': w.type = WordType.Ignored; break;
@@ -128,9 +132,7 @@ class TextAnalysisService {
             selectedConfiguration.word_background;
       }
 
-      for(TextAnalysisObserver o in this.observers) {
-        o.update();
-      }
+      this.textUpdated();
     });
   }
 
@@ -141,5 +143,11 @@ class TextAnalysisService {
 
     querySelectorAll(".stressed").style.color = '#000000';
     querySelectorAll(".unstressed").style.color = '#000000';
+  }
+
+  void textUpdated() {
+    for(TextAnalysisObserver o in this.observers) {
+      o.textUpdated();
+    }
   }
 }

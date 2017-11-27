@@ -48,7 +48,7 @@ import 'package:WebAnnotation/components/user_account/user_register_component.da
       name: 'TextAnalysisParam',
       component: TextAnalysisComponent),
   const Route(
-      path: '/word_review/:word',
+      path: '/word_review/:wordIndex',
       name: 'WordReview',
       component: WordReviewComponent),
   const Route(

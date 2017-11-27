@@ -47,9 +47,10 @@ class SegmentationSelectionComponent implements OnInit {
   @override
   ngOnInit() {
     segmentationWord = new Word("");
+    this.reset();
+  }
 
-    print('init');
-
+  void reset() {
     new Future.delayed(const Duration(microseconds: 100), () {
       if(word != null) {
         print('word: ' + word);

@@ -4,36 +4,41 @@
     Wort hinzufügen...
 </div>
 
-<div *ngIf="!busyAdding" class="container">
+<div *ngIf="!busyAdding && word != null" class="container">
     <div class="row bordered">
         <div class="col">
-            <h2>Manuelle Analyse: {{word}}</h2>
+            <h2>Manuelle Analyse: {{word.text}}</h2>
 
             <div *ngIf="numWordsLeft() > 0">
                 <span *ngIf="previousWord != null">
-                    <a href="javascript:void(0);" (click)="gotoWord(previousWord)">&lt;&lt; {{previousWord}} </a> |
+                    <a href="javascript:void(0);" (click)="gotoWord(previousWord)">&lt;&lt; {{previousWord.text}} </a> |
                 </span>
 
                 Noch {{numWordsLeft()}} unbekannte Wörter zu klären
 
                 <span *ngIf="nextWord != null">
-                | <a href="javascript:void(0);" (click)="gotoWord(nextWord)"> {{nextWord}} &gt;&gt;</a>
+                | <a href="javascript:void(0);" (click)="gotoWord(nextWord)"> {{nextWord.text}} &gt;&gt;</a>
                 </span>
             </div>
         </div>
     </div>
 
     <segmentation-selection [loadingProposals]="loadingProposals"
-                            [word]="word"
+                            [word]="word.text"
                             [segmentations]="segmentations">
     </segmentation-selection>
 
     <div class="row bordered">
-        <material-button raised
+        <material-button raised *ngIf="!loadingProposals"
                          (trigger)="nextWordClicked()">
             Speichern
         </material-button>
-        <br>
+
+        <material-button raised *ngIf="!loadingProposals"
+                         (trigger)="ignoreClicked()">
+            Ignorieren
+        </material-button>
+
         <material-button raised
                          (trigger)="doneButtonClicked()">
             Zurück zum Text

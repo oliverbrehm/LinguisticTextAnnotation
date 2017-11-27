@@ -171,7 +171,7 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
   }
 
   @override
-  void update() {
+  void textUpdated() {
     updateConifurationUI();
   }
 }

@@ -24,7 +24,8 @@ import 'package:WebAnnotation/components/text_analysis/text_input_component.dart
     formDirectives,
     TextPreviewComponent,
     TextSettingsComponent,
-    TextInputComponent
+    TextInputComponent,
+    MaterialToggleComponent
   ],
   providers: const [],
 )
