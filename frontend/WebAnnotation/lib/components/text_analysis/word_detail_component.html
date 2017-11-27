@@ -5,15 +5,12 @@
 
     <p style="text-decoration: underline"><strong>{{word.text}}</strong></p>
 
+    <material-toggle [(checked)]="isAnnotatedToggleChecked"
+                     label="Annotieren"
+                     (click)="toggleAnnotated()">
 
-    <input type="radio" name="annotationType" value="annotated"
-           (click)="radioAnnotatedChanged($event)"
-           ng-checked="word.isAnnotated()"> annotieren
-
-    <input type="radio" name="annotationType" value="ignored"
-           (click)="radioAnnotatedChanged($event)"
-           ng-checked="word.isIgnored()" > ignorieren<br>
-    <br>
+    </material-toggle>
+    <br><br>
 
     <div *ngIf="word.isAnnotated()">
         Betonungsmuster:

@@ -10,9 +10,15 @@ import 'package:WebAnnotation/services/model/TextConfiguration.dart';
 import 'package:WebAnnotation/services/model/Word.dart';
 import 'package:WebAnnotation/services/model/AnnotationText.dart';
 
+abstract class TextAnalysisObserver {
+  void update();
+}
+
 /// service description
 @Injectable()
 class TextAnalysisService {
+
+  List<TextAnalysisObserver> observers = [];
 
   bool analyzing = false;
 
@@ -74,6 +80,10 @@ class TextAnalysisService {
     });
   }
 
+  void addObserver(TextAnalysisObserver observer) {
+    this.observers.add(observer);
+  }
+
   void clearText() {
     annotatedText = null;
   }
@@ -102,6 +112,10 @@ class TextAnalysisService {
             selectedConfiguration.stressed_color;
         querySelectorAll(".unstressed").style.color =
             selectedConfiguration.unstressed_color;
+        if(selectedConfiguration.use_background) {
+          querySelectorAll(".stressed").style.backgroundColor = selectedConfiguration.word_background;
+          querySelectorAll(".unstressed").style.backgroundColor = selectedConfiguration.word_background;
+        }
       } else {
         querySelectorAll(".stressed").style.backgroundColor =
             selectedConfiguration.stressed_color;
@@ -112,8 +126,10 @@ class TextAnalysisService {
       if(selectedConfiguration.use_background) {
         querySelectorAll(".word").style.backgroundColor =
             selectedConfiguration.word_background;
-      } else {
-        querySelectorAll(".word").style.backgroundColor = '#FFFFFF';
+      }
+
+      for(TextAnalysisObserver o in this.observers) {
+        o.update();
       }
     });
   }

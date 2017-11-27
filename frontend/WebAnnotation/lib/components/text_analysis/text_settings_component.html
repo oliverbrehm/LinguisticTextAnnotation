@@ -2,12 +2,16 @@
     <h2>Einstellungen</h2>
 
     Betonte Silbe:<br>
-    <input type="checkbox" [(ngModel)]="selectedConfiguration().stressed_bold" (change)="stressedBoldChanged($event)" />Fett<br>
+    <material-toggle [(checked)]="selectedConfiguration().stressed_bold"
+                     label="Fett"
+                     (click)="textAnalysisService.applyCurrentConfiguration()">
+    </material-toggle>
+
     <div class="input-group">
         <input type="text" disabled value="{{selectedConfiguration().stressed_color}}" class="form-control" />
         <span class="form-control">
                 <input #inputColorStressed type="color" [(ngModel)]="selectedConfiguration().stressed_color"
-                       (input)="applyCurrentConfiguration()">
+                       (input)="textAnalysisService.applyCurrentConfiguration()">
             </span>
     </div>
     <br>
@@ -17,37 +21,44 @@
         <input type="text" disabled value="{{selectedConfiguration().unstressed_color}}" class="form-control" />
         <span class="form-control">
                 <input #inputColorUnstressed type="color" [(ngModel)]="selectedConfiguration().unstressed_color"
-                       (input)="applyCurrentConfiguration()">
+                       (input)="textAnalysisService.applyCurrentConfiguration()">
             </span>
     </div>
     <br>
 
     Wort Hintergrundfarbe:<br>
-    <input type="checkbox" [(ngModel)]="selectedConfiguration().use_background" (change)="useWordBackgroundChanged($event)" />Aktivieren<br>
+    <material-toggle [(checked)]="selectedConfiguration().use_background"
+                     label="Aktivieren"
+                     (click)="textAnalysisService.applyCurrentConfiguration()">
+    </material-toggle>
+    <br>
     <div *ngIf="selectedConfiguration().use_background" class="input-group">
         <input type="text" disabled value="{{selectedConfiguration().word_background}}" class="form-control" />
         <span class="form-control">
                 <input #inputColorWordBackground type="color" [(ngModel)]="selectedConfiguration().word_background"
-                       (input)="applyCurrentConfiguration()">
+                       (input)="textAnalysisService.applyCurrentConfiguration()">
             </span>
     </div>
     <br>
 
     Silbe hervorheben:<br>
-    <input type="radio" name="radioSyllableColor" value="foreground"
-           (click)="radioSyllableColorChanged($event)"
-           ng-checked="selectedConfiguration().highlight_foreground"/>Vordergrundfarbe<br>
-    <input type="radio" name="radioSyllableColor" value="background"
-           (click)="radioSyllableColorChanged($event)"
-           ng-checked="!selectedConfiguration().highlight_foreground" />Hintergrundfarbe<br>
-    <br>
+    <material-radio-group [selectionModel]="foregroundSelectionModel">
+        <material-radio *ngFor="let option of foregroundOptions"
+                        class="radio-per-line"
+                        [(checked)]="option.selected"
+                        [value]="option.label"
+                        (click)="radioSyllableColorChanged()">
+            {{option.label}}
+        </material-radio>
+    </material-radio-group>
+    <br><br>
 
     Schriftgröße:
     <div class="input-group">
         <input type="text" disabled value="{{selectedConfiguration().font_size}}" class="form-control"/>
         <span style="padding-left: 0.5em; padding-top: 0.5em;">
                 <input type="range" min="8" max="32" [(ngModel)]="fontSizeValue"
-                       (input)="fontSizeSliderMoved($event)" (change)="applyCurrentConfiguration()" class="slider">
+                       (input)="fontSizeSliderMoved($event)" (change)="textAnalysisService.applyCurrentConfiguration()" class="slider">
             </span>
     </div>
     <br>
@@ -57,7 +68,7 @@
         <input type="text" disabled value="{{selectedConfiguration().syllable_distance}}" class="form-control"/>
         <span style="padding-left: 0.5em; padding-top: 0.5em;">
                 <input type="range" min="0" max="8" [(ngModel)]="syllableDistanceValue"
-                       (input)="syllableDistanceSliderMoved($event)" (change)="applyCurrentConfiguration()" class="slider">
+                       (input)="syllableDistanceSliderMoved($event)" (change)="textAnalysisService.applyCurrentConfiguration()" class="slider">
             </span>
     </div>
     <br>
@@ -67,7 +78,7 @@
         <input type="text" disabled value="{{selectedConfiguration().word_distance}}" class="form-control"/>
         <span style="padding-left: 0.5em; padding-top: 0.5em;">
                 <input type="range" min="2" max="20" [(ngModel)]="wordDistanceValue"
-                       (input)="wordDistanceSliderMoved($event)" (change)="applyCurrentConfiguration()" class="slider">
+                       (input)="wordDistanceSliderMoved($event)" (change)="textAnalysisService.applyCurrentConfiguration()" class="slider">
             </span>
     </div>
     <br>
@@ -77,7 +88,7 @@
         <input type="text" disabled value="{{selectedConfiguration().line_height}}" class="form-control"/>
         <span style="padding-left: 0.5em; padding-top: 0.5em;">
                 <input type="range" min="10" max="40" [(ngModel)]="lineHeightValue"
-                       (input)="lineHeightSliderMoved($event)" (change)="applyCurrentConfiguration()" class="slider" id="myRange">
+                       (input)="lineHeightSliderMoved($event)" (change)="textAnalysisService.applyCurrentConfiguration()" class="slider" id="myRange">
     </span>
     </div>
 </div>

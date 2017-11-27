@@ -98,6 +98,10 @@ a:hover {
   background-color: indianred;
 }
 
+.material-toggle.checked .tgl-btn {
+  background-color: #4DE8D0;
+}
+
 
 @media print {
   body *, .navbar {

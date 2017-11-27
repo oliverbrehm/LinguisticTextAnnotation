@@ -1,3 +1,4 @@
+import 'package:WebAnnotation/services/model/common.dart';
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
@@ -18,7 +19,7 @@ import 'package:WebAnnotation/services/model/TextConfiguration.dart';
   ],
   providers: const [],
 )
-class TextSettingsComponent implements OnInit {
+class TextSettingsComponent implements OnInit, TextAnalysisObserver {
   final AppService appService;
   final TextAnalysisService textAnalysisService;
   final UserAccountService userAccountService;
@@ -30,12 +31,19 @@ class TextSettingsComponent implements OnInit {
   String wordDistanceValue = "7"; // divided by 10
   String fontSizeValue = "14"; // not divided
 
+  final SelectionModel foregroundSelectionModel = new SelectionModel.withList();
+  List<Option> foregroundOptions = [
+    new Option("Vordergrundfarbe", false, false),
+    new Option("Hintergrundfarbe", false, false)
+  ];
+
   TextSettingsComponent(this.appService, this.textAnalysisService,
       this.userAccountService);
 
   @override
   ngOnInit() {
-
+    updateConifurationUI();
+    textAnalysisService.addObserver(this);
   }
 
   List<TextConfiguration> textConfigurations() {
@@ -46,9 +54,7 @@ class TextSettingsComponent implements OnInit {
     return textAnalysisService.selectedConfiguration;
   }
 
-  void applyCurrentConfiguration() {
-    textAnalysisService.applyCurrentConfiguration();
-
+  void updateConifurationUI() {
     fontSizeValue =
         selectedConfiguration().font_size.toInt().toString();
     lineHeightValue =
@@ -57,13 +63,16 @@ class TextSettingsComponent implements OnInit {
         (selectedConfiguration().syllable_distance * 10).toInt().toString();
     wordDistanceValue =
         (selectedConfiguration().word_distance * 10).toInt().toString();
+
+    foregroundOptions[0].selected = selectedConfiguration().highlight_foreground;
+    foregroundOptions[1].selected = !selectedConfiguration().highlight_foreground;
   }
 
   void configurationSelected(TextConfiguration configuration) {
     newConfigurationName = configuration.name;
     textAnalysisService.selectedConfiguration = new TextConfiguration.copy(configuration);
 
-    applyCurrentConfiguration();
+    textAnalysisService.applyCurrentConfiguration();
   }
 
   void saveConfiguration() {
@@ -116,28 +125,6 @@ class TextSettingsComponent implements OnInit {
     });
   }
 
-  void stressedBoldChanged(event) {
-    var checked = event.target.checked;
-    if(checked) {
-      selectedConfiguration().stressed_bold = true;
-    } else {
-      selectedConfiguration().stressed_bold = false;
-    }
-
-    applyCurrentConfiguration();
-  }
-
-  void useWordBackgroundChanged(event) {
-    var checked = event.target.checked;
-    if(checked) {
-      selectedConfiguration().use_background = true;
-    } else {
-      selectedConfiguration().use_background = false;
-    }
-
-    applyCurrentConfiguration();
-  }
-
   void fontSizeSliderMoved(event) {
     var value = event.target.value;
     double lh = double.parse(value, (error) {
@@ -148,18 +135,9 @@ class TextSettingsComponent implements OnInit {
     selectedConfiguration().font_size = lh;
   }
 
-  void radioSyllableColorChanged(event) {
-    var value = event.target.value;
-    if(value == 'foreground') {
-      selectedConfiguration().highlight_foreground = true;
-    } else if(value == 'background') {
-      selectedConfiguration().highlight_foreground = false;
-    } else {
-      print('ERROR: checkbox syllable color none selected');
-    }
-
-    textAnalysisService.resetColors();
-    applyCurrentConfiguration();
+  void radioSyllableColorChanged() {
+    selectedConfiguration().highlight_foreground = foregroundOptions[0].selected;
+    textAnalysisService.applyCurrentConfiguration();
   }
 
   void lineHeightSliderMoved(event) {
@@ -190,5 +168,10 @@ class TextSettingsComponent implements OnInit {
     });
 
     selectedConfiguration().word_distance = lh / 10.0;
+  }
+
+  @override
+  void update() {
+    updateConifurationUI();
   }
 }

@@ -25,6 +25,8 @@ class WordDetailComponent implements OnInit {
 
   String hyphenationText = "";
 
+  bool isAnnotatedToggleChecked = false;
+
   WordDetailComponent(this.appService, this.textAnalysisService);
 
   @Input()
@@ -33,6 +35,8 @@ class WordDetailComponent implements OnInit {
   @override
   ngOnInit() {
     hyphenationText = word.getHyphenation();
+
+    isAnnotatedToggleChecked = word.isAnnotated();
   }
 
   syllableSelected(Syllable syllable) {
@@ -41,14 +45,11 @@ class WordDetailComponent implements OnInit {
     textAnalysisService.applyCurrentConfiguration();
   }
 
-  void radioAnnotatedChanged(event) {
-    var value = event.target.value;
-    if(value == 'annotated') {
+  void toggleAnnotated() {
+    if(isAnnotatedToggleChecked) {
       word.type = WordType.Annotated;
-    } else if(value == 'ignored') {
-      word.type = WordType.Ignored;
     } else {
-      print('ERROR: radio annotated color none selected');
+      word.type = WordType.Ignored;
     }
 
     textAnalysisService.applyCurrentConfiguration();
