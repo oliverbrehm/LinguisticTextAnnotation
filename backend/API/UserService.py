@@ -230,7 +230,7 @@ class UserService:
                              stressed_bold, line_height):
         n_id = int(configuration_id)
 
-        configuration:TextConfiguration = self.database.session.query(TextConfiguration).filter(TextConfiguration.id == n_id).first()
+        configuration = self.database.session.query(TextConfiguration).filter(TextConfiguration.id == n_id).first()
 
         if not configuration:
             return False

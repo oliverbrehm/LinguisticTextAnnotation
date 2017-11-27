@@ -11,7 +11,7 @@
         <input type="text" disabled value="{{selectedConfiguration().stressed_color}}" class="form-control" />
         <span class="form-control">
                 <input #inputColorStressed type="color" [(ngModel)]="selectedConfiguration().stressed_color"
-                       (input)="textAnalysisService.applyCurrentConfiguration()">
+                       (input)="textAnalysisService.applyCurrentConfiguration()" class="color-input">
             </span>
     </div>
     <br>
@@ -20,9 +20,9 @@
     <div class="input-group">
         <input type="text" disabled value="{{selectedConfiguration().unstressed_color}}" class="form-control" />
         <span class="form-control">
-                <input #inputColorUnstressed type="color" [(ngModel)]="selectedConfiguration().unstressed_color"
-                       (input)="textAnalysisService.applyCurrentConfiguration()">
-            </span>
+            <input #inputColorUnstressed type="color" [(ngModel)]="selectedConfiguration().unstressed_color"
+                       (input)="textAnalysisService.applyCurrentConfiguration()" class="color-input">
+        </span>
     </div>
     <br>
 
@@ -36,7 +36,7 @@
         <input type="text" disabled value="{{selectedConfiguration().word_background}}" class="form-control" />
         <span class="form-control">
                 <input #inputColorWordBackground type="color" [(ngModel)]="selectedConfiguration().word_background"
-                       (input)="textAnalysisService.applyCurrentConfiguration()">
+                       (input)="textAnalysisService.applyCurrentConfiguration()" class="color-input">
             </span>
     </div>
     <br>

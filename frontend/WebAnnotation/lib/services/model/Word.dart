@@ -76,6 +76,7 @@ class Word {
   }
 
   bool parseHyphenationUsingOriginalText(String hyphenation) {
+    print("parseHyphenationUsingOriginalText");
     this.syllables = [];
 
     List<String> syllables = hyphenation.split("-");
@@ -89,14 +90,27 @@ class Word {
           .replaceAll("oe", "ö")
           .replaceAll("ue", "ü");
 
-      String syllable = remaining.substring(0, lookupSyllable.length);
+      print("lookupSyllable: " + lookupSyllable);
+
+      String syllable = remaining; // default
+      if(remaining.length >= lookupSyllable.length) {
+        syllable = remaining.substring(0, lookupSyllable.length);
+      }
+
+      print("syllable: " + syllable);
 
       if (syllable.toLowerCase() != lookupSyllable) {
         // this should match, but if it does not, use lookup as fallback
         syllable = lookupSyllable;
       }
 
-      remaining = remaining.substring(lookupSyllable.length);
+      if(remaining.length > lookupSyllable.length) {
+        remaining = remaining.substring(lookupSyllable.length);
+      } else {
+        remaining = "";
+      }
+
+      print("remaining: " + remaining);
 
       if(syllable.length > 0) {
         this.addSyllable(syllable, false);
@@ -107,6 +121,7 @@ class Word {
   }
 
   bool parseHyphenation(String hyphenation) {
+    print("parseHyphenation");
     this.syllables = [];
 
     List<String> syllables = hyphenation.split("-");
