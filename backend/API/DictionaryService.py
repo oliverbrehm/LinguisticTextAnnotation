@@ -1,5 +1,4 @@
 import sqlite3
-import nltk # natural language toolkit
 import pyphen
 import requests
 import spacy
@@ -12,6 +11,8 @@ import sqlalchemy
 from sqlalchemy.orm import relationship
 
 from Database import Base as Base
+
+TOKENS_TO_IGNORE = ['X', 'PUNCT', 'NUM']
 
 
 class Segmentation:
@@ -74,9 +75,6 @@ class AddedEntry(Base):
 class DictionaryService:
     def __init__(self, database):
         self.database = database
-
-        nltk.download('punkt')
-        nltk.download('averaged_perceptron_tagger')
 
         # init pyphen
         language = 'de_DE'
@@ -164,46 +162,66 @@ class DictionaryService:
         if not text:
             return None
 
-        # TODO remove nltk
-        # TODO german language? not working well for extra characters liek -, ', ...
-        #words = nltk.word_tokenize(text)
-        #taggedWords = nltk.pos_tag(words)
-
         analyzed = []
 
         doc = self.nlp(text)
-
-        tokensToIgnore = ['X', 'PUNCT', 'NUM']
 
         for token in doc:
             word = token.text
             pos = token.pos_
             lemma = token.lemma_
 
-            entry = {
-                'text': word,
-                'pos': pos,
-                'lemma': lemma
-            }
+            if '-' in word:
+                # if double word (containing hyphen)
+                subwords = word.split('-')
+                for i in range(len(subwords)):
+                    sw = subwords[i]
 
-            ignore = False
+                    entry = self._lookup_token(sw, pos, lemma, user, user_service)
+                    analyzed.append(entry)
 
-            # don't analyze special tokens
-            if len(word) < 2 or pos in tokensToIgnore:
-                entry['type'] = 'ignored'
-                ignore = True
-
-            if not ignore:
-                annotated = self.query_word(word, user_service, user)
-                if annotated is None:
-                    entry['type'] = 'not_found'
-                else:
-                    entry['type'] = 'annotated_word'
-                    entry['annotation'] = annotated
-
-            analyzed.append(entry)
+                    if i is not len(subwords) - 1:
+                        # in between double word, add hyphen as token
+                        entry = self._hyphen_token()
+                        analyzed.append(entry)
+            else:
+                # normal word (without hyphen)
+                entry = self._lookup_token(word, pos, lemma, user, user_service)
+                analyzed.append(entry)
 
         return analyzed
+
+    def _lookup_token(self, word, pos, lemma, user, user_service):
+        ignore = False
+
+        entry = {
+            'text': word,
+            'pos': pos,
+            'lemma': lemma
+        }
+
+        # don't analyze special tokens
+        if len(word) < 2 or pos in TOKENS_TO_IGNORE:
+            entry['type'] = 'ignored'
+            ignore = True
+
+        if not ignore:
+            annotated = self.query_word(word, user_service, user)
+            if annotated is None:
+                entry['type'] = 'not_found'
+            else:
+                entry['type'] = 'annotated_word'
+                entry['annotation'] = annotated
+
+        return entry
+
+    def _hyphen_token(self):
+        return {
+            'text': '-',
+            'pos': 'PUNCT',
+            'lemma': '-',
+            'type': 'ignored'
+        }
 
     def query_segmentation(self, word):
         segmentations = []
