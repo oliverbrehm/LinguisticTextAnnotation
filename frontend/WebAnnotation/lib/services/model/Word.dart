@@ -2,8 +2,6 @@ enum WordType {
   Ignored,
   Annotated,
   NotFound,
-  Punctuation,
-  Number
 }
 
 class Syllable {
@@ -21,6 +19,9 @@ class Word {
 
   WordType type = WordType.Ignored;
 
+  String partOfSpeech = "";
+  String lemma = "";
+
   bool editing = false;
 
   Word(this.text);
@@ -35,14 +36,6 @@ class Word {
 
   bool isNotFound() {
     return this.type == WordType.NotFound;
-  }
-
-  bool isNumber() {
-    return this.type == WordType.Number;
-  }
-
-  bool isPunctuation() {
-    return this.type == WordType.Punctuation;
   }
 
   void addSyllable(String text, bool stressed) {

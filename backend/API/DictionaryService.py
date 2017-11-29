@@ -2,6 +2,7 @@ import sqlite3
 import nltk # natural language toolkit
 import pyphen
 import requests
+import spacy
 
 from datetime import datetime
 
@@ -79,6 +80,9 @@ class DictionaryService:
 
         # init pyphen
         language = 'de_DE'
+
+        # init spacy
+        self.nlp = spacy.load('de')
 
         if language in pyphen.LANGUAGES:
             self.pyphen_dict = pyphen.Pyphen(lang=language)
@@ -160,29 +164,44 @@ class DictionaryService:
         if not text:
             return None
 
+        # TODO remove nltk
         # TODO german language? not working well for extra characters liek -, ', ...
-        words = nltk.word_tokenize(text)
-        taggedWords = nltk.pos_tag(words)
+        #words = nltk.word_tokenize(text)
+        #taggedWords = nltk.pos_tag(words)
 
         analyzed = []
 
-        for (word, tag) in taggedWords:
-            #print(word, tag); # DEBUG tags
+        doc = self.nlp(text)
+
+        tokensToIgnore = ['X', 'PUNCT', 'NUM']
+
+        for token in doc:
+            word = token.text
+            pos = token.pos_
+            lemma = token.lemma_
+
+            entry = {
+                'text': word,
+                'pos': pos,
+                'lemma': lemma
+            }
+
+            ignore = False
 
             # don't analyze special tokens
-            # part of speech tags: http://www.ims.uni-stuttgart.de/forschung/ressourcen/lexika/TagSets/stts-table.html
-            if tag is 'CD':
-                analyzed.append({'type': 'number', 'text': word}); continue
-            if tag in ['.', ',']:
-                analyzed.append({'type': 'punctuation', 'text': word}); continue
-            if len(word) < 2 or tag is 'XY' or tag in ["''"]:
-                analyzed.append({'type': 'unknown', 'text': word}); continue
+            if len(word) < 2 or pos in tokensToIgnore:
+                entry['type'] = 'ignored'
+                ignore = True
 
-            annotated = self.query_word(word, user_service, user)
-            if annotated is None:
-                analyzed.append({'type': 'not_found', 'text': word})
-            else:
-                analyzed.append({'type': 'annotated_word', 'text': word, 'annotation': annotated})
+            if not ignore:
+                annotated = self.query_word(word, user_service, user)
+                if annotated is None:
+                    entry['type'] = 'not_found'
+                else:
+                    entry['type'] = 'annotated_word'
+                    entry['annotation'] = annotated
+
+            analyzed.append(entry)
 
         return analyzed
 
@@ -201,7 +220,10 @@ class DictionaryService:
 
                 stress_pattern, hyphenation = self.parse_mary_xml(word, response.text)
 
-                if stress_pattern:
+                if stress_pattern and len(stress_pattern) > 0:
+                    if "1" not in stress_pattern:
+                        # contains no stress, default use first syllable
+                        stress_pattern[0] = '1' + stress_pattern[1:]
                     segmentation_mary = Segmentation(word, "MARY TTS", "Source: MARY TTS", hyphenation, stress_pattern)
                     segmentations.append(segmentation_mary.json())
         except requests.exceptions.ReadTimeout:
@@ -220,8 +242,6 @@ class DictionaryService:
         return segmentations
 
     def parse_mary_xml(self, queryWord, xmlText):
-        print(xmlText)
-
         root = ET.fromstring(xmlText)
 
         stress_pattern = ""
@@ -232,13 +252,10 @@ class DictionaryService:
             return ("", "")
 
         wordElement = root[0][0][0][0] # root: maryxml[0] -> p[0] -> s[0] -> phrase[0] -> t (== Word)
-        print(wordElement)
 
         if not wordElement:
             print('word not found')
             return ("", "")
-
-        # TODO REMOVE hyphenation_remaining = queryWord
 
         for syllable in wordElement:
             stressed = syllable.get('stress')
@@ -247,25 +264,7 @@ class DictionaryService:
             else:
                 stress_pattern = stress_pattern + "0"
 
-            # TODO extract hyphenation from phonesm?
-            # own algorithm or P2G converter...?
-            '''
-            phon:str = syllable.get('ph')
-            phon = phon.replace(' ', '').replace('?', '')
-            print('phon', phon)
-            syllable_text = hyphenation_remaining[0:len(phon)]
-            print('syllable_text', syllable_text)
-
-            if len(phon) < len(hyphenation_remaining):
-                hyphenation_remaining = hyphenation_remaining[len(phon):]
-
-            if hyphenation:
-                hyphenation = hyphenation + '-'
-
-            hyphenation = hyphenation + syllable_text
-            '''
-
-            # fallback: use pyphen and hope it matches
+            # use pyphen hyphenation and hope it matches
             hyphenation = self.pyphen_dict.inserted(queryWord)
 
         return stress_pattern, hyphenation

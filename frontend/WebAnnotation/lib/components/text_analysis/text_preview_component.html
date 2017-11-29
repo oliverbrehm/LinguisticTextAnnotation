@@ -16,9 +16,8 @@
                 <span (click)="editWord(word)">{{word.text}}</span>
                 <word-detail *ngIf="word.editing" class="popup-content" [word]="word"></word-detail>
             </span>
+
             <span *ngIf="word.isNotFound()" class="notFound word" (click)="wordReview(word)">{{word.text}}</span>
-            <span *ngIf="word.isNumber()" class="number word unstressed">{{word.text}}</span>
-            <span *ngIf="word.isPunctuation()" class="unstressed">{{word.text}}</span>
         </span>
     </div>
 

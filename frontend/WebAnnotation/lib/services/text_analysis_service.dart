@@ -56,9 +56,7 @@ class TextAnalysisService {
         w.parseStressPattern("0");
 
         switch(entry['type']) {
-          case 'unknown': w.type = WordType.Ignored; break;
-          case 'number': w.type = WordType.Number; break;
-          case 'punctuation': w.type = WordType.Punctuation; break;
+          case 'ignored': w.type = WordType.Ignored; break;
           case 'not_found': w.type = WordType.NotFound; break;
           case 'annotated_word':
             var annotation = entry['annotation'];
@@ -69,7 +67,16 @@ class TextAnalysisService {
               w.type = WordType.NotFound;
             }
             break;
-          default: continue;
+          default:
+             w.type = WordType.Ignored; break;
+        }
+
+        if(entry.containsKey("pos")) {
+          w.partOfSpeech = entry['pos'];
+        }
+
+        if(entry.containsKey("lemma")) {
+          w.lemma = entry['lemma'];
         }
 
         annotatedText.addWord(w);
