@@ -37,6 +37,16 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
     new Option("Hintergrundfarbe", false, false)
   ];
 
+  final SelectionModel wordPOSAnnotationSelectionModel = new SelectionModel.withList();
+  List<Option> wordPOSAnnotationOptions = [
+    new Option("Annotieren", true, false),
+    new Option("Unbetont", false, false),
+    new Option("Ignorieren", false, false)
+  ];
+
+
+  WordPOS selectedWordPOS = new WordPOS("", "", WordPOSPolicy.Ignore);
+
   TextSettingsComponent(this.appService, this.textAnalysisService,
       this.userAccountService);
 
@@ -44,6 +54,32 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
   ngOnInit() {
     updateConifurationUI();
     textAnalysisService.addObserver(this);
+
+    this.wordPOSSelected(wordPOSList()[0]);
+  }
+
+  List<WordPOS> wordPOSList() {
+    return selectedConfiguration().wordPosList;
+  }
+
+  void wordPOSSelected(WordPOS wordPOS) {
+    this.selectedWordPOS = wordPOS;
+
+    for(Option o in wordPOSAnnotationOptions) {
+      o.selected = false;
+    }
+
+    switch(selectedWordPOS.policy) {
+      case WordPOSPolicy.Annotate:
+        wordPOSAnnotationOptions[0].selected = true;
+        break;
+      case WordPOSPolicy.Unstressed:
+        wordPOSAnnotationOptions[1].selected = true;
+        break;
+      case WordPOSPolicy.Ignore:
+        wordPOSAnnotationOptions[2].selected = true;
+        break;
+    }
   }
 
   List<TextConfiguration> textConfigurations() {
@@ -137,6 +173,28 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
 
   void radioSyllableColorChanged() {
     selectedConfiguration().highlight_foreground = foregroundOptions[0].selected;
+    textAnalysisService.applyCurrentConfiguration();
+  }
+
+  void wordPOSAnnotationChanged() {
+    for(Option o in wordPOSAnnotationOptions) {
+      if(o.selected) {
+        switch(o.label) {
+          case "Annotieren":
+            selectedWordPOS.policy = WordPOSPolicy.Annotate;
+            break;
+          case "Unbetont":
+            selectedWordPOS.policy = WordPOSPolicy.Unstressed;
+            break;
+          case "Ignorieren":
+            selectedWordPOS.policy = WordPOSPolicy.Ignore;
+            break;
+        }
+      }
+    }
+
+    // TODO add word POS configs to applyCurrentConfiguration
+    appService.errorMessage("TODO: " + selectedWordPOS.name + ", " + selectedWordPOS.policy.toString());
     textAnalysisService.applyCurrentConfiguration();
   }
 

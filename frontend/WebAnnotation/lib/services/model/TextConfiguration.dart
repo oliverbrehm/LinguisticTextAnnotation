@@ -4,6 +4,20 @@ import 'dart:convert';
 
 import 'package:WebAnnotation/app_service.dart';
 
+enum WordPOSPolicy {
+  Annotate,
+  Unstressed,
+  Ignore
+}
+
+class WordPOS {
+  String name;
+  String color;
+  WordPOSPolicy policy;
+
+  WordPOS(this.name, this.color, this.policy);
+}
+
 class TextConfiguration {
   int id;
 
@@ -21,6 +35,19 @@ class TextConfiguration {
   bool use_background;
   bool highlight_foreground;
   bool stressed_bold;
+
+  List<WordPOS> wordPosList = [
+    new WordPOS("Nomen", "#000000", WordPOSPolicy.Annotate),
+    new WordPOS("Eigenname", "#000000", WordPOSPolicy.Annotate),
+    new WordPOS("Verb", "#000000", WordPOSPolicy.Annotate),
+    new WordPOS("Adjektiv", "#000000", WordPOSPolicy.Annotate),
+    new WordPOS("Adverb", "#000000", WordPOSPolicy.Annotate),
+    new WordPOS("Artikel", "#000000", WordPOSPolicy.Annotate),
+    new WordPOS("Präposition", "#000000", WordPOSPolicy.Annotate),
+    new WordPOS("Pronomen", "#000000", WordPOSPolicy.Annotate),
+    new WordPOS("Konjunktion", "#000000", WordPOSPolicy.Annotate),
+    new WordPOS("Zahl", "#000000", WordPOSPolicy.Annotate),
+  ];
 
   TextConfiguration(this.id, this.name, this.stressed_color, this.unstressed_color,
       this.word_background, this.font_size, this.line_height, this.word_distance,

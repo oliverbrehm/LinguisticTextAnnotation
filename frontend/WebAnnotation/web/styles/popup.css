@@ -15,9 +15,9 @@
     border: 1px solid #292929;
     padding: 0.5em;
     position: absolute;
-    z-index: 1;
     top: 125%;
     left: -9em;
+    z-index: 2;
 }
 
 /* Popup arrow */

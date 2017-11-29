@@ -91,6 +91,26 @@
                        (input)="lineHeightSliderMoved($event)" (change)="textAnalysisService.applyCurrentConfiguration()" class="slider" id="myRange">
     </span>
     </div>
+    <br>
+
+    Wortart:
+    <material-dropdown-select
+            [buttonText]="selectedWordPOS.name">
+        <material-select-item *ngFor="let wpos of wordPOSList()" (trigger)="wordPOSSelected(wpos)">
+            {{wpos.name}}
+        </material-select-item>
+    </material-dropdown-select>
+    <br>
+
+    <material-radio-group [selectionModel]="wordPOSAnnotationSelectionModel">
+        <material-radio *ngFor="let option of wordPOSAnnotationOptions"
+                        class="radio-per-line"
+                        [(checked)]="option.selected"
+                        [value]="option.label"
+                        (click)="wordPOSAnnotationChanged()">
+            {{option.label}}
+        </material-radio>
+    </material-radio-group>
 </div>
 
 <br>
