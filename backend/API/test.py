@@ -1,3 +1,3 @@
 import spacy
 
-print(spacy.explain('PROPN'))
+print(spacy.explain('PART'))

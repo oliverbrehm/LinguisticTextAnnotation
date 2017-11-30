@@ -1,6 +1,7 @@
 enum WordType {
   Ignored,
   Annotated,
+  Unstressed,
   NotFound,
 }
 
@@ -26,12 +27,61 @@ class Word {
 
   Word(this.text);
 
+  String getCssPosClass() {
+    switch(partOfSpeech) {
+      case "NOUN":
+        return "pos-noun";
+      case "PROPN":
+        return "pos-propn";
+      case "VERB":
+        return "pos-verb";
+      case "AUX":
+        return "pos-aux";
+      case "ADJ":
+        return "pos-adj";
+      case "ADV":
+        return "pos-adv";
+      case "ADP":
+        return "pos-adp";
+      case "DET":
+        return "pos-det";
+      case "PRON":
+        return "pos-pron";
+      case "CONJ":
+        return "pos-conj";
+      case "SCONJ":
+        return "pos-conj";
+      case "PART":
+        return "pos-part";
+      case "NUM":
+        return "pos-num";
+      default:
+        return "";
+    }
+  }
+
+  Map<String, bool> cssClasses = {};
+
+  void updateCssClasses() {
+    cssClasses =  {
+      'word': true,
+      'popup': !isNotFound(),
+      'unstressed': isIgnored(),
+      'notFound': isNotFound(),
+      getCssPosClass(): true
+    };
+  }
+
   bool isIgnored() {
     return this.type == WordType.Ignored;
   }
 
   bool isAnnotated() {
     return this.type == WordType.Annotated;
+  }
+
+  bool isUnstressed() {
+    return this.type == WordType.Unstressed;
   }
 
   bool isNotFound() {

@@ -99,7 +99,13 @@ class TextAnalysisService {
     annotatedText = null;
   }
 
+  void updatePOS(WordPOS pos) {
+    annotatedText.updatePOS(pos);
+  }
+
   void applyCurrentConfiguration() {
+    this.annotatedText.updateCssClasses();
+
     new Future.delayed(const Duration(microseconds: 100), () {
       resetColors();
 
@@ -139,6 +145,8 @@ class TextAnalysisService {
             selectedConfiguration.word_background;
       }
 
+      this.highlightPOS();
+
       this.textUpdated();
     });
   }
@@ -156,5 +164,11 @@ class TextAnalysisService {
     for(TextAnalysisObserver o in this.observers) {
       o.textUpdated();
     }
+  }
+
+  void highlightPOS() {
+    // TODO, example all nouns in red
+    //querySelectorAll(".pos-noun .syllable .stressed").style.color = "#FF0000";
+    //querySelectorAll(".pos-noun .syllable .unstressed").style.color = "#FF0000";
   }
 }

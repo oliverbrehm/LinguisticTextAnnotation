@@ -45,7 +45,7 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
   ];
 
 
-  WordPOS selectedWordPOS = new WordPOS("", "", WordPOSPolicy.Ignore);
+  WordPOS selectedWordPOS = new WordPOS("", "", "", WordPOSPolicy.Ignore);
 
   TextSettingsComponent(this.appService, this.textAnalysisService,
       this.userAccountService);
@@ -193,8 +193,7 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
       }
     }
 
-    // TODO add word POS configs to applyCurrentConfiguration
-    appService.errorMessage("TODO: " + selectedWordPOS.name + ", " + selectedWordPOS.policy.toString());
+    textAnalysisService.updatePOS(selectedWordPOS);
     textAnalysisService.applyCurrentConfiguration();
   }
 

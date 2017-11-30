@@ -12,10 +12,42 @@ enum WordPOSPolicy {
 
 class WordPOS {
   String name;
+  String cssClassName;
   String color;
   WordPOSPolicy policy;
 
-  WordPOS(this.name, this.color, this.policy);
+  bool posTagMatches(String posTag) {
+    switch(name) {
+      case 'Nomen':
+        return posTag == 'NOUN';
+      case 'Eigenname':
+        return posTag == 'PROPN';
+      case 'Verb':
+        return posTag == 'VERB';
+      case 'Hilfsverb':
+        return posTag == 'AUX';
+      case 'Adjektiv':
+        return posTag == 'ADJ';
+      case 'Adverb':
+        return posTag == 'ADV';
+      case 'Artikel':
+        return posTag == 'DET';
+      case 'Adposition':
+        return posTag == 'ADP';
+      case 'Pronomen':
+        return posTag == 'PRON';
+      case 'Konjunktion':
+        return posTag == 'CONJ' || posTag == 'SCONJ';
+      case 'Zahl':
+        return posTag == 'NUM';
+      case 'Partikel':
+        return posTag == 'PART';
+      default:
+        return false;
+    }
+  }
+
+  WordPOS(this.name, this.cssClassName, this.color, this.policy);
 }
 
 class TextConfiguration {
@@ -37,16 +69,18 @@ class TextConfiguration {
   bool stressed_bold;
 
   List<WordPOS> wordPosList = [
-    new WordPOS("Nomen", "#000000", WordPOSPolicy.Annotate),
-    new WordPOS("Eigenname", "#000000", WordPOSPolicy.Annotate),
-    new WordPOS("Verb", "#000000", WordPOSPolicy.Annotate),
-    new WordPOS("Adjektiv", "#000000", WordPOSPolicy.Annotate),
-    new WordPOS("Adverb", "#000000", WordPOSPolicy.Annotate),
-    new WordPOS("Artikel", "#000000", WordPOSPolicy.Annotate),
-    new WordPOS("Präposition", "#000000", WordPOSPolicy.Annotate),
-    new WordPOS("Pronomen", "#000000", WordPOSPolicy.Annotate),
-    new WordPOS("Konjunktion", "#000000", WordPOSPolicy.Annotate),
-    new WordPOS("Zahl", "#000000", WordPOSPolicy.Annotate),
+    new WordPOS("Nomen", "pos-noun" , "#000000", WordPOSPolicy.Annotate),
+    new WordPOS("Eigenname", "pos-propn", "#000000", WordPOSPolicy.Annotate),
+    new WordPOS("Verb", "pos-verb", "#000000", WordPOSPolicy.Annotate),
+    new WordPOS("Hilfsverb", "pos-aux", "#000000", WordPOSPolicy.Annotate),
+    new WordPOS("Adjektiv", "pos-adj", "#000000", WordPOSPolicy.Annotate),
+    new WordPOS("Adverb", "pos-adv", "#000000", WordPOSPolicy.Annotate),
+    new WordPOS("Artikel", "pos-det", "#000000", WordPOSPolicy.Annotate),
+    new WordPOS("Adposition", "pos-adp", "#000000", WordPOSPolicy.Annotate),
+    new WordPOS("Pronomen", "pos-pron", "#000000", WordPOSPolicy.Annotate),
+    new WordPOS("Konjunktion", "pos-conj", "#000000", WordPOSPolicy.Annotate),
+    new WordPOS("Zahl", "pos-num", "#000000", WordPOSPolicy.Annotate),
+    new WordPOS("Partikel", "pos-part", "#000000", WordPOSPolicy.Annotate),
   ];
 
   TextConfiguration(this.id, this.name, this.stressed_color, this.unstressed_color,

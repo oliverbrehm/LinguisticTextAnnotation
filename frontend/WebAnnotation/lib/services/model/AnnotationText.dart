@@ -1,3 +1,4 @@
+import 'package:WebAnnotation/services/model/TextConfiguration.dart';
 import 'package:WebAnnotation/services/model/Word.dart';
 
 class AnnotationText {
@@ -82,6 +83,30 @@ class AnnotationText {
 
     if(word != null) {
       word.editing = true;
+    }
+  }
+
+  void updateCssClasses() {
+    for(Word w in words) {
+      w.updateCssClasses();
+    }
+  }
+
+  void updatePOS(WordPOS pos) {
+    for (Word w in words) {
+      if(pos.posTagMatches(w.partOfSpeech)) {
+        switch(pos.policy) {
+          case WordPOSPolicy.Annotate:
+            w.type = WordType.Annotated;
+            break;
+          case WordPOSPolicy.Ignore:
+            w.type = WordType.Ignored;
+            break;
+          case WordPOSPolicy.Unstressed:
+            w.type = WordType.Unstressed;
+            break;
+        }
+      }
     }
   }
 }
