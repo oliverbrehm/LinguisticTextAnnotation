@@ -1,4 +1,5 @@
-import 'package:WebAnnotation/services/model/common.dart';
+import 'package:WebAnnotation/services/model/PartOfSpeech.dart';
+import 'package:WebAnnotation/services/model/Common.dart';
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
@@ -45,7 +46,7 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
   ];
 
 
-  WordPOS selectedWordPOS = new WordPOS("", "", "", WordPOSPolicy.Ignore);
+  PartOfSpeech selectedWordPOS = PartOfSpeech.unknownPOS();
 
   TextSettingsComponent(this.appService, this.textAnalysisService,
       this.userAccountService);
@@ -58,11 +59,11 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
     this.wordPOSSelected(wordPOSList()[0]);
   }
 
-  List<WordPOS> wordPOSList() {
-    return selectedConfiguration().wordPosList;
+  List<PartOfSpeech> wordPOSList() {
+    return PartOfSpeech.list();
   }
 
-  void wordPOSSelected(WordPOS wordPOS) {
+  void wordPOSSelected(PartOfSpeech wordPOS) {
     this.selectedWordPOS = wordPOS;
 
     for(Option o in wordPOSAnnotationOptions) {
@@ -70,13 +71,13 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
     }
 
     switch(selectedWordPOS.policy) {
-      case WordPOSPolicy.Annotate:
+      case POSPolicy.Annotate:
         wordPOSAnnotationOptions[0].selected = true;
         break;
-      case WordPOSPolicy.Unstressed:
+      case POSPolicy.Unstressed:
         wordPOSAnnotationOptions[1].selected = true;
         break;
-      case WordPOSPolicy.Ignore:
+      case POSPolicy.Ignore:
         wordPOSAnnotationOptions[2].selected = true;
         break;
     }
@@ -181,13 +182,13 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
       if(o.selected) {
         switch(o.label) {
           case "Annotieren":
-            selectedWordPOS.policy = WordPOSPolicy.Annotate;
+            selectedWordPOS.policy = POSPolicy.Annotate;
             break;
           case "Unbetont":
-            selectedWordPOS.policy = WordPOSPolicy.Unstressed;
+            selectedWordPOS.policy = POSPolicy.Unstressed;
             break;
           case "Ignorieren":
-            selectedWordPOS.policy = WordPOSPolicy.Ignore;
+            selectedWordPOS.policy = POSPolicy.Ignore;
             break;
         }
       }

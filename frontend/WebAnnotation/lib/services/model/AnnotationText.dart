@@ -1,4 +1,4 @@
-import 'package:WebAnnotation/services/model/TextConfiguration.dart';
+import 'package:WebAnnotation/services/model/PartOfSpeech.dart';
 import 'package:WebAnnotation/services/model/Word.dart';
 
 class AnnotationText {
@@ -12,7 +12,7 @@ class AnnotationText {
 
   Word nextMissingWord() {
     for(Word w in this.words) {
-      if(w.type == WordType.NotFound) {
+      if(w.state == WordState.NotFound) {
         return w;
       }
     }
@@ -25,7 +25,7 @@ class AnnotationText {
       if(w.text == word) {
         w.parseHyphenationUsingOriginalText(hyphenation);
         w.parseStressPattern(stressPattern);
-        w.type = WordType.Annotated;
+        w.state = WordState.Annotated;
       }
     }
   }
@@ -34,7 +34,7 @@ class AnnotationText {
     int n = 0;
 
     for(Word w in this.words) {
-      if(w.type == WordType.NotFound) {
+      if(w.state == WordState.NotFound) {
         n++;
       }
     }
@@ -46,7 +46,7 @@ class AnnotationText {
     Word previous;
 
     for(Word w in this.words) {
-      if(w.type == WordType.NotFound) {
+      if(w.state == WordState.NotFound) {
         if(w == word) {
           return previous;
         }
@@ -62,7 +62,7 @@ class AnnotationText {
     bool found = false;
 
     for(Word w in this.words) {
-      if(w.type == WordType.NotFound) {
+      if(w.state == WordState.NotFound) {
         if(found) {
           return w;
         }
@@ -92,18 +92,18 @@ class AnnotationText {
     }
   }
 
-  void updatePOS(WordPOS pos) {
+  void updatePOS(PartOfSpeech pos) {
     for (Word w in words) {
-      if(pos.posTagMatches(w.partOfSpeech)) {
+      if(w.partOfSpeech == pos) {
         switch(pos.policy) {
-          case WordPOSPolicy.Annotate:
-            w.type = WordType.Annotated;
+          case POSPolicy.Annotate:
+            w.state = WordState.Annotated;
             break;
-          case WordPOSPolicy.Ignore:
-            w.type = WordType.Ignored;
+          case POSPolicy.Ignore:
+            w.state = WordState.Ignored;
             break;
-          case WordPOSPolicy.Unstressed:
-            w.type = WordType.Unstressed;
+          case POSPolicy.Unstressed:
+            w.state = WordState.Unstressed;
             break;
         }
       }

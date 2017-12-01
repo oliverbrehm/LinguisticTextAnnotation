@@ -1,4 +1,6 @@
-enum WordType {
+import 'package:WebAnnotation/services/model/PartOfSpeech.dart';
+
+enum WordState {
   Ignored,
   Annotated,
   Unstressed,
@@ -18,47 +20,14 @@ class Word {
   // syllables in cleartext, containing umlaut and upper case letters
   List<Syllable> syllables = [];
 
-  WordType type = WordType.Ignored;
+  WordState state = WordState.Ignored;
 
-  String partOfSpeech = "";
+  PartOfSpeech partOfSpeech = PartOfSpeech.unknownPOS();
   String lemma = "";
 
   bool editing = false;
 
   Word(this.text);
-
-  String getCssPosClass() {
-    switch(partOfSpeech) {
-      case "NOUN":
-        return "pos-noun";
-      case "PROPN":
-        return "pos-propn";
-      case "VERB":
-        return "pos-verb";
-      case "AUX":
-        return "pos-aux";
-      case "ADJ":
-        return "pos-adj";
-      case "ADV":
-        return "pos-adv";
-      case "ADP":
-        return "pos-adp";
-      case "DET":
-        return "pos-det";
-      case "PRON":
-        return "pos-pron";
-      case "CONJ":
-        return "pos-conj";
-      case "SCONJ":
-        return "pos-conj";
-      case "PART":
-        return "pos-part";
-      case "NUM":
-        return "pos-num";
-      default:
-        return "";
-    }
-  }
 
   Map<String, bool> cssClasses = {};
 
@@ -68,24 +37,24 @@ class Word {
       'popup': !isNotFound(),
       'unstressed': isIgnored(),
       'notFound': isNotFound(),
-      getCssPosClass(): true
+      partOfSpeech.cssClassName: true
     };
   }
 
   bool isIgnored() {
-    return this.type == WordType.Ignored;
+    return this.state == WordState.Ignored;
   }
 
   bool isAnnotated() {
-    return this.type == WordType.Annotated;
+    return this.state == WordState.Annotated;
   }
 
   bool isUnstressed() {
-    return this.type == WordType.Unstressed;
+    return this.state == WordState.Unstressed;
   }
 
   bool isNotFound() {
-    return this.type == WordType.NotFound;
+    return this.state == WordState.NotFound;
   }
 
   void addSyllable(String text, bool stressed) {
@@ -133,14 +102,10 @@ class Word {
           .replaceAll("oe", "ö")
           .replaceAll("ue", "ü");
 
-      print("lookupSyllable: " + lookupSyllable);
-
       String syllable = remaining; // default
       if(remaining.length >= lookupSyllable.length) {
         syllable = remaining.substring(0, lookupSyllable.length);
       }
-
-      print("syllable: " + syllable);
 
       if (syllable.toLowerCase() != lookupSyllable) {
         // this should match, but if it does not, use lookup as fallback
@@ -153,8 +118,6 @@ class Word {
         remaining = "";
       }
 
-      print("remaining: " + remaining);
-
       if(syllable.length > 0) {
         this.addSyllable(syllable, false);
       }
@@ -164,7 +127,6 @@ class Word {
   }
 
   bool parseHyphenation(String hyphenation) {
-    print("parseHyphenation");
     this.syllables = [];
 
     List<String> syllables = hyphenation.split("-");

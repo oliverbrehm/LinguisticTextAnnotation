@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:WebAnnotation/services/model/PartOfSpeech.dart';
 import 'package:angular/core.dart';
 
 import 'dart:html';
@@ -56,23 +57,23 @@ class TextAnalysisService {
         w.parseStressPattern("0");
 
         switch(entry['type']) {
-          case 'ignored': w.type = WordType.Ignored; break;
-          case 'not_found': w.type = WordType.NotFound; break;
+          case 'ignored': w.state = WordState.Ignored; break;
+          case 'not_found': w.state = WordState.NotFound; break;
           case 'annotated_word':
             var annotation = entry['annotation'];
             if(w.parseHyphenationUsingOriginalText(annotation['hyphenation'])
                 && w.parseStressPattern(annotation['stress_pattern'])) {
-              w.type = WordType.Annotated;
+              w.state = WordState.Annotated;
             } else {
-              w.type = WordType.NotFound;
+              w.state = WordState.NotFound;
             }
             break;
           default:
-             w.type = WordType.Ignored; break;
+             w.state = WordState.Ignored; break;
         }
 
         if(entry.containsKey("pos")) {
-          w.partOfSpeech = entry['pos'];
+          w.partOfSpeech = PartOfSpeech.withTag(entry['pos']);
         }
 
         if(entry.containsKey("lemma")) {
@@ -99,7 +100,7 @@ class TextAnalysisService {
     annotatedText = null;
   }
 
-  void updatePOS(WordPOS pos) {
+  void updatePOS(PartOfSpeech pos) {
     annotatedText.updatePOS(pos);
   }
 

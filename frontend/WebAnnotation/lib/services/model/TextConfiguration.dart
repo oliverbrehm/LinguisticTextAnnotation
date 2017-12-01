@@ -4,52 +4,6 @@ import 'dart:convert';
 
 import 'package:WebAnnotation/app_service.dart';
 
-enum WordPOSPolicy {
-  Annotate,
-  Unstressed,
-  Ignore
-}
-
-class WordPOS {
-  String name;
-  String cssClassName;
-  String color;
-  WordPOSPolicy policy;
-
-  bool posTagMatches(String posTag) {
-    switch(name) {
-      case 'Nomen':
-        return posTag == 'NOUN';
-      case 'Eigenname':
-        return posTag == 'PROPN';
-      case 'Verb':
-        return posTag == 'VERB';
-      case 'Hilfsverb':
-        return posTag == 'AUX';
-      case 'Adjektiv':
-        return posTag == 'ADJ';
-      case 'Adverb':
-        return posTag == 'ADV';
-      case 'Artikel':
-        return posTag == 'DET';
-      case 'Adposition':
-        return posTag == 'ADP';
-      case 'Pronomen':
-        return posTag == 'PRON';
-      case 'Konjunktion':
-        return posTag == 'CONJ' || posTag == 'SCONJ';
-      case 'Zahl':
-        return posTag == 'NUM';
-      case 'Partikel':
-        return posTag == 'PART';
-      default:
-        return false;
-    }
-  }
-
-  WordPOS(this.name, this.cssClassName, this.color, this.policy);
-}
-
 class TextConfiguration {
   int id;
 
@@ -67,21 +21,6 @@ class TextConfiguration {
   bool use_background;
   bool highlight_foreground;
   bool stressed_bold;
-
-  List<WordPOS> wordPosList = [
-    new WordPOS("Nomen", "pos-noun" , "#000000", WordPOSPolicy.Annotate),
-    new WordPOS("Eigenname", "pos-propn", "#000000", WordPOSPolicy.Annotate),
-    new WordPOS("Verb", "pos-verb", "#000000", WordPOSPolicy.Annotate),
-    new WordPOS("Hilfsverb", "pos-aux", "#000000", WordPOSPolicy.Annotate),
-    new WordPOS("Adjektiv", "pos-adj", "#000000", WordPOSPolicy.Annotate),
-    new WordPOS("Adverb", "pos-adv", "#000000", WordPOSPolicy.Annotate),
-    new WordPOS("Artikel", "pos-det", "#000000", WordPOSPolicy.Annotate),
-    new WordPOS("Adposition", "pos-adp", "#000000", WordPOSPolicy.Annotate),
-    new WordPOS("Pronomen", "pos-pron", "#000000", WordPOSPolicy.Annotate),
-    new WordPOS("Konjunktion", "pos-conj", "#000000", WordPOSPolicy.Annotate),
-    new WordPOS("Zahl", "pos-num", "#000000", WordPOSPolicy.Annotate),
-    new WordPOS("Partikel", "pos-part", "#000000", WordPOSPolicy.Annotate),
-  ];
 
   TextConfiguration(this.id, this.name, this.stressed_color, this.unstressed_color,
       this.word_background, this.font_size, this.line_height, this.word_distance,

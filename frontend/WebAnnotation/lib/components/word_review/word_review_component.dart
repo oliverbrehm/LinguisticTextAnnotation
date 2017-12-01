@@ -133,7 +133,7 @@ class WordReviewComponent implements OnInit {
 
   void ignoreClicked() {
     segmentationSelection.reset();
-    this.word.type = WordType.Ignored;
+    this.word.state = WordState.Ignored;
     gotoNextWord();
   }
 

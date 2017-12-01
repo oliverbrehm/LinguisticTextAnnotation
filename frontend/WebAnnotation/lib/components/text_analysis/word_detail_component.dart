@@ -47,9 +47,9 @@ class WordDetailComponent implements OnInit {
 
   void toggleAnnotated() {
     if(isAnnotatedToggleChecked) {
-      word.type = WordType.Annotated;
+      word.state = WordState.Annotated;
     } else {
-      word.type = WordType.Ignored;
+      word.state = WordState.Ignored;
     }
 
     textAnalysisService.applyCurrentConfiguration();
