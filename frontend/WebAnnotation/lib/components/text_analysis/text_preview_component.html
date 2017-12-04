@@ -1,27 +1,14 @@
 <div class="bordered textPreview">
     <h2>Vorschau</h2>
 
-    <div id="annotationText" class="annotationText" [style.letter-spacing]="letterSpacing()">
+    <div id="annotationText" class="annotationText" [ngStyle]="annotatedText().styles">
         <span *ngFor="let word of annotatedText().words">
-            <span *ngIf="word.isAnnotated()" [ngClass]="word.cssClasses">
-                <span *ngFor="let syllable of word.syllables"class="syllable" (click)="editWord(word)">
-                    <span *ngIf="syllable.stressed" class="stressed">{{syllable.text}}</span>
-                    <span *ngIf="!syllable.stressed" class="unstressed">{{syllable.text}}</span>
+            <span *ngIf="word.isEditable()" [ngClass]="word.cssClasses" [ngStyle]="word.styles">
+                <span *ngFor="let syllable of word.syllables"
+                      class="syllable" (click)="editWord(word)" [ngStyle]="syllable.styles">
+                    {{syllable.text}}
                 </span>
 
-                <word-detail *ngIf="word.editing" class="popup-content" [word]="word"></word-detail>
-            </span>
-
-            <span *ngIf="word.isUnstressed()" [ngClass]="word.cssClasses">
-                <span *ngFor="let syllable of word.syllables"class="syllable" (click)="editWord(word)">
-                    <span class="unstressed">{{syllable.text}}</span>
-                </span>
-
-                <word-detail *ngIf="word.editing" class="popup-content" [word]="word"></word-detail>
-            </span>
-
-            <span *ngIf="word.isIgnored()" [ngClass]="word.cssClasses">
-                <span (click)="editWord(word)">{{word.text}}</span>
                 <word-detail *ngIf="word.editing" class="popup-content" [word]="word"></word-detail>
             </span>
 

@@ -1,10 +1,24 @@
 import 'package:WebAnnotation/services/model/PartOfSpeech.dart';
+import 'package:WebAnnotation/services/model/TextConfiguration.dart';
 import 'package:WebAnnotation/services/model/Word.dart';
+import 'package:WebAnnotation/services/text_analysis_service.dart';
 
 class AnnotationText {
-  String originalText;
+  String originalText = "";
 
   List<Word> words = new List<Word>();
+
+  Map<String, String> styles = {};
+  void updateStyles(TextConfiguration c) {
+    styles = {
+      'font-size': c.font_size.toString() + "px",
+      'letter-spacing' : c.letter_spacing.toString() + "px"
+    };
+
+    for(Word word in words) {
+      word.updateStyles(c);
+    }
+  }
 
   void addWord(Word word) {
     words.add(word);
@@ -83,12 +97,6 @@ class AnnotationText {
 
     if(word != null) {
       word.editing = true;
-    }
-  }
-
-  void updateCssClasses() {
-    for(Word w in words) {
-      w.updateCssClasses();
     }
   }
 

@@ -172,19 +172,26 @@ class DictionaryService:
             lemma = token.lemma_
 
             if '\n' in word:
+                # line breaks
                 entry = self._lookup_token(word, pos, lemma, user, user_service)
                 entry['type'] = 'linebreak'
                 analyzed.append(entry)
             elif '-' in word:
                 # if double word (containing hyphen)
-                subwords = word.split('-')
-                for i in range(len(subwords)):
-                    sw = subwords[i]
+                composite_text = word.replace('-', ' ')
+                composite_tokens = self.nlp(composite_text)
 
-                    entry = self._lookup_token(sw, pos, lemma, user, user_service)
+                for i in range(len(composite_tokens)):
+                    composite_token = composite_tokens[i]
+
+                    word = composite_token.text
+                    pos = composite_token.pos_
+                    lemma = composite_token.lemma_
+
+                    entry = self._lookup_token(word, pos, lemma, user, user_service)
                     analyzed.append(entry)
 
-                    if i is not len(subwords) - 1:
+                    if i is not len(composite_tokens) - 1:
                         # in between double word, add hyphen as token
                         entry = self._hyphen_token()
                         analyzed.append(entry)

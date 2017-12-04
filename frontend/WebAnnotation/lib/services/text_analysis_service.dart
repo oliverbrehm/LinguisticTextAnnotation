@@ -106,71 +106,13 @@ class TextAnalysisService {
   }
 
   void applyCurrentConfiguration() {
-    this.annotatedText.updateCssClasses();
-
-    new Future.delayed(const Duration(microseconds: 100), () {
-      resetColors();
-
-      querySelectorAll(".word").style.fontSize =
-          selectedConfiguration.font_size.toString() + "px";
-      querySelectorAll(".word").style.marginBottom =
-          (selectedConfiguration.line_height - 1.0).toString() + "em";
-      querySelectorAll(".word").style.marginRight =
-          selectedConfiguration.word_distance.toString() + "em";
-      querySelectorAll(".syllable").style.marginRight =
-          selectedConfiguration.syllable_distance.toString() + "em";
-
-      if(selectedConfiguration.stressed_bold) {
-        querySelectorAll(".stressed").style.fontWeight = 'bold';
-      } else {
-        querySelectorAll(".stressed").style.fontWeight = 'normal';
-      }
-
-      if(selectedConfiguration.highlight_foreground) {
-        querySelectorAll(".stressed").style.color =
-            selectedConfiguration.stressed_color;
-        querySelectorAll(".unstressed").style.color =
-            selectedConfiguration.unstressed_color;
-        if(selectedConfiguration.use_background) {
-          querySelectorAll(".stressed").style.backgroundColor = selectedConfiguration.word_background;
-          querySelectorAll(".unstressed").style.backgroundColor = selectedConfiguration.word_background;
-        }
-      } else {
-        querySelectorAll(".stressed").style.backgroundColor =
-            selectedConfiguration.stressed_color;
-        querySelectorAll(".unstressed").style.backgroundColor =
-            selectedConfiguration.unstressed_color;
-      }
-
-      if(selectedConfiguration.use_background) {
-        querySelectorAll(".word").style.backgroundColor =
-            selectedConfiguration.word_background;
-      }
-
-      this.highlightPOS();
-
-      this.textUpdated();
-    });
-  }
-
-  void resetColors() {
-    querySelectorAll(".stressed").style.backgroundColor = '#FFFFFF';
-    querySelectorAll(".unstressed").style.backgroundColor = '#FFFFFF';
-    querySelectorAll(".word").style.backgroundColor = '#FFFFFF';
-
-    querySelectorAll(".stressed").style.color = '#000000';
-    querySelectorAll(".unstressed").style.color = '#000000';
+    this.annotatedText.updateStyles(selectedConfiguration);
+    this.textUpdated();
   }
 
   void textUpdated() {
     for(TextAnalysisObserver o in this.observers) {
       o.textUpdated();
     }
-  }
-
-  void highlightPOS() {
-    // TODO, example all nouns in red
-    //querySelectorAll(".pos-noun .syllable .stressed").style.color = "#FF0000";
-    //querySelectorAll(".pos-noun .syllable .unstressed").style.color = "#FF0000";
   }
 }

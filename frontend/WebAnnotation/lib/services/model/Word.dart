@@ -1,4 +1,5 @@
 import 'package:WebAnnotation/services/model/PartOfSpeech.dart';
+import 'package:WebAnnotation/services/model/TextConfiguration.dart';
 
 enum WordState {
   Ignored,
@@ -11,6 +12,26 @@ enum WordState {
 class Syllable {
   String text;
   bool stressed;
+
+  Map<String, String> styles = {};
+  void updateStyles(TextConfiguration c, bool ignored, bool unstressed, bool isLastSyllable) {
+    if(ignored) {
+      styles = {
+        'margin-right': "0",
+        'font-weight': "normal",
+        'color': c.highlight_foreground ? c.unstressed_color : "inherit",
+        'background-color': !c.highlight_foreground ? c.unstressed_color : "inherit"
+      };
+    } else {
+      String highlightColor = (!unstressed && this.stressed) ? c.stressed_color : c.unstressed_color;
+      styles = {
+        'margin-right': !isLastSyllable ? (c.syllable_distance.toString() + "em") : "0",
+        'font-weight': (!unstressed && this.stressed && c.stressed_bold) ? "bold" : "normal",
+        'color': c.highlight_foreground ? highlightColor : "inherit",
+        'background-color': !c.highlight_foreground ? highlightColor : "inherit"
+      };
+    }
+  }
 
   Syllable(this.text, this.stressed);
 }
@@ -31,8 +52,8 @@ class Word {
   Word(this.text);
 
   Map<String, bool> cssClasses = {};
-
-  void updateCssClasses() {
+  Map<String, String> styles = {};
+  void updateStyles(TextConfiguration c) {
     cssClasses =  {
       'word': true,
       'popup': !isNotFound(),
@@ -40,22 +61,40 @@ class Word {
       'notFound': isNotFound(),
       partOfSpeech.cssClassName: true
     };
+
+    styles = {
+      'margin-bottom': (c.line_height - 1.0).toString() + "em",
+      'margin-right': c.word_distance.toString() + "em",
+      'background-color': c.use_background ? c.word_background : "inherit",
+    };
+
+    for(Syllable syllable in this.syllables) {
+      bool isLastSyllable =
+        (this.syllables.indexOf(syllable) == this.syllables.length - 1);
+      syllable.updateStyles(c, this.isIgnored(), this.isUnstressed(), isLastSyllable);
+    }
+  }
+
+  bool isEditable() {
+    return this.state == WordState.Ignored
+        || this.state == WordState.Annotated
+        || this.state == WordState.Unstressed;
   }
 
   bool isIgnored() {
     return this.state == WordState.Ignored;
   }
 
-  bool isLineBreak() {
-    return this.state == WordState.LineBreak;
+  bool isUnstressed() {
+    return this.state == WordState.Unstressed;
   }
 
   bool isAnnotated() {
     return this.state == WordState.Annotated;
   }
 
-  bool isUnstressed() {
-    return this.state == WordState.Unstressed;
+  bool isLineBreak() {
+    return this.state == WordState.LineBreak;
   }
 
   bool isNotFound() {
