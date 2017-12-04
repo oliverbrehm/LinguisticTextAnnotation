@@ -2,6 +2,7 @@ import 'package:WebAnnotation/services/model/PartOfSpeech.dart';
 
 enum WordState {
   Ignored,
+  LineBreak,
   Annotated,
   Unstressed,
   NotFound,
@@ -43,6 +44,10 @@ class Word {
 
   bool isIgnored() {
     return this.state == WordState.Ignored;
+  }
+
+  bool isLineBreak() {
+    return this.state == WordState.LineBreak;
   }
 
   bool isAnnotated() {

@@ -26,6 +26,8 @@
             </span>
 
             <span *ngIf="word.isNotFound()" [ngClass]="word.cssClasses" (click)="wordReview(word)">{{word.text}}</span>
+
+            <br *ngIf="word.isLineBreak()">
         </span>
     </div>
 

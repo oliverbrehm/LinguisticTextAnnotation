@@ -58,6 +58,7 @@ class TextAnalysisService {
 
         switch(entry['type']) {
           case 'ignored': w.state = WordState.Ignored; break;
+          case 'linebreak': w.state = WordState.LineBreak; break;
           case 'not_found': w.state = WordState.NotFound; break;
           case 'annotated_word':
             var annotation = entry['annotation'];

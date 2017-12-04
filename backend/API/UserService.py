@@ -281,7 +281,6 @@ class UserService:
 
         configuration_list = []
         for c in configurations:
-            print("response:", c.use_background)
             configuration_list.append(c.json())
 
         return configuration_list

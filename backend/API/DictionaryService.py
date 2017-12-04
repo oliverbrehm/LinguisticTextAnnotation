@@ -12,7 +12,7 @@ from sqlalchemy.orm import relationship
 
 from Database import Base as Base
 
-TOKENS_TO_IGNORE = ['X', 'PUNCT', 'NUM']
+TOKENS_TO_IGNORE = ['X', 'PUNCT', 'NUM', 'SPACE']
 
 
 class Segmentation:
@@ -171,7 +171,11 @@ class DictionaryService:
             pos = token.pos_
             lemma = token.lemma_
 
-            if '-' in word:
+            if '\n' in word:
+                entry = self._lookup_token(word, pos, lemma, user, user_service)
+                entry['type'] = 'linebreak'
+                analyzed.append(entry)
+            elif '-' in word:
                 # if double word (containing hyphen)
                 subwords = word.split('-')
                 for i in range(len(subwords)):
@@ -203,9 +207,8 @@ class DictionaryService:
         # don't analyze special tokens
         if len(word) < 2 or pos in TOKENS_TO_IGNORE:
             entry['type'] = 'ignored'
-            ignore = True
 
-        if not ignore:
+        else:
             annotated = self.query_word(word, user_service, user)
             if annotated is None:
                 entry['type'] = 'not_found'
