@@ -73,7 +73,7 @@
     </div>
     <br>
 
-    Wort abstand:
+    Wortabstand:
     <div class="input-group">
         <input type="text" disabled value="{{selectedConfiguration().word_distance}}" class="form-control"/>
         <span style="padding-left: 0.5em; padding-top: 0.5em;">
@@ -90,6 +90,16 @@
                 <input type="range" min="10" max="40" [(ngModel)]="lineHeightValue"
                        (input)="lineHeightSliderMoved($event)" (change)="textAnalysisService.applyCurrentConfiguration()" class="slider" id="myRange">
     </span>
+    </div>
+    <br>
+
+    Zeichenabstand:
+    <div class="input-group">
+        <input type="text" disabled value="{{selectedConfiguration().letter_spacing}}" class="form-control"/>
+        <span style="padding-left: 0.5em; padding-top: 0.5em;">
+                <input type="range" min="0" max="16" [(ngModel)]="letterSpacingValue"
+                       (input)="letterSpacingSliderMoved($event)" class="slider">
+            </span>
     </div>
     <br>
 

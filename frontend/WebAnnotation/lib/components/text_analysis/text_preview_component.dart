@@ -48,6 +48,10 @@ class TextPreviewComponent implements OnInit {
     return textAnalysisService.annotatedText.nextMissingWord() == null;
   }
 
+  String letterSpacing() {
+    return textAnalysisService.selectedConfiguration.letter_spacing.toString() + 'px';
+  }
+
   void startWordReview() {
     // search first unknown word
     Word w = textAnalysisService.annotatedText.nextMissingWord();

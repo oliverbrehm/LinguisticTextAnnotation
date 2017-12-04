@@ -17,13 +17,14 @@ class TextConfiguration {
   double line_height;
   double syllable_distance;
   double word_distance;
+  double letter_spacing;
 
   bool use_background;
   bool highlight_foreground;
   bool stressed_bold;
 
   TextConfiguration(this.id, this.name, this.stressed_color, this.unstressed_color,
-      this.word_background, this.font_size, this.line_height, this.word_distance,
+      this.word_background, this.font_size, this.line_height, this.word_distance, this.letter_spacing,
       this.syllable_distance, this.use_background, this.highlight_foreground, this.stressed_bold);
 
   TextConfiguration.copy(TextConfiguration c) {
@@ -38,6 +39,7 @@ class TextConfiguration {
     this.line_height = c.line_height;
     this.syllable_distance = c.syllable_distance;
     this.word_distance = c.word_distance;
+    this.letter_spacing = c.letter_spacing;
 
     this.use_background = c.use_background;
     this.highlight_foreground = c.highlight_foreground;
@@ -57,6 +59,7 @@ class TextConfiguration {
       'word_distance': this.word_distance.toString(),
       'syllable_distance': this.syllable_distance.toString(),
       'font_size': this.font_size.toString(),
+      'letter_spacing': this.letter_spacing.toString(),
 
       'use_background': this.use_background.toString(),
       'highlight_foreground': this.highlight_foreground.toString(),
@@ -86,6 +89,7 @@ class TextConfiguration {
         double word_distance = c['word_distance'];
         double syllable_distance = c['syllable_distance'];
         double font_size = c['font_size'];
+        double letter_spacing = c['letter_spacing'];
 
         bool use_background = c['use_background'];
         bool highlight_foreground = c['highlight_foreground'];
@@ -93,7 +97,7 @@ class TextConfiguration {
 
         textConfigurations.add(new TextConfiguration(id, name, stressed_color,
             unstressed_color, word_background, font_size, line_height,
-            word_distance, syllable_distance, use_background,
+            word_distance, letter_spacing, syllable_distance, use_background,
             highlight_foreground, stressed_bold));
       }
 

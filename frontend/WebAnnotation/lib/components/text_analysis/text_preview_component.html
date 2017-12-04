@@ -1,7 +1,7 @@
 <div class="bordered textPreview">
     <h2>Vorschau</h2>
 
-    <div id="annotationText" class="annotationText">
+    <div id="annotationText" class="annotationText" [style.letter-spacing]="letterSpacing()">
         <span *ngFor="let word of annotatedText().words">
             <span *ngIf="word.isAnnotated()" [ngClass]="word.cssClasses">
                 <span *ngFor="let syllable of word.syllables"class="syllable" (click)="editWord(word)">

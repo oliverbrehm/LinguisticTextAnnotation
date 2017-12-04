@@ -28,7 +28,7 @@ class TextAnalysisService {
   AnnotationText annotatedText;
 
   TextConfiguration selectedConfiguration = new TextConfiguration(-1, "",
-      '#4DE8D0', '#FFEBCD', '#FFFFFF', 16.0, 1.5, 0.2, 0.4, false, false, true);
+      '#4DE8D0', '#FFEBCD', '#FFFFFF', 16.0, 1.5, 0.2, 0.4, 0.0, false, false, true);
 
   Future<bool> lookup(var userData) async {
     String url = AppService.SERVER_URL + "/query/text";

@@ -83,6 +83,7 @@ class TextConfiguration(Base):
     word_distance = sqlalchemy.Column(sqlalchemy.Float)
     syllable_distance = sqlalchemy.Column(sqlalchemy.Float)
     font_size = sqlalchemy.Column(sqlalchemy.Float)
+    letter_spacing = sqlalchemy.Column(sqlalchemy.Float)
 
     use_background = sqlalchemy.Column(sqlalchemy.Boolean)
     highlight_foreground = sqlalchemy.Column(sqlalchemy.Boolean)
@@ -104,6 +105,7 @@ class TextConfiguration(Base):
             "word_distance": self.word_distance,
             "syllable_distance": self.syllable_distance,
             "font_size": self.font_size,
+            "letter_spacing": self.letter_spacing,
 
             "use_background": self.use_background,
             "highlight_foreground": self.highlight_foreground,
@@ -212,13 +214,14 @@ class UserService:
         return True
 
     def add_configuration(self, user, name, stressed_color, unstressed_color, word_background, word_distance,
-                          syllable_distance, font_size, use_background, highlight_foreground, stressed_bold,
+                          syllable_distance, font_size, letter_spacing, use_background, highlight_foreground, stressed_bold,
                           line_height):
         configuration = TextConfiguration(user=user, name=name, stressed_color=stressed_color,
                                           unstressed_color= unstressed_color, word_background=word_background,
                                           word_distance=word_distance, syllable_distance=syllable_distance,
                                           use_background=use_background, highlight_foreground=highlight_foreground,
-                                          stressed_bold=stressed_bold, font_size=font_size, line_height=line_height)
+                                          stressed_bold=stressed_bold, font_size=font_size,
+                                          letter_spacing=letter_spacing, line_height=line_height)
         self.database.session.add(configuration)
         self.database.session.commit()
 
@@ -226,7 +229,7 @@ class UserService:
         return True
 
     def update_configuration(self, configuration_id, name, stressed_color, unstressed_color, word_background,
-                             word_distance, syllable_distance, font_size, use_background, highlight_foreground,
+                             word_distance, syllable_distance, font_size, letter_spacing, use_background, highlight_foreground,
                              stressed_bold, line_height):
         n_id = int(configuration_id)
 
@@ -245,6 +248,7 @@ class UserService:
         configuration.word_distance = word_distance
         configuration.syllable_distance = syllable_distance
         configuration.font_size = font_size
+        configuration.letter_spacing = letter_spacing
 
         configuration.use_background = use_background
         configuration.highlight_foreground = highlight_foreground

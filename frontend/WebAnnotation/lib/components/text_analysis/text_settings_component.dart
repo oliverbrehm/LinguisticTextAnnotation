@@ -31,6 +31,7 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
   String syllableDistanceValue = "3"; // divided by 10
   String wordDistanceValue = "7"; // divided by 10
   String fontSizeValue = "14"; // not divided
+  String letterSpacingValue = "0"; // not divided 0 to 32
 
   final SelectionModel foregroundSelectionModel = new SelectionModel.withList();
   List<Option> foregroundOptions = [
@@ -100,6 +101,8 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
         (selectedConfiguration().syllable_distance * 10).toInt().toString();
     wordDistanceValue =
         (selectedConfiguration().word_distance * 10).toInt().toString();
+    letterSpacingValue =
+        selectedConfiguration().letter_spacing.toInt().toString();
 
     foregroundOptions[0].selected = selectedConfiguration().highlight_foreground;
     foregroundOptions[1].selected = !selectedConfiguration().highlight_foreground;
@@ -164,12 +167,12 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
 
   void fontSizeSliderMoved(event) {
     var value = event.target.value;
-    double lh = double.parse(value, (error) {
+    double fs = double.parse(value, (error) {
       print(error);
       return;
     });
 
-    selectedConfiguration().font_size = lh;
+    selectedConfiguration().font_size = fs;
   }
 
   void radioSyllableColorChanged() {
@@ -210,22 +213,32 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
 
   void syllableDistanceSliderMoved(event) {
     var value = event.target.value;
-    double lh = double.parse(value, (error) {
+    double sd = double.parse(value, (error) {
       print(error);
       return;
     });
 
-    selectedConfiguration().syllable_distance = lh / 10.0;
+    selectedConfiguration().syllable_distance = sd / 10.0;
   }
 
   void wordDistanceSliderMoved(event) {
     var value = event.target.value;
-    double lh = double.parse(value, (error) {
+    double wd = double.parse(value, (error) {
       print(error);
       return;
     });
 
-    selectedConfiguration().word_distance = lh / 10.0;
+    selectedConfiguration().word_distance = wd / 10.0;
+  }
+
+  void letterSpacingSliderMoved(event) {
+    var value = event.target.value;
+    double ls = double.parse(value, (error) {
+      print(error);
+      return;
+    });
+
+    selectedConfiguration().letter_spacing = ls;
   }
 
   @override
