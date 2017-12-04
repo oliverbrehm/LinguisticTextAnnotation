@@ -7,22 +7,22 @@
                      (click)="textAnalysisService.applyCurrentConfiguration()">
     </material-toggle>
 
-    <div class="input-group">
-        <input type="text" disabled value="{{selectedConfiguration().stressed_color}}" class="form-control" />
-        <span class="form-control">
-                <input #inputColorStressed type="color" [(ngModel)]="selectedConfiguration().stressed_color"
-                       (input)="textAnalysisService.applyCurrentConfiguration()" class="color-input">
-            </span>
+    <div class="colorPickerField" (click)="openColorPicker('inputColorStressed')"
+         [style.background-color]="selectedConfiguration().stressed_color">
+        {{selectedConfiguration().stressed_color.toUpperCase()}}
+        <input id="inputColorStressed" type="color" class="colorPickerInput" tabindex=-1
+               [(ngModel)]="selectedConfiguration().stressed_color"
+               (input)="textAnalysisService.applyCurrentConfiguration()">
     </div>
     <br>
 
     Unbetonte Silbe:
-    <div class="input-group">
-        <input type="text" disabled value="{{selectedConfiguration().unstressed_color}}" class="form-control" />
-        <span class="form-control">
-            <input #inputColorUnstressed type="color" [(ngModel)]="selectedConfiguration().unstressed_color"
-                       (input)="textAnalysisService.applyCurrentConfiguration()" class="color-input">
-        </span>
+    <div class="colorPickerField" (click)="openColorPicker('inputColorUnstressed')"
+         [style.background-color]="selectedConfiguration().unstressed_color">
+        {{selectedConfiguration().unstressed_color.toUpperCase()}}
+        <input id="inputColorUnstressed" type="color" class="colorPickerInput" tabindex=-1
+               [(ngModel)]="selectedConfiguration().unstressed_color"
+               (input)="textAnalysisService.applyCurrentConfiguration()">
     </div>
     <br>
 
@@ -32,12 +32,13 @@
                      (click)="textAnalysisService.applyCurrentConfiguration()">
     </material-toggle>
     <br>
-    <div *ngIf="selectedConfiguration().use_background" class="input-group">
-        <input type="text" disabled value="{{selectedConfiguration().word_background}}" class="form-control" />
-        <span class="form-control">
-                <input #inputColorWordBackground type="color" [(ngModel)]="selectedConfiguration().word_background"
-                       (input)="textAnalysisService.applyCurrentConfiguration()" class="color-input">
-            </span>
+    <div *ngIf="selectedConfiguration().use_background" class="colorPickerField"
+         (click)="openColorPicker('inputColorWordBackground')"
+         [style.background-color]="selectedConfiguration().word_background">
+        {{selectedConfiguration().word_background.toUpperCase()}}
+        <input id="inputColorWordBackground" type="color" class="colorPickerInput" tabindex=-1
+               [(ngModel)]="selectedConfiguration().word_background"
+               (input)="textAnalysisService.applyCurrentConfiguration()">
     </div>
     <br>
 

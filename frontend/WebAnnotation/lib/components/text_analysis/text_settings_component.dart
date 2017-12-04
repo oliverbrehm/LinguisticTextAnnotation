@@ -3,6 +3,7 @@ import 'package:WebAnnotation/model/Common.dart';
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
+import 'dart:html';
 
 import 'package:WebAnnotation/app_service.dart';
 import 'package:WebAnnotation/services/text_analysis_service.dart';
@@ -46,7 +47,6 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
     new Option("Ignorieren", false, false)
   ];
 
-
   PartOfSpeech selectedWordPOS = PartOfSpeech.unknownPOS();
 
   TextSettingsComponent(this.appService, this.textAnalysisService,
@@ -62,6 +62,13 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
 
   List<PartOfSpeech> wordPOSList() {
     return PartOfSpeech.list();
+  }
+
+  void openColorPicker(String inputId) {
+    print('opening ' + inputId);
+    var inputElement = querySelector('#' + inputId);
+    inputElement.focus();
+    inputElement.click();
   }
 
   void wordPOSSelected(PartOfSpeech wordPOS) {

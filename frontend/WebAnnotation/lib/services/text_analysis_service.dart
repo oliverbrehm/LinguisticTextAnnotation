@@ -107,8 +107,10 @@ class TextAnalysisService {
   }
 
   void applyCurrentConfiguration() {
-    this.annotatedText.updateStyles(selectedConfiguration);
-    this.textUpdated();
+    new Future.delayed(const Duration(microseconds: 10), () {
+      this.annotatedText.updateStyles(selectedConfiguration);
+      this.textUpdated();
+    });
   }
 
   void textUpdated() {
