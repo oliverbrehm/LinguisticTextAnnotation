@@ -1,6 +1,6 @@
-import 'package:WebAnnotation/services/model/PartOfSpeech.dart';
-import 'package:WebAnnotation/services/model/TextConfiguration.dart';
-import 'package:WebAnnotation/services/model/Word.dart';
+import 'package:WebAnnotation/model/PartOfSpeech.dart';
+import 'package:WebAnnotation/model/TextConfiguration.dart';
+import 'package:WebAnnotation/model/Word.dart';
 import 'package:WebAnnotation/services/text_analysis_service.dart';
 
 class AnnotationText {

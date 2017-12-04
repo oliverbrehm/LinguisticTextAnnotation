@@ -1,15 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:WebAnnotation/services/model/PartOfSpeech.dart';
+import 'package:WebAnnotation/model/PartOfSpeech.dart';
+import 'package:WebAnnotation/model/Syllable.dart';
 import 'package:angular/core.dart';
 
 import 'dart:html';
 
 import 'package:WebAnnotation/app_service.dart';
-import 'package:WebAnnotation/services/model/TextConfiguration.dart';
-import 'package:WebAnnotation/services/model/Word.dart';
-import 'package:WebAnnotation/services/model/AnnotationText.dart';
+import 'package:WebAnnotation/model/TextConfiguration.dart';
+import 'package:WebAnnotation/model/Word.dart';
+import 'package:WebAnnotation/model/AnnotationText.dart';
 
 abstract class TextAnalysisObserver {
   void textUpdated();
@@ -113,6 +114,20 @@ class TextAnalysisService {
   void textUpdated() {
     for(TextAnalysisObserver o in this.observers) {
       o.textUpdated();
+    }
+  }
+
+  void applyToAllWords(Word word) {
+    for(Word w in this.annotatedText.words) {
+      if(w != word && w.text == word.text) {
+        w.syllables = [];
+
+        for(Syllable s in word.syllables) {
+          w.addSyllable(s.text, s.stressed);
+        }
+
+        w.updateStyles(this.selectedConfiguration);
+      }
     }
   }
 }

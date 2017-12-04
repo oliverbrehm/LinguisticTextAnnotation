@@ -4,14 +4,14 @@ import 'dart:convert';
 
 import 'package:WebAnnotation/app_service.dart';
 
-class UserWord {
+class UserEntry {
   int id;
 
   String text;
   String stressPattern;
   String hyphenation;
 
-  UserWord(this.id, this.text, this.stressPattern, this.hyphenation);
+  UserEntry(this.id, this.text, this.stressPattern, this.hyphenation);
 
   static Future<bool> add(String text, String hyphenation,
       String stressPattern, var credentials) async {
@@ -31,7 +31,7 @@ class UserWord {
     });
   }
 
-  static Future<List<UserWord>> query(var credentials) async {
+  static Future<List<UserEntry>> query(var credentials) async {
     String url = AppService.SERVER_URL + "/user/word/list";
 
     var data = credentials;
@@ -39,7 +39,7 @@ class UserWord {
     return HttpRequest.postFormData(url, data).then((request) {
       var words = JSON.decode(request.response)['user_words'];
 
-      List<UserWord> userWords = [];
+      List<UserEntry> userWords = [];
 
       for (var t in words) {
         int id = t['id'];
@@ -47,7 +47,7 @@ class UserWord {
         String stress_pattern = t['stress_pattern'];
         String hyphenation = t['hyphenation'];
 
-        userWords.add(new UserWord(id, text, stress_pattern, hyphenation));
+        userWords.add(new UserEntry(id, text, stress_pattern, hyphenation));
       }
 
       return userWords;

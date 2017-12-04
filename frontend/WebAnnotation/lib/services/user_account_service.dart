@@ -5,9 +5,9 @@ import 'dart:async';
 import 'dart:html';
 
 import 'package:WebAnnotation/app_service.dart';
-import 'package:WebAnnotation/services/model/TextConfiguration.dart';
-import 'package:WebAnnotation/services/model/UserText.dart';
-import 'package:WebAnnotation/services/model/UserWord.dart';
+import 'package:WebAnnotation/model/TextConfiguration.dart';
+import 'package:WebAnnotation/model/UserText.dart';
+import 'package:WebAnnotation/model/UserEntry.dart';
 
 /// service description
 @Injectable()
@@ -25,7 +25,7 @@ class UserAccountService {
   bool loggedIn = false;
 
   List<UserText> userTexts = [];
-  List<UserWord> userWords = [];
+  List<UserEntry> userWords = [];
   List<TextConfiguration> textConfigurations = [];
 
   bool queryingTexts = false;
@@ -152,7 +152,7 @@ class UserAccountService {
 
     this.queryingWords = true;
 
-    return UserWord.query(credentials()).then((wordList) {
+    return UserEntry.query(credentials()).then((wordList) {
       this.queryingWords = false;
 
       if(wordList != null) {
@@ -166,10 +166,10 @@ class UserAccountService {
 
   Future<bool> addWord(String text, String hyphenation,
       String stressPattern) async {
-    return UserWord.add(text, hyphenation, stressPattern, credentials());
+    return UserEntry.add(text, hyphenation, stressPattern, credentials());
   }
 
-  Future<bool> deleteWord(UserWord userWord) async {
+  Future<bool> deleteWord(UserEntry userWord) async {
     return userWord.delete(credentials()).then((success) {
       if(success) {
         this.userWords.remove(userWord);

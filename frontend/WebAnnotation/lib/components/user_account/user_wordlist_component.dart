@@ -6,7 +6,7 @@ import 'package:angular_forms/angular_forms.dart';
 
 import 'package:WebAnnotation/app_service.dart';
 import 'package:WebAnnotation/services/user_account_service.dart';
-import 'package:WebAnnotation/services/model/UserWord.dart';
+import 'package:WebAnnotation/model/UserEntry.dart';
 
 @Component(
     selector: 'user-wordlist',
@@ -36,11 +36,11 @@ class UserWordlistComponent implements OnInit {
     }
   }
 
-  List<UserWord> userWords() {
+  List<UserEntry> userWords() {
     return userAccountService.userWords;
   }
 
-  void deleteUserWord(UserWord userWord) {
+  void deleteUserWord(UserEntry userWord) {
     userAccountService.deleteWord(userWord).then((success) {
       if(!success) {
         appService.errorMessage("Löschen des Wortes " + userWord.text +" fehlgeschlagen.");
