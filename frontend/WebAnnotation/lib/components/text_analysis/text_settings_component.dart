@@ -47,7 +47,7 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
     new Option("Ignorieren", false, false)
   ];
 
-  PartOfSpeech selectedWordPOS = PartOfSpeech.unknownPOS();
+  PartOfSpeech selectedWordPOS = PartOfSpeechConfiguration.unknownPOS;
 
   TextSettingsComponent(this.appService, this.textAnalysisService,
       this.userAccountService);
@@ -61,7 +61,7 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
   }
 
   List<PartOfSpeech> wordPOSList() {
-    return PartOfSpeech.list();
+    return selectedConfiguration().partOfSpeechConfiguration.list();
   }
 
   void openColorPicker(String inputId) {

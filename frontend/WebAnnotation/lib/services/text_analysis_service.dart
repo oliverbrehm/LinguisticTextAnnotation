@@ -30,7 +30,7 @@ class TextAnalysisService {
 
   TextConfiguration selectedConfiguration = new TextConfiguration(-1, "",
       '#4DE8D0', '#FFEBCD', '#FFFFFF', '#F4D1A8', 16.0, 1.5, 0.2, 0.4, 0.0,
-      false, false, true, true);
+      false, false, true, true, new PartOfSpeechConfiguration());
 
   Future<bool> lookup(var userData) async {
     String url = AppService.SERVER_URL + "/query/text";
@@ -76,7 +76,7 @@ class TextAnalysisService {
         }
 
         if(entry.containsKey("pos")) {
-          w.partOfSpeech = PartOfSpeech.withTag(entry['pos']);
+          w.partOfSpeech = selectedConfiguration.partOfSpeechConfiguration.withTag(entry['pos']);
         }
 
         if(entry.containsKey("lemma")) {

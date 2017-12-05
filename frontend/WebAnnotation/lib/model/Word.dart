@@ -18,7 +18,7 @@ class Word {
 
   WordState state = WordState.Ignored;
 
-  PartOfSpeech partOfSpeech = PartOfSpeech.unknownPOS();
+  PartOfSpeech partOfSpeech = PartOfSpeechConfiguration.unknownPOS;
   String lemma = "";
 
   bool editing = false;
@@ -33,7 +33,7 @@ class Word {
       'popup': !isNotFound(),
       'unstressed': isIgnored(),
       'notFound': isNotFound(),
-      partOfSpeech.cssClassName: true
+      partOfSpeech.posId: true
     };
 
     styles = {

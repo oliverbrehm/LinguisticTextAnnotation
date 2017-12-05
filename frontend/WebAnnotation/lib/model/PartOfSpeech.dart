@@ -6,46 +6,95 @@ enum POSPolicy {
 
 class PartOfSpeech {
   String name;
-  String cssClassName;
-  String color;
+  String posId;
 
   List<String> posTags;
 
   POSPolicy policy;
 
-  static PartOfSpeech withTag(String posTag) {
-    for(PartOfSpeech pos in _availablePOS) {
+  PartOfSpeech(this.name, this.posId, this.posTags, this.policy);
+
+  json() {
+    String policy = "";
+    switch(this.policy) {
+      case POSPolicy.Annotate:
+        policy = 'annotate';
+        break;
+      case POSPolicy.Unstressed:
+        policy = 'unstressed';
+        break;
+      case POSPolicy.Ignore:
+        policy = 'ignore';
+        break;
+    }
+
+    return  {
+      'posId': this.posId,
+      'policy': policy
+    };
+  }
+}
+
+class PartOfSpeechConfiguration {
+  List<PartOfSpeech> _posItems = [
+    new PartOfSpeech("Nomen", "pos-noun", ["NOUN"],POSPolicy.Annotate),
+    new PartOfSpeech("Eigenname", "pos-propn", ["PROPN"], POSPolicy.Annotate),
+    new PartOfSpeech("Verb", "pos-verb", ["VERB"], POSPolicy.Annotate),
+    new PartOfSpeech("Hilfsverb", "pos-aux", ["AUX"], POSPolicy.Annotate),
+    new PartOfSpeech("Adjektiv", "pos-adj", ["ADJ"], POSPolicy.Annotate),
+    new PartOfSpeech("Adverb", "pos-adv", ["ADV"], POSPolicy.Annotate),
+    new PartOfSpeech("Artikel", "pos-det", ["DET"], POSPolicy.Annotate),
+    new PartOfSpeech("Adposition", "pos-adp", ["ADP"], POSPolicy.Annotate),
+    new PartOfSpeech("Pronomen", "pos-pron", ["PRON"], POSPolicy.Annotate),
+    new PartOfSpeech("Konjunktion", "pos-conj", ["CONJ", "SCONJ"], POSPolicy.Annotate),
+    new PartOfSpeech("Zahl", "pos-num", ["NUM"], POSPolicy.Annotate),
+    new PartOfSpeech("Partikel", "pos-part", ["PART"], POSPolicy.Annotate),
+    unknownPOS
+  ];
+
+  PartOfSpeech withTag(String posTag) {
+    for(PartOfSpeech pos in _posItems) {
       if(pos.posTags.contains(posTag)) {
         return pos;
       }
     }
 
-    return unknownPOS();
+    return unknownPOS;
   }
 
-  static PartOfSpeech unknownPOS() {
-    return _availablePOS[0];
+  static PartOfSpeech unknownPOS = new PartOfSpeech("Unbekannt", "pos-na", [""],POSPolicy.Annotate);
+
+  void setPartOfSpeech(String posId, String policy) {
+    for(PartOfSpeech pos in this._posItems) {
+      if(pos.posId == posId) {
+        switch(policy) {
+          case 'annotate':
+            pos.policy = POSPolicy.Annotate;
+            break;
+          case 'unstressed':
+            pos.policy = POSPolicy.Unstressed;
+            break;
+          case 'ignore':
+            pos.policy = POSPolicy.Ignore;
+            break;
+          default:
+            return;
+        }
+      }
+    }
   }
 
-  PartOfSpeech(this.name, this.cssClassName, this.color, this.posTags, this.policy);
+  List<PartOfSpeech> list() {
+    return _posItems;
+  }
 
-  static List<PartOfSpeech> _availablePOS = [
-    new PartOfSpeech("Unbekannt", "pos-na" , "#000000", [""],POSPolicy.Annotate),
-    new PartOfSpeech("Nomen", "pos-noun" , "#000000", ["NOUN"],POSPolicy.Annotate),
-    new PartOfSpeech("Eigenname", "pos-propn", "#000000", ["PROPN"], POSPolicy.Annotate),
-    new PartOfSpeech("Verb", "pos-verb", "#000000", ["VERB"], POSPolicy.Annotate),
-    new PartOfSpeech("Hilfsverb", "pos-aux", "#000000", ["AUX"], POSPolicy.Annotate),
-    new PartOfSpeech("Adjektiv", "pos-adj", "#000000", ["ADJ"], POSPolicy.Annotate),
-    new PartOfSpeech("Adverb", "pos-adv", "#000000", ["ADV"], POSPolicy.Annotate),
-    new PartOfSpeech("Artikel", "pos-det", "#000000", ["DET"], POSPolicy.Annotate),
-    new PartOfSpeech("Adposition", "pos-adp", "#000000", ["ADP"], POSPolicy.Annotate),
-    new PartOfSpeech("Pronomen", "pos-pron", "#000000", ["PRON"], POSPolicy.Annotate),
-    new PartOfSpeech("Konjunktion", "pos-conj", "#000000", ["CONJ", "SCONJ"], POSPolicy.Annotate),
-    new PartOfSpeech("Zahl", "pos-num", "#000000", ["NUM"], POSPolicy.Annotate),
-    new PartOfSpeech("Partikel", "pos-part", "#000000", ["PART"], POSPolicy.Annotate),
-  ];
+  json() {
+    var ret = [];
+    for(PartOfSpeech pos in _posItems) {
+      ret.add(pos.json());
+    }
 
-  static List<PartOfSpeech> list() {
-    return _availablePOS;
+    return ret;
   }
 }
+

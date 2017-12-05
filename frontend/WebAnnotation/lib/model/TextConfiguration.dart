@@ -3,6 +3,7 @@ import 'dart:html';
 import 'dart:convert';
 
 import 'package:WebAnnotation/app_service.dart';
+import 'package:WebAnnotation/model/PartOfSpeech.dart';
 
 class TextConfiguration {
   int id;
@@ -25,9 +26,12 @@ class TextConfiguration {
   bool stressed_bold;
   bool use_alternate_color;
 
+  PartOfSpeechConfiguration partOfSpeechConfiguration;
+
   TextConfiguration(this.id, this.name, this.stressed_color, this.unstressed_color,
       this.word_background, this.alternate_color, this.font_size, this.line_height, this.word_distance, this.letter_spacing,
-      this.syllable_distance, this.use_background, this.highlight_foreground, this.stressed_bold, this.use_alternate_color);
+      this.syllable_distance, this.use_background, this.highlight_foreground,
+      this.stressed_bold, this.use_alternate_color, this.partOfSpeechConfiguration);
 
   TextConfiguration.copy(TextConfiguration c) {
     this.id = c.id;
@@ -48,9 +52,11 @@ class TextConfiguration {
     this.highlight_foreground = c.highlight_foreground;
     this.stressed_bold = c.stressed_bold;
     this.use_alternate_color = c.use_alternate_color;
+
+    this.partOfSpeechConfiguration = c.partOfSpeechConfiguration;
   }
 
-  Map<String, String> json() {
+  json() {
     return {
       'id': this.id.toString(),
       'name': this.name,
@@ -69,7 +75,9 @@ class TextConfiguration {
       'use_background': this.use_background.toString(),
       'highlight_foreground': this.highlight_foreground.toString(),
       'stressed_bold': this.stressed_bold.toString(),
-      'use_alternate_color': this.use_alternate_color.toString()
+      'use_alternate_color': this.use_alternate_color.toString(),
+
+      'part_of_speech_configuration': this.partOfSpeechConfiguration.json()
     };
   }
 
@@ -103,10 +111,20 @@ class TextConfiguration {
         bool stressed_bold = c['stressed_bold'];
         bool use_alternate_color = c['use_alternate_color'];
 
+        PartOfSpeechConfiguration partOfSpeechConfiguration = new PartOfSpeechConfiguration();
+        var posConfList = c['part_of_speech_configuration'];
+        if(posConfList != null) {
+          for(var posConf in posConfList) {
+            String posId = posConf['pos_id'];
+            String posPolicy = posConf['policy'];
+            partOfSpeechConfiguration.setPartOfSpeech(posId, posPolicy);
+          }
+        }
+
         textConfigurations.add(new TextConfiguration(id, name, stressed_color,
             unstressed_color, word_background, alternate_color, font_size, line_height,
             word_distance, letter_spacing, syllable_distance, use_background,
-            highlight_foreground, stressed_bold, use_alternate_color));
+            highlight_foreground, stressed_bold, use_alternate_color, partOfSpeechConfiguration));
       }
 
       return textConfigurations;
