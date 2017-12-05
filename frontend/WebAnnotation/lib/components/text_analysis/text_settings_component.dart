@@ -65,7 +65,6 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
   }
 
   void openColorPicker(String inputId) {
-    print('opening ' + inputId);
     var inputElement = querySelector('#' + inputId);
     inputElement.focus();
     inputElement.click();
@@ -73,22 +72,7 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
 
   void wordPOSSelected(PartOfSpeech wordPOS) {
     this.selectedWordPOS = wordPOS;
-
-    for(Option o in wordPOSAnnotationOptions) {
-      o.selected = false;
-    }
-
-    switch(selectedWordPOS.policy) {
-      case POSPolicy.Annotate:
-        wordPOSAnnotationOptions[0].selected = true;
-        break;
-      case POSPolicy.Unstressed:
-        wordPOSAnnotationOptions[1].selected = true;
-        break;
-      case POSPolicy.Ignore:
-        wordPOSAnnotationOptions[2].selected = true;
-        break;
-    }
+    this.updateConifurationUI();
   }
 
   List<TextConfiguration> textConfigurations() {
@@ -113,13 +97,31 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
 
     foregroundOptions[0].selected = selectedConfiguration().highlight_foreground;
     foregroundOptions[1].selected = !selectedConfiguration().highlight_foreground;
+
+    for(Option o in wordPOSAnnotationOptions) {
+      o.selected = false;
+    }
+
+    switch(selectedWordPOS.policy) {
+      case POSPolicy.Annotate:
+        wordPOSAnnotationOptions[0].selected = true;
+        break;
+      case POSPolicy.Unstressed:
+        wordPOSAnnotationOptions[1].selected = true;
+        break;
+      case POSPolicy.Ignore:
+        wordPOSAnnotationOptions[2].selected = true;
+        break;
+    }
   }
 
   void configurationSelected(TextConfiguration configuration) {
     newConfigurationName = configuration.name;
-    textAnalysisService.selectedConfiguration = new TextConfiguration.copy(configuration);
+    textAnalysisService.selectedConfiguration = configuration;
 
     textAnalysisService.applyCurrentConfiguration();
+
+    updateConifurationUI();
   }
 
   void saveConfiguration() {

@@ -71,7 +71,6 @@ class WordDetailComponent implements OnInit {
   }
 
   void closePopup() {
-    print('CLOSE POPUP');
     textAnalysisService.annotatedText.editWord(null);
   }
 }

@@ -73,7 +73,6 @@ class TextPreviewComponent implements OnInit {
   }
 
   void editWord(Word word) {
-    print('edit WORD');
     annotatedText().editWord(word);
   }
   

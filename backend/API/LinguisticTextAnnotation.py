@@ -180,13 +180,20 @@ def user_add_configuration():
     stressed_bold = map_boolean(request.form.get('stressed_bold'))
     use_alternate_color = map_boolean(request.form.get('use_alternate_color'))
 
+    #print(request.form.get("part_of_speech_configuration"))
+    pos_config_list = request.form.get("part_of_speech_configuration")
+    pos_config_list = json.loads(pos_config_list)
+    print(str(pos_config_list))
+
     if not name or not stressed_color or not unstressed_color or not word_background or not line_height \
-            or not word_distance or not syllable_distance or not font_size or not letter_spacing or not alternate_color:
+            or not word_distance or not syllable_distance or not font_size or not letter_spacing \
+            or not alternate_color or not pos_config_list:
         return create_error_response(400, "Data not provided.")
 
     success = userService.add_configuration(user, name, stressed_color, unstressed_color, word_background, alternate_color,
                                             word_distance, syllable_distance, font_size, letter_spacing, use_background,
-                                            highlight_foreground, stressed_bold, line_height, use_alternate_color)
+                                            highlight_foreground, stressed_bold, line_height,
+                                            use_alternate_color, pos_config_list)
 
     if not success:
         return create_error_response(404, "Error adding configuration.")
@@ -218,13 +225,17 @@ def user_update_configuration():
     stressed_bold = map_boolean(request.form.get('stressed_bold'))
     use_alternate_color = map_boolean(request.form.get('use_alternate_color'))
 
+    pos_config_list = json.loads(request.form.get("part_of_speech_configuration"))
+
     if not name or not stressed_color or not unstressed_color or not word_background or not line_height \
-            or not word_distance or not syllable_distance or not font_size or not letter_spacing or not alternate_color:
+            or not word_distance or not syllable_distance or not font_size or not letter_spacing\
+            or not alternate_color or not pos_config_list:
         return create_error_response(400, "Data not provided.")
 
     success = userService.update_configuration(configuration_id, name, stressed_color, unstressed_color,
                                                word_background, alternate_color, word_distance, syllable_distance, font_size, letter_spacing,
-                                               use_background, highlight_foreground, stressed_bold, line_height, use_alternate_color)
+                                               use_background, highlight_foreground, stressed_bold, line_height,
+                                               use_alternate_color, pos_config_list)
 
     if not success:
         return create_error_response(404, "Configuration to be updated not found.")

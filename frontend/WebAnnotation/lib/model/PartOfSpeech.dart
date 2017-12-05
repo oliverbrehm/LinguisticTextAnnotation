@@ -29,7 +29,7 @@ class PartOfSpeech {
     }
 
     return  {
-      'posId': this.posId,
+      'pos_id': this.posId,
       'policy': policy
     };
   }
@@ -64,7 +64,7 @@ class PartOfSpeechConfiguration {
 
   static PartOfSpeech unknownPOS = new PartOfSpeech("Unbekannt", "pos-na", [""],POSPolicy.Annotate);
 
-  void setPartOfSpeech(String posId, String policy) {
+  void setPartOfSpeechPolicyString(String posId, String policy) {
     for(PartOfSpeech pos in this._posItems) {
       if(pos.posId == posId) {
         switch(policy) {
@@ -84,17 +84,33 @@ class PartOfSpeechConfiguration {
     }
   }
 
+  void setPartOfSpeechPolicy(String posId, POSPolicy policy) {
+    for(PartOfSpeech pos in this._posItems) {
+      if(pos.posId == posId) {
+        pos.policy = policy;
+      }
+    }
+  }
+
   List<PartOfSpeech> list() {
     return _posItems;
   }
 
-  json() {
+  List json() {
     var ret = [];
     for(PartOfSpeech pos in _posItems) {
       ret.add(pos.json());
     }
 
     return ret;
+  }
+
+  PartOfSpeechConfiguration copy() {
+    PartOfSpeechConfiguration posConfig = new PartOfSpeechConfiguration();
+    for(PartOfSpeech pos in _posItems) {
+      posConfig.setPartOfSpeechPolicy(pos.posId, pos.policy);
+    }
+    return posConfig;
   }
 }
 

@@ -1,4 +1,5 @@
 import sqlalchemy
+from flask import json
 from sqlalchemy.orm import relationship
 
 from DictionaryService import DictionaryService
@@ -113,7 +114,25 @@ class TextConfiguration(Base):
             "use_background": self.use_background,
             "highlight_foreground": self.highlight_foreground,
             "stressed_bold": self.stressed_bold,
-            "use_alternate_color": self.use_alternate_color
+            "use_alternate_color": self.use_alternate_color,
+        }
+
+class PartOfSpeechConfiguration(Base):
+
+    __tablename__ = 'pos_config'
+
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
+
+    pos_id = sqlalchemy.Column(sqlalchemy.String(16))
+    policy = sqlalchemy.Column(sqlalchemy.String(16))
+
+    text_config_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('text_config.id'))
+    text_config = relationship(TextConfiguration)
+
+    def json(self):
+        return {
+            "pos_id": self.pos_id,
+            "policy": self.policy
         }
 
 
@@ -219,7 +238,7 @@ class UserService:
 
     def add_configuration(self, user, name, stressed_color, unstressed_color, word_background, alternate_color, word_distance,
                           syllable_distance, font_size, letter_spacing, use_background, highlight_foreground, stressed_bold,
-                          line_height, use_alternate_color):
+                          line_height, use_alternate_color, pos_config_list):
         configuration = TextConfiguration(user=user, name=name, stressed_color=stressed_color,
                                           unstressed_color= unstressed_color, word_background=word_background,
                                           word_distance=word_distance, syllable_distance=syllable_distance,
@@ -230,12 +249,22 @@ class UserService:
         self.database.session.add(configuration)
         self.database.session.commit()
 
+        for pos_config in pos_config_list:
+            pos_id = pos_config['pos_id']
+            policy = pos_config['policy']
+
+            pos = PartOfSpeechConfiguration(pos_id=pos_id, policy=policy, text_config=configuration)
+
+            self.database.session.add(pos)
+
+        self.database.session.commit()
+
         # TODO maybe return id here (also other add methods), so that frontend does not have to reload the list
         return True
 
     def update_configuration(self, configuration_id, name, stressed_color, unstressed_color, word_background, alternate_color,
                              word_distance, syllable_distance, font_size, letter_spacing, use_background, highlight_foreground,
-                             stressed_bold, line_height, use_alternate_color):
+                             stressed_bold, line_height, use_alternate_color, pos_config_list):
         n_id = int(configuration_id)
 
         configuration = self.database.session.query(TextConfiguration).filter(TextConfiguration.id == n_id).first()
@@ -262,6 +291,21 @@ class UserService:
         configuration.use_alternate_color = use_alternate_color
 
         self.database.session.commit()
+
+        try:
+            pos_config = self.database.session.query(PartOfSpeechConfiguration)\
+                .filter(PartOfSpeechConfiguration.text_config == configuration).all()
+            for pc_db in pos_config:
+                for pc_update in pos_config_list:
+                    pos_id = pc_update['pos_id']
+                    pos_policy = pc_update['policy']
+                    if pc_db.pos_id == pos_id:
+                        pc_db.policy = pos_policy
+
+            self.database.session.commit()
+        except Exception as e:
+            print("Error updating part of speech for TextConfiguration")
+            print(str(e))
 
         return True
 
@@ -292,7 +336,20 @@ class UserService:
 
         configuration_list = []
         for c in configurations:
-            configuration_list.append(c.json())
+            config = c.json()
+            pos_config_list = []
+
+            try:
+                pos_config = self.database.session.query(PartOfSpeechConfiguration) \
+                    .filter(PartOfSpeechConfiguration.text_config == c).all()
+                for pc in pos_config:
+                    pos_config_list.append(pc.json())
+            except Exception as e:
+                print("Error querying part of speech for TextConfiguration")
+                print(str(e))
+
+            config['part_of_speech_configuration'] = pos_config_list
+            configuration_list.append(config)
 
         return configuration_list
 

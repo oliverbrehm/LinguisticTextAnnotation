@@ -111,7 +111,6 @@ class Word {
   }
 
   bool parseHyphenationUsingOriginalText(String hyphenation) {
-    print("parseHyphenationUsingOriginalText");
     this.syllables = [];
 
     List<String> syllables = hyphenation.split("-");

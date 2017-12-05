@@ -32,7 +32,7 @@ class UserAccountService {
   bool queryingWords = false;
   bool queryingConfigurations = false;
 
-  Map<String, String> credentials() {
+  Map credentials() {
     return {
       'email': this.email,
       'password': this.password

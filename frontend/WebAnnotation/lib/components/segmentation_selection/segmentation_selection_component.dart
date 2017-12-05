@@ -54,7 +54,6 @@ class SegmentationSelectionComponent implements OnInit {
   void reset() {
     new Future.delayed(const Duration(microseconds: 100), () {
       if(word != null) {
-        print('word: ' + word);
         segmentationWord = new Word(word);
 
         hyphenationText = segmentationWord.text;
@@ -66,7 +65,6 @@ class SegmentationSelectionComponent implements OnInit {
   }
 
   void loadDefault() {
-    print('load default');
     if(segmentations != null && segmentations.length > 0) {
       applySegmentationProposal(segmentations.first);
     } else {
@@ -104,8 +102,6 @@ class SegmentationSelectionComponent implements OnInit {
     if(segmentationProposal == null) {
       return;
     }
-
-    print('apply proposal');
 
     segmentationWord.text = segmentationProposal.text;
     _currentHyphenation = segmentationProposal.hyphenation;

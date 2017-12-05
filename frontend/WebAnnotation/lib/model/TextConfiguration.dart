@@ -53,10 +53,12 @@ class TextConfiguration {
     this.stressed_bold = c.stressed_bold;
     this.use_alternate_color = c.use_alternate_color;
 
-    this.partOfSpeechConfiguration = c.partOfSpeechConfiguration;
+    this.partOfSpeechConfiguration = c.partOfSpeechConfiguration.copy();
   }
 
-  json() {
+  Map json(){
+    String posJson = JSON.encode(this.partOfSpeechConfiguration.json());
+
     return {
       'id': this.id.toString(),
       'name': this.name,
@@ -77,7 +79,7 @@ class TextConfiguration {
       'stressed_bold': this.stressed_bold.toString(),
       'use_alternate_color': this.use_alternate_color.toString(),
 
-      'part_of_speech_configuration': this.partOfSpeechConfiguration.json()
+      'part_of_speech_configuration': posJson
     };
   }
 
@@ -115,9 +117,10 @@ class TextConfiguration {
         var posConfList = c['part_of_speech_configuration'];
         if(posConfList != null) {
           for(var posConf in posConfList) {
+            print(posConf.toString());
             String posId = posConf['pos_id'];
             String posPolicy = posConf['policy'];
-            partOfSpeechConfiguration.setPartOfSpeech(posId, posPolicy);
+            partOfSpeechConfiguration.setPartOfSpeechPolicyString(posId, posPolicy);
           }
         }
 
