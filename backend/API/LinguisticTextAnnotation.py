@@ -167,6 +167,7 @@ def user_add_configuration():
     stressed_color = request.form.get("stressed_color")
     unstressed_color = request.form.get("unstressed_color")
     word_background = request.form.get('word_background')
+    alternate_color = request.form.get('alternate_color')
 
     line_height = request.form.get("line_height")
     word_distance = request.form.get('word_distance')
@@ -177,14 +178,15 @@ def user_add_configuration():
     use_background = map_boolean(request.form.get('use_background'))
     highlight_foreground = map_boolean(request.form.get('highlight_foreground'))
     stressed_bold = map_boolean(request.form.get('stressed_bold'))
+    use_alternate_color = map_boolean(request.form.get('use_alternate_color'))
 
     if not name or not stressed_color or not unstressed_color or not word_background or not line_height \
-            or not word_distance or not syllable_distance or not font_size or not letter_spacing:
+            or not word_distance or not syllable_distance or not font_size or not letter_spacing or not alternate_color:
         return create_error_response(400, "Data not provided.")
 
-    success = userService.add_configuration(user, name, stressed_color, unstressed_color, word_background,
+    success = userService.add_configuration(user, name, stressed_color, unstressed_color, word_background, alternate_color,
                                             word_distance, syllable_distance, font_size, letter_spacing, use_background,
-                                            highlight_foreground, stressed_bold, line_height)
+                                            highlight_foreground, stressed_bold, line_height, use_alternate_color)
 
     if not success:
         return create_error_response(404, "Error adding configuration.")
@@ -203,6 +205,7 @@ def user_update_configuration():
     stressed_color = request.form.get("stressed_color")
     unstressed_color = request.form.get("unstressed_color")
     word_background = request.form.get('word_background')
+    alternate_color = request.form.get('alternate_color')
 
     line_height = request.form.get("line_height")
     word_distance = request.form.get('word_distance')
@@ -213,14 +216,15 @@ def user_update_configuration():
     use_background = map_boolean(request.form.get('use_background'))
     highlight_foreground = map_boolean(request.form.get('highlight_foreground'))
     stressed_bold = map_boolean(request.form.get('stressed_bold'))
+    use_alternate_color = map_boolean(request.form.get('use_alternate_color'))
 
     if not name or not stressed_color or not unstressed_color or not word_background or not line_height \
-            or not word_distance or not syllable_distance or not font_size or not letter_spacing:
+            or not word_distance or not syllable_distance or not font_size or not letter_spacing or not alternate_color:
         return create_error_response(400, "Data not provided.")
 
     success = userService.update_configuration(configuration_id, name, stressed_color, unstressed_color,
-                                               word_background, word_distance, syllable_distance, font_size, letter_spacing,
-                                               use_background, highlight_foreground, stressed_bold, line_height)
+                                               word_background, alternate_color, word_distance, syllable_distance, font_size, letter_spacing,
+                                               use_background, highlight_foreground, stressed_bold, line_height, use_alternate_color)
 
     if not success:
         return create_error_response(404, "Configuration to be updated not found.")

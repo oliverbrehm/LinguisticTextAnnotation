@@ -12,6 +12,7 @@ class TextConfiguration {
   String stressed_color;
   String unstressed_color;
   String word_background;
+  String alternate_color;
 
   double font_size;
   double line_height;
@@ -22,10 +23,11 @@ class TextConfiguration {
   bool use_background;
   bool highlight_foreground;
   bool stressed_bold;
+  bool use_alternate_color;
 
   TextConfiguration(this.id, this.name, this.stressed_color, this.unstressed_color,
-      this.word_background, this.font_size, this.line_height, this.word_distance, this.letter_spacing,
-      this.syllable_distance, this.use_background, this.highlight_foreground, this.stressed_bold);
+      this.word_background, this.alternate_color, this.font_size, this.line_height, this.word_distance, this.letter_spacing,
+      this.syllable_distance, this.use_background, this.highlight_foreground, this.stressed_bold, this.use_alternate_color);
 
   TextConfiguration.copy(TextConfiguration c) {
     this.id = c.id;
@@ -34,6 +36,7 @@ class TextConfiguration {
     this.stressed_color = c.stressed_color;
     this.unstressed_color = c.unstressed_color;
     this.word_background = c.word_background;
+    this.alternate_color = c.alternate_color;
 
     this.font_size = c.font_size;
     this.line_height = c.line_height;
@@ -44,6 +47,7 @@ class TextConfiguration {
     this.use_background = c.use_background;
     this.highlight_foreground = c.highlight_foreground;
     this.stressed_bold = c.stressed_bold;
+    this.use_alternate_color = c.use_alternate_color;
   }
 
   Map<String, String> json() {
@@ -54,6 +58,7 @@ class TextConfiguration {
       'stressed_color': this.stressed_color,
       'unstressed_color': this.unstressed_color,
       'word_background': this.word_background,
+      'alternate_color': this.alternate_color,
 
       'line_height': this.line_height.toString(),
       'word_distance': this.word_distance.toString(),
@@ -63,7 +68,8 @@ class TextConfiguration {
 
       'use_background': this.use_background.toString(),
       'highlight_foreground': this.highlight_foreground.toString(),
-      'stressed_bold': this.stressed_bold.toString()
+      'stressed_bold': this.stressed_bold.toString(),
+      'use_alternate_color': this.use_alternate_color.toString()
     };
   }
 
@@ -84,6 +90,7 @@ class TextConfiguration {
         String stressed_color = c['stressed_color'];
         String unstressed_color = c['unstressed_color'];
         String word_background = c['word_background'];
+        String alternate_color = c['alternate_color'];
 
         double line_height = c['line_height'];
         double word_distance = c['word_distance'];
@@ -94,11 +101,12 @@ class TextConfiguration {
         bool use_background = c['use_background'];
         bool highlight_foreground = c['highlight_foreground'];
         bool stressed_bold = c['stressed_bold'];
+        bool use_alternate_color = c['use_alternate_color'];
 
         textConfigurations.add(new TextConfiguration(id, name, stressed_color,
-            unstressed_color, word_background, font_size, line_height,
+            unstressed_color, word_background, alternate_color, font_size, line_height,
             word_distance, letter_spacing, syllable_distance, use_background,
-            highlight_foreground, stressed_bold));
+            highlight_foreground, stressed_bold, use_alternate_color));
       }
 
       return textConfigurations;

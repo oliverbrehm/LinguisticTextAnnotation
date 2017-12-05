@@ -5,7 +5,7 @@ class Syllable {
   bool stressed;
 
   Map<String, String> styles = {};
-  void updateStyles(TextConfiguration c, bool ignored, bool unstressed, bool isLastSyllable) {
+  void updateStyles(TextConfiguration c, bool ignored, bool unstressed, bool isLastSyllable, bool alternate) {
     if(ignored) {
       styles = {
         'margin-right': "0",
@@ -14,7 +14,8 @@ class Syllable {
         'background-color': !c.highlight_foreground ? c.unstressed_color : "inherit"
       };
     } else {
-      String highlightColor = (!unstressed && this.stressed) ? c.stressed_color : c.unstressed_color;
+      String unstressedColor = alternate ? c.alternate_color : c.unstressed_color;
+      String highlightColor = (!unstressed && this.stressed) ? c.stressed_color : unstressedColor;
       styles = {
         'margin-right': !isLastSyllable ? (c.syllable_distance.toString() + "em") : "0",
         'font-weight': (!unstressed && this.stressed && c.stressed_bold) ? "bold" : "normal",

@@ -26,6 +26,22 @@
     </div>
     <br>
 
+    2. Unbetonte Silbe:<br>
+    <material-toggle [(checked)]="selectedConfiguration().use_alternate_color"
+                     label="Aktivieren"
+                     (click)="textAnalysisService.applyCurrentConfiguration()">
+    </material-toggle>
+    <br>
+    <div *ngIf="selectedConfiguration().use_alternate_color" class="colorPickerField"
+         (click)="openColorPicker('inputColorAlternate')"
+         [style.background-color]="selectedConfiguration().alternate_color">
+        {{selectedConfiguration().alternate_color.toUpperCase()}}
+        <input id="inputColorAlternate" type="color" class="colorPickerInput" tabindex=-1
+               [(ngModel)]="selectedConfiguration().alternate_color"
+               (input)="textAnalysisService.applyCurrentConfiguration()">
+    </div>
+    <br>
+
     Wort Hintergrundfarbe:<br>
     <material-toggle [(checked)]="selectedConfiguration().use_background"
                      label="Aktivieren"
@@ -55,52 +71,57 @@
     <br><br>
 
     Schriftgröße:
-    <div class="input-group">
-        <input type="text" disabled value="{{selectedConfiguration().font_size}}" class="form-control"/>
-        <span style="padding-left: 0.5em; padding-top: 0.5em;">
-                <input type="range" min="8" max="32" [(ngModel)]="fontSizeValue"
-                       (input)="fontSizeSliderMoved($event)" (change)="textAnalysisService.applyCurrentConfiguration()" class="slider">
-            </span>
+    <div class="rangeSelection">
+        <span class="valueBox">
+            {{selectedConfiguration().font_size}}
+        </span>
+
+        <input type="range" min="8" max="32" [(ngModel)]="fontSizeValue" (input)="fontSizeSliderMoved($event)"
+               (change)="textAnalysisService.applyCurrentConfiguration()" class="slider">
     </div>
     <br>
 
     Silbenabstand:
-    <div class="input-group">
-        <input type="text" disabled value="{{selectedConfiguration().syllable_distance}}" class="form-control"/>
-        <span style="padding-left: 0.5em; padding-top: 0.5em;">
-                <input type="range" min="0" max="8" [(ngModel)]="syllableDistanceValue"
-                       (input)="syllableDistanceSliderMoved($event)" (change)="textAnalysisService.applyCurrentConfiguration()" class="slider">
-            </span>
+    <div class="rangeSelection">
+        <span class="valueBox">
+            {{selectedConfiguration().syllable_distance}}
+        </span>
+
+        <input type="range" min="0" max="8" [(ngModel)]="syllableDistanceValue" (input)="syllableDistanceSliderMoved($event)"
+               (change)="textAnalysisService.applyCurrentConfiguration()" class="slider">
     </div>
     <br>
 
     Wortabstand:
-    <div class="input-group">
-        <input type="text" disabled value="{{selectedConfiguration().word_distance}}" class="form-control"/>
-        <span style="padding-left: 0.5em; padding-top: 0.5em;">
-                <input type="range" min="2" max="20" [(ngModel)]="wordDistanceValue"
-                       (input)="wordDistanceSliderMoved($event)" (change)="textAnalysisService.applyCurrentConfiguration()" class="slider">
-            </span>
+    <div class="rangeSelection">
+        <span class="valueBox">
+            {{selectedConfiguration().word_distance}}
+        </span>
+
+        <input type="range" min="2" max="20" [(ngModel)]="wordDistanceValue" (input)="wordDistanceSliderMoved($event)"
+               (change)="textAnalysisService.applyCurrentConfiguration()" class="slider">
     </div>
     <br>
 
     Zeilenabstand:
-    <div class="input-group">
-        <input type="text" disabled value="{{selectedConfiguration().line_height}}" class="form-control"/>
-        <span style="padding-left: 0.5em; padding-top: 0.5em;">
-                <input type="range" min="10" max="40" [(ngModel)]="lineHeightValue"
-                       (input)="lineHeightSliderMoved($event)" (change)="textAnalysisService.applyCurrentConfiguration()" class="slider" id="myRange">
-    </span>
+    <div class="rangeSelection">
+        <span class="valueBox">
+            {{selectedConfiguration().line_height}}
+        </span>
+
+        <input type="range" min="10" max="40" [(ngModel)]="lineHeightValue"(input)="lineHeightSliderMoved($event)"
+               (change)="textAnalysisService.applyCurrentConfiguration()" class="slider" id="myRange">
     </div>
     <br>
 
     Zeichenabstand:
-    <div class="input-group">
-        <input type="text" disabled value="{{selectedConfiguration().letter_spacing}}" class="form-control"/>
-        <span style="padding-left: 0.5em; padding-top: 0.5em;">
-                <input type="range" min="0" max="16" [(ngModel)]="letterSpacingValue"
-                       (input)="letterSpacingSliderMoved($event)" class="slider">
-            </span>
+    <div class="rangeSelection">
+        <span class="valueBox">
+            {{selectedConfiguration().letter_spacing}}
+        </span>
+
+        <input type="range" min="0" max="16" [(ngModel)]="letterSpacingValue" (input)="letterSpacingSliderMoved($event)"
+               (change)="textAnalysisService.applyCurrentConfiguration()" class="slider">
     </div>
     <br>
 

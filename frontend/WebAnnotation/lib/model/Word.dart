@@ -42,10 +42,15 @@ class Word {
       'background-color': c.use_background ? c.word_background : "inherit",
     };
 
+    bool previousAlternated = true;
     for(Syllable syllable in this.syllables) {
       bool isLastSyllable =
         (this.syllables.indexOf(syllable) == this.syllables.length - 1);
-      syllable.updateStyles(c, this.isIgnored(), this.isUnstressed(), isLastSyllable);
+      bool alternate = (c.use_alternate_color && !syllable.stressed && !previousAlternated);
+
+      syllable.updateStyles(c, this.isIgnored(), this.isUnstressed(), isLastSyllable, alternate);
+
+      previousAlternated = (alternate || syllable.stressed);
     }
   }
 

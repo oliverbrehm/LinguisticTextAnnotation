@@ -65,7 +65,7 @@
 }
 
 .colorPickerField {
-    border: 2px solid #dddddd;
+    border: 2px solid #d3d3d3;
     border-radius: 4px;
     height: 2em;
     line-height: 2em;
@@ -85,4 +85,26 @@
     width: 1px;
     height: 1px;
     overflow: hidden;
+}
+
+.rangeSelection {
+    height: 2em;
+}
+
+.valueBox {
+    border-radius: 4px;
+    background-color: #d3d3d3;
+    height: 100%;
+    line-height: 1.8em;
+    cursor: default;
+    width: 25%;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 18px;
+    color: black;
+    display: inline-block;
+}
+
+.slider {
+    width: 70%;
 }
