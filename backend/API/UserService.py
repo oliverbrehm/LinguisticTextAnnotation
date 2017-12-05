@@ -249,9 +249,13 @@ class UserService:
         self.database.session.add(configuration)
         self.database.session.commit()
 
+        print('add pos')
+
         for pos_config in pos_config_list:
             pos_id = pos_config['pos_id']
             policy = pos_config['policy']
+
+            print('adding', pos_id, policy)
 
             pos = PartOfSpeechConfiguration(pos_id=pos_id, policy=policy, text_config=configuration)
 
@@ -292,6 +296,8 @@ class UserService:
 
         self.database.session.commit()
 
+        print('update pos')
+
         try:
             pos_config = self.database.session.query(PartOfSpeechConfiguration)\
                 .filter(PartOfSpeechConfiguration.text_config == configuration).all()
@@ -314,6 +320,10 @@ class UserService:
 
         try:
             text_config = self.database.session.query(TextConfiguration).filter(TextConfiguration.id == n_id).first()
+
+            self.database.session.query(PartOfSpeechConfiguration) \
+                .filter(PartOfSpeechConfiguration.text_config == text_config).delete()
+
             self.database.session.delete(text_config)
             self.database.session.commit()
         except Exception as e:

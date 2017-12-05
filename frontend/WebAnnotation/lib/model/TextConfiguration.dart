@@ -54,6 +54,7 @@ class TextConfiguration {
     this.use_alternate_color = c.use_alternate_color;
 
     this.partOfSpeechConfiguration = c.partOfSpeechConfiguration.copy();
+    print('copy2, ' + this.partOfSpeechConfiguration.list().toString());
   }
 
   Map json(){
@@ -115,6 +116,9 @@ class TextConfiguration {
 
         PartOfSpeechConfiguration partOfSpeechConfiguration = new PartOfSpeechConfiguration();
         var posConfList = c['part_of_speech_configuration'];
+
+        print("-----------");
+
         if(posConfList != null) {
           for(var posConf in posConfList) {
             print(posConf.toString());

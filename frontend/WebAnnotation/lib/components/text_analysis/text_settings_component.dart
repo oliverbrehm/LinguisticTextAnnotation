@@ -47,14 +47,14 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
     new Option("Ignorieren", false, false)
   ];
 
-  PartOfSpeech selectedWordPOS = PartOfSpeechConfiguration.unknownPOS;
+  PartOfSpeech selectedWordPOS = PartOfSpeechConfiguration.unknownPOS();
 
   TextSettingsComponent(this.appService, this.textAnalysisService,
       this.userAccountService);
 
   @override
   ngOnInit() {
-    updateConifurationUI();
+    updateConfigurationUI();
     textAnalysisService.addObserver(this);
 
     this.wordPOSSelected(wordPOSList()[0]);
@@ -72,7 +72,7 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
 
   void wordPOSSelected(PartOfSpeech wordPOS) {
     this.selectedWordPOS = wordPOS;
-    this.updateConifurationUI();
+    this.updateConfigurationUI();
   }
 
   List<TextConfiguration> textConfigurations() {
@@ -83,7 +83,7 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
     return textAnalysisService.selectedConfiguration;
   }
 
-  void updateConifurationUI() {
+  void updateConfigurationUI() {
     fontSizeValue =
         selectedConfiguration().font_size.toInt().toString();
     lineHeightValue =
@@ -117,11 +117,13 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
 
   void configurationSelected(TextConfiguration configuration) {
     newConfigurationName = configuration.name;
-    textAnalysisService.selectedConfiguration = configuration;
+    textAnalysisService.selectedConfiguration = new TextConfiguration.copy(configuration);
+    this.selectedWordPOS = wordPOSList()[0];
 
+    textAnalysisService.updatePOS();
     textAnalysisService.applyCurrentConfiguration();
 
-    updateConifurationUI();
+    updateConfigurationUI();
   }
 
   void saveConfiguration() {
@@ -206,7 +208,7 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
       }
     }
 
-    textAnalysisService.updatePOS(selectedWordPOS);
+    textAnalysisService.updatePOS();
     textAnalysisService.applyCurrentConfiguration();
   }
 
@@ -252,6 +254,6 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
 
   @override
   void textUpdated() {
-    updateConifurationUI();
+    updateConfigurationUI();
   }
 }

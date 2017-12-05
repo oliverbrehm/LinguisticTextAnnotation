@@ -76,7 +76,7 @@ class TextAnalysisService {
         }
 
         if(entry.containsKey("pos")) {
-          w.partOfSpeech = selectedConfiguration.partOfSpeechConfiguration.withTag(entry['pos']);
+          w.posId = selectedConfiguration.partOfSpeechConfiguration.withTag(entry['pos']).posId;
         }
 
         if(entry.containsKey("lemma")) {
@@ -103,8 +103,8 @@ class TextAnalysisService {
     annotatedText = null;
   }
 
-  void updatePOS(PartOfSpeech pos) {
-    annotatedText.updatePOS(pos);
+  void updatePOS() {
+    annotatedText.updatePOS(this.selectedConfiguration);
   }
 
   void applyCurrentConfiguration() {

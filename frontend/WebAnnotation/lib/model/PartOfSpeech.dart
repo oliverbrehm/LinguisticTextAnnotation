@@ -49,7 +49,7 @@ class PartOfSpeechConfiguration {
     new PartOfSpeech("Konjunktion", "pos-conj", ["CONJ", "SCONJ"], POSPolicy.Annotate),
     new PartOfSpeech("Zahl", "pos-num", ["NUM"], POSPolicy.Annotate),
     new PartOfSpeech("Partikel", "pos-part", ["PART"], POSPolicy.Annotate),
-    unknownPOS
+    unknownPOS()
   ];
 
   PartOfSpeech withTag(String posTag) {
@@ -59,10 +59,22 @@ class PartOfSpeechConfiguration {
       }
     }
 
-    return unknownPOS;
+    return unknownPOS();
   }
 
-  static PartOfSpeech unknownPOS = new PartOfSpeech("Unbekannt", "pos-na", [""],POSPolicy.Annotate);
+  PartOfSpeech withPosId(String posId) {
+    for(PartOfSpeech pos in _posItems) {
+      if(pos.posId == posId) {
+        return pos;
+      }
+    }
+
+    return unknownPOS();
+  }
+
+  static PartOfSpeech unknownPOS() {
+    return new PartOfSpeech("Unbekannt", "pos-na", [""], POSPolicy.Annotate);
+  }
 
   void setPartOfSpeechPolicyString(String posId, String policy) {
     for(PartOfSpeech pos in this._posItems) {

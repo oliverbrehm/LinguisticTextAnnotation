@@ -100,20 +100,19 @@ class AnnotationText {
     }
   }
 
-  void updatePOS(PartOfSpeech pos) {
+  void updatePOS(TextConfiguration c) {
     for (Word w in words) {
-      if(w.partOfSpeech == pos) {
-        switch(pos.policy) {
-          case POSPolicy.Annotate:
-            w.state = WordState.Annotated;
-            break;
-          case POSPolicy.Ignore:
-            w.state = WordState.Ignored;
-            break;
-          case POSPolicy.Unstressed:
-            w.state = WordState.Unstressed;
-            break;
-        }
+      PartOfSpeech pos = c.partOfSpeechConfiguration.withPosId(w.posId);
+      switch(pos.policy) {
+        case POSPolicy.Annotate:
+          w.state = WordState.Annotated;
+          break;
+        case POSPolicy.Ignore:
+          w.state = WordState.Ignored;
+          break;
+        case POSPolicy.Unstressed:
+          w.state = WordState.Unstressed;
+          break;
       }
     }
   }
