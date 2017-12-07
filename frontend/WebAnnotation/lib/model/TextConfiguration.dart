@@ -14,6 +14,7 @@ class TextConfiguration {
   String unstressed_color;
   String word_background;
   String alternate_color;
+  String syllable_separator;
 
   double font_size;
   double line_height;
@@ -25,13 +26,14 @@ class TextConfiguration {
   bool highlight_foreground;
   bool stressed_bold;
   bool use_alternate_color;
+  bool use_syllable_separator;
 
   PartOfSpeechConfiguration partOfSpeechConfiguration;
 
   TextConfiguration(this.id, this.name, this.stressed_color, this.unstressed_color,
-      this.word_background, this.alternate_color, this.font_size, this.line_height, this.word_distance, this.letter_spacing,
+      this.word_background, this.alternate_color, this.syllable_separator, this.font_size, this.line_height, this.word_distance, this.letter_spacing,
       this.syllable_distance, this.use_background, this.highlight_foreground,
-      this.stressed_bold, this.use_alternate_color, this.partOfSpeechConfiguration);
+      this.stressed_bold, this.use_alternate_color, this.use_syllable_separator, this.partOfSpeechConfiguration);
 
   TextConfiguration.copy(TextConfiguration c) {
     this.id = c.id;
@@ -41,6 +43,7 @@ class TextConfiguration {
     this.unstressed_color = c.unstressed_color;
     this.word_background = c.word_background;
     this.alternate_color = c.alternate_color;
+    this.syllable_separator = c.syllable_separator;
 
     this.font_size = c.font_size;
     this.line_height = c.line_height;
@@ -52,9 +55,9 @@ class TextConfiguration {
     this.highlight_foreground = c.highlight_foreground;
     this.stressed_bold = c.stressed_bold;
     this.use_alternate_color = c.use_alternate_color;
+    this.use_syllable_separator = c.use_syllable_separator;
 
     this.partOfSpeechConfiguration = c.partOfSpeechConfiguration.copy();
-    print('copy2, ' + this.partOfSpeechConfiguration.list().toString());
   }
 
   Map json(){
@@ -68,6 +71,7 @@ class TextConfiguration {
       'unstressed_color': this.unstressed_color,
       'word_background': this.word_background,
       'alternate_color': this.alternate_color,
+      'syllable_separator': this.syllable_separator,
 
       'line_height': this.line_height.toString(),
       'word_distance': this.word_distance.toString(),
@@ -79,6 +83,7 @@ class TextConfiguration {
       'highlight_foreground': this.highlight_foreground.toString(),
       'stressed_bold': this.stressed_bold.toString(),
       'use_alternate_color': this.use_alternate_color.toString(),
+      'use_syllable_separator': this.use_syllable_separator.toString(),
 
       'part_of_speech_configuration': posJson
     };
@@ -102,6 +107,7 @@ class TextConfiguration {
         String unstressed_color = c['unstressed_color'];
         String word_background = c['word_background'];
         String alternate_color = c['alternate_color'];
+        String syllable_separator = c['syllable_separator'];
 
         double line_height = c['line_height'];
         double word_distance = c['word_distance'];
@@ -113,6 +119,7 @@ class TextConfiguration {
         bool highlight_foreground = c['highlight_foreground'];
         bool stressed_bold = c['stressed_bold'];
         bool use_alternate_color = c['use_alternate_color'];
+        bool use_syllable_separator = c['use_syllable_separator'];
 
         PartOfSpeechConfiguration partOfSpeechConfiguration = new PartOfSpeechConfiguration();
         var posConfList = c['part_of_speech_configuration'];
@@ -129,9 +136,9 @@ class TextConfiguration {
         }
 
         textConfigurations.add(new TextConfiguration(id, name, stressed_color,
-            unstressed_color, word_background, alternate_color, font_size, line_height,
+            unstressed_color, word_background, alternate_color, syllable_separator, font_size, line_height,
             word_distance, letter_spacing, syllable_distance, use_background,
-            highlight_foreground, stressed_bold, use_alternate_color, partOfSpeechConfiguration));
+            highlight_foreground, stressed_bold, use_alternate_color, use_syllable_separator, partOfSpeechConfiguration));
       }
 
       return textConfigurations;

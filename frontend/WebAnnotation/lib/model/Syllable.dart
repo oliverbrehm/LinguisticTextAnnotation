@@ -3,9 +3,12 @@ import 'package:WebAnnotation/model/TextConfiguration.dart';
 class Syllable {
   String text;
   bool stressed;
+  bool isLast;
 
   Map<String, String> styles = {};
-  void updateStyles(TextConfiguration c, bool ignored, bool unstressed, bool isLastSyllable, bool alternate) {
+  Map<String, String> separatorStyles = {};
+
+  void updateStyles(TextConfiguration c, bool ignored, bool unstressed, bool alternate) {
     if(ignored) {
       styles = {
         'margin-right': "0",
@@ -17,13 +20,17 @@ class Syllable {
       String unstressedColor = alternate ? c.alternate_color : c.unstressed_color;
       String highlightColor = (!unstressed && this.stressed) ? c.stressed_color : unstressedColor;
       styles = {
-        'margin-right': !isLastSyllable ? (c.syllable_distance.toString() + "em") : "0",
+        'margin-right': !isLast ? (c.syllable_distance.toString() + "em") : "0",
         'font-weight': (!unstressed && this.stressed && c.stressed_bold) ? "bold" : "normal",
         'color': c.highlight_foreground ? highlightColor : "inherit",
         'background-color': !c.highlight_foreground ? highlightColor : "inherit"
       };
     }
+
+    separatorStyles = {
+      'margin-right': c.syllable_distance.toString() + "em"
+    };
   }
 
-  Syllable(this.text, this.stressed);
+  Syllable(this.text, this.stressed, this.isLast);
 }

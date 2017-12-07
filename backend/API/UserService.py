@@ -81,6 +81,8 @@ class TextConfiguration(Base):
     word_background = sqlalchemy.Column(sqlalchemy.String(9))
     alternate_color = sqlalchemy.Column(sqlalchemy.String(9))
 
+    syllable_separator = sqlalchemy.Column(sqlalchemy.String(1))
+
     line_height = sqlalchemy.Column(sqlalchemy.Float)
     word_distance = sqlalchemy.Column(sqlalchemy.Float)
     syllable_distance = sqlalchemy.Column(sqlalchemy.Float)
@@ -91,6 +93,7 @@ class TextConfiguration(Base):
     highlight_foreground = sqlalchemy.Column(sqlalchemy.Boolean)
     stressed_bold = sqlalchemy.Column(sqlalchemy.Boolean)
     use_alternate_color = sqlalchemy.Column(sqlalchemy.Boolean)
+    use_syllable_separator = sqlalchemy.Column(sqlalchemy.Boolean)
 
     user_email = sqlalchemy.Column(sqlalchemy.String(256), sqlalchemy.ForeignKey('user.email'))
     user = relationship(User)
@@ -104,6 +107,7 @@ class TextConfiguration(Base):
             "unstressed_color": self.unstressed_color,
             "word_background": self.word_background,
             "alternate_color": self.alternate_color,
+            "syllable_separator": self.syllable_separator,
 
             "line_height": self.line_height,
             "word_distance": self.word_distance,
@@ -115,6 +119,7 @@ class TextConfiguration(Base):
             "highlight_foreground": self.highlight_foreground,
             "stressed_bold": self.stressed_bold,
             "use_alternate_color": self.use_alternate_color,
+            "use_syllable_separator": self.use_syllable_separator
         }
 
 class PartOfSpeechConfiguration(Base):
@@ -236,16 +241,17 @@ class UserService:
 
         return True
 
-    def add_configuration(self, user, name, stressed_color, unstressed_color, word_background, alternate_color, word_distance,
+    def add_configuration(self, user, name, stressed_color, unstressed_color, word_background, alternate_color, syllable_separator, word_distance,
                           syllable_distance, font_size, letter_spacing, use_background, highlight_foreground, stressed_bold,
-                          line_height, use_alternate_color, pos_config_list):
+                          line_height, use_alternate_color, use_syllable_separator, pos_config_list):
         configuration = TextConfiguration(user=user, name=name, stressed_color=stressed_color,
                                           unstressed_color= unstressed_color, word_background=word_background,
                                           word_distance=word_distance, syllable_distance=syllable_distance,
                                           use_background=use_background, highlight_foreground=highlight_foreground,
                                           stressed_bold=stressed_bold, font_size=font_size,
                                           letter_spacing=letter_spacing, line_height=line_height,
-                                          alternate_color=alternate_color, use_alternate_color=use_alternate_color)
+                                          alternate_color=alternate_color, use_alternate_color=use_alternate_color,
+                                          syllable_separator=syllable_separator, use_syllable_separator=use_syllable_separator)
         self.database.session.add(configuration)
         self.database.session.commit()
 
@@ -266,9 +272,9 @@ class UserService:
         # TODO maybe return id here (also other add methods), so that frontend does not have to reload the list
         return True
 
-    def update_configuration(self, configuration_id, name, stressed_color, unstressed_color, word_background, alternate_color,
+    def update_configuration(self, configuration_id, name, stressed_color, unstressed_color, word_background, alternate_color, syllable_separator,
                              word_distance, syllable_distance, font_size, letter_spacing, use_background, highlight_foreground,
-                             stressed_bold, line_height, use_alternate_color, pos_config_list):
+                             stressed_bold, line_height, use_alternate_color, use_syllable_separator, pos_config_list):
         n_id = int(configuration_id)
 
         configuration = self.database.session.query(TextConfiguration).filter(TextConfiguration.id == n_id).first()
@@ -282,6 +288,7 @@ class UserService:
         configuration.unstressed_color = unstressed_color
         configuration.word_background = word_background
         configuration.alternate_color = alternate_color
+        configuration.syllable_separator = syllable_separator
 
         configuration.line_height = line_height
         configuration.word_distance = word_distance
@@ -293,6 +300,7 @@ class UserService:
         configuration.highlight_foreground = highlight_foreground
         configuration.stressed_bold = stressed_bold
         configuration.use_alternate_color = use_alternate_color
+        configuration.use_syllable_separator = use_syllable_separator
 
         self.database.session.commit()
 

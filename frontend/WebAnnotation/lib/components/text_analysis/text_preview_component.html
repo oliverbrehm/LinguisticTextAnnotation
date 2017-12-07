@@ -5,10 +5,9 @@
         <span *ngFor="let word of annotatedText().words">
             <span *ngIf="word.isEditable()" [ngClass]="word.cssClasses" [ngStyle]="word.styles">
                 <span *ngFor="let syllable of word.syllables"
-                      class="syllable" (click)="editWord(word)" [ngStyle]="syllable.styles">
-                    {{syllable.text}}
+                      class="syllable" (click)="editWord(word)">
+                    <span [ngStyle]="syllable.styles">{{syllable.text}}</span><span *ngIf="useSyllableSeparator() && !syllable.isLast" [ngStyle]="syllable.separatorStyles">{{syllableSeparator()}}</span>
                 </span>
-
                 <word-detail *ngIf="word.editing" class="popup-content" [word]="word"></word-detail>
             </span>
 

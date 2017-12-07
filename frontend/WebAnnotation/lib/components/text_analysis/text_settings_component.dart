@@ -28,6 +28,8 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
 
   String newConfigurationName = 'Neue Vorlage';
 
+  String syllableSeparatorText = '|';
+
   String lineHeightValue = "10"; // value divided by 10, for double mapping
   String syllableDistanceValue = "3"; // divided by 10
   String wordDistanceValue = "7"; // divided by 10
@@ -62,6 +64,18 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
 
   List<PartOfSpeech> wordPOSList() {
     return selectedConfiguration().partOfSpeechConfiguration.list();
+  }
+
+  void syllableSeparatorChanged() {
+    if(syllableSeparatorText.length > 1) {
+      syllableSeparatorText = syllableSeparatorText[0];
+    }
+
+    if(syllableSeparatorText.length == 1) {
+      selectedConfiguration().syllable_separator = syllableSeparatorText;
+    }
+
+    textAnalysisService.applyCurrentConfiguration();
   }
 
   void openColorPicker(String inputId) {
@@ -112,6 +126,10 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
       case POSPolicy.Ignore:
         wordPOSAnnotationOptions[2].selected = true;
         break;
+    }
+
+    if(syllableSeparatorText.length > 0) {
+      this.syllableSeparatorText = selectedConfiguration().syllable_separator;
     }
   }
 

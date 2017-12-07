@@ -28,7 +28,7 @@
 
     2. Unbetonte Silbe:<br>
     <material-toggle [(checked)]="selectedConfiguration().use_alternate_color"
-                     label="Aktivieren"
+                     label="Benutzen"
                      (click)="textAnalysisService.applyCurrentConfiguration()">
     </material-toggle>
     <br>
@@ -44,7 +44,7 @@
 
     Wort Hintergrundfarbe:<br>
     <material-toggle [(checked)]="selectedConfiguration().use_background"
-                     label="Aktivieren"
+                     label="Benutzen"
                      (click)="textAnalysisService.applyCurrentConfiguration()">
     </material-toggle>
     <br>
@@ -123,6 +123,21 @@
         <input type="range" min="0" max="16" [(ngModel)]="letterSpacingValue" (input)="letterSpacingSliderMoved($event)"
                (change)="textAnalysisService.applyCurrentConfiguration()" class="slider">
     </div>
+    <br>
+
+    Silbentrennzeichen:<br>
+    <material-toggle [(checked)]="selectedConfiguration().use_syllable_separator"
+                     label="Benutzen"
+                     (click)="textAnalysisService.applyCurrentConfiguration()">
+    </material-toggle>
+    <br>
+    <div *ngIf="selectedConfiguration().use_syllable_separator">
+        <material-input multiline
+                        (keyup)="syllableSeparatorChanged()"
+                        autoFocus floatingLabel label="Zeichen"
+                        [(ngModel)]="syllableSeparatorText">
+        </material-input>
+    </div><br>
     <br>
 
     Wortart:

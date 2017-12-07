@@ -52,6 +52,14 @@ class TextPreviewComponent implements OnInit {
     return textAnalysisService.selectedConfiguration.letter_spacing.toString() + 'px';
   }
 
+  bool useSyllableSeparator() {
+    return textAnalysisService.selectedConfiguration.use_syllable_separator;
+  }
+
+  String syllableSeparator() {
+    return textAnalysisService.selectedConfiguration.syllable_separator;
+  }
+
   void startWordReview() {
     // search first unknown word
     Word w = textAnalysisService.annotatedText.nextMissingWord();

@@ -168,6 +168,7 @@ def user_add_configuration():
     unstressed_color = request.form.get("unstressed_color")
     word_background = request.form.get('word_background')
     alternate_color = request.form.get('alternate_color')
+    syllable_separator = request.form.get('syllable_separator')
 
     line_height = request.form.get("line_height")
     word_distance = request.form.get('word_distance')
@@ -179,6 +180,7 @@ def user_add_configuration():
     highlight_foreground = map_boolean(request.form.get('highlight_foreground'))
     stressed_bold = map_boolean(request.form.get('stressed_bold'))
     use_alternate_color = map_boolean(request.form.get('use_alternate_color'))
+    use_syllable_separator = map_boolean(request.form.get('use_syllable_separator'))
 
     #print(request.form.get("part_of_speech_configuration"))
     pos_config_list = request.form.get("part_of_speech_configuration")
@@ -187,13 +189,13 @@ def user_add_configuration():
 
     if not name or not stressed_color or not unstressed_color or not word_background or not line_height \
             or not word_distance or not syllable_distance or not font_size or not letter_spacing \
-            or not alternate_color or not pos_config_list:
+            or not alternate_color or not pos_config_list or not syllable_separator:
         return create_error_response(400, "Data not provided.")
 
-    success = userService.add_configuration(user, name, stressed_color, unstressed_color, word_background, alternate_color,
+    success = userService.add_configuration(user, name, stressed_color, unstressed_color, word_background, alternate_color, syllable_separator,
                                             word_distance, syllable_distance, font_size, letter_spacing, use_background,
                                             highlight_foreground, stressed_bold, line_height,
-                                            use_alternate_color, pos_config_list)
+                                            use_alternate_color, use_syllable_separator, pos_config_list)
 
     if not success:
         return create_error_response(404, "Error adding configuration.")
@@ -213,6 +215,7 @@ def user_update_configuration():
     unstressed_color = request.form.get("unstressed_color")
     word_background = request.form.get('word_background')
     alternate_color = request.form.get('alternate_color')
+    syllable_separator = request.form.get('syllable_separator')
 
     line_height = request.form.get("line_height")
     word_distance = request.form.get('word_distance')
@@ -224,18 +227,19 @@ def user_update_configuration():
     highlight_foreground = map_boolean(request.form.get('highlight_foreground'))
     stressed_bold = map_boolean(request.form.get('stressed_bold'))
     use_alternate_color = map_boolean(request.form.get('use_alternate_color'))
+    use_syllable_separator = map_boolean(request.form.get('use_syllable_separator'))
 
     pos_config_list = json.loads(request.form.get("part_of_speech_configuration"))
 
     if not name or not stressed_color or not unstressed_color or not word_background or not line_height \
             or not word_distance or not syllable_distance or not font_size or not letter_spacing\
-            or not alternate_color or not pos_config_list:
+            or not alternate_color or not pos_config_list or not syllable_separator:
         return create_error_response(400, "Data not provided.")
 
-    success = userService.update_configuration(configuration_id, name, stressed_color, unstressed_color,
+    success = userService.update_configuration(configuration_id, name, stressed_color, unstressed_color, syllable_separator,
                                                word_background, alternate_color, word_distance, syllable_distance, font_size, letter_spacing,
                                                use_background, highlight_foreground, stressed_bold, line_height,
-                                               use_alternate_color, pos_config_list)
+                                               use_alternate_color, use_syllable_separator, pos_config_list)
 
     if not success:
         return create_error_response(404, "Configuration to be updated not found.")

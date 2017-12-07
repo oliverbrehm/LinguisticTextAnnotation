@@ -44,11 +44,9 @@ class Word {
 
     bool previousAlternated = true;
     for(Syllable syllable in this.syllables) {
-      bool isLastSyllable =
-        (this.syllables.indexOf(syllable) == this.syllables.length - 1);
       bool alternate = (c.use_alternate_color && !syllable.stressed && !previousAlternated);
 
-      syllable.updateStyles(c, this.isIgnored(), this.isUnstressed(), isLastSyllable, alternate);
+      syllable.updateStyles(c, this.isIgnored(), this.isUnstressed(), alternate);
 
       previousAlternated = (alternate || syllable.stressed);
     }
@@ -81,7 +79,11 @@ class Word {
   }
 
   void addSyllable(String text, bool stressed) {
-    this.syllables.add(new Syllable(text, stressed));
+    for(Syllable s in this.syllables) {
+      s.isLast = false;
+    }
+
+    this.syllables.add(new Syllable(text, stressed, true));
   }
 
   bool hasStress() {
