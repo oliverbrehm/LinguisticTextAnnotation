@@ -124,11 +124,8 @@ class TextConfiguration {
         PartOfSpeechConfiguration partOfSpeechConfiguration = new PartOfSpeechConfiguration();
         var posConfList = c['part_of_speech_configuration'];
 
-        print("-----------");
-
         if(posConfList != null) {
           for(var posConf in posConfList) {
-            print(posConf.toString());
             String posId = posConf['pos_id'];
             String posPolicy = posConf['policy'];
             partOfSpeechConfiguration.setPartOfSpeechPolicyString(posId, posPolicy);

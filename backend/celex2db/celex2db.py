@@ -6,46 +6,20 @@ import writeSQLite
 
 # frequency of status output
 STEP_SIZE = 1000
-
-# open celex2 file (gpw.cd)
-gpwFile = open("./celex2/german/gpw/gpw.cd")
+MAX_LINES_LEMMAS = 1000000
+MAX_LINES_WORDLIST = 10000
 
 # create model
 dictionary = celex.Dictionary()
 
-# parse celex2 file
-print("--- parsing celex2 file ---")
-maxLines = 1000000
-current = 0
-numParsed = 0
-numErrors = 0
-while True:
-    line = gpwFile.readline()
-    if not line:
-        break
+# parse lemma file
+print("--- parsing celex2 lemmas (gol) ---")
+dictionary.parse_lemmas(MAX_LINES_LEMMAS, STEP_SIZE)
 
-    if current > 0 and current % STEP_SIZE == 0:
-        print("parsed " + str(numParsed) + " words...", "ERRORS:", numErrors)
+# parse word list
+print("--- parsing celex2 word list (gpw, gow) ---")
+dictionary.parse_words(MAX_LINES_WORDLIST, STEP_SIZE)
 
-    current = current + 1
-
-    components = line.split('\\')
-    if len(components) < 5:
-        # phonetic pattern should be the 5th part
-        continue
-
-    text = components[1]
-    phon = components[4]
-
-    if not dictionary.add_word(text, phon):
-        numErrors = numErrors + 1
-
-    # read only max lines
-    numParsed = numParsed + 1
-    if current >= maxLines:
-        break
-
-print("parsed " + str(numParsed) + " words...", "ERRORS:", numErrors)
 
 # write to json file
 # WriteJSON.write_json(dictionary, STEP_SIZE)
@@ -54,6 +28,6 @@ print("parsed " + str(numParsed) + " words...", "ERRORS:", numErrors)
 # WriteFirebase.write_firebase(dictionary, STEP_SIZE)
 
 # write to SQLite database
-writeSQLite.write_sqlite(dictionary, STEP_SIZE)
+#writeSQLite.write_sqlite(dictionary, STEP_SIZE)
 
 print("--- DONE ---")

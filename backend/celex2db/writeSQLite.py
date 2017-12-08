@@ -17,6 +17,7 @@ def write_sqlite(dictionary, step_size):
     for word in dictionary.words:
 
         if current > 0 and current % step_size == 0:
+            dictionary_service.commit()
             print("added to database: " + str(num_added))
             print("skipped: " + str(num_skipped))
 

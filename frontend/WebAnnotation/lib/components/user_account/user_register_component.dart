@@ -52,30 +52,6 @@ class UserRegisterComponent implements OnInit {
   }
 
   bool validateEmail() {
-    // TODO REMOVE? using material-input's own validation
-    /*
-    bool valid = true;
-    if(valid && emailText.isEmpty) {
-      valid = false;
-      emailInput.error = "Bitte Email Adresse eineben";
-    }
-
-    List<String> matches = emailText.split(new RegExp(r"(.*)@(.*).(.*)"));
-
-    for(var m in matches) {
-      print(m.toString());
-    }
-
-    if(valid && matches.length != 1) valid = false;
-
-    if(!valid) {
-      emailInput.error = "Keine gültige Email Adresse";
-    } else {
-      emailInput.error = "";
-    }
-
-    return valid;*/
-
     if(emailText.isEmpty) {
       return false;
     }

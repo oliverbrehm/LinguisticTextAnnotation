@@ -255,13 +255,9 @@ class UserService:
         self.database.session.add(configuration)
         self.database.session.commit()
 
-        print('add pos')
-
         for pos_config in pos_config_list:
             pos_id = pos_config['pos_id']
             policy = pos_config['policy']
-
-            print('adding', pos_id, policy)
 
             pos = PartOfSpeechConfiguration(pos_id=pos_id, policy=policy, text_config=configuration)
 
@@ -303,8 +299,6 @@ class UserService:
         configuration.use_syllable_separator = use_syllable_separator
 
         self.database.session.commit()
-
-        print('update pos')
 
         try:
             pos_config = self.database.session.query(PartOfSpeechConfiguration)\

@@ -14,7 +14,7 @@ from Database import Database
 from flask import Flask, request
 from flask import Response
 
-DB_WORDS_PATH = 'sqlite:///../db/celex.db'
+DB_WORDS_PATH = 'sqlite:///../db/words.db'
 DB_USERS_PATH = 'sqlite:///../db/user.db'
 
 app = Flask(__name__)
@@ -182,10 +182,8 @@ def user_add_configuration():
     use_alternate_color = map_boolean(request.form.get('use_alternate_color'))
     use_syllable_separator = map_boolean(request.form.get('use_syllable_separator'))
 
-    #print(request.form.get("part_of_speech_configuration"))
     pos_config_list = request.form.get("part_of_speech_configuration")
     pos_config_list = json.loads(pos_config_list)
-    print(str(pos_config_list))
 
     if not name or not stressed_color or not unstressed_color or not word_background or not line_height \
             or not word_distance or not syllable_distance or not font_size or not letter_spacing \

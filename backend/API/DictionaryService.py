@@ -16,12 +16,13 @@ TOKENS_TO_IGNORE = ['X', 'PUNCT', 'NUM', 'SPACE']
 
 
 class Segmentation:
-    def __init__(self, text, origin, source, hyphenation, stress_pattern):
+    def __init__(self, text, origin, source, hyphenation, stress_pattern, pos):
         self.text = text
         self.origin = origin
         self.source = source
         self.hyphenation = hyphenation
         self.stress_pattern = stress_pattern
+        self.pos = pos
 
     def json(self):
         return {
@@ -30,6 +31,7 @@ class Segmentation:
             "source": self.source,
             "hyphenation": self.hyphenation,
             "stress_pattern": self.stress_pattern,
+            "pos": self.pos
         }
 
 
@@ -40,17 +42,26 @@ class Word(Base):
     text = sqlalchemy.Column(sqlalchemy.String(128), primary_key=True)
     stress_pattern = sqlalchemy.Column(sqlalchemy.String(32))
     hyphenation = sqlalchemy.Column(sqlalchemy.String(128))
+    pos = sqlalchemy.Column(sqlalchemy.String(8), primary_key=True)
 
-    def __init__(self, text, stress_pattern, hyphenation):
+    def __init__(self, text, stress_pattern, hyphenation, pos):
         self.text = text
         self.stress_pattern = stress_pattern
         self.hyphenation = hyphenation
+        self.pos = pos
+
+    def __str__(self):
+        return self.text + ", " \
+               + self.stress_pattern \
+               + ", " + self.hyphenation \
+               + ", " + self.pos
 
     def json(self):
         return {
             "text": self.text,
             "stress_pattern": self.stress_pattern,
-            "hyphenation": self.hyphenation
+            "hyphenation": self.hyphenation,
+            "pos": self.pos
         }
 
 
@@ -103,14 +114,16 @@ class DictionaryService:
 
         try:
             self.database.session.add(db_word)
-            self.database.session.commit()
+            if not bulk_add:
+                # do not commit for bulk adding (takes too long)
+                self.database.session.commit()
         except sqlite3.IntegrityError:
-            print('Word ', word, 'already in Database.')
             self.database.session.rollback()
+            print('Word ', word, 'already in Database.')
             return
         except Exception as e:
-            print(e)
             self.database.session.rollback()
+            print(e)
             return
 
         if bulk_add:
@@ -129,6 +142,13 @@ class DictionaryService:
             self.database.session.rollback()
 
         return db_word
+
+    def commit(self):
+        try:
+            self.database.session.commit()
+        except Exception as e:
+            self.database.session.rollback()
+            print(e)
 
     def list_added_entries(self):
         entries = self.database.session.query(AddedEntry).all()
