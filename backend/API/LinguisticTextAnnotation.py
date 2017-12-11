@@ -62,11 +62,11 @@ def test_error():
     --------------------------------------------------------- '''
 
 
-@app.route('/query/word/<text>', methods=['GET'])
-def query_word(text):
+@app.route('/query/word/<text>/<pos>', methods=['GET'])
+def query_word(text, pos):
     user = userService.authenticate(Authentication.read(request))
     # TODO better method than to pass userService as a parameter?
-    response = dictionaryService.query_word(text, userService, user)
+    response = dictionaryService.query_word(text, pos, userService, user)
 
     if response is None:
         return create_error_response(404, "Word not found.")
@@ -111,11 +111,13 @@ def user_add_word():
     text = request.form.get("text")
     stress_pattern = request.form.get("stress_pattern")
     hyphenation = request.form.get("hyphenation")
+    lemma = request.form.get("lemma")
+    pos = request.form.get("pos")
 
-    if not text or not stress_pattern or not hyphenation:
+    if not text or not stress_pattern or not hyphenation or not lemma or not pos:
         return create_error_response(400, "Data not provided.")
 
-    db_word = userService.add_word(user, text, stress_pattern, hyphenation)
+    db_word = userService.add_word(user, text, lemma, pos, stress_pattern, hyphenation)
 
     if not db_word:
         return create_error_response(404, "Error adding word.")
@@ -381,11 +383,12 @@ def submit_verification():
 
     stress_pattern = request.form.get("stress_pattern")
     hyphenation = request.form.get("hyphenation")
+    lemma = request.form.get("lemma")
 
-    if not stress_pattern or not hyphenation:
+    if not stress_pattern or not hyphenation or not lemma:
         return create_error_response(400, "Data not provided.")
 
-    if not verificationService.submit(user, word_id, stress_pattern, hyphenation, dictionaryService):
+    if not verificationService.submit(user, word_id, lemma, stress_pattern, hyphenation, dictionaryService):
         return create_error_response(404, "Unable to submit proposal.")
 
     return create_response(201)

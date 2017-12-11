@@ -7,10 +7,10 @@ import writeSQLite
 # frequency of status output
 STEP_SIZE = 1000
 MAX_LINES_LEMMAS = 1000000
-MAX_LINES_WORDLIST = 10000
+MAX_LINES_WORDLIST = 1000000
 
 # create model
-dictionary = celex.Dictionary()
+dictionary = celex.CelexDictionary()
 
 # parse lemma file
 print("--- parsing celex2 lemmas (gol) ---")
@@ -28,6 +28,6 @@ dictionary.parse_words(MAX_LINES_WORDLIST, STEP_SIZE)
 # WriteFirebase.write_firebase(dictionary, STEP_SIZE)
 
 # write to SQLite database
-#writeSQLite.write_sqlite(dictionary, STEP_SIZE)
+writeSQLite.write_sqlite(dictionary, STEP_SIZE)
 
 print("--- DONE ---")

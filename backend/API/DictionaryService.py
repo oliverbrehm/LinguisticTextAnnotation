@@ -16,13 +16,14 @@ TOKENS_TO_IGNORE = ['X', 'PUNCT', 'NUM', 'SPACE']
 
 
 class Segmentation:
-    def __init__(self, text, origin, source, hyphenation, stress_pattern, pos):
+    def __init__(self, text, origin, source, hyphenation, stress_pattern, lemma, pos):
         self.text = text
         self.origin = origin
         self.source = source
         self.hyphenation = hyphenation
         self.stress_pattern = stress_pattern
         self.pos = pos
+        self.lemma = lemma
 
     def json(self):
         return {
@@ -31,7 +32,8 @@ class Segmentation:
             "source": self.source,
             "hyphenation": self.hyphenation,
             "stress_pattern": self.stress_pattern,
-            "pos": self.pos
+            "pos": self.pos,
+            "lemma": self.lemma
         }
 
 
@@ -40,15 +42,17 @@ class Word(Base):
     __tablename__ = 'word'
 
     text = sqlalchemy.Column(sqlalchemy.String(128), primary_key=True)
+    pos = sqlalchemy.Column(sqlalchemy.String(8), primary_key=True)
     stress_pattern = sqlalchemy.Column(sqlalchemy.String(32))
     hyphenation = sqlalchemy.Column(sqlalchemy.String(128))
-    pos = sqlalchemy.Column(sqlalchemy.String(8), primary_key=True)
+    lemma = sqlalchemy.Column(sqlalchemy.String(128))
 
-    def __init__(self, text, stress_pattern, hyphenation, pos):
+    def __init__(self, text, stress_pattern, hyphenation, lemma, pos):
         self.text = text
         self.stress_pattern = stress_pattern
         self.hyphenation = hyphenation
         self.pos = pos
+        self.lemma = lemma
 
     def __str__(self):
         return self.text + ", " \
@@ -61,6 +65,7 @@ class Word(Base):
             "text": self.text,
             "stress_pattern": self.stress_pattern,
             "hyphenation": self.hyphenation,
+            "lemma": self.lemma,
             "pos": self.pos
         }
 
@@ -106,25 +111,26 @@ class DictionaryService:
         return entry.lower() \
             .replace("ä", "ae") \
             .replace("ö", "oe") \
-            .replace("ü", "ue")
+            .replace("ü", "ue") \
+            .replace("ß", "ss")
 
-    def add_word(self, word, stress_pattern, hyphenation, bulk_add=False):
+    def add_word(self, word, stress_pattern, hyphenation, lemma, pos, bulk_add=False):
         # insert word
-        db_word = Word(text=word, stress_pattern=stress_pattern, hyphenation=hyphenation)
+        db_word = Word(text=word, stress_pattern=stress_pattern, hyphenation=hyphenation, lemma=lemma, pos=pos)
 
         try:
             self.database.session.add(db_word)
-            if not bulk_add:
-                # do not commit for bulk adding (takes too long)
-                self.database.session.commit()
+            self.database.session.commit()
         except sqlite3.IntegrityError:
             self.database.session.rollback()
+
             print('Word ', word, 'already in Database.')
-            return
+            return None
         except Exception as e:
+            print('Error adding word "' + word + '" to Database.')
+            #if not bulk_add:
             self.database.session.rollback()
-            print(e)
-            return
+            return None
 
         if bulk_add:
             # do not create added entries for bulk adding (creating the database)
@@ -143,13 +149,6 @@ class DictionaryService:
 
         return db_word
 
-    def commit(self):
-        try:
-            self.database.session.commit()
-        except Exception as e:
-            self.database.session.rollback()
-            print(e)
-
     def list_added_entries(self):
         entries = self.database.session.query(AddedEntry).all()
         result = []
@@ -159,19 +158,28 @@ class DictionaryService:
 
         return result
 
-    def query_word(self, word, user_service, user):
+    def query_word(self, word, pos, user_service, user):
         # handle umlaut
         query_text = DictionaryService.preprocess_entry(word)
 
         # first query user words (local preferences)
         if user_service and user:
-            word = user_service.get_word(user, query_text)
+            word = user_service.get_word(user, query_text, pos)
 
             if word is not None:
                 return word
 
         # if not found in user database, search the global word database
-        word = self.database.session.query(Word).filter(Word.text == query_text).first()
+        candidates = self.database.session.query(Word).filter(Word.text == query_text).all()
+
+        word = None
+        if len(candidates) > 0:
+            word = candidates[0]
+
+            for w in candidates:
+                if w.pos == pos:
+                    word = w
+                    break
 
         if word is None:
             return None
@@ -236,7 +244,7 @@ class DictionaryService:
             entry['type'] = 'ignored'
 
         else:
-            annotated = self.query_word(word, user_service, user)
+            annotated = self.query_word(word, pos, user_service, user)
             if annotated is None:
                 entry['type'] = 'not_found'
             else:
@@ -272,7 +280,7 @@ class DictionaryService:
                     if "1" not in stress_pattern:
                         # contains no stress, default use first syllable
                         stress_pattern[0] = '1' + stress_pattern[1:]
-                    segmentation_mary = Segmentation(word, "MARY TTS", "Source: MARY TTS", hyphenation, stress_pattern)
+                    segmentation_mary = Segmentation(word, "MARY TTS", "Source: MARY TTS", hyphenation, stress_pattern, "", "na")
                     segmentations.append(segmentation_mary.json())
         except requests.exceptions.ReadTimeout:
             print('Timout querying MARY TTS.')
@@ -284,7 +292,7 @@ class DictionaryService:
         for s in range(1, len(syllables)):
             stress_pattern = stress_pattern + "0"
 
-        segmentation_pyphen = Segmentation(word, "Pyphen", "Source: Pyphen", hyphenation, stress_pattern)
+        segmentation_pyphen = Segmentation(word, "Pyphen", "Source: Pyphen", hyphenation, stress_pattern, "", "na")
         segmentations.append(segmentation_pyphen.json())
 
         return segmentations
@@ -297,13 +305,13 @@ class DictionaryService:
 
         if not root:
             print('root not found')
-            return ("", "")
+            return "", ""
 
         wordElement = root[0][0][0][0] # root: maryxml[0] -> p[0] -> s[0] -> phrase[0] -> t (== Word)
 
         if not wordElement:
             print('word not found')
-            return ("", "")
+            return "", ""
 
         for syllable in wordElement:
             stressed = syllable.get('stress')
