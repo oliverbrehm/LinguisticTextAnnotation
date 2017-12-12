@@ -40,22 +40,24 @@ class SegmentationSelectionComponent implements OnInit {
   bool loadingProposals;
 
   @Input()
-  String word;
+  Word word;
 
   @Input()
   List<Segmentation> segmentations;
 
   @override
   ngOnInit() {
-    segmentationWord = new Word("");
+    if(word != null) {
+      segmentationWord = new Word.initialize(word.text, word.posId, word.lemma);
+    } else {
+      segmentationWord = new Word("");
+    }
     this.reset();
   }
 
   void reset() {
     new Future.delayed(const Duration(microseconds: 100), () {
       if(word != null) {
-        segmentationWord = new Word(word);
-
         hyphenationText = segmentationWord.text;
         _currentHyphenation = hyphenationText;
 
@@ -108,11 +110,14 @@ class SegmentationSelectionComponent implements OnInit {
     hyphenationText = segmentationProposal.hyphenation;
     _currentStressPattern = segmentationProposal.stressPattern;
 
+    segmentationWord.lemma = segmentationProposal.lemma;
+    segmentationWord.posId = segmentationProposal.pos;
+
     updateSegmentation();
   }
 
   void updateSegmentation() {
-    this.segmentationWord = new Word(segmentationWord.text);
+    this.segmentationWord = new Word.initialize(segmentationWord.text, segmentationWord.posId, segmentationWord.lemma);
     this.segmentationWord.parseHyphenation(_currentHyphenation);
     this.segmentationWord.parseStressPattern(_currentStressPattern);
   }

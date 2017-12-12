@@ -165,8 +165,8 @@ class UserAccountService {
   }
 
   Future<bool> addWord(String text, String hyphenation,
-      String stressPattern) async {
-    return UserEntry.add(text, hyphenation, stressPattern, credentials());
+      String stressPattern, String pos, String lemma) async {
+    return UserEntry.add(text, hyphenation, stressPattern, pos, lemma, credentials());
   }
 
   Future<bool> deleteWord(UserEntry userWord) async {

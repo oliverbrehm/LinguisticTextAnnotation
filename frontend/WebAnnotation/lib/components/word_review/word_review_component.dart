@@ -100,8 +100,10 @@ class WordReviewComponent implements OnInit {
 
     String hyphenation = segmentationWord.getHyphenation();
     String stressPattern = segmentationWord.getStressPattern();
+    String pos = segmentationWord.posId;
+    String lemma = segmentationWord.lemma;
 
-    this.userAccountService.addWord(word.text, hyphenation, stressPattern)
+    this.userAccountService.addWord(word.text, hyphenation, stressPattern, pos, lemma)
         .then((bool success) {
       if(success) {
         this.textAnalysisService.annotatedText.updateWord(word.text, hyphenation, stressPattern);

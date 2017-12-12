@@ -10,13 +10,22 @@
 
         <div class="bordered">
             <h3>Silbentrennung</h3>
-            <material-input multiline
-                            (keyup)="hyphenationChanged()"
+            <material-input (keyup)="hyphenationChanged()"
                             autoFocus floatingLabel style="width:80%"
                             [(ngModel)]="hyphenationText">
             </material-input>
             <br>
             <p>(Silben mit "-" trennen)</p>
+        </div>
+
+        <div class="bordered">
+            <h3>Wortart</h3>
+            <material-input label="Lemma"
+                            autoFocus floatingLabel style="width:80%"
+                            [(ngModel)]="segmentationWord.lemma">
+            </material-input>
+            <br>
+            <p>Wortart: {{segmentationWord.posName()}}</p>
         </div>
     </div>
 

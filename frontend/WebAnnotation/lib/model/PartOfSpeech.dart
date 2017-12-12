@@ -36,21 +36,27 @@ class PartOfSpeech {
 }
 
 class PartOfSpeechConfiguration {
+  static PartOfSpeechConfiguration defaultConfiguration = new PartOfSpeechConfiguration();
+
   List<PartOfSpeech> _posItems = [
-    new PartOfSpeech("Nomen", "pos-noun", ["NOUN"],POSPolicy.Annotate),
-    new PartOfSpeech("Eigenname", "pos-propn", ["PROPN"], POSPolicy.Annotate),
-    new PartOfSpeech("Verb", "pos-verb", ["VERB"], POSPolicy.Annotate),
-    new PartOfSpeech("Hilfsverb", "pos-aux", ["AUX"], POSPolicy.Annotate),
-    new PartOfSpeech("Adjektiv", "pos-adj", ["ADJ"], POSPolicy.Annotate),
-    new PartOfSpeech("Adverb", "pos-adv", ["ADV"], POSPolicy.Annotate),
-    new PartOfSpeech("Artikel", "pos-det", ["DET"], POSPolicy.Annotate),
-    new PartOfSpeech("Adposition", "pos-adp", ["ADP"], POSPolicy.Annotate),
-    new PartOfSpeech("Pronomen", "pos-pron", ["PRON"], POSPolicy.Annotate),
-    new PartOfSpeech("Konjunktion", "pos-conj", ["CONJ", "SCONJ"], POSPolicy.Annotate),
-    new PartOfSpeech("Zahl", "pos-num", ["NUM"], POSPolicy.Annotate),
-    new PartOfSpeech("Partikel", "pos-part", ["PART"], POSPolicy.Annotate),
+    new PartOfSpeech("Nomen", "noun", ["NOUN"],POSPolicy.Annotate),
+    new PartOfSpeech("Eigenname", "propn", ["PROPN"], POSPolicy.Annotate),
+    new PartOfSpeech("Verb", "verb", ["VERB"], POSPolicy.Annotate),
+    new PartOfSpeech("Hilfsverb", "aux", ["AUX"], POSPolicy.Annotate),
+    new PartOfSpeech("Adjektiv", "adj", ["ADJ"], POSPolicy.Annotate),
+    new PartOfSpeech("Adverb", "adv", ["ADV"], POSPolicy.Annotate),
+    new PartOfSpeech("Artikel", "det", ["DET"], POSPolicy.Annotate),
+    new PartOfSpeech("Adposition", "adp", ["ADP"], POSPolicy.Annotate),
+    new PartOfSpeech("Pronomen", "pron", ["PRON"], POSPolicy.Annotate),
+    new PartOfSpeech("Konjunktion", "conj", ["CONJ", "SCONJ"], POSPolicy.Annotate),
+    new PartOfSpeech("Zahl", "num", ["NUM"], POSPolicy.Annotate),
+    new PartOfSpeech("Partikel", "part", ["PART"], POSPolicy.Annotate),
     unknownPOS()
   ];
+
+  static defaultWithPosId(String posId) {
+    return defaultConfiguration.withPosId(posId);
+  }
 
   PartOfSpeech withTag(String posTag) {
     for(PartOfSpeech pos in _posItems) {
@@ -73,7 +79,7 @@ class PartOfSpeechConfiguration {
   }
 
   static PartOfSpeech unknownPOS() {
-    return new PartOfSpeech("Unbekannt", "pos-na", [""], POSPolicy.Annotate);
+    return new PartOfSpeech("Unbekannt", "na", [""], POSPolicy.Annotate);
   }
 
   void setPartOfSpeechPolicyString(String posId, String policy) {

@@ -18,12 +18,13 @@ class Word {
 
   WordState state = WordState.Ignored;
 
-  String posId = "pos-na";
+  String posId = "na";
   String lemma = "";
 
   bool editing = false;
 
   Word(this.text);
+  Word.initialize(this.text, this.posId, this.lemma);
 
   Map<String, bool> cssClasses = {};
   Map<String, String> styles = {};
@@ -33,7 +34,7 @@ class Word {
       'popup': !isNotFound(),
       'unstressed': isIgnored(),
       'notFound': isNotFound(),
-      posId: true
+      'pos-' + posId: true
     };
 
     styles = {
@@ -50,6 +51,11 @@ class Word {
 
       previousAlternated = (alternate || syllable.stressed);
     }
+  }
+
+  String posName() {
+    String posName = PartOfSpeechConfiguration.defaultWithPosId(this.posId).name;
+    return posName;
   }
 
   bool isEditable() {
