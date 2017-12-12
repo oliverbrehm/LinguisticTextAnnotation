@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:WebAnnotation/services/text_analysis_service.dart';
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
@@ -30,9 +31,10 @@ class UserAccountComponent implements OnInit {
 
   final AppService appService;
   final UserAccountService userAccountService;
+  final TextAnalysisService textAnalysisService;
   final Router router;
 
-  UserAccountComponent(this.appService, this.userAccountService, this.router);
+  UserAccountComponent(this.appService, this.userAccountService, this.textAnalysisService, this.router);
 
   @override
   Future<Null> ngOnInit() async {
@@ -50,6 +52,7 @@ class UserAccountComponent implements OnInit {
   void logout() {
     appService.clearMessage();
     userAccountService.logout();
+    textAnalysisService.clearText();
     appService.infoMessage("Logout erfolgreich.");
   }
 

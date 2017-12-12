@@ -102,6 +102,10 @@ class AnnotationText {
 
   void updatePOS(TextConfiguration c) {
     for (Word w in words) {
+      if(w.state == WordState.NotFound || w.state == WordState.LineBreak) {
+        continue;
+      }
+
       PartOfSpeech pos = c.partOfSpeechConfiguration.withPosId(w.posId);
       switch(pos.policy) {
         case POSPolicy.Annotate:

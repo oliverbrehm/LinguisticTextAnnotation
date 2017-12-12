@@ -117,7 +117,11 @@ class SegmentationSelectionComponent implements OnInit {
   }
 
   void updateSegmentation() {
-    this.segmentationWord = new Word.initialize(segmentationWord.text, segmentationWord.posId, segmentationWord.lemma);
+    if(word != null) {
+      this.segmentationWord = new Word.initialize(word.text, word.posId, word.lemma);
+    } else {
+      this.segmentationWord = new Word.initialize(segmentationWord.text, segmentationWord.posId, segmentationWord.lemma);
+    }
     this.segmentationWord.parseHyphenation(_currentHyphenation);
     this.segmentationWord.parseStressPattern(_currentStressPattern);
   }

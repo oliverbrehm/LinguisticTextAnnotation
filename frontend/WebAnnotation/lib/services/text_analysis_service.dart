@@ -100,6 +100,7 @@ class TextAnalysisService {
   }
 
   void clearText() {
+    lookupText = '';
     annotatedText = null;
   }
 

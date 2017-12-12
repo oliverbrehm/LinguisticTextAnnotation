@@ -236,8 +236,8 @@ def user_update_configuration():
             or not alternate_color or not pos_config_list or not syllable_separator:
         return create_error_response(400, "Data not provided.")
 
-    success = userService.update_configuration(configuration_id, name, stressed_color, unstressed_color, syllable_separator,
-                                               word_background, alternate_color, word_distance, syllable_distance, font_size, letter_spacing,
+    success = userService.update_configuration(configuration_id, name, stressed_color, unstressed_color,
+                                               word_background, alternate_color, syllable_separator, word_distance, syllable_distance, font_size, letter_spacing,
                                                use_background, highlight_foreground, stressed_bold, line_height,
                                                use_alternate_color, use_syllable_separator, pos_config_list)
 
