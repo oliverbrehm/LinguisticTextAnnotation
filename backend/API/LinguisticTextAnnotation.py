@@ -357,12 +357,15 @@ def query_verification():
     verification_proposals = verificationService.proposals_for_word(user_word)
     if verification_proposals is not None:
         for p in verification_proposals:
-            s = Segmentation(word['text'], p.user.first_name + " " + p.user.last_name, "Benutzer"
-                             , p.hyphenation, p.stress_pattern)
+            s = Segmentation(word['text'], p.user.first_name + " " + p.user.last_name, "Benutzer", p.hyphenation, p.stress_pattern, p.lemma, user_word.pos)
             segmentations.append(s.json())
 
     segmentation_proposals = dictionaryService.query_segmentation(word['text'])
     if segmentation_proposals is not None:
+        for sp in segmentation_proposals:
+            sp['lemma'] = user_word.lemma
+            sp['pos'] = user_word.pos
+
         segmentations = segmentations + segmentation_proposals
 
     if segmentations is not None:

@@ -31,6 +31,7 @@ class Word {
   void updateStyles(TextConfiguration c) {
     cssClasses =  {
       'word': true,
+      'print-text': true,
       'popup': !isNotFound(),
       'unstressed': isIgnored(),
       'notFound': isNotFound(),

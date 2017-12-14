@@ -2,18 +2,18 @@
     <h2>Vorschau</h2>
 
     <div id="annotationText" class="annotationText" [ngStyle]="annotatedText().styles">
-        <span *ngFor="let word of annotatedText().words">
+        <span *ngFor="let word of annotatedText().words" class="print-text">
             <span *ngIf="word.isEditable()" [ngClass]="word.cssClasses" [ngStyle]="word.styles">
                 <span *ngFor="let syllable of word.syllables"
-                      class="syllable" (click)="editWord(word)">
-                    <span [ngStyle]="syllable.styles">{{syllable.text}}</span><span *ngIf="!word.isIgnored() && useSyllableSeparator() && !syllable.isLast" [ngStyle]="syllable.separatorStyles">{{syllableSeparator()}}</span>
+                      class="syllable print-text" (click)="editWord(word)">
+                    <span class="print-text" [ngStyle]="syllable.styles">{{syllable.text}}</span><span class="print-text" *ngIf="!word.isIgnored() && useSyllableSeparator() && !syllable.isLast" [ngStyle]="syllable.separatorStyles">{{syllableSeparator()}}</span>
                 </span>
                 <word-detail *ngIf="word.editing" class="popup-content" [word]="word"></word-detail>
             </span>
 
-            <span *ngIf="word.isNotFound()" [ngClass]="word.cssClasses" (click)="wordReview(word)">{{word.text}}</span>
+            <span class="print-text" *ngIf="word.isNotFound()" [ngClass]="word.cssClasses" (click)="wordReview(word)">{{word.text}}</span>
 
-            <br *ngIf="word.isLineBreak()">
+            <br class="print-text" *ngIf="word.isLineBreak()">
         </span>
     </div>
 

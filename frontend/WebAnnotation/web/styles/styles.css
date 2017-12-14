@@ -10,6 +10,8 @@ body {
   margin-top: 4em;
 
   background-color: #FBFEFF;
+
+  font-size: 18px;
 }
 
 .delete-button {
@@ -119,7 +121,7 @@ a:hover {
     padding: 15px;
   }
 
-  .annotationText * {
+  .print-text {
     display: inline-block;
   }
 

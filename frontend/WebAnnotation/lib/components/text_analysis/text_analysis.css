@@ -79,12 +79,10 @@
 }
 
 .colorPickerInput {
-    position: absolute;
-    left: -10000px;
-    top: auto;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
+    left: 0;
+    width: 0;
+    height: 0;
+    visibility: hidden;
 }
 
 .rangeSelection {

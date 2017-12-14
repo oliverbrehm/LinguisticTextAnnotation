@@ -1,20 +1,25 @@
 <div class="container">
     <div style="text-align: center">
-        <h1>LinguisticTextAnnotation [app title]</h1>
+        <h1>Prosodiya Online Text Analyse</h1>
     </div>
     <br>
 
     <div class="row">
         <div class="bordered">
 
-            <h2>Info text</h2>
+            <h2>Aufbereitung von Texten zur LRS Therapie</h2>
 
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-            labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-            et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem
-            ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-            dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-            Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            Die Online Text Analyse wurde im Rahmen einer Masterarbeit an der Universität Tübingen entwickelt. Die
+            App gibt die Möglichkeit beliebige Texte zu analysieren und aufzubereiten. <br>
+            Die ursprüngliche Zielsetzung war dabei Silben und Betonungsmuster in Wörtern farblich hervorzuheben. So
+            bearbeitete Texte werden von Lerntherapeuten für die Therapie von Lese-Rechtschreibschwäche (LRS)
+            eingesetzt. Durch die Trennung und Hervorhebung einzelner Silben kann der Sprachrhythmus im Text besser
+            wahrgenommen werden, somit wird das Textverständnis verbessert. <br>
+            Die App soll das Erstellen dieser Lerntexte vereinfachen. Im Vergleich einer manuellen Generierung der
+            Texte, zum Beispiel mit einem Textverarbeitungsprogramm, geschieht das meiste automatisch. Bei Unklarheiten (z.B. unbekannte
+            Wörter) wird der Nutzer durch eine übersichtliche Benutzerschnittstelle geleitet, um diese zu beseitigen.
+            Durch die Verwendung von Nutzerkonten können Texte auch gespeichert werden, außerdem kann die globale
+            Wort Datenbank erweitert werden.
         </div>
     </div>
     <br>
@@ -24,9 +29,11 @@
 
             <h2>Textanalyse</h2>
 
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-            labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-            et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.<br>
+            Zur Analyse kann einfach ein eigener Text eingegeben oder kopiert werden. Nachdem der Text analysiert
+            wurde können unbekannte Wörter geklärt und die Anzeigeeinstellungen angepasst werden. Es stehen außerdem
+            Funktionen zum Drucken oder Kopieren (Weiterverwendung in Textverarbeitungsprogramm) zur Verfügung.<br>
+            <br>
+
             Zur <a [routerLink]="['TextAnalysis']">Textanalyse</a>
         </div>
     </div>
@@ -35,11 +42,13 @@
     <div class="row">
         <div class="col-md-6">
             <div class="bordered">
-                <h2>Nutzerverkonto</h2>
+                <h2>Nutzerkonto</h2>
 
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-                et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.<br>
+                Zum effektiven Arbeiten mit der App wird ein Nutzerkonto benötigt. Dadurch lassen sich eigene Einträge
+                für unbekannte Wörter erstellen sodass diese erkannt werden, wenn sie erneut vorkommen. Außerdem können
+                verwendete Texte gespeichert und wiederverwendet werden.<br>
+                <br>
+
                 <a [routerLink]="['UserAccount']">Einloggen oder Konto erstellen</a>
             </div>
         </div>
@@ -47,11 +56,15 @@
         <div class="col-md">
             <div class="bordered">
                 <h2>Betonungsdatenbank</h2>
-
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-                et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.<br>
-                Zur <a [routerLink]="['WordVerification']">Verifizierung</a>
+                Das Herzstück der Textanalyse ist eine Datenbank in der Betonungsmuster und andere Worteigenschaften
+                gespeichert sind. Wegen des immensen Umfangs eines Sprachwortschatzes sind nicht alle Wörter und
+                Wortbeugungen der deutschen Sprache enthalten. <br>
+                Die Datenbank kann jedoch von allen Nutzern erweitert werden. Wird ein unbekanntes Wort bei der
+                Textanalyse hinzugefügt steht es nur dem Benutzer zur Verfügung, der den Eintrag erstellt hat. Um es
+                allen Nutzern bereitzustellen, muss es von mindestens zwei weiteren Nutzern bestätigt werden. Auf der
+                Seite <a [routerLink]="['WordVerification']">Verifizierung</a> kann jeder Nutzer Wörter bestätigen
+                oder Gegenvorschläge einbringen. So kann die Datenbank wachsen und mehr Wörter werden automatisch
+                erkannt.
             </div>
         </div>
     </div>
