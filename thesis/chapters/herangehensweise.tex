@@ -1,0 +1,250 @@
+% !TEX root = ../ausarbeitung.tex
+
+\chapter{Herangehensweise}
+
+anforderungsanalyse zur erarbeitung von spezifikation
+
+\section{Anforderungsanalyse}
+
+auflistung von use cases, user stories\\
+verweis auf evaluation\\
+information structure, menü hierarchie, aufbau des user interfaces (links, lineare hierarchie)\\
+storyboards\\
+
+komponenten, die benötigt werden, grobe struktur\\
+
+USER INTERFACE DESIGN, entwürfe, heuristiken?\\
+color scheme https://color.adobe.com \\
+
+\subsection{Softwarestack}
+
+Anforderungen: Datenspeicherung, User Verwaltung\\
+Backend as a service: e.g. Firebase, zu unflexibel\\
+
+überblick über technologien
+
+\subsubsection{Kommunikation Frontend und Backend}
+
+Warum aufteilen?\\
+Diagramm?
+
+\subsubsection{Backend}
+welche alternativen fuer backend\\
+frontend unabhäng von daten
+
+\paragraph{python}
+warum python\\
+flexibel und schnell, viele frameworks\\
+Requests an externe Services, MARY, BALLOON
+
+\paragraph{REST API}
+was? warum?
+
+\paragraph{flask}
+gutes framework für REST
+
+\paragraph{spacy}
+parser, alternative NLTK, auch benutzt, warum ist spacy besser?\\
+tokenizer, part of speech
+
+\subsubsection{Frontend}
+
+webapplication, html css, single-view-application, dynamic data loading
+viele frameworks, verwende AngularDart
+no javascript: weakly typed languages transforming to JS: GWT (java), typescript, Dart
+
+\paragraph{Angular Dart}
+warum? javascript is bad.\\
+
+data binding\\
+more lightweight vs Java\\
+
+many google apps use it\\
+objektorientierung\\
+
+angular? angular2?\\
+
+dart, google\\
+alternativen, typescript...\\
+
+dart2js compiler, wie funktioniert dieser\\
+
+\subsubsection{Deployment}
+
+webserver für frontend, auf eigenem server mit apache gehostet\\
+flask python service läuft immer, REST schnittstelle\\
+
+\section{Entwicklung}
+
+Überblick, welche Schritte wurden wann erledigt?\\
+Aufbau der Datenbank\\
+REST API, verschiedene Services\\
+Frontend, verschiedene Komponenten (Hauptnavigationskomponenten, nicht angular komponenten)\\
+
+\subsection{Basisdatenbank}
+
+CELEX\\
+was? beschreibung\\
+alternativen?\\
+warum?
+
+\subsubsection{Impementierung celex2db}
+
+parsing\\
+modell, zusammenführung verschiedener cd dateien\\
+sqlite3, word Tabelle\\
+
+\subsubsection{Ergebnisse}
+
+anzahl wörter\\
+fehler\\
+zeit, aber irrelevant weil nur einmal erledigen
+
+
+\subsection{Backend}
+
+flask, implementierung der Routen s. spezifikation\\
+überblick services, wer macht was, abhängigkeiten (Diagramm)\\
+
+\subsubsection{Routen}
+angebotene funktionen, routen mit parameter namen
+
+\subsubsection{Dictionary Service}
+
+was macht dieser?\\
+sqlite Tabellen\\
+Klassendiagramme\\
+
+\subsubsection{User Service}
+was macht dieser?\\
+sqlite Tabellen\\
+Klassendiagramme\\
+
+\subsubsection{Verification Service}
+was macht dieser?\\
+sqlite Tabellen\\
+Klassendiagramme\\
+
+
+\subsection{Frontend}
+
+angular dart app\\
+komponenten s. software stack erklärung\\
+
+app\_component, providers, directives\\
+
+\subsubsection{Model}
+word, syllable...
+
+\subsubsection{Begrüßungsseite}
+
+home\_component\\
+angular router links
+
+\subsubsection{Text Analyse}
+
+ui und service
+
+\paragraph{TextAnalysisService}
+
+funktionen, model abhängigkeiten
+
+\paragraph{Texteingabe}
+
+texteingabe, material-input\\
+
+\paragraph{Textvorschau}
+
+iterieren über wörter\\
+span je nach word state\\
+notfound wörter mit link zu word review\\
+linebreaks (sind wörter, spezieller state)\\
+
+editierbare wörter, css aus komponente\\
+popup:\\
+\begin{itemize}
+	\item annotieren oder nicht
+	\item manuelles Betonungsmuster
+	\item manuelle Silbentrennung
+	\item gleiche wörter übernehmen
+	\item Wortart
+	\item Lemma
+\end{itemize}
+
+span für silben\\
+style aus komponente\\
+separator zeichen\\
+
+drucken, css vorlage, @media\\
+text kopieren, js/dart magic\\
+
+\paragraph{Textoptionen}
+
+text neu analysieren\\
+text speichern, mit titel\\
+neuen text eingeben
+
+\subsubsection{Annotationseinstellungen}
+
+verschiedene einstellungen\\
+in server für user gespeichert\\
+
+\paragraph{TextConfigurationService}
+
+TODO refactor, diesen service neben user service anlegen
+
+\paragraph{User Interfache für Einstellungen}
+betonte silbe\\
+fett, farbe\\
+
+color picker\\
+
+unbetonte silben\\
+farbe\\
+2. farbe, benutzen\\
+
+worthintergrund, warum, in welcher einstellung sinnvoll?
+
+größen und abstände\\
+\begin{itemize}
+	\item Schriftgröße
+	\item Silbenabstand
+	\item Wortabstand
+	\item Zeilenabstand
+	\item Zeichenabstand
+\end{itemize}
+
+custom slider\\
+
+Silbentrennzeichen\\
+warum, benutzen, eingabe\\
+
+Wortart dropdown\\
+funktionen separat wür die verschiedenen Wortarten\\
+dropdown\\
+funktion iteriert über alle wörter im text und wendet eigenschaft auf jedes passende Wort an\\
+funktionen:\\
+\begin{itemize}
+	\item Annotieren
+	\item Unbetont
+	\item Ignorieren
+\end{itemize}
+
+\paragraph{Annotationsvorlagen}
+
+speichert alles\\
+name der vorlage\\
+liste, aktivieren, löschen\\
+neue vorlage anlegen oder momentane speichern\\
+
+\subsubsection{Text Review}
+
+TBD
+
+\subsubsection{Nutzerkonto}
+
+TBD
+
+\subsubsection{Wort Verifizierung}
+
+TBD

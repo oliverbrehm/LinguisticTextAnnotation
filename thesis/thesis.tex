@@ -1,0 +1,114 @@
+\documentclass[twoside,12pt,a4paper]{scrreprt}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{babelbib}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{graphicx} % Zum Einbinden von Grafiken
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true,linkcolor=Black,citecolor=MidnightBlue,urlcolor=MidnightBlue]{hyperref}
+\usepackage[all]{hypcap}
+\usepackage{pgfplots} \pgfplotsset{compat=1.9}
+\usepackage{helvet} % Schönere SansSerif-Schrift
+\usepackage{times}  % Schönere Serif-Schrift
+
+\usepackage{blindtext} % sollte am Ende nicht mehr benötigt werden ;)
+
+\pagestyle{headings}
+
+\graphicspath{ {figures/} } % Pfad-Prefix für einzubindende Grafiken. Es sind auch mehrere Pfade möglich, diese müssen jeweils in eigenen {Klammern} stehen.
+
+\setkomafont{disposition}{\normalcolor\bfseries} % überall Serifen verwenden
+% oder
+%\renewcommand{\familydefault}{\sfdefault} % überall Sans-Serif verwenden
+
+% PDF-Optionen (werden in den Dateieigenschaften angezeigt)
+\hypersetup{
+pdftitle={Entwicklung einer Webanwendung zur Annotation spezifischer linguistischer Merkmale in Fließtexten},
+pdfauthor={Oliver Brehm},
+pdfsubject={Masterarbeit Infromatik},
+pdfpagelayout=TwoColumnRight
+}
+
+%%% Eigene Makros
+\newcommand{\qq}[1]{\glqq #1\grqq} % \qq{Text in Anführungszeichen}
+
+\begin{document}
+
+%%% Titelseite
+\begin{titlepage}
+\begin{center}
+\LARGE Eberhard Karls Universität Tübingen\\
+\large Mathematisch-Naturwissenschaftliche Fakultät \\
+Wilhelm-Schickard-Institut für Informatik\\
+[3cm]
+\huge Masterarbeit Informatik\\
+[2cm]
+\Large\textbf{Entwicklung einer Webanwendung zur Annotation spezifischer linguistischer Merkmale in Fließtexten}\\
+[1.5cm]
+\large Oliver Brehm\\
+[0.5cm]
+31.01.2017\\
+\vfill
+\small\textbf{Gutachter}\\[0.3cm]
+\large Jun.-Prof. Dr. Alexandra Kirsch\\
+\footnotesize Wilhelm-Schickard-Institut für Informatik\\Universität Tübingen\\
+[1cm]
+\small\textbf{Betreuer}\\[0.3cm]
+\large M.Sc. Heiko Holz\\
+\footnotesize Wilhelm-Schickard-Institut für Informatik\\Universität Tübingen
+\end{center}
+\end{titlepage}
+
+%%% Titelrückseite: Bibliographische Angaben
+\thispagestyle{empty}
+\vspace*{\fill}
+\textbf{Brehm, Oliver:}\\
+\emph{Entwicklung einer Webanwendung zur Annotation spezifischer linguistischer Merkmale in Fließtexten}\\
+Masterarbeit Informatik\\
+Eberhard Karls Universität Tübingen\\
+Bearbeitungszeitraum: August 2017 - Januar 2018
+\newpage
+
+%%% Zusammenfassung (Abstract), hier aus externer Datei eingebunden
+\input{chapters/zusammenfassung.tex}
+\newpage
+
+%%% Inhaltsverzeichnis
+\KOMAoption{toc}{listof,bib} % Abbildungs-/Tabellenverzeichnis, Literaturverzeichnis aufnehmen
+\tableofcontents\label{toc}
+\cleardoublepage
+
+%%% Hauptteil (mit \input{dateiname} wird die Datei 'dateiname' eingebunden)
+\input{chapters/einleitung.tex}
+\cleardoublepage
+
+\input{chapters/forschung.tex}
+\cleardoublepage
+
+\input{chapters/herangehensweise.tex}
+\cleardoublepage
+
+\input{chapters/evaluation.tex}
+\cleardoublepage
+
+\input{chapters/diskussion.tex}
+\cleardoublepage
+
+%%% Literaturverzeichnis, lädt die Datei literatur.bib
+\bibliographystyle{babplain} % "babplain" benötigt das Paket babelbib
+\bibliography{library}
+\cleardoublepage
+
+%%% Selbständigkeitserklärung
+\thispagestyle{empty}
+\section*{Erklärung}
+Hiermit erkläre ich, dass ich diese schriftliche Abschlussarbeit selbständig 
+verfasst habe, keine anderen als die angegebenen Hilfsmittel und Quellen benutzt 
+habe und alle wörtlich oder sinngemäß aus anderen Werken übernommenen Aussagen als 
+solche gekennzeichnet habe.
+\\[2cm]
+Ort, Datum \hfil Unterschrift 
+
+\end{document}
