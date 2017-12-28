@@ -45,7 +45,7 @@ class TextPreviewComponent implements OnInit {
   }
 
   bool hasUnknownWords() {
-    return textAnalysisService.annotatedText.nextMissingWord() == null;
+    return textAnalysisService.annotatedText.nextMissingWord() != null;
   }
 
   String letterSpacing() {

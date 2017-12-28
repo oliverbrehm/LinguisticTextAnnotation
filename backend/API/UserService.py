@@ -150,7 +150,6 @@ class UserWord(Base):
     text = sqlalchemy.Column(sqlalchemy.String(128))
     stress_pattern = sqlalchemy.Column(sqlalchemy.String(32))
     hyphenation = sqlalchemy.Column(sqlalchemy.String(128))
-    lemma = sqlalchemy.Column(sqlalchemy.String(128))
     pos = sqlalchemy.Column(sqlalchemy.String(8))
 
     user_email = sqlalchemy.Column(sqlalchemy.String(256), sqlalchemy.ForeignKey('user.email'))
@@ -162,7 +161,6 @@ class UserWord(Base):
             "text": self.text,
             "stress_pattern": self.stress_pattern,
             "hyphenation": self.hyphenation,
-            "lemma": self.lemma,
             "pos": self.pos,
             "user_first_name": self.user.first_name,
             "user_last_name": self.user.last_name
@@ -222,11 +220,11 @@ class UserService:
 
         return True
 
-    def add_word(self, user, text, lemma, pos, stress_pattern, hyphenation):
+    def add_word(self, user, text, pos, stress_pattern, hyphenation):
         text = DictionaryService.preprocess_entry(text)
         hyphenation = DictionaryService.preprocess_entry(hyphenation)
 
-        user_word = UserWord(user=user, text=text, stress_pattern=stress_pattern, hyphenation=hyphenation, lemma=lemma, pos=pos)
+        user_word = UserWord(user=user, text=text, stress_pattern=stress_pattern, hyphenation=hyphenation, pos=pos)
         self.database.session.add(user_word)
         self.database.session.commit()
 

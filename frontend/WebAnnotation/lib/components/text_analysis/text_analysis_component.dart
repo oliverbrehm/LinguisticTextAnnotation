@@ -48,6 +48,7 @@ class TextAnalysisComponent implements OnInit {
     } else if(textAnalysisService.annotatedText != null) {
       textAnalysisService.lookupText = textAnalysisService.annotatedText.originalText;
       textAnalysisService.applyCurrentConfiguration();
+      appService.scrollToTop();
     }
 
     if(userAccountService.loggedIn) {
@@ -72,6 +73,8 @@ class TextAnalysisComponent implements OnInit {
         appService.errorMessage("Der Text konnte nicht analysiert werden.");
       } else {
         textAnalysisService.applyCurrentConfiguration();
+        appService.infoMessage("Der Text wurde erfolgreich analysiert und wird in der Vorschau hervorgehoben dargestellt."
+            "Sie Können in der Vorschau jedes Wort bearbeiten indem Sie darauf klicken.");
       }
     });
   }

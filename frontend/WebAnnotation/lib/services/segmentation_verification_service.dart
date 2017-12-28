@@ -57,21 +57,19 @@ class SegmentationVerificationService extends SegmentationService {
       String stressPattern = word['stress_pattern'];
       String authorFirstName = word['user_first_name'];
       String authorLastName = word['user_last_name'];
-      String pos = word['pos'];
-      String lemma = word['lemma'];
 
-      this.verificationWord = new Word.initialize(wordText, pos, lemma);
+      this.verificationWord = new Word.initialize(wordText, "", "");
       this.verificationWord.parseHyphenationUsingOriginalText(hyphenation);
       this.verificationWord.parseStressPattern(stressPattern);
 
-      Segmentation s = new Segmentation(wordText, authorFirstName + " " + authorLastName, 'Benutzer', hyphenation, stressPattern, pos, lemma);
+      Segmentation s = new Segmentation(wordText, authorFirstName + " " + authorLastName, 'Benutzer', hyphenation, stressPattern);
       this.segmentations.add(s);
 
       var segmentationProposals = response['segmentations'];
 
       for(var proposal in segmentationProposals) {
         var s = new Segmentation(proposal['text'], proposal['origin']
-            , proposal['source'], proposal['hyphenation'], proposal['stress_pattern'], proposal['pos'], proposal['lemma']);
+            , proposal['source'], proposal['hyphenation'], proposal['stress_pattern']);
         this.segmentations.add(s);
       }
 

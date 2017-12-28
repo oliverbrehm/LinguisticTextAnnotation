@@ -111,13 +111,12 @@ def user_add_word():
     text = request.form.get("text")
     stress_pattern = request.form.get("stress_pattern")
     hyphenation = request.form.get("hyphenation")
-    lemma = request.form.get("lemma")
     pos = request.form.get("pos")
 
-    if not text or not stress_pattern or not hyphenation or not lemma or not pos:
+    if not text or not stress_pattern or not hyphenation or not pos:
         return create_error_response(400, "Data not provided.")
 
-    db_word = userService.add_word(user, text, lemma, pos, stress_pattern, hyphenation)
+    db_word = userService.add_word(user, text, pos, stress_pattern, hyphenation)
 
     if not db_word:
         return create_error_response(404, "Error adding word.")
@@ -357,16 +356,11 @@ def query_verification():
     verification_proposals = verificationService.proposals_for_word(user_word)
     if verification_proposals is not None:
         for p in verification_proposals:
-            s = Segmentation(word['text'], p.user.first_name + " " + p.user.last_name, "Benutzer", p.hyphenation, p.stress_pattern, p.lemma, user_word.pos)
+            s = Segmentation(word['text'], p.user.first_name + " " + p.user.last_name, "Benutzer", p.hyphenation, p.stress_pattern)
             segmentations.append(s.json())
 
     segmentation_proposals = dictionaryService.query_segmentation(word['text'])
-    if segmentation_proposals is not None:
-        for sp in segmentation_proposals:
-            sp['lemma'] = user_word.lemma
-            sp['pos'] = user_word.pos
-
-        segmentations = segmentations + segmentation_proposals
+    segmentations = segmentations + segmentation_proposals
 
     if segmentations is not None:
         resp['segmentations'] = segmentations
@@ -386,12 +380,11 @@ def submit_verification():
 
     stress_pattern = request.form.get("stress_pattern")
     hyphenation = request.form.get("hyphenation")
-    lemma = request.form.get("lemma")
 
-    if not stress_pattern or not hyphenation or not lemma:
+    if not stress_pattern or not hyphenation:
         return create_error_response(400, "Data not provided.")
 
-    if not verificationService.submit(user, word_id, lemma, stress_pattern, hyphenation, dictionaryService):
+    if not verificationService.submit(user, word_id, stress_pattern, hyphenation, dictionaryService):
         return create_error_response(404, "Unable to submit proposal.")
 
     return create_response(201)

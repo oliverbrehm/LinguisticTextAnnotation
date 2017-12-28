@@ -110,9 +110,6 @@ class SegmentationSelectionComponent implements OnInit {
     hyphenationText = segmentationProposal.hyphenation;
     _currentStressPattern = segmentationProposal.stressPattern;
 
-    segmentationWord.lemma = segmentationProposal.lemma;
-    segmentationWord.posId = segmentationProposal.pos;
-
     updateSegmentation();
   }
 

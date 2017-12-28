@@ -16,14 +16,12 @@ TOKENS_TO_IGNORE = ['X', 'PUNCT', 'NUM', 'SPACE']
 
 
 class Segmentation:
-    def __init__(self, text, origin, source, hyphenation, stress_pattern, lemma, pos):
+    def __init__(self, text, origin, source, hyphenation, stress_pattern):
         self.text = text
         self.origin = origin
         self.source = source
         self.hyphenation = hyphenation
         self.stress_pattern = stress_pattern
-        self.pos = pos
-        self.lemma = lemma
 
     def json(self):
         return {
@@ -31,9 +29,7 @@ class Segmentation:
             "origin": self.origin,
             "source": self.source,
             "hyphenation": self.hyphenation,
-            "stress_pattern": self.stress_pattern,
-            "pos": self.pos,
-            "lemma": self.lemma
+            "stress_pattern": self.stress_pattern
         }
 
 
@@ -177,6 +173,7 @@ class DictionaryService:
             word = candidates[0]
 
             for w in candidates:
+                print(w.text)
                 if w.pos == pos:
                     word = w
                     break
@@ -231,8 +228,6 @@ class DictionaryService:
         return analyzed
 
     def _lookup_token(self, word, pos, lemma, user, user_service):
-        ignore = False
-
         entry = {
             'text': word,
             'pos': pos,
@@ -244,8 +239,10 @@ class DictionaryService:
             entry['type'] = 'ignored'
 
         else:
+            print("word:", word)
             annotated = self.query_word(word, pos, user_service, user)
             if annotated is None:
+                print('not found')
                 entry['type'] = 'not_found'
             else:
                 entry['type'] = 'annotated_word'
@@ -280,7 +277,7 @@ class DictionaryService:
                     if "1" not in stress_pattern:
                         # contains no stress, default use first syllable
                         stress_pattern[0] = '1' + stress_pattern[1:]
-                    segmentation_mary = Segmentation(word, "MARY TTS", "Source: MARY TTS", hyphenation, stress_pattern, "", "na")
+                    segmentation_mary = Segmentation(word, "MARY TTS", "Source: MARY TTS", hyphenation, stress_pattern)
                     segmentations.append(segmentation_mary.json())
         except requests.exceptions.ReadTimeout:
             print('Timout querying MARY TTS.')
@@ -292,7 +289,7 @@ class DictionaryService:
         for s in range(1, len(syllables)):
             stress_pattern = stress_pattern + "0"
 
-        segmentation_pyphen = Segmentation(word, "Pyphen", "Source: Pyphen", hyphenation, stress_pattern, "", "na")
+        segmentation_pyphen = Segmentation(word, "Pyphen", "Source: Pyphen", hyphenation, stress_pattern)
         segmentations.append(segmentation_pyphen.json())
 
         return segmentations

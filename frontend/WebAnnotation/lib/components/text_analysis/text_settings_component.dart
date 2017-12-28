@@ -142,6 +142,8 @@ class TextSettingsComponent implements OnInit, TextAnalysisObserver {
     textAnalysisService.applyCurrentConfiguration();
 
     updateConfigurationUI();
+
+    appService.scrollToTop();
   }
 
   void saveConfiguration() {

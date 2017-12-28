@@ -78,7 +78,9 @@ class WordReviewComponent implements OnInit {
 
         // delay to next detection cycle
         new Future.delayed(const Duration(microseconds: 100), () {
-          this.segmentationSelection.loadDefault();
+          if(this.segmentationSelection != null) {
+            this.segmentationSelection.loadDefault();
+          }
         });
       }
 
@@ -127,6 +129,7 @@ class WordReviewComponent implements OnInit {
       if(w == null) {
         // no more unknown words, back to text
         router.navigate(['TextAnalysis']);
+        appService.infoMessage("Alle unbekannten Wörter wurden geklärt.");
         return;
       }
 

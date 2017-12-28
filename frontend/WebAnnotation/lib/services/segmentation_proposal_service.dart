@@ -36,7 +36,7 @@ class SegmentationProposalService extends SegmentationService {
       var backendProposals = JSON.decode(response);
 
       for(var s in backendProposals) {
-        Segmentation seg = new Segmentation(s['text'], s['origin'], s['source'], s['hyphenation'], s['stress_pattern'], s['pos'], s['lemma']);
+        Segmentation seg = new Segmentation(s['text'], s['origin'], s['source'], s['hyphenation'], s['stress_pattern']);
         this.segmentations.add(seg);
       }
 
