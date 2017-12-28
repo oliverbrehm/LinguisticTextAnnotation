@@ -1,1 +1,1 @@
-scp -i '../aws/LinguisticTextAnnotation.pem' debug.sh VerificationService.py Database.py LinguisticTextAnnotation.py DictionaryService.py UserService.py launch.sh ubuntu@ec2-18-221-249-140.us-east-2.compute.amazonaws.com:./LinguisticTextAnnotation/.
+scp -i '../aws/LinguisticTextAnnotation.pem' debug.sh prepareUserTest.py VerificationService.py Database.py LinguisticTextAnnotation.py DictionaryService.py UserService.py launch.sh ubuntu@ec2-18-221-249-140.us-east-2.compute.amazonaws.com:./LinguisticTextAnnotation/.

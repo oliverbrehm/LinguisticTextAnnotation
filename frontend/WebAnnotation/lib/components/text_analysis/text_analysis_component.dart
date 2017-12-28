@@ -73,7 +73,7 @@ class TextAnalysisComponent implements OnInit {
         appService.errorMessage("Der Text konnte nicht analysiert werden.");
       } else {
         textAnalysisService.applyCurrentConfiguration();
-        appService.infoMessage("Der Text wurde erfolgreich analysiert und wird in der Vorschau hervorgehoben dargestellt."
+        appService.infoMessage("Der Text wurde erfolgreich analysiert und wird in der Vorschau hervorgehoben dargestellt. "
             "Sie Können in der Vorschau jedes Wort bearbeiten indem Sie darauf klicken.");
       }
     });
