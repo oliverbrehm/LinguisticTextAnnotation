@@ -20,13 +20,6 @@ dictionary.parse_lemmas(MAX_LINES_LEMMAS, STEP_SIZE)
 print("--- parsing celex2 word list (gpw, gow) ---")
 dictionary.parse_words(MAX_LINES_WORDLIST, STEP_SIZE)
 
-
-# write to json file
-# WriteJSON.write_json(dictionary, STEP_SIZE)
-
-# write to firebase
-# WriteFirebase.write_firebase(dictionary, STEP_SIZE)
-
 # write to SQLite database
 writeSQLite.write_sqlite(dictionary, STEP_SIZE)
 
