@@ -27,12 +27,14 @@
 \hypersetup{
 pdftitle={Entwicklung einer Webanwendung zur Annotation spezifischer linguistischer Merkmale in Fließtexten},
 pdfauthor={Oliver Brehm},
-pdfsubject={Masterarbeit Infromatik},
+pdfsubject={Masterarbeit Medieninfromatik},
 pdfpagelayout=TwoColumnRight
 }
 
 %%% Eigene Makros
-\newcommand{\qq}[1]{\glqq #1\grqq} % \qq{Text in Anführungszeichen}
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{TODO }#1}} 
+\newcommand{\tocite}[1]{\textcolor{blue}{[\textbf{CITE }#1]}} 
+\newcommand{\qq}[1]{\glqq #1\grqq}
 
 \begin{document}
 
@@ -43,7 +45,7 @@ pdfpagelayout=TwoColumnRight
 \large Mathematisch-Naturwissenschaftliche Fakultät \\
 Wilhelm-Schickard-Institut für Informatik\\
 [3cm]
-\huge Masterarbeit Informatik\\
+\huge Masterarbeit Medieninfromatik\\
 [2cm]
 \Large\textbf{Entwicklung einer Webanwendung zur Annotation spezifischer linguistischer Merkmale in Fließtexten}\\
 [1.5cm]
@@ -88,6 +90,9 @@ Bearbeitungszeitraum: August 2017 - Januar 2018
 \cleardoublepage
 
 \input{chapters/herangehensweise.tex}
+\cleardoublepage
+
+\input{chapters/entwicklung.tex}
 \cleardoublepage
 
 \input{chapters/evaluation.tex}

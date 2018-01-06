@@ -2,8 +2,17 @@
 
 \chapter{Einleitung}
 
-was: LRS/Legasthenie, Methoden zur Therapie, meist manuell erstellte übungen, Literatur zu übungen\\
-kurz vorhandene tools vorstellen, zeigen, diese sind nicht auf das spezifische problem zugeschnitten, Literatur zu Tools\\
+In der vorliegenden Arbeit wurde eine Applikation entwickelt, die Fließtexte durch farbliche Annotationen so aufbereiten kann, dass diese in der Therapie von Kindern mit Lese-Rechtschreibschwäche (LRS) eingesetzt werden können.\\
+
+LRS tritt bei ca. 700000 Kindern und Jugendlichen unter 18 Jahren auf \cite{Schulte-Koerne2014} \tocite{Seiten? Vorwort}. Bei Kindern mit LRS können gezielte Maßnahmen zu einer Verbesserung der Lesekompetenz führen \tocite{???}. Das Lesen speziell bearbeiteter Texte zielt darauf ab, die Dekodierfähigkeit zu verbessern, was neben anderen Faktoren einen Teil der Ursachen für LRS abdeckt. \tocite{schulte k, findeisen, s. 52}. Eine Zentrale Rolle beim Schrifterwerb spielt das Erkennen von Silben. Es wurde gezeigt, dass beim Lesen Lernen, im Gegensatz zum einzelnen Buchstaben die Silbe als kleinste Einheit wahrgenommen wird. \tocite{wirklich? oder so aehnlich} Die Silbenmethode und Silbenfibeln sind beim Schrifterwerb im schulischen Umfeld im Einsatz \todo{seit wann?} und weisen deutliche Erfolge auf \tocite{Silbenmethode, einsatz}.\\
+
+Die Applikation wurde mit der Motivation entwickelt das Erstellen von Übungstexten zu vereinfachen und zu automatisieren. In den Übungstexten werden Wörter in Silben unterteilt, diese lassen sich mit verschiedenen Farben annotieren. Weitere Merkmale, wie der Abstand zwischen Silben und Wörtern, sowie ein Silbentrennzeichen, lassen sich frei anpassen. Aktuell werden solche Texte oft manuell, z.B. mit einem Textverarbeitungsprogramm, erstellt. Die Anwendung kann Therapeuten oder Eltern helfen, spezifisch zugeschnittene Übungen mit wenig Aufwand selbst zu erstellen. Im Folgenden Kapitel werden auch einige Alternativen vorgestellt, die das Lesen Lernen mit der Silbenmethode unterstützen.\\
+
+
+
+
+
+
 
 warum: einsparung von arbeit der lerntherapheuten, automatisierun, digitalisierung\\
 therapie von LRS wichtig, einfacheres erstellen von übungen, mehr übungen, mehr lernzeit, weniger betreung, insgesamt mehr lernerfolg (keine belege, prognose, oder mit anderen lerntools belegen)
@@ -15,13 +24,12 @@ erarbeitung einer spezifikation mit fachkundigen experten? \\
 wie wurden features identifiziert: brainsorming, interview, fragebogen
 
 
-wissenschaftliche Beiträge: \\
-untersuchung von wortbetonung, wie kann eine datenbank erstellt und erweitert werden\\
-einfache benutzbarkeit einer anwendung für bildung, webapplikation zur plattformunabhängigen benutzung\\
-ziel möglichst gute usability, durch evaluation mit therapheuten und fachfremden bestätigt
 
-ausblick\\
-einführung in LRS, methoden zum lesetraining\\
-spezifikation und wahl des software stacks, frontend, backend, technologien\\
-entwicklung, beschreibung der komponenten und module
-evaluation (was ist dabei klar geworden?) und ausblick (nur 1/2 punkte hier nennen)
+
+
+
+Die Entwicklung der Anwendung stellte verschiedene Herausforderungen in diversen Bereichen dar. Zum musste untersucht werden, wie in Wörtern Silbentrennung und Wortbetonung automatisch bestimmt werden kann. Hierfür wurde eine eigene Datenbank generiert, die diese und andere Merkmale speichert. Eine besondere Schwierigkeit stellte die Komplexität und der Umfang der deutschen Sprache dar. Als Grundlage für die Datenbank diente das Lexikon CELEX, aus dem rund 360000 Einträge extrahiert werden konnten. Damit ist es aber nicht möglich den sämtlichen Wortschatz lückenlos mit allen Wortbeugungen abzubilden. Es wurde deshalb nach einer Möglichkeit gesucht, eine Benutzerfreundliche Schnittstelle zu entwickeln, mit der leicht manuelle und korrekte Einträge der Datenbank von Nutzern und Experten hinzugefügt werden können.\\
+Eine weitere Schwierigkeit stellte die User Experience dar. Die Zielgruppe der Nutzer, die die App letztendlich bedienen sollen, besteht hauptsächlich aus Lerntherapeuten, Nachhilfelehrern und Eltern von Betroffenen Kindern. Diese bringen sehr unterschiedliche Kenntnisse im Umgang mit Software mit. Haben die Nutzer Schwierigkeiten, das Programm zu benutzen, führt das schnell zu Frust und letztendlich dazu, dass die Software am Ende überhaupt nicht genutzt wird und die Aufgabe weiterhin manuell erledigt wird. \tocite{irgendwas mit user experience wichtig} Das Ziel war also die Oberfläche so einfach und intuitiv wie möglich zu gestalten, um Allen Nutzern einen reibungslosen Umgang mit der Applikation zu ermöglichen. Es wurde daher beschlossen eine Browser basierte Anwendung zu entwickeln, die plattformunabhängig funktioniert. Damit wurden von Anfang an eine Hürden wie die Bindung an ein bestimmtes Betriebssystem und die Notwendigkeit der Installation von Software, beseitigt.\\
+Im Evaluationsteil am Ende der Arbeit wird die Benutzbarkeit des Gesamtsystems anhand von Benutzertests bewertet. Hierfür wurden als Probanden sowohl Experten \todo{wenns geklappt hat...} als auch Laien (zur Simulation der Nutzer, die Eltern von betroffenen Kindern sind) herangezogen und die Unterschiede der beiden Gruppen verglichen.
+
+In den Folgenden Kapiteln werden zunächst Grundlagen zur Lese-Rechtschreibschwäche sowie zur linguistischen Begriffen und Algorithmen gegeben. Danach wird der Prozess der Planung und Entwicklung der Software beschrieben, detaillierte Beschreibungen zu einzelnen Komponenten und zum Zusammenspiel dieser sollen verdeutlichen, wie das System funktioniert. Den Abschluss bildet die Evaluation anhand von Nutzertests, hier wird gezeigt, wie die Software im tatsächlichen Einsatz zu bewerten ist. Diese zeigte sowohl Stärken als auch Schwächen des Systems, die in einem Weiteren Einsatz noch zu beheben sind. Die Flexibilität des Gesamtsystems, schaffte zudem viele anregende neue Ideen, die im Anschluss an diese Arbeit leicht realisierbar wären.

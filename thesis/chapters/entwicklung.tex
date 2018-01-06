@@ -1,0 +1,176 @@
+% !TEX root = ../ausarbeitung.tex
+
+\chapter{Entwicklung der Anwendung}
+
+Überblick, welche Schritte wurden wann erledigt?\\
+Aufbau der Datenbank\\
+REST API, verschiedene Services\\
+Frontend, verschiedene Komponenten (Hauptnavigationskomponenten, nicht angular komponenten)\\
+
+\section{Basisdatenbank}
+
+CELEX\\
+was? beschreibung\\
+alternativen?\\
+warum?
+
+\subsection{Impementierung celex2db}
+
+parsing\\
+modell, zusammenführung verschiedener cd dateien\\
+sqlite3, word Tabelle\\
+
+\subsection{Ergebnisse}
+
+anzahl wörter\\
+fehler\\
+zeit, aber irrelevant weil nur einmal erledigen
+
+
+\section{Backend}
+
+flask, implementierung der Routen s. spezifikation\\
+überblick services, wer macht was, abhängigkeiten (Diagramm)\\
+
+\subsection{Routen}
+angebotene funktionen, routen mit parameter namen
+
+\subsection{Dictionary Service}
+
+was macht dieser?\\
+sqlite Tabellen\\
+Klassendiagramme\\
+
+\subsection{User Service}
+was macht dieser?\\
+sqlite Tabellen\\
+Klassendiagramme\\
+
+\subsection{Verification Service}
+was macht dieser?\\
+sqlite Tabellen\\
+Klassendiagramme\\
+
+
+\section{Frontend}
+
+angular dart app\\
+komponenten s. software stack erklärung\\
+
+app\_component, providers, directives\\
+
+\subsection{Model}
+word, syllable...
+
+\subsection{Begrüßungsseite}
+
+home\_component\\
+angular router links
+
+\subsection{Text Analyse}
+
+ui und service
+
+\subsubsection{TextAnalysisService}
+
+funktionen, model abhängigkeiten
+
+\subsubsection{Texteingabe}
+
+texteingabe, material-input\\
+
+\subsubsection{Textvorschau}
+
+iterieren über wörter\\
+span je nach word state\\
+notfound wörter mit link zu word review\\
+linebreaks (sind wörter, spezieller state)\\
+
+editierbare wörter, css aus komponente\\
+popup:\\
+\begin{itemize}
+	\item annotieren oder nicht
+	\item manuelles Betonungsmuster
+	\item manuelle Silbentrennung
+	\item gleiche wörter übernehmen
+	\item Wortart
+	\item Lemma
+\end{itemize}
+
+span für silben\\
+style aus komponente\\
+separator zeichen\\
+
+drucken, css vorlage, @media\\
+text kopieren, js/dart magic\\
+
+\subsubsection{Textoptionen}
+
+text neu analysieren\\
+text speichern, mit titel\\
+neuen text eingeben
+
+\subsection{Annotationseinstellungen}
+
+verschiedene einstellungen\\
+in server für user gespeichert\\
+
+\subsubsection{TextConfigurationService}
+
+TODO refactor, diesen service neben user service anlegen
+
+\subsubsection{User Interfache für Einstellungen}
+betonte silbe\\
+fett, farbe\\
+
+color picker\\
+
+unbetonte silben\\
+farbe\\
+2. farbe, benutzen\\
+
+worthintergrund, warum, in welcher einstellung sinnvoll?
+
+größen und abstände\\
+\begin{itemize}
+	\item Schriftgröße
+	\item Silbenabstand
+	\item Wortabstand
+	\item Zeilenabstand
+	\item Zeichenabstand
+\end{itemize}
+
+custom slider\\
+
+Silbentrennzeichen\\
+warum, benutzen, eingabe\\
+
+Wortart dropdown\\
+funktionen separat wür die verschiedenen Wortarten\\
+dropdown\\
+funktion iteriert über alle wörter im text und wendet eigenschaft auf jedes passende Wort an\\
+funktionen:\\
+\begin{itemize}
+	\item Annotieren
+	\item Unbetont
+	\item Ignorieren
+\end{itemize}
+
+\subsubsection{Annotationsvorlagen}
+
+speichert alles\\
+name der vorlage\\
+liste, aktivieren, löschen\\
+neue vorlage anlegen oder momentane speichern\\
+
+\subsection{Text Review}
+
+TBD
+
+\subsection{Nutzerkonto}
+
+TBD
+
+\subsection{Wort Verifizierung}
+
+TBD

@@ -1,59 +1,134 @@
 % !TEX root = ../ausarbeitung.tex
 
-\chapter{Herangehensweise}
+\chapter{Anforderungsanalyse und Spezifikation}
 
-anforderungsanalyse zur erarbeitung von spezifikation
+Schon während der Konzeption des Projekts ist klar geworden, dass die zu entwickelnde Software eine relativ komplexe Architektur erfordert. Da eine Browser Applikation entwickelt wurde, musste die Software in Teilprojekte untergliedert werden. Zum einen das User-Interface für die Web Applikation und zum Anderen die Programmlogik, welche auf Grund der benötigten Funktionalitäten (wie Datenbankanbindung und Algorithmen zur Textverarbeitung) nicht sinnvoll im Web Client implementiert werden konnte.\\
+Um eine Spezifikation für die Software zu entwerfen und den zu verwendenden Software-Stack zu definieren, wurde zunächst eine Anforderungsanalyse durchgeführt, die im Folgendem Teil beschrieben wird. Im darauffolgenden Kapitel gehe ich Schritt für Schritt auf die Entwicklung des Gesamtsystems ein.
 
-\section{Anforderungsanalyse}
+\section{Anforderungen an die Software}
 
-auflistung von use cases, user stories\\
-verweis auf evaluation\\
-information structure, menü hierarchie, aufbau des user interfaces (links, lineare hierarchie)\\
-storyboards\\
+Zunächst wurde festgestellt, welche Funktionen die App dem Nutzer bieten soll. Dazu wurden Folgende mögliche Szenarien aufgestellt:
 
-komponenten, die benötigt werden, grobe struktur\\
+\paragraph{Text Analyse} 
+Der User möchte einen Fließtext eingeben und von der Anwendung annotieren lassen. Nach der Eingabe soll das Ergebnis annotiert in der App dargestellt werden.
 
-USER INTERFACE DESIGN, entwürfe, heuristiken?\\
-color scheme https://color.adobe.com \\
+\paragraph{Anpassung der annotierten Darstellung}
+Der User möchte die Parameter des annotierten Texts ändern. Angepasst werden können sollen die Texteigenschaften (Font, Zeilenabstand, Zeichenabstand) und die Darstellung der Annotation (Farben für betonte und unbetonte Silbe, Silbenabstand, Trennzeichen zwischen Silben)
 
-\subsection{Softwarestack}
+\paragraph{Export der annotierten Darstellung}
+Der User hat die Möglichkeit verschiedene Formate des annotierten Texts zu exportieren, z.B. Druck, HTML oder Word.
 
-Anforderungen: Datenspeicherung, User Verwaltung\\
+\paragraph{Verwaltung von User Accounts}
+Dem User soll die Möglichkeit gegeben werden, einen User Account zu erstellen um persönlich verwendete Daten (z.B. Texte oder Wortsegmentierungen) speichern zu können. Dazu werden Funktionen und Interfaces zur Registrierung eines Nutzeraccounts, Login, Logout, zum Bearbeiten der Nutzerinformationen und zum Löschen des Accounts bereitgestellt.
+
+\paragraph{Behandlung unbekannter Wörter}
+Der Nutzer kann nacheinander die Segmentierung von Wörtern, die durch das System nicht eindeutig bestimmt wurden konnten, selbst manuell festlegen.
+
+\paragraph{Bestimmung der Segmentierung unbekannter Wörter}
+Für ein unbekanntes Wort wählt der User in einem neuen View die Segmentierung selbst aus. Dafür werden folgende Möglichkeiten gegeben:
+\begin{itemize}
+	\item Input aus G2P Systemen wie MARY TTS
+	\item Manuelle Segmentierung mit geeignetem User Interface
+	\item Eventuell weitere Quellen für die Segmentierung (z.B. Duden)
+\end{itemize}
+
+\paragraph{Speicherung von Nutzer Segmentierungen}
+Vom Nutzer hinzugefügte Segmentierungen sollen (lokal für diesen Nutzer) gespeichert werden können und beim nächsten Vorkommen in einem Text automatisch verwendet werden.
+
+\paragraph{Speicherung und Wiederverwendung von Annotationskonfigurationen für Texte}
+Die Einstellungen, die ein Nutzer an einenm annotierten Text vorgenommen hat, können als Vorlage für andere Texte gespeichert werden. In den Annotationseinstellungen eines Textes kann eine zuvor gespeicherte Konfiguration wiederverwendet werden.
+
+\paragraph{Speicherung und Wiederverwendung von Nutzertexten}
+Analysierte Texte können vom Nutzer zusammen mit der verwendeten Konfiguration gespeichert werden. Den Texten können Metadaten zugeordnet werden, z.B. Thema, Niveau, Zielgruppe. Im Benutzerbereich werden die Texte, die der Nutzer hinzugefügt hat, geeignet strukturiert, dargestellt. Dem Nutzer wird die Möglichkeit gegeben, den gespeicherten Text erneut analysieren zu lassen.
+
+\paragraph{Verifizierung unbekannter Wörter}
+Manuelle Segmentierungen von unbekannten Wörtern müssen auf Korrektheit überprüft werden. Dazu wird jeder Nutzer aufgefordert, die Einträge anderer Nutzer zu überprüfen. In einem View, ähnlich zur manuellen Segmentierung, kann der Nutzer Einträge anderer Nutzer bestätigen oder Gegenvorschläge übermitteln.
+
+\paragraph{Expertennutzer}
+Ein Experte (z.B. Linguist oder Lerntherapeut) kann sich als solcher bei der Erstellung eines Accounts identifizieren. Bei der Wort Verifizierung zählt die Stimme der Expertennutzers mehr als die eines Nutzers, der kein Experte ist.
+
+\subsubsection{User Interface}
+Von diesen Szenarien ausgehend wurde in den Folgenden Schritten ein geeignetes User Interface erarbeitet:
+
+\paragraph{Informationsstruktur}
+\todo{information structure, menü hierarchie, aufbau des user interfaces (links, lineare hierarchie), storyboards}\\
+
+\paragraph{Farbschema}
+\todo{color scheme https://color.adobe.com}
+
+\subsection*{Grundlegende Anforderungen}
+
+Aus den oben beschriebenen Use Cases lassen sich diverse Anforderungen an die Software spezifizieren:
+
+\begin{itemize}
+	\item Service zur Textanalyse
+	\item Wortdatenbank
+	\item Service zur Manipulation der Wortdatenbank
+	\item Service zur Nutzerverwaltung
+	\item Speicherung Nutzer spezifischer Daten
+	\item Geeignetes User Interface zur Darstellung von Texten und zur Interaktion mit dem System
+\end{itemize}
+
+
+
+
+\section{Softwarestack}
+
+Bei der Vielseitigkeit der verschiedenen Anforderungen ist die Wahl der zu verwendenden Technologien nicht unerheblich. Programmiersprachen und Frameworks müssen sorgfältig ausgewählt werden um für jedes Teilproblem eine passende Lösung zu entwickeln.\\
+Die erste wichtige Unterteilung fand statt zum Einen in ein Frontend welches die zum Benutzer darstellt und zum Anderen in ein Backend welches die vom System verwendeten Daten speichert und manipuliert und diese mit Hilfe geeigneter Algorithmen an das Frontend schickt. Eine genaue Beschreibung über den detaillierten Aufbau und die Funktion von Front- und Backend wird in Kapitel 4 gegeben.\\
+
+\todo{kleine Grafik zu front backend}
+
+Diese Aufteilung ist in der Webentwicklung weit verbreitet \tocite{front backend} und bietet einige Vorteile gegenüber eins komplett integriertem Gesamtsystems:
+
+\begin{itemize}
+	\item Klare Trennung von Darstellung und Datenverarbeitung
+	\item Einfachere Fehlersuche durch kleinere Komponenten
+	\item Bei der Entwickelung zusätzlicher Frontends (z.B. für Android oder iOS) muss nur ein neuer Teil des Softwaresystems entwickelt werden, während das Backend gleich bleibt
+	\item Einfache Arbeitsaufteilung im Entwicklerteam (relevant bei Weiterentwicklung der Anwendung mit mehreren Personen)
+	\item \todo{more?}
+\end{itemize}
+
+\subsection{Verwendete Technologien}
+Für verschiedene zu realisierende Ziele gibt es für jedes Teilziel Technologien, die Vorteile gegenüber anderen bieten. Die Verwaltung von Datenbanken ist zum Beispiel besser mit einer Server seitigen Skriptsprache zu implementieren, als mit den Möglichkeiten, die das Frontend bietet. Im Web Frontend dagegen sind gewisse Technologien wie HTML, CSS und JavaScript standard, die zwangsläufig verwendet werden müssen. Daher wird In der Applikation eine Vielzahl verschiedener Technologien verwendet, eine Übersicht ist hier gegeben:
+
+\begin{itemize}
+	\item Backend: python, REST API, sowie die python Frameworks flask, spacy und sqlalchemy
+	\item Frontend: HTML, CSS, JavaScript, AngularDart
+	\item Kommunikation mit JSON
+	\item Deployment mit Apache auf AWS Server
+\end{itemize}
+
+Im Folgenden werden die einzelnen Technologien und deren Vorteile beschrieben.
+
+\subsection{Backend}
 Backend as a service: e.g. Firebase, zu unflexibel\\
 
-überblick über technologien
-
-\subsubsection{Kommunikation Frontend und Backend}
-
-Warum aufteilen?\\
-Diagramm?
-
-\subsubsection{Backend}
 welche alternativen fuer backend\\
 frontend unabhäng von daten
 
-\paragraph{python}
+\subsubsection{python}
 warum python\\
 flexibel und schnell, viele frameworks\\
 Requests an externe Services, MARY, BALLOON
 
-\paragraph{REST API}
+\subsubsection{REST API}
 was? warum?
 
-\paragraph{flask}
+\subsubsection{flask}
 gutes framework für REST
 
-\paragraph{spacy}
+\subsubsection{spacy}
 parser, alternative NLTK, auch benutzt, warum ist spacy besser?\\
 tokenizer, part of speech
 
-\subsubsection{Frontend}
+\subsection{Frontend}
 
 webapplication, html css, single-view-application, dynamic data loading
 viele frameworks, verwende AngularDart
 no javascript: weakly typed languages transforming to JS: GWT (java), typescript, Dart
 
-\paragraph{Angular Dart}
+\subsubsection{Angular Dart}
 warum? javascript is bad.\\
 
 data binding\\
@@ -69,182 +144,15 @@ alternativen, typescript...\\
 
 dart2js compiler, wie funktioniert dieser\\
 
-\subsubsection{Deployment}
+\subsection{Deployment}
 
 webserver für frontend, auf eigenem server mit apache gehostet\\
 flask python service läuft immer, REST schnittstelle\\
 
-\section{Entwicklung}
-
-Überblick, welche Schritte wurden wann erledigt?\\
-Aufbau der Datenbank\\
-REST API, verschiedene Services\\
-Frontend, verschiedene Komponenten (Hauptnavigationskomponenten, nicht angular komponenten)\\
-
-\subsection{Basisdatenbank}
-
-CELEX\\
-was? beschreibung\\
-alternativen?\\
-warum?
-
-\subsubsection{Impementierung celex2db}
-
-parsing\\
-modell, zusammenführung verschiedener cd dateien\\
-sqlite3, word Tabelle\\
-
-\subsubsection{Ergebnisse}
-
-anzahl wörter\\
-fehler\\
-zeit, aber irrelevant weil nur einmal erledigen
 
 
-\subsection{Backend}
-
-flask, implementierung der Routen s. spezifikation\\
-überblick services, wer macht was, abhängigkeiten (Diagramm)\\
-
-\subsubsection{Routen}
-angebotene funktionen, routen mit parameter namen
-
-\subsubsection{Dictionary Service}
-
-was macht dieser?\\
-sqlite Tabellen\\
-Klassendiagramme\\
-
-\subsubsection{User Service}
-was macht dieser?\\
-sqlite Tabellen\\
-Klassendiagramme\\
-
-\subsubsection{Verification Service}
-was macht dieser?\\
-sqlite Tabellen\\
-Klassendiagramme\\
 
 
-\subsection{Frontend}
 
-angular dart app\\
-komponenten s. software stack erklärung\\
-
-app\_component, providers, directives\\
-
-\subsubsection{Model}
-word, syllable...
-
-\subsubsection{Begrüßungsseite}
-
-home\_component\\
-angular router links
-
-\subsubsection{Text Analyse}
-
-ui und service
-
-\paragraph{TextAnalysisService}
-
-funktionen, model abhängigkeiten
-
-\paragraph{Texteingabe}
-
-texteingabe, material-input\\
-
-\paragraph{Textvorschau}
-
-iterieren über wörter\\
-span je nach word state\\
-notfound wörter mit link zu word review\\
-linebreaks (sind wörter, spezieller state)\\
-
-editierbare wörter, css aus komponente\\
-popup:\\
-\begin{itemize}
-	\item annotieren oder nicht
-	\item manuelles Betonungsmuster
-	\item manuelle Silbentrennung
-	\item gleiche wörter übernehmen
-	\item Wortart
-	\item Lemma
-\end{itemize}
-
-span für silben\\
-style aus komponente\\
-separator zeichen\\
-
-drucken, css vorlage, @media\\
-text kopieren, js/dart magic\\
-
-\paragraph{Textoptionen}
-
-text neu analysieren\\
-text speichern, mit titel\\
-neuen text eingeben
-
-\subsubsection{Annotationseinstellungen}
-
-verschiedene einstellungen\\
-in server für user gespeichert\\
-
-\paragraph{TextConfigurationService}
-
-TODO refactor, diesen service neben user service anlegen
-
-\paragraph{User Interfache für Einstellungen}
-betonte silbe\\
-fett, farbe\\
-
-color picker\\
-
-unbetonte silben\\
-farbe\\
-2. farbe, benutzen\\
-
-worthintergrund, warum, in welcher einstellung sinnvoll?
-
-größen und abstände\\
-\begin{itemize}
-	\item Schriftgröße
-	\item Silbenabstand
-	\item Wortabstand
-	\item Zeilenabstand
-	\item Zeichenabstand
-\end{itemize}
-
-custom slider\\
-
-Silbentrennzeichen\\
-warum, benutzen, eingabe\\
-
-Wortart dropdown\\
-funktionen separat wür die verschiedenen Wortarten\\
-dropdown\\
-funktion iteriert über alle wörter im text und wendet eigenschaft auf jedes passende Wort an\\
-funktionen:\\
-\begin{itemize}
-	\item Annotieren
-	\item Unbetont
-	\item Ignorieren
-\end{itemize}
-
-\paragraph{Annotationsvorlagen}
-
-speichert alles\\
-name der vorlage\\
-liste, aktivieren, löschen\\
-neue vorlage anlegen oder momentane speichern\\
-
-\subsubsection{Text Review}
-
-TBD
-
-\subsubsection{Nutzerkonto}
-
-TBD
-
-\subsubsection{Wort Verifizierung}
-
-TBD
+%-----------------------------------------------------------------------------------------
+%-----------------------------------------------------------------------------------------
