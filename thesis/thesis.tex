@@ -81,6 +81,9 @@ Bearbeitungszeitraum: August 2017 - Januar 2018
 %%% Inhaltsverzeichnis
 \KOMAoption{toc}{listof,bib} % Abbildungs-/Tabellenverzeichnis, Literaturverzeichnis aufnehmen
 \tableofcontents\label{toc}
+%\cleardoublepage % hier oder reicht nach list of figures and tables?
+\listoffigures
+\listoftables
 \cleardoublepage
 
 %%% Hauptteil (mit \input{dateiname} wird die Datei 'dateiname' eingebunden)
@@ -99,8 +102,8 @@ Bearbeitungszeitraum: August 2017 - Januar 2018
 \input{chapters/evaluation.tex}
 \cleardoublepage
 
-\input{chapters/diskussion.tex}
-\cleardoublepage
+%\input{chapters/diskussion.tex}
+%\cleardoublepage
 
 %%% Literaturverzeichnis, lädt die Datei literatur.bib
 \bibliographystyle{babplain} % "babplain" benötigt das Paket babelbib

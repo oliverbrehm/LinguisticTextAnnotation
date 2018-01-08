@@ -1,11 +1,192 @@
 % !TEX root = ../ausarbeitung.tex
 
 \chapter{Evaluation}
-Der Evaluationsteil sollte zunächst die Forschungsfragen/anvisierten Beiträge aus der Einleitung aufgreifen und daraus die verwendeten Evaluationsmethoden ableiten. Z.B. \qq{Das Ziel war es eine barrierefreie, effizente Bedienoberfläche zu erstellen, die auf verschiedenen Endgeräten läuft.} Daraus ergeben sich folgende Evaluationsziele und Methoden:
+
+Die Applikation wurde mit dem Hauptziel entwickelt, eine Nutzeroberfläche zu entwickeln, mit der sowohl Personen, die in der LRS Therapie arbeiten (wie Lerntherapeuten oder Nachhilfelehrer) als auch Nicht-Experten (z.B. die Eltern betroffener Kinder) intuitiv und effizient benötigtes Arbeitsmaterial erstellen können. Außerdem wurde untersucht wie eine Datenbank für Betonungsmuster in Wörtern erstellt und benutzerfreundlich erweitert werden kann.\\
+
+Die Evaluation untersucht daher folgende Punkte:
 \begin{itemize}
-  \item barrierefrei $\rightarrow$ Heuristiken zur Barrierefreiheit nach W3C oder BITV
-  \item effizient $\rightarrow$ Messung der Antwortzeit für verschiedene Anfragen
-  \item verschiedene Endgeräte $\rightarrow$ Anzeigebeispiele von verschiedenen Endgeräten oder Test durch entsprechendes Tool, das verschiedene Endgeräte simuliert.
+	\item Erstellung von Arbeitsmaterial aus einem einfachen Text 
+	\item Intuitivität und Einfachheit der Bedienung
+	\item Effizienz des Prozesses der Erstellung von Arbeitsmaterial
+	\item Unterschiede in der Bedienung durch Experten und Laien
+	\item Nutzerfreundliche Erweiterung der Wortdatenbank
 \end{itemize}
 
-Es bietet sich an, die Durchführung der Evaluation und ihre Beschreibung parallel zu bearbeiten, denn oft fällt erst beim Schreiben auf, dass die Evaluationsmethode nicht zu den Zielen der Arbeit passt. Die Beschreibung sollte alle Parameter enthalten, die den Versuch ausmachen, d.h. Programmparameter, Testbedingungen, Anzahl Testläufe etc.
+Zunächst wird durch Beispiele eines annotieren Textes mit verschiedenen Einstellungen demonstriert, welche vielseitigen Möglichkeiten die Textannotation für das Erstellen von Arbeitsmaterial bietet. Für die Untersuchung von Intuitivität, Einfachheit und Effizienz bei der Bedienung der Applikation wurde ein Nutzertest durchgeführt. Dieser fand als Interview statt um qualitative Daten durch Nutzerbefragung zu erheben. Außerdem wurden quantitative Daten durch das Ausfüllen von Ankreuzfragen während des Interview erhoben.
+
+\section{Ergebnisse der Textannotation}
+
+Um zu zeigen, dass die Applikation das Ziel des automatischen Erstellens von Arbeitsmaterial erfüllt, werden im Folgenden verschiedene Texte präsentiert, die mit Hilfe des Web Interfaces erstellt wurden. Die Ergebnisse zeigen, dass das Programm diese Ziel nicht nur erfüllt, sondern im Vergleich zu herkömmlichen Methoden \tocite{Silbefibel, ABC} auch noch einen hohen Grad an Flexibilität bietet. Die Einstellungen und damit das Erscheinungsbild des resultierenden Textes können vom Nutzer frei an die Bedürfnisse des jeweiligen Falls angepasst werden.
+
+\subsubsection{Annotation 1}
+Annotation 1 mit Screenshots
+
+\subsubsection{Annotation 2}
+Annotation 2 mit Screenshots
+
+\subsubsection{Annotation 3}
+Annotation 3 mit Screenshots
+
+
+\section{Nutzertest}
+
+Der Nutzertest beinhaltete neben den statistischen Daten zu Alter und Beruf bzw. Studiengang fünf Szenarien, die der Nutzer bearbeiten sollte. Um detaillierte Informationen zur Vorgehensweise des Probanden zu erhalten, wurde im Interview mit der \textit{Thinking Aloud} Methode gearbeitet, d.h. der Proband wurde aufgefordert bei jeder Aktion, die er durchführt, möglichst genau zu beschreiben was er damit bezweckt und warum er es tut. \tocite{thinking aloud} In der schriftlichen Testbeschreibung wurde der Nutzer daher informiert, alle Arbeitsschritte der Szenarien laut vorzulesen und Kommentare und Kritik jederzeit zu äußern. Außerdem wurde in jedem Text explizit mündlich darauf hingewiesen, alle Handlungen möglichst genau zu beschreiben.\\
+In der Testbeschreibung wurde auch verdeutlicht, dass es sich um ein Test des Softwaresystems handelt und nicht des Nutzers. \todo{warum wichtic, cite}\\
+
+Um möglichst konsistente Testbedingungen zu schaffen, wurde bei allen Probanden mit einer aktuellen Version von Google Chrome gearbeitet. Es wurde zudem sichergestellt, dass den Probanden ein möglichst gewohntes Umfeld geboten wird. Im besten Fall benutzten die Nutzer ihre eigenen Computer. Falls dies nicht möglich war, wurde vorher überprüft ob beim Testgerät alles genauso wie gewohnt bedient werden konnte, d.h. Einstellungen für Peripherie wie Maus, Tastatur oder Touchpad wurden vorher, dem Nutzer entsprechend, angepasst.\\
+
+Nach jedem der fünf Szenarien wurde von dem Proband ein After Scenario Questionnaire ausgefüllt \tocite{asc}. Es beinhaltete die folgenden drei Fragen:
+\begin{itemize}
+	\item \textbf{Intuitivität}: Die Aufgabe konnte ich intuitiv und problemlos erledigen.
+	\item \textbf{Zeitaufwand}: Ich halte die Zeit, die ich gebraucht habe um die Aufgabe zu erledigen, für angemessen.
+	\item \textbf{Dokumentation}:Ich bin mit den Informationen, die ich während der Bearbeitung in der App erhalten habe (Beschreibungen, Rückmeldungen) zufrieden.
+\end{itemize}
+
+Zustimmung oder Ablehnung der Aussagen konnte in den fünf Optionen \textit{trifft zu}, \textit{trifft eher zu}, \textit{weder noch}, \textit{trifft eher nicht zu} oder \textit{trifft nicht zu} ausgedrückt werden.
+
+Die Software wurde insgesamt \todo{howmany} Probanden getestet. Die Bedienung der Software sollte sich im besten Fall möglichst wenig unterscheiden, wenn sie durch Experten oder Laien durchgeführt wird. Daher wurden die Befragten in die entsprechenden zwei Gruppen eingeteilt. Zum einen die Expertengruppe, bestehend aus Lerntherapeuten und Nachhilfelehrern, und zum Anderen Laien, die exemplarisch für Leute aus dem Umfeld der Betroffenen stehen. Es wurden \todo{howmany} Experten und \todo{howmany} Laien befragt.\\
+
+Im Folgenden werden die einzelnen Szenarien beschrieben und deren Ergebnisse dargestellt. Von den Probanden erkannte und während des Szenarios geäußerte Schwierigkeiten und Probleme werden tabellarisch, zusammen mit eventuellen Ansätzen zu deren Behebung dargestellt.
+
+\subsubsection{Szenario 1: Nutzerkonto}
+
+Zuerst sollte der Proband ein Nutzerkonto mit Mail Adresse und Passwort erstellen (hier wurde, damit der Nutzer kein sicherheitskritisches Passwort verwendet und sich das Passwort während des Tests merken kann \qq{12345678} vorgegeben). Anschließend loggt er sich ein und wieder aus.
+
+\todo{Grafik Ergebnisse}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|r|l|}
+		\hline
+		\textbf{Problem} & \textbf{Lösungsansatz}\\
+		\hline
+		\hline
+		problem1 & lösung1\\
+		\hline
+		problem1 & lösung1\\
+		\hline
+	\end{tabular}
+	\caption{Nutzeranmerkungen zu Szenario 1}
+	\label{table:szenario1}
+\end{table}
+
+\subsubsection{Szenario 2: Textanalyse}
+
+Als nächstes loggt sich der Proband wieder ein und soll einen gegebenen Text in das Textfeld der Textanalyse kopieren und diesen dann analysieren lassen. Alle unbekannten Wörter (in der Anwendung rot hinterlegt) sollen nun manuell geklärt werden. Der Nutzer klickt so lange durch das User Interface der manuellen Analyse, bis alle Wörter annotiert sind. Als letztes soll mit den Einstellungen der Annotation experimentiert werden, bis eine Einstellung gefunden wird, die den Nutzer anspricht. Hier wurde noch mündlich hinzugefügt, dass der Nutzer, um sich damit vertraut zu machen, alle Einstellungen einmal ausprobieren sollte.
+
+\todo{Grafik Ergebnisse}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|r|l|}
+		\hline
+		\textbf{Problem} & \textbf{Lösungsansatz}\\
+		\hline
+		\hline
+		problem1 & lösung1\\
+		\hline
+		problem1 & lösung1\\
+		\hline
+	\end{tabular}
+	\caption{Nutzeranmerkungen zu Szenario 2}
+	\label{table:szenario2}
+\end{table}
+
+\subsubsection{Szenario 3: Annotationsvorlagen}
+
+Im dritten Szenario werden dem Nutzer zweimal die erste Zeile des Textes, jeweils mit verschieden Einstellungen annotiert, gegeben. Er soll nun nacheinander versuchen, die Annotation so einzustellen, dass es so wie im gegebenen Ausschnitt aussieht. Zudem sollen diese Einstellungen als Vorlagen mit den Namen \qq{Vorlage 1} und \qq{Vorlage 2} gespeichert werden. Zum Schluss wechselt der Nutzer zwischen Vorlage 1 und Vorlage 2 hin und her.
+\todo{Grafik Ergebnisse}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|r|l|}
+		\hline
+		\textbf{Problem} & \textbf{Lösungsansatz}\\
+		\hline
+		\hline
+		problem1 & lösung1\\
+		\hline
+		problem1 & lösung1\\
+		\hline
+	\end{tabular}
+	\caption{Nutzeranmerkungen zu Szenario 3}
+	\label{table:szenario3}
+\end{table}
+
+\subsubsection{Szenario 4: Texte wiederverwenden}
+
+Hier soll der Nutzer den aktuellen Text mit Titel in seinem Nutzerkonto speichern. Anschließen wird auf die Nutzerkonto Seite gewechselt und der gespeicherte Text neu analysiert.
+\todo{Grafik Ergebnisse}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|r|l|}
+		\hline
+		\textbf{Problem} & \textbf{Lösungsansatz}\\
+		\hline
+		\hline
+		problem1 & lösung1\\
+		\hline
+		problem1 & lösung1\\
+		\hline
+	\end{tabular}
+	\caption{Nutzeranmerkungen zu Szenario 4}
+	\label{table:szenario4}
+\end{table}
+
+\subsubsection{Szenario 5: Wort Verifizierung}
+
+Im letzten Szenario wechselt der Nutzer auf die Verifizierungsseite. Hier sollen vier Einträge anderer Nutzer bestätigt oder verbessert verden.
+\todo{Grafik Ergebnisse}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|r|l|}
+		\hline
+		\textbf{Problem} & \textbf{Lösungsansatz}\\
+		\hline
+		\hline
+		problem1 & lösung1\\
+		\hline
+		problem1 & lösung1\\
+		\hline
+	\end{tabular}
+	\caption{Nutzeranmerkungen zu Szenario 5}
+	\label{table:szenario5}
+\end{table}
+
+
+\subsubsection{Allgemeine Anmerkungen}
+
+Zum Schluss des Nutzertest wurde der Proband zu allgemeinen Äußerungen von Kritik und Vorschlägen zur Applikation als Ganzes aufgefordert. Wichtige Kommentare sind in der folgenden Tabelle festgehalten.
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|r|l|}
+		\hline
+		\textbf{Problem} & \textbf{Lösungsansatz}\\
+		\hline
+		\hline
+		problem1 & lösung1\\
+		\hline
+		problem1 & lösung1\\
+		\hline
+	\end{tabular}
+	\caption{Allgemeine Äußerungen von Kritik und Vorschlägen}
+	\label{table:usertestgeneral}
+\end{table}
+
+
+\section{Diskussion}
+Die Diskussion kann als Teil des Evaluations- oder Schlusskapitels oder als eigenständiges Kapitel aufgeführt werden. Wichtig ist, dass Sie Ihre Evaluationsergebnisse realistisch einschätzen und ins Verhältnis zum Stand der Technik setzen. Achten Sie besonders darauf, aus den Daten Ihrer Evaluation keine Wunschergebnisse abzulesen, die nicht in den Daten sind (wenn Ihre Testnutzer Ihr neuimplementiertes System nicht besser bedienen können als ein vorhandenes, dann ist das eben so). Gerade unerwartete bzw. \qq{negative} Ergebnisse (z.B. das neue System ist nicht besser als vorhandene) bringen wissenschaftliche Erkenntnisse: man stellt damit fest, dass der gewählte Weg nicht zum gewünschten Ergebnis führt und man generiert damit neue Fragen, z.B. warum der Weg nicht funktioniert hat, obwohl er vor dem Test als überlegen erachtet wurde.
+
+Es kann auch sein, dass verschiedene Evaluationsformen Unterschiede offenbaren. Z.B. kann es sein, dass die Nutzbarkeit des implementierten Systems nicht besser ist als bei anderen Ansätzen, aber dass es deutlich einfacher zu warten ist.
+
+
+Im letzten Teil runden Sie Ihre Arbeit ab, in dem Sie Ihre Argumentation aus der Einleitung aufgreifen und mit konkreten Daten aus Ihrem Hauptteil und der Evaluation untermauern. Auch hier können Sie Bezug zur Literatur nehmen. Am Ende sollten Sie einen Ausblick über weitere Forschungsthemen geben. Dabei aufpassen, dass es nicht so klingt wie \qq{mir ist die Zeit ausgegangen und folgendes habe ich nicht mehr geschafft}. Eine gute wissenschaftliche Arbeit wirft mehr Fragen auf als sie beantwortet. Es sollte also eher klingen nach \qq{meine Arbeit hat \dots gezeigt. Daraus ergeben sich weitere interessante Fragen \dots}.
+
+\section{Ausblick}
+
+datenbank: PHONOLEX als Grundlage (statt oder zusaetzlich zu CELEX)
+...
