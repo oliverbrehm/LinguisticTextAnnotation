@@ -3,6 +3,7 @@
 \chapter{Entwicklung der Anwendung}
 
 Im Rahmen der Masterarbeit wurde die beschriebende Web Applikation prototypisch entwickelt. Die dazu nötige Planung und die verwendeten Technologien wurden in den vorherigen Kapiteln geschildert. Nun wird auf den Prozess der Entwicklung und auf die detaillierte Struktur der Applikation eingegangen.\\
+
 Das Entwicklung des Systems wurde in drei Teilprojekte untergliedert:
 \begin{enumerate}
 	\item Erstellung der Basisdatenbank aus dem Wörterbuch CELEX2
@@ -11,8 +12,7 @@ Das Entwicklung des Systems wurde in drei Teilprojekte untergliedert:
 \end{enumerate}
 
 Dabei wurde Schritt 1 als Erstes durchgeführt, die Verfügbarkeit der Basisdatenbank war Voraussetzung um mit der Entwicklung von Front- und Backend zu beginnen. Als eine erste Version der Datenbank vorlag, wurde zunächst mit der Entwicklung eines minimalen Backends begonnen, welches die Kernfunktionalität - das Analysieren von Texten - beherrschte. Damit konnte eine erste Version des Frontends erstellt werden, um einen ersten Eindruck zu bekommen, wie alle Technologien miteinander funktionieren.\\
-Im Anschluss konnten Front- und Backend parallel entwickelt werden. Es wurden immer wieder Funktionen im Backend entwickelt, woraufhin das Frontend angepasst wurde, um dem Nutzer diese Funktionen anzubieten. Zu diesem Zeitpunkt wurde auch die Basisdatenbank einige male überarbeitet, so ist das Gesamtsystem Schritt für Schritt auf eine agile Weise \tocite{agil} gewachsen.\\
-Im Folgenden wird näher auf die drei Teilprojekte eingegangen.
+Im Anschluss konnten Front- und Backend parallel entwickelt werden. Es wurden immer wieder Funktionen im Backend entwickelt, woraufhin das Frontend angepasst wurde, um dem Nutzer diese Funktionen anzubieten. Zu diesem Zeitpunkt wurde auch die Basisdatenbank einige male überarbeitet, so ist das Gesamtsystem Schritt für Schritt auf eine agile Weise \tocite{agil} gewachsen. Im Folgenden wird näher auf die drei Teilprojekte eingegangen.
 
 \section{Basisdatenbank}
 
@@ -22,7 +22,7 @@ Für die Segmentierung von Wörtern in Silben mit Betonung wird eine sqlite Date
 Hier wurde darauf geachtet, eine einheitliche orthographische Form der Wörter durchzusetzen. Wörter bestehen nur aus Kleinbuchstaben (auch die Anfänge von Nomen und Eigennamen). Außerdem wird hier auf Umlaute verzichtet, \qq{ä} wird durch \qq{ae} ersetzt, \qq{ö} durch \qq{oe}, \qq{ü} durch \qq{ue} und \qq{ß} durch \qq{ss}. Beispielsweise wird das Wort \textit{Häuser} zu \textit{haeuser}. So kann beim Nachschlagen garantiert werden, dass ein Wort nicht wegen uneinheitlicher Schreibweise nicht gefunden wird, sofern alle Umlaute vorher ersetzt wurden.
 
 \paragraph{Wortart}
-Um Doppeldeutigkeit zu vermeiden wird ein Eintrag nur eindeutig über das Paar aus Worttext und Wortart identifiziert. Viele Grundformen von Verben kommen zum Beispiel auch als Nomen vor, werden aber dann groß geschrieben (\qq{sie sollte die Maschine \textit{verwenden}} gegen \qq{das \textit{Verwenden} der Maschine}). Die Bezeichner für Wortart sind in verschiedenen Systemen wie dem CELEX gegen den NLP parser spacy unterschiedlich, daher wird hier eine eigene - im Gesamtsystem konsistente - Benennung der Wortart eingeführt (die Benennung orientiert sich an den Tag Namen des spacy parsers, verwendet jedoch zur Unterscheidung Klein- statt Großschreibung):
+Um Doppeldeutigkeit zu vermeiden wird ein Eintrag nur eindeutig über das Paar aus Worttext und Wortart identifiziert. Viele Grundformen von Verben kommen zum Beispiel auch als Nomen vor, werden aber dann groß geschrieben (\qq{sie sollte die Maschine \textit{verwenden}} gegen \qq{das \textit{Verwenden} der Maschine}). Die Bezeichner für Wortart sind in verschiedenen Systemen wie dem CELEX und dem NLP parser \textit{spacy} unterschiedlich, daher wird hier eine eigene - im Gesamtsystem konsistente - Benennung der Wortart eingeführt (die Benennung orientiert sich an den Tag Namen des spacy parsers, verwendet jedoch zur Unterscheidung Klein- statt Großschreibung):
 \begin{itemize}
 	\item Nomen: \qq{noun}
 	\item Eigenname: \qq{propn}
@@ -87,11 +87,70 @@ zeit, aber irrelevant weil nur einmal erledigen
 
 \section{Backend}
 
-flask, implementierung der Routen s. spezifikation\\
-überblick services, wer macht was, abhängigkeiten (Diagramm)\\
+Das mit python in dem Web-Framework flask entwickelte Backend verarbeitet sämtliche, vom Frontend gesendeten HTTP requests. Es sendet entweder eine Antwort mit den geforderten Daten oder einen HTTP Fehlercode mit Fehlermeldung. Das Backend Projekt befindet sich in \qq{/backend/API}. Es wurde in die drei Services \textit{DictionaryService}, \textit{UserService} und \textit{VerificationService} strukturiert. Das Hauptsript \todo{rename} \qq{LinguisticTextAnnotation.py} verwaltet diese Services, startet die flask Applikation und definiert die einzelnen Routen für HTTP requests (diese werden im folgenden Abschnitt aufgelistet). Folgende Grafik zeigt eine Übersicht über die Struktur des Backends.
+
+\todo{Grafik Backend}
 
 \subsection{Routen}
-angebotene funktionen, routen mit parameter namen
+Folgende Tabelle bietet eine Übersicht über die verfügbaren Routen, welche die HTTP requests verarbeiten. Zudem werden kurz der Zweck und die Parameter der Route beschrieben. Ein \textit{X} in der Spalte Authentifizierung bedeutet, dass die Mail Adresse und das Passwort des Nutzers übergeben werden muss. Diese werden nicht extra in der Spalte Parameter aufgeführt (außer in der \qq{/user/authenticate} Route, diese dient ausschließlich dazu, die Übermittelten Nutzer Credentials zu prüfen).
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|l|l|l|c|}
+		\hline
+		\textbf{Route} & \textbf{Parameter} & \textbf{Methode} & \textbf{Auth.}\\
+		\hline
+		\hline
+		/query/word & text, pos & GET & \\
+		\hline
+		/query/text & text & POST & \\
+		\hline
+		/query/segmentation& word & GET & \\
+		\hline
+		\hline
+		/user/register & email, password, & POST & \\
+		& first\_name, last\_name, is\_expert &&\\
+		\hline
+		/user/authenticate & \textit{email, password} & POST & X\\
+		\hline
+		/user/list & \todo{remove} & GET & \\
+		\hline
+		/user/delete & \todo{implement} & POST & X\\
+		\hline
+		\hline
+		/user/word/add& text, stress\_pattern, hyphenation, pos & POST & X\\
+		\hline
+		/user/word/delete& id & POST & X\\
+		\hline
+		/user/word/list & - & POST & X\\
+		\hline
+		\hline
+		/user/configuration/add & name, \textit{options} & POST & X\\
+		\hline
+		/user/configuration/update & id, name, \textit{options}  & POST & X\\
+		\hline
+		/user/configuration/list & - & POST & X\\
+		\hline
+		/user/configuration/delete & id & POST & X\\
+		\hline
+		\hline
+		/user/text/add & title, text & POST & X\\
+		\hline
+		/user/text/delete & id & POST & X\\
+		\hline
+		/user/text/list & - & POST & X\\
+		\hline
+		\hline
+		/user/verification/query & - & POST & X\\
+		\hline
+		/user/verification/submit & id, stress\_pattern, hyphenation & POST & X\\
+		\hline
+	\end{tabular}
+	\caption{Backend routen für HTTP requests mit Parametern und Methode}
+	\label{table:backendroutes}
+\end{table}
+
+Die bei \qq{user/configuration/} nicht aufgeführten \textit{options} bestehen aus allen für die Annotationsvorlage gespeicherten einstellungen. Dies sind die Folgenden Felder: \textit{stressed\_color, unstressed\_color, word\_background, alternate\_color, syllable\_separator, line\_height, word\_distance, syllable\_distance, font\_size, letter\_spacing, use\_background, highlight\_foreground, stressed\_bold, use\_alternate\_color, use\_syllable\_separator, part\_of\_speech\_configuration}.
 
 \subsection{Dictionary Service}
 

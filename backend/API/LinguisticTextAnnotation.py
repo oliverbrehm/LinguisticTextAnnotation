@@ -51,12 +51,6 @@ def create_error_response(errcode, message):
 def api_intro():
     return "LinguisticTextAnnotation API"
 
-@app.route('/error', methods=['GET'])
-def test_error():
-    print(thiswillcauseanerror)
-    return create_response(201)
-
-
 ''' ---------------------------------------------------------
     Text analysis
     --------------------------------------------------------- '''
