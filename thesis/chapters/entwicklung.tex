@@ -14,7 +14,7 @@ Das Entwicklung des Systems wurde in drei Teilprojekte untergliedert:
 Dabei wurde Schritt 1 als Erstes durchgeführt, die Verfügbarkeit der Basisdatenbank war Voraussetzung um mit der Entwicklung von Front- und Backend zu beginnen. Als eine erste Version der Datenbank vorlag, wurde zunächst mit der Entwicklung eines minimalen Backends begonnen, welches die Kernfunktionalität - das Analysieren von Texten - beherrschte. Damit konnte eine erste Version des Frontends erstellt werden, um einen ersten Eindruck zu bekommen, wie alle Technologien miteinander funktionieren.\\
 Im Anschluss konnten Front- und Backend parallel entwickelt werden. Es wurden immer wieder Funktionen im Backend entwickelt, woraufhin das Frontend angepasst wurde, um dem Nutzer diese Funktionen anzubieten. Zu diesem Zeitpunkt wurde auch die Basisdatenbank einige male überarbeitet, so ist das Gesamtsystem Schritt für Schritt auf eine agile Weise \tocite{agil} gewachsen. Im Folgenden wird näher auf die drei Teilprojekte eingegangen.
 
-\section{Basisdatenbank}
+\section{Erstellung einer Basisdatenbank}
 
 Für die Segmentierung von Wörtern in Silben mit Betonung wird eine sqlite Datenbank verwendet, deren Entwicklung hier beschrieben wird. Als Grundlage für die Datenbank dient das digitale Lexikon \todo{Lexikon/woerterbuch...?} CELEX2, wie in Kapitel \toref{CELEX} beschrieben. Folgende Informationen wurden dem CELEX entnommen und in der Datenbank gespeichert:
 
@@ -54,7 +54,7 @@ Neben den Worteinträgen sollen in der Datenbank noch Informationen über die He
 
 Alle in der Worttabelle beschriebenen Einträge sind auch im CELEX vorhanden. Der Folgende Abschnitt beschreibt, wie die Daten aus dem Lexikon extrahiert und in der Wortdatenbank gespeichert wurden.
 
-\subsection{Impementierung celex2db}
+\subsection{Impementierung}
 
 Für die Generierung der Datenbank wurde das python Projekt \textit{celex2db} erstellt, welches in \qq{/backend/celex2db} zu finden ist (alle Pfadangaben in diesem Abschnitt beziehen sich auf dieses Verzeichnis). Die Daten im CELEX sind über mehrere Dateien verteilt. So gibt es eine Teilung in Sprachen (für die Datenbank werden nur Deutsche Wörter benutzt, zu finden in \qq{celex2/german}), Wörter und Lemmata sowie in Orthographie, Phonologie und Morphologie. Die Teilung in Wort und Lemma spart Speicherplatz. Das Lemma eines Verbs, zum Beispiel, ist die Grundform dieses. Zur Beugung \textit{gehst} gehört also das Lemma \textit{gehen}. Viele Eigenschaften des Verbs \textit{gehen} beziehen sich auf alle Beugungen, so müssen diese nicht für alle Verbformen redundant gespeichert werden.\\
 Die Einträge in den Wortlisten des CELEX verweisen jeweils mit einer ID auf den zugehörigen Eintrag in der Lemma Liste. Da in der zu entwickelnden Datenbank auch das Lemma gespeichert werden soll, müssen sowohl Wort Listen als auch Lemma Listen geparsed werden.\\
@@ -91,7 +91,7 @@ Das mit python in dem Web-Framework flask entwickelte Backend verarbeitet sämtl
 
 \todo{Grafik Backend}
 
-\subsection{Routen}
+\subsection{HTTP Routen}
 Folgende Tabelle bietet eine Übersicht über die verfügbaren Routen, welche die HTTP requests verarbeiten. Zudem werden kurz der Zweck und die Parameter der Route beschrieben. Ein \textit{X} in der Spalte Authentifizierung bedeutet, dass die Mail Adresse und das Passwort des Nutzers übergeben werden muss. Diese werden nicht extra in der Spalte Parameter aufgeführt (außer in der \qq{/user/authenticate} Route, diese dient ausschließlich dazu, die Übermittelten Nutzer Credentials zu prüfen).
 
 \begin{table}[h!]
@@ -176,8 +176,8 @@ komponenten s. software stack erklärung\\
 
 app\_component, providers, directives\\
 
-\subsection{Model}
-word, syllable...
+\subsection{Datenmodell}
+word, syllable, klassendiagramme, interaktion...
 
 \subsection{Begrüßungsseite}
 
@@ -280,7 +280,7 @@ name der vorlage\\
 liste, aktivieren, löschen\\
 neue vorlage anlegen oder momentane speichern\\
 
-\subsection{Text Review}
+\subsection{Manuelle Wortanalyse}
 
 TBD
 
