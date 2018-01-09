@@ -15,6 +15,7 @@ Dabei wurde Schritt 1 als Erstes durchgeführt, die Verfügbarkeit der Basisdate
 Im Anschluss konnten Front- und Backend parallel entwickelt werden. Es wurden immer wieder Funktionen im Backend entwickelt, woraufhin das Frontend angepasst wurde, um dem Nutzer diese Funktionen anzubieten. Zu diesem Zeitpunkt wurde auch die Basisdatenbank einige male überarbeitet, so ist das Gesamtsystem Schritt für Schritt auf eine agile Weise \tocite{agil} gewachsen. Im Folgenden wird näher auf die drei Teilprojekte eingegangen.
 
 \section{Erstellung einer Basisdatenbank}
+\label{sec:worddatabase}
 
 Für die Segmentierung von Wörtern in Silben mit Betonung wird eine sqlite Datenbank verwendet, deren Entwicklung hier beschrieben wird. Als Grundlage für die Datenbank dient das digitale Lexikon \todo{Lexikon/woerterbuch...?} CELEX2, wie in Kapitel \toref{CELEX} beschrieben. Folgende Informationen wurden dem CELEX entnommen und in der Datenbank gespeichert:
 
@@ -48,9 +49,14 @@ Das Betonungsmuster identifiziert eine Silbe als Hauptbetonung im Wort. Dieser E
 \paragraph{Lemma}
 was genau? auch im celex, keine wirkliche anwendung in der app, vielleicht ausblick
 
-Neben den Worteinträgen sollen in der Datenbank noch Informationen über die Herkunft der Wörter gespeichert werden. Neben den Basiseinträgen, die aus dem CELEX extrahiert werden, wird den Nutzern später die Möglichkeit gegeben Einträge zur Datenbank hinzuzufügen. Um diesen Vorgang nachvollziehbar zu machen gibt es eine zweite Tabelle, in welcher Einträge für neu hinzugefügte Wörter mit Zeitstempel angelegt werden. Das Folgende Schema zeigt die Struktur der Wortdatenbank.
+Neben den Worteinträgen sollen in der Datenbank noch Informationen über die Herkunft der Wörter gespeichert werden. Neben den Basiseinträgen, die aus dem CELEX extrahiert werden, wird den Nutzern später die Möglichkeit gegeben Einträge zur Datenbank hinzuzufügen. Um diesen Vorgang nachvollziehbar zu machen gibt es eine zweite Tabelle, in welcher Einträge für neu hinzugefügte Wörter mit Zeitstempel angelegt werden. Das Folgende Schema \ref{figure:worddatabase} zeigt die Struktur der Wortdatenbank.
 
-\todo{Figur Datenbankschema}
+\begin{figure}
+	\todo{Figur Datenbankschema}
+	\caption{Schema der Wortdatenbank}
+	\label{figure:worddatabase}
+\end{figure}
+
 
 Alle in der Worttabelle beschriebenen Einträge sind auch im CELEX vorhanden. Der Folgende Abschnitt beschreibt, wie die Daten aus dem Lexikon extrahiert und in der Wortdatenbank gespeichert wurden.
 
@@ -80,19 +86,18 @@ Letztendlich werden die Einträge der Wortliste im Skript \qq{writeSQLite.py} in
 
 \subsection{Ergebnisse}
 
-anzahl wörter\\
-fehler\\
-zeit, aber irrelevant weil nur einmal erledigen
-
+Ein Wort soll eindeutig identifizierbar sein durch den Worttext und die Wortart. Daher wurde in der Datenbank die Kombination der Felder \textit{text} und \textit{pos} (part of speech/Wortart) als Primärschlüssel gewählt. Ein doppeltes Einfügen eines Wortes in die Datenbank verletzt den SQL \textit{UNIQUE Constraint}, und ist somit nicht möglich. Die dadurch von python geworfene Exception wird in diesem Fall abgefangen und und die \texttt{add\_word} Methode liefert \texttt{None} zurück.\\
+Trotz der Wortidentifizierung anhand von zwei Merkmalen, beinhaltet der CELEX teilweise redundante Informationen. 4 356 Einträge verursachen aufgrund des \textit{UNIQUE Constraint} Fehler, da sie mit gleichem Text und gleicher Wortart schon in der Datenbank waren, diese wurden somit übersprungen. Bei einem kompletten Neuaufbau der Datenbank aus dem CELEX werden 360 243 Wörter hinzugefügt. Die Datenbank wurde als sqlite Datei \qq{/backend/db/words.db} angelegt.
 
 \section{Backend}
 
-Das mit python in dem Web-Framework flask entwickelte Backend verarbeitet sämtliche, vom Frontend gesendeten HTTP requests. Es sendet entweder eine Antwort mit den geforderten Daten oder einen HTTP Fehlercode mit Fehlermeldung. Das Backend Projekt befindet sich in \qq{/backend/API}. Es wurde in die drei Services \textit{DictionaryService}, \textit{UserService} und \textit{VerificationService} strukturiert. Das Hauptsript \todo{rename} \qq{LinguisticTextAnnotation.py} verwaltet diese Services, startet die flask Applikation und definiert die einzelnen Routen für HTTP requests (diese werden im folgenden Abschnitt aufgelistet). Folgende Grafik zeigt eine Übersicht über die Struktur des Backends.
+Das in python mit dem Web-Framework flask entwickelte Backend verarbeitet sämtliche, vom Frontend gesendeten HTTP requests. Es sendet entweder eine Antwort mit den geforderten Daten oder einen HTTP Fehlercode mit Fehlermeldung. Das Backend Projekt befindet sich in \qq{/backend/API}. Es wurde in die drei Services \textit{DictionaryService}, \textit{UserService} und \textit{VerificationService} strukturiert. Das Hauptsript \todo{rename} \qq{LinguisticTextAnnotation.py} verwaltet diese Services, startet die flask Applikation und definiert die einzelnen Routen für HTTP requests (diese werden im folgenden Abschnitt aufgelistet). Folgende Grafik zeigt eine Übersicht über die Struktur des Backends.
 
 \todo{Grafik Backend}
 
 \subsection{HTTP Routen}
-Folgende Tabelle bietet eine Übersicht über die verfügbaren Routen, welche die HTTP requests verarbeiten. Zudem werden kurz der Zweck und die Parameter der Route beschrieben. Ein \textit{X} in der Spalte Authentifizierung bedeutet, dass die Mail Adresse und das Passwort des Nutzers übergeben werden muss. Diese werden nicht extra in der Spalte Parameter aufgeführt (außer in der \qq{/user/authenticate} Route, diese dient ausschließlich dazu, die Übermittelten Nutzer Credentials zu prüfen).
+Tabelle \ref{table:backendroutes} bietet eine Übersicht über die verfügbaren Routen, welche die HTTP requests verarbeiten. Zudem werden kurz der Zweck und die Parameter der Route beschrieben. Ein \textit{X} in der Spalte Authentifizierung bedeutet, dass die Mail Adresse und das Passwort des Nutzers übergeben werden muss. Diese werden nicht extra in der Spalte Parameter aufgeführt (außer in der \qq{/user/authenticate} Route, diese dient ausschließlich dazu, die Übermittelten Nutzer Credentials zu prüfen).
+\todo{include return JSON fields...}
 
 \begin{table}[h!]
 	\centering
@@ -154,11 +159,43 @@ Die bei \qq{user/configuration/} nicht aufgeführten \textit{options} bestehen a
 
 \subsection{Dictionary Service}
 
-was macht dieser?\\
-sqlite Tabellen\\
-Klassendiagramme\\
+Das Modul \textit{DictionaryService.py} verarbeitet Anfragen zur Textanalyse, verwaltet die Wortdatenbank und generiert Vorschläge für die manuelle Segmentierung von Wörtern \todo{Segmentierung beschreiben}. Das Schema der Wortdatenbank zeigt Figur \ref{figure:worddatabase}. Folgende Klassen werden definiert:
+\begin{itemize}
+	\item \texttt{Word}: Entspricht Tabelle \textit{word} in der Wortdatenbank und speichert die Merkmale eines Wortes.
+	\item \texttt{AddedEntry}: Enthält einen Verweis (Fremdschlüssel) auf ein hinzugefügtes Wort und dessen Erstellungszeitpunkt.
+	\item \texttt{Segmentation}: Modelliert einen Segmentierungsvorschlag. Die Klasse enthält Worttext, Segmentierung und Betonungsmuster. Außerdem speichert sie den Namen (\texttt{origin}) und die Herkunft (\texttt{source}) der Quelle des Vorschlags (z.B. MARY TTS).
+\end{itemize}
+
+Im Folgenden werden die Funktionen des \textit{DictionaryService} genauer beschrieben.
+
+\paragraph{Funktionen der Wortdatenbank}
+\begin{itemize}
+	\item Die Methode \texttt{add\_word} bekommt Worttext, Betonungsmuster, Wortteilung, Lemma und Wortart übergeben (s. Abschnitt \ref{sec:worddatabase}), fügt das Wort der Datenbank hinzu und liefert eine \texttt{Word} Instanz zurück. Im Falle eines Fehlers oder falls das Wort schon existiert, gibt die Methode \texttt{None} zurück.
+	
+	\item \texttt{query\_word} schlägt ein Wort mit den Parametern Worttext und Wortart in der Datenbank nach und gibt das annotierte Wort im JSON (\textit{text}, \textit{stress\_pattern}, \textit{hyphenation}, \textit{lemma}, \textit{pos}) Format zurück. Als Parameter kann optional der eingeloggte Nutzer übergeben werden. Ist das der Fall, wird zuerst überprüft, ob im Nutzeraccount (s. Abschnitt \ref{sec:userservice}) eine manuelle Segmentierung für das Wort gespeichert ist und falls ja, diese zurückgegeben. Werden in der Wortdatenbank mehrere Wörter gefunden, die dem gesuchten Worttext entsprechen, wird zusätzlich die Wortart geprüft und der passende Eintrag (bzw. der Erste Eintrag, falls kein Wort mit der entsprechenden Wortart gefunden wird) zurückgegeben.
+	
+\paragraph{Textanalyse}
+Die Methode \texttt{query\_text} bekommt den gesamten zu analysierenden Text übergeben (sowie optional den eingeloggten Nutzer für manuelle Worteinträge). Der Text wird zunächst mit dem spacy Parser analysiert. Dieser zerlegt den Text in einzelne Wörter und Trennzeichen und gibt eine Liste von Tokens zurück. Nun wird über die Liste der Tokens iteriert und dabei wiederum eine Liste von JSON Einträgen generiert, welche am Schluss von der Methode zurückgegeben wird. Jedes spacy Token liefert den Worttext \texttt{text} die Wortart \texttt{pos\_} und das Lemma \texttt{lemma\_}. Das Token wird wie folgt verarbeitet:
+
+\begin{enumerate}
+	\item In jedem Fall wird ein neuer JSON Eintrag angelegt und die Felder \texttt{text}, \texttt{pos} und \texttt{lemma} mit den entsprechenden Inhalt des spacy Tokens gefüllt.
+	
+	\item Enthält der Worttext einen Linebreak \qq{\texttt{\textbackslash n}}, so wird das JSON Feld \texttt{type} mit \textit{linebreak} belegt.
+	
+	\item Enthält der Worttext einen Trennstrich \qq{\texttt{-}}, so handelt es sich um ein zusammengesetztes Wort (z.B. \textit{100-Millionen-Einwohner-Staat}). Hier werden alle Trennstriche durch Leerzeichen ersetzt. Der resultierende String wird dann erneut mit spacy analysiert und die Tokens dann entsprechend verarbeitet. Hinter jedem Teilwort (außer dem Letzten) wird manuell der Trennstrich als eigenes Token eingefügt.
+	
+	\item Entspricht der Wortart-Tag einem String aus \texttt{['X', 'PUNCT', 'NUM', 'SPACE']}, so handelt es sich um eine dem Parser unbekannte Zeichenfolge, eine Zahl, ein Satz- oder Leerzeichen. Diese Tags werden nicht nachgeschlagen sondern mit dem JSON \texttt{type} Feld \textit{ignored} der Rückgabeliste hinzugefügt.
+	
+	\item Trifft keiner dieser Sonderfälle zu, wird das Wort mit der Methode \texttt{query\_word} nachgeschlagen. Wird dieses gefunden (Rückgabewert nicht \texttt{None}), wird der \texttt{type} auf \textit{annotated\_word} gesetzt. Das JSON Feld \texttt{annotation} enthält dann die Informationen des annotierten Wortes (von \texttt{query\_word} zurückgegeben). Ist das Wort nicht in der Datenbank, so enthält das Feld \texttt{type} den Wert \textit{not\_found}.
+\end{enumerate}
+
+\end{itemize}
+
+\paragraph{Generierung von Segmentierungsvorschlägen}
+\todo{pyphen, MARY...}
 
 \subsection{User Service}
+\label{sec:userservice}
 was macht dieser?\\
 sqlite Tabellen\\
 Klassendiagramme\\
