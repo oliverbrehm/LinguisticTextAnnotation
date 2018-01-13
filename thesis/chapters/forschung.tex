@@ -39,23 +39,19 @@ vorhandene tools vorstellen, Literatur zu Tools, zeigen, wie diese Ideen weiterg
 
 Um das Ziel einer automatischen Analyse und Annotation beliebiger Texte zu realisieren, werden computerlinguistisch vor Allem die folgenden zwei Schritte untersucht:
 \begin{enumerate}
-	\item Syntaktische Analyse (Zerlegung des Texts in Sätze und Wörter)
+	\item Linguistische Analyse (Zerlegung des Texts Wörter)
 	\item Nachschlagen der Betonungsmuster in einer Datenbank
 \end{enumerate}
 
-\subsection{Syntaktische Analyse}
-was? wie funktioniet das?
-grundbegriffe aus carstensen\cite{Carstensen2009}
-nlp parser python openNLP, spacy\\
-was liefern diese? zusätzlich lemma, pos\\
+\subsection{Linguistische Analyse}
+Da die vom Programm zu verarbeitende Eingabe ein Text ist, also eine beliebige Folge von alphanumerischen Zeichen, sowie Leerraumzeichen und Interpunktionen, muss diese Eingabe zunächst korrekt in Wörter zerteilt werden. Dieser Schritt wird \textbf{Tokenisierung} genannt. Zusätzlich werden auch von einem \textbf{Tagger} jedem Wort weitere Informationen, wie z.B. die Wortart (\textit{Part-of-Speech/POS-Tagger}) hinzugefügt. Diese werden üblicherweise mithilfe eines entsprechenden Lexikons nachgeschlagen. \cite{Carstensen2009}\todo{2. auflage 2014, S. 218-220, 224-226} Der für dieses Projekt verwendete Parser wird in Abschnitt \toref{spacy} näher beschrieben.
+
+\todo{Lemma, was ist das}\\
 
 \subsection{Datenbanken zur Wortbetoung}
-Silbentrennung\\
-Wortbetonung\\
-Part of speech, was, warum? doppeldeutigkeiten?\\
-Lemma, was ist das\\
-CELEX, Alternativen\\
-Graphem2Phonem beschreiben, warum?\\
-Tools, MARY, BAS...
+Nachdem der Text als Liste von Wörtern (Tokens) vorliegt kann auf dieser Ebene weitergearbeitet werden. Für die gewünschte Annotation des Textes muss eine Repräsentation in einzelnen Silben vorliegen. Zusätzlich wird für die Hervorhebung des Sprachrhythlmus die betonte Silbe im Wort gesucht. Es ist durchaus möglich, dass in einem Wort mehrere Betonungen vorkommen (gerade bei Wortkompositionen, die im Deutschen häufig zu finden sind, z.B. \textit{heraus+kommen}). Dies wird in der vorliegenden Arbeit vernachlässigt, es wird nur eine Hauptbetonung, die erste vorkommende Betonung im Wort, gesucht.\\
+Informationen zur Worttrennung in Silben und zur Wortbetonung lassen sich in diversen Lexika finden. Für die weitere Verwendung in der zu entwickelnden Applikation wurde als Grundlage das Lexikon CELEX2 gewählt. Dabei handelt es sich um ein umfangreiches Sprachlexikon für die Sprachen Englisch, Deutsch und Niederländisch. Verarbeitet wurden hier zunächst nur die deutsche Sprache. Neben der gesuchten Worttrennung und -betonung enthält es auch weitere linguistische Informationen wie Wortart und Grundformen sowie phonologische und orthographische Annotationen.
+\todo{Alternativen, welche? könnten zusätzlich oder anstelle des CELEX verwendet werden}\\
+Weiterführend wurden auch Text-To-Speech Systeme untersucht. Diese müssen um zu funktionieren zwangsweise eine phonologische Analyse durchführen, also auch die Wortbetonung bestimmen. Beispielsweise liefern die Systeme MARY TTS\tocite{MARY, woher?} oder BAS\tocite{BAS} auch textuellen annotiere Formen ihrer phonologischen Analyse, die auch als Grundlage zur Extraktion von Worttrennung und Betonung dienen können.\\
 
-Erweiterung durch Crowdsourcing, viele Mithelfer durch Plattformen wie Amazon Mechanical Turc\cite{Snow2008} oder CrowdFlower \todo{Meurers} \cite{Meurers2015}, \todo{translation}\cite{Zaidan2011}.
+Linguistische Datenbanken sind aufgrund des Umfangs und der Flexibilität von Sprachgrammatiken niemals vollständig\tocite{lixika, datenbanken}. Es wurde daher ein Weg gesucht die Datenbank auf unkomplizierte Weise erweiterbar zu machen. Dies kann mit einem geeignete User-Interface durch Experten erfolgen, die unbekannte Einträge ergänzen und hinzufügen. Einige Arbeiten hatten bereits Erfolg damit, solche Aufgaben effektiv auch auf Nutzer zu verteilen, die keine Experten für den jeweiligen Anwendungsbereich sind. Auf Plattformen wie Amazon Mechanical Turc oder CrowdFlower können beispielsweise leicht Arbeiter anonym engagiert werden, die solche Aufgaben erledigen\cite{Snow2008}. Diese Plattformen wurden beispielsweise von Zaidan (Übersetzungen)\cite{Zaidan2011} oder Meurers\cite{Meurers2015} (\todo{wofür?}) benutzt, um computerlinguistische Aufgaben zu erledigen.
