@@ -281,6 +281,8 @@ class DictionaryService:
                     segmentations.append(segmentation_mary.json())
         except requests.exceptions.ReadTimeout:
             print('Timout querying MARY TTS.')
+        except Exception:
+            print('Error querying MARY TTS.')
 
         # pyphen: no stress pattern available, default first syllable stressed
         hyphenation = self.pyphen_dict.inserted(word)

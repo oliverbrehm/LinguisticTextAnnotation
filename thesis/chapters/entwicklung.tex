@@ -51,12 +51,12 @@ was genau? auch im celex, keine wirkliche anwendung in der app, vielleicht ausbl
 
 Neben den Worteinträgen sollen in der Datenbank noch Informationen über die Herkunft der Wörter gespeichert werden. Neben den Basiseinträgen, die aus dem CELEX extrahiert werden, wird den Nutzern später die Möglichkeit gegeben Einträge zur Datenbank hinzuzufügen. Um diesen Vorgang nachvollziehbar zu machen gibt es eine zweite Tabelle, in welcher Einträge für neu hinzugefügte Wörter mit Zeitstempel angelegt werden. Das Folgende Schema \ref{figure:worddatabase} zeigt die Struktur der Wortdatenbank.
 
-\begin{figure}
-	\todo{Figur Datenbankschema}
-	\caption{Schema der Wortdatenbank}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.6\linewidth]{figures/worddb}
+	\caption{Schema der Wortdatenbank (\textit{word.db})}
 	\label{figure:worddatabase}
 \end{figure}
-
 
 Alle in der Worttabelle beschriebenen Einträge sind auch im CELEX vorhanden. Der Folgende Abschnitt beschreibt, wie die Daten aus dem Lexikon extrahiert und in der Wortdatenbank gespeichert wurden.
 
@@ -168,13 +168,13 @@ Das Modul \textit{DictionaryService.py} verarbeitet Anfragen zur Textanalyse, ve
 
 Im Folgenden werden die Funktionen des \textit{DictionaryService} genauer beschrieben.
 
-\paragraph{Funktionen der Wortdatenbank}
+\subsubsection{Funktionen der Wortdatenbank}
 \begin{itemize}
 	\item Die Methode \texttt{add\_word} bekommt Worttext, Betonungsmuster, Wortteilung, Lemma und Wortart übergeben (s. Abschnitt \ref{sec:worddatabase}), fügt das Wort der Datenbank hinzu und liefert eine \texttt{Word} Instanz zurück. Im Falle eines Fehlers oder falls das Wort schon existiert, gibt die Methode \texttt{None} zurück.
 	
 	\item \texttt{query\_word} schlägt ein Wort mit den Parametern Worttext und Wortart in der Datenbank nach und gibt das annotierte Wort im JSON (\textit{text}, \textit{stress\_pattern}, \textit{hyphenation}, \textit{lemma}, \textit{pos}) Format zurück. Als Parameter kann optional der eingeloggte Nutzer übergeben werden. Ist das der Fall, wird zuerst überprüft, ob im Nutzeraccount (s. Abschnitt \ref{sec:userservice}) eine manuelle Segmentierung für das Wort gespeichert ist und falls ja, diese zurückgegeben. Werden in der Wortdatenbank mehrere Wörter gefunden, die dem gesuchten Worttext entsprechen, wird zusätzlich die Wortart geprüft und der passende Eintrag (bzw. der Erste Eintrag, falls kein Wort mit der entsprechenden Wortart gefunden wird) zurückgegeben.
 	
-\paragraph{Textanalyse}
+\subsubsection{Textanalyse}
 Die Methode \texttt{query\_text} bekommt den gesamten zu analysierenden Text übergeben (sowie optional den eingeloggten Nutzer für manuelle Worteinträge). Der Text wird zunächst mit dem spacy Parser analysiert. Dieser zerlegt den Text in einzelne Wörter und Trennzeichen und gibt eine Liste von Tokens zurück. Nun wird über die Liste der Tokens iteriert und dabei wiederum eine Liste von JSON Einträgen generiert, welche am Schluss von der Methode zurückgegeben wird. Jedes spacy Token liefert den Worttext \texttt{text} die Wortart \texttt{pos\_} und das Lemma \texttt{lemma\_}. Das Token wird wie folgt verarbeitet:
 
 \begin{enumerate}
@@ -191,13 +191,22 @@ Die Methode \texttt{query\_text} bekommt den gesamten zu analysierenden Text üb
 
 \end{itemize}
 
-\paragraph{Generierung von Segmentierungsvorschlägen}
+\subsubsection{Generierung von Segmentierungsvorschlägen}
 \todo{pyphen, MARY...}
 
 \subsection{User Service}
 \label{sec:userservice}
+
 was macht dieser?\\
 sqlite Tabellen\\
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.8\linewidth]{figures/userservicedb}
+	\caption{Schema der User Datenbank (\textit{user.db})}
+	\label{fig:userdb}
+\end{figure}
+
 Klassendiagramme\\
 
 \subsection{Verification Service}
