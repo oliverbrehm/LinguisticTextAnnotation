@@ -62,7 +62,7 @@ Alle in der Worttabelle beschriebenen Einträge sind auch im CELEX vorhanden. De
 
 \subsection{Impementierung}
 
-Für die Generierung der Datenbank wurde das python Projekt \textit{celex2db} erstellt, welches in \qq{/backend/celex2db} zu finden ist (alle Pfadangaben in diesem Abschnitt beziehen sich auf dieses Verzeichnis). Die Daten im CELEX sind über mehrere Dateien verteilt. So gibt es eine Teilung in Sprachen (für die Datenbank werden nur Deutsche Wörter benutzt, zu finden in \qq{celex2/german}), Wörter und Lemmata sowie in Orthographie, Phonologie und Morphologie. Die Teilung in Wort und Lemma spart Speicherplatz. Das Lemma eines Verbs, zum Beispiel, ist die Grundform dieses. Zur Beugung \textit{gehst} gehört also das Lemma \textit{gehen}. Viele Eigenschaften des Verbs \textit{gehen} beziehen sich auf alle Beugungen, so müssen diese nicht für alle Verbformen redundant gespeichert werden.\\
+Für die Generierung der Datenbank wurde das python Projekt \textit{celex2db} erstellt, welches in \qq{/backend/celex2db} zu finden ist (alle Pfadangaben in diesem Abschnitt beziehen sich auf dieses Verzeichnis). Die Daten im CELEX \todo{in Forschungsstand teil verschieben} sind über mehrere Dateien verteilt. So gibt es eine Teilung in Sprachen (für die Datenbank werden nur Deutsche Wörter benutzt, zu finden in \qq{celex2/german}), Wörter und Lemmata sowie in Orthographie, Phonologie und Morphologie. Die Teilung in Wort und Lemma spart Speicherplatz. Das Lemma eines Verbs, zum Beispiel, ist die Grundform dieses. Zur Beugung \textit{gehst} gehört also das Lemma \textit{gehen}. Viele Eigenschaften des Verbs \textit{gehen} beziehen sich auf alle Beugungen \todo{=Flexionsformen?}, so müssen diese nicht für alle Verbformen redundant gespeichert werden.\\
 Die Einträge in den Wortlisten des CELEX verweisen jeweils mit einer ID auf den zugehörigen Eintrag in der Lemma Liste. Da in der zu entwickelnden Datenbank auch das Lemma gespeichert werden soll, müssen sowohl Wort Listen als auch Lemma Listen geparsed werden.\\
 
 Das Hauptskript \qq{celex2db.py} führt die folgenden Schritte aus:
@@ -73,16 +73,16 @@ Das Hauptskript \qq{celex2db.py} führt die folgenden Schritte aus:
 \end{enumerate}
 Während der Ausführung des Skripts werden Schrittweise Fortschrittsangaben mit Fehlern ausgegeben (Schrittweite im Skript einstellbar), da das Parsen und Erstellen der Datenbank einige Zeit benötigt (mehr dazu im Abschnitt \toref{Ergebnisse}).
 
-Die Klasse \textbf{CelexDictionary} im Skript \qq{celex.py} bietet die Methoden zum Parsen der Wort und Lemma Listen. Die Struktur ist in \toref{Figur} dargestellt.\\
+Die Klasse \texttt{CelexDictionary} im Skript \qq{celex.py} bietet die Methoden zum Parsen der Wort und Lemma Listen. Die Struktur ist in \toref{Figur} dargestellt.\\
 
 \todo{Klassendiagramm CelexDictionary}
 
-In der \textbf{parseLemma} Methode wird die CELEX Datei \qq{gml.cd} verarbeitet. Die morphologische Informationen zu den Lemmata enthält. Jede Zeile enthält ein Lemma, für welches in der Struktur \textbf{CelexLemma} die ID des Lemmas, Text und Wortart gespeichert werden.\\
+In der \texttt{parseLemma} Methode wird die CELEX Datei \qq{gml.cd} verarbeitet. Die morphologische Informationen zu den Lemmata enthält. Jede Zeile enthält ein Lemma, für welches in der Struktur \texttt{CelexLemma} die ID des Lemmas, Text und Wortart gespeichert werden.\\
 
-In der \textbf{parseWords} Methode werden nun die beiden Dateien \qq{gpw.cd} und \qq{gow.cd} verarbeitet, welche phonologische und orthographische Informationen zu allen enthaltenen Beugungen der Wörter enthalten. Die IDs und Reihenfolge in beiden Wortlisten stimmen überein, sodass beide Listen gleichzeitig verarbeitet werden können. Aus der phonologischen Liste werden der Text des Wortes, der Verweis auf das zugehörige Lemma (lemma\_id) sowie das phonologische Muster entnommen. Die orthographischen Liste liefert lediglich die Silbentrennung.\\
-Danach wird in der zuvor verarbeiteten Liste der Lemmas, mithilfe der \textit{lemma\_id} der Text passende Lemmas gesucht und alle verfügbaren Daten in der Struktur \textbf{CelexWord} gespeichert. Die Hauptklasse \textbf{CelexDictionary} enthält ein python Dictionary aller \textbf{CelexWord} Einträge, siehe \toref{klassendiagram figur}.
+In der \texttt{parseWords} Methode werden nun die beiden Dateien \qq{g\textbf{p}w.cd} und \qq{g\textbf{o}w.cd} verarbeitet, welche phonologische und orthographische Informationen zu allen enthaltenen Beugungen der Wörter enthalten. Die IDs und Reihenfolge in beiden Wortlisten stimmen überein, sodass beide Listen gleichzeitig verarbeitet werden können. Aus der phonologischen Liste werden der Text des Wortes, der Verweis auf das zugehörige Lemma (lemma\_id) sowie die phonologische Darstellung entnommen. Die orthographischen Liste liefert lediglich die Silbentrennung.\\
+Danach wird in der zuvor verarbeiteten Liste der Lemmas, mithilfe der \texttt{lemma\_id} der Text passende Lemmas gesucht und alle verfügbaren Daten in der Struktur \texttt{CelexWord} gespeichert. Die Hauptklasse \texttt{CelexDictionary} enthält ein python Dictionary aller \texttt{CelexWord} Einträge, siehe \toref{klassendiagram figur}.
 
-Letztendlich werden die Einträge der Wortliste im Skript \qq{writeSQLite.py} in die Datenbank übertragen. In einem frühen Entwicklungsstadium wurden hier SQL Instruktionen verwendet um die Datenbankeinträge zu erstellen. Nach der Entwicklung des \textbf{DictionaryService} im Backend (genauer beschrieben im Abschnitt \toref{DictionaryService}) wurde später direkt auf diesen zugegriffen, um Redundanten Code zu vermeiden. Ein einfacher Funktionsaufruf der Methode \textbf{add\_word} des \textbf{DictionaryService} fügt den Eintrag der Wortdatenbank hinzu.
+Letztendlich werden die Einträge der Wortliste im Skript \qq{writeSQLite.py} in die Datenbank übertragen. In einem frühen Entwicklungsstadium wurden hier SQL Instruktionen verwendet um die Datenbankeinträge zu erstellen. Nach der Entwicklung des \texttt{DictionaryService} im Backend (genauer beschrieben im Abschnitt \toref{DictionaryService}) wurde später direkt auf diesen zugegriffen, um Redundanten Code zu vermeiden. Ein einfacher Funktionsaufruf der Methode \texttt{add\_word} des \texttt{DictionaryService} fügt den Eintrag der Wortdatenbank hinzu.
 
 \subsection{Ergebnisse}
 
@@ -184,7 +184,8 @@ Die Methode \texttt{query\_text} bekommt den gesamten zu analysierenden Text üb
 	
 	\item Enthält der Worttext einen Trennstrich \qq{\texttt{-}}, so handelt es sich um ein zusammengesetztes Wort (z.B. \textit{100-Millionen-Einwohner-Staat}). Hier werden alle Trennstriche durch Leerzeichen ersetzt. Der resultierende String wird dann erneut mit spacy analysiert und die Tokens dann entsprechend verarbeitet. Hinter jedem Teilwort (außer dem Letzten) wird manuell der Trennstrich als eigenes Token eingefügt.
 	
-	\item Entspricht der Wortart-Tag einem String aus \texttt{['X', 'PUNCT', 'NUM', 'SPACE']}, so handelt es sich um eine dem Parser unbekannte Zeichenfolge, eine Zahl, ein Satz- oder Leerzeichen. Diese Tags werden nicht nachgeschlagen sondern mit dem JSON \texttt{type} Feld \textit{ignored} der Rückgabeliste hinzugefügt.
+	\item Entspricht der Wortart-Tag einem String aus \texttt{['X',} \texttt{'PUNCT', }\texttt{'NUM', }\\
+	\texttt{'SPACE']}, so handelt es sich um eine dem Parser unbekannte Zeichenfolge, eine Zahl, ein Satz- oder Leerzeichen. Diese Tags werden nicht nachgeschlagen sondern mit dem JSON \texttt{type} Feld \textit{ignored} der Rückgabeliste hinzugefügt.
 	
 	\item Trifft keiner dieser Sonderfälle zu, wird das Wort mit der Methode \texttt{query\_word} nachgeschlagen. Wird dieses gefunden (Rückgabewert nicht \texttt{None}), wird der \texttt{type} auf \textit{annotated\_word} gesetzt. Das JSON Feld \texttt{annotation} enthält dann die Informationen des annotierten Wortes (von \texttt{query\_word} zurückgegeben). Ist das Wort nicht in der Datenbank, so enthält das Feld \texttt{type} den Wert \textit{not\_found}.
 \end{enumerate}
@@ -230,9 +231,23 @@ word, syllable, klassendiagramme, interaktion...
 home\_component\\
 angular router links
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.6\linewidth, frame]{figures/frontend/home}
+	\caption{Bildschirmfoto der Begrüßungsseite}
+	\label{fig:frontend-home}
+\end{figure}
+
 \subsection{Text Analyse}
 
 ui und service
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.8\linewidth, frame]{figures/frontend/textanalyse}
+	\caption{Bildschirmfoto der Textanalyse}
+	\label{fig:frontend-home}
+\end{figure}
 
 \subsubsection{TextAnalysisService}
 
@@ -259,6 +274,13 @@ popup:\\
 	\item Wortart
 	\item Lemma
 \end{itemize}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.4\linewidth, frame]{figures/frontend/wordpopup}
+	\caption{Bildschirmfoto der spezifischen Worteinstellungen}
+	\label{fig:frontend-home}
+\end{figure}
 
 span für silben\\
 style aus komponente\\
@@ -292,6 +314,13 @@ unbetonte silben\\
 farbe\\
 2. farbe, benutzen\\
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.4\linewidth, frame]{figures/frontend/config-color}
+	\caption{Bildschirmfoto der Farbeinstellungen}
+	\label{fig:frontend-home}
+\end{figure}
+
 worthintergrund, warum, in welcher einstellung sinnvoll?
 
 größen und abstände\\
@@ -302,6 +331,13 @@ größen und abstände\\
 	\item Zeilenabstand
 	\item Zeichenabstand
 \end{itemize}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.4\linewidth, frame]{figures/frontend/config-text}
+	\caption{Bildschirmfoto der Texteinstellungen}
+	\label{fig:frontend-home}
+\end{figure}
 
 custom slider\\
 
@@ -319,6 +355,13 @@ funktionen:\\
 	\item Ignorieren
 \end{itemize}
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.4\linewidth, frame]{figures/frontend/config-pos}
+	\caption{Bildschirmfoto der spezifischen Wortart Einstellungen}
+	\label{fig:frontend-home}
+\end{figure}
+
 \subsubsection{Annotationsvorlagen}
 
 speichert alles\\
@@ -326,14 +369,39 @@ name der vorlage\\
 liste, aktivieren, löschen\\
 neue vorlage anlegen oder momentane speichern\\
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.4\linewidth]{figures/frontend/config-vorlagen}
+	\caption{Bildschirmfoto der UI zur Verwaltung und Verwendung von Annotationsvorlagen}
+	\label{fig:frontend-home}
+\end{figure}
+
 \subsection{Manuelle Wortanalyse}
 
 TBD
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.8\linewidth]{figures/frontend/manuelle-analyse}
+	\caption{Bildschirmfoto der Manuellen Wortanalyse}
+	\label{fig:frontend-home}
+\end{figure}
 
 \subsection{Nutzerkonto}
 
 TBD
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.8\linewidth, frame]{figures/frontend/user-account}
+	\caption{Bildschirmfoto der Textanalyse}
+	\label{fig:frontend-home}
+\end{figure}
 
 \subsection{Wort Verifizierung}
 
 TBD
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.6\linewidth]{figures/frontend/verifizierung}
+	\caption{Bildschirmfoto der Textanalyse \todo{Namen unkenntlich machen!}}
+	\label{fig:frontend-home}
+\end{figure}
