@@ -17,61 +17,73 @@ Zunächst wird durch Beispiele eines annotieren Textes mit verschiedenen Einstel
 
 \section{Ergebnisse der Textannotation}
 
-Um zu zeigen, dass die Applikation das Ziel des automatischen Erstellens von Arbeitsmaterial erfüllt, werden im Folgenden verschiedene Texte präsentiert, die mit Hilfe des Web Interfaces erstellt wurden. Die Ergebnisse zeigen, dass das Programm diese Ziel nicht nur erfüllt, sondern im Vergleich zu herkömmlichen Methoden \tocite{Silbefibel, ABC} auch noch einen hohen Grad an Flexibilität bietet. Die Einstellungen und damit das Erscheinungsbild des resultierenden Textes können vom Nutzer frei an die Bedürfnisse des jeweiligen Falls angepasst werden.
+Um zu zeigen, dass die Applikation das Ziel des automatischen Erstellens von Arbeitsmaterial erfüllt, werden im Folgenden verschiedene Texte präsentiert, die mit Hilfe des Web Interfaces erstellt wurden. Die Ergebnisse zeigen, dass das Programm diese Ziel nicht nur erfüllt, sondern im Vergleich zu herkömmlichen Methoden \tocite{Silbefibel, ABC} auch noch einen hohen Grad an Flexibilität bietet. Die Einstellungen und damit das Erscheinungsbild des resultierenden Textes können vom Nutzer frei an die Bedürfnisse des jeweiligen Falls angepasst werden.\\
 
-\subsubsection{Annotation 1}
-Annotation 1 mit Screenshots
+Im Folgenden wurde der Beispieltext \textit{Aschenputtel} mit der Web Applikation analysiert, sodass Silbentrennung und Betonung farblich markiert dargestellt werden. Die in den Beispielen verwendeten Texten wurden mit der Druckfunktion der Textvorschau als PDF Dateien exportiert. Jedes Bild entspricht einer DIN A4 Seite.
+
+\subsubsection{Beispiel 1: Hervorhebung der Silben mit zwei alterierenden Farben}
+
+Im ersten Beispiel wird die Schriftfarbe für da Hervorheben der Silben genutzt. Die betonte Silbe wird immer rot dargestellt, in Wörtern mit vielen Silben, werden diese dann alterierend rot und blau hervorgehoben. Die Schriftgröße wurde auf \textit{22} gesetzt, der Wortabstand auf den Wert \textit{0.4}. Zusätzlich sorgt die Einstellung des Zeilenabstands auf \textit{1.5} für bessere Lesbarkeit.
+
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=.7\linewidth, frame]{figures/evaluation/annotation1}
-	\caption{Annotation1}
-	\label{fig:frontend-home}
+	\caption{Hervorhebung der Silben mit zwei alterierenden Farben}
+	\label{fig:evaluation-ex1}
 \end{figure}
 \newpage
 
-\subsubsection{Annotation 2}
-Annotation 2 mit Screenshots
+\subsubsection{Beispiel 2: Worthintergrund und Silbenabstand}
+
+In diesem Beispiel sorgt die Worthintergrundfarbe für eine bessere Wahrnehmung des Wortes als Einheit. Dadurch kann auch ein Silbenabstand (hier \textit{0.1}) eingestellt werden ohne dass die Gefahr besteht, dass dadurch nicht mehr klar ist, welche Silben zusammen gehören. Wegen dem Worthintergrund nehmen die Wörter mehr Platz in der Zeile ein, daher wurde auch der Zeilenabstand auf \textit{2.2} erhöht. Zudem wurde hier ein Zeichenabstand von \textit{2} (statt \textit{1} in Beispiel 1) gewählt.
+
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=.7\linewidth, frame]{figures/evaluation/annotation2}
-	\caption{Annotation2}
-	\label{fig:frontend-home}
+	\caption{Worthintergrund und Silbenabstand}
+	\label{fig:evaluation-ex2}
 \end{figure}
 \newpage
 
-\subsubsection{Annotation 3}
-Annotation 3 mit Screenshots
+\subsubsection{Beispiel 3:  Silbentrennzeichen und verschiedene Silbenfarben}
+
+In Beispiel 3 wurde wieder auf die Worthintergrundfarbe verzichtet. Das Trennzeichen \qq{=} soll hier das Silbentrennen erleichtern, sowie zusammenhängende Silben zu einem Wort gruppieren. Der Zeichenabstand beträgt wieder \textit{1}, der Silbenabstand \textit{0}, da das Gleichheitszeichen hier als Silbentrenner dient. Zusätzlich wurde eine weitere Farbe für alterierende Silben gewählt. Hier wird nur noch die betonte Silbe rot dargestellt, danach alterieren die Silben bei langen Wörtern in den Farben blau und lila.
+
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=.7\linewidth, frame]{figures/evaluation/annotation3}
-	\caption{Annotation3}
-	\label{fig:frontend-home}
+	\caption{Silbentrennzeichen und verschiedene Silbenfarben}
+	\label{fig:evaluation-ex3}
 \end{figure}
 \newpage
 
-\subsubsection{Annotation 4}
-Annotation 4 mit Screenshots
+\subsubsection{Beispiel 4: Hervorhebung des Silbenhintergrunds}
+
+In diesem Beispiel wird ein anderer Ansatz der farblichen Hervorhebung gewählt. Die eingestellten Farben bestimmen hier den Hintergrund der Silben und nicht die Schriftfarbe (diese ist immer Schwarz). Das Beispiel hebt vor Allem die betonte Silbe hervor, die grün dargestellt werden. Unbetonte Silben bekommen alterierend zwei verschiedene Grautöne als Hintergrund. Der Silbenabstand ist hier wieder \textit{0}, somit wird die Einheit des Wortes deutlich erkennbar.
+
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=.7\linewidth, frame]{figures/evaluation/annotation4}
-	\caption{Annotation4}
-	\label{fig:frontend-home}
+	\caption{Hervorhebung des Silbenhintergrunds}
+	\label{fig:evaluation-ex4}
 \end{figure}
 \newpage
 
-\subsubsection{Annotation 5}
-Annotation 5 mit Screenshots
+\subsubsection{Beispiel 5: Manuelles Deaktivieren der Hervorhebung in kurzen Wörtern}
+
+In Beispiel 5 wird der Sprachrhythmus mit Wortbetonungen noch deutlicher hervorgehoben. Die betonte Silbe wir zusätzlich zur grünen Farbe auch fett dargestellt. Außerdem wurde die Betonung in manchen Wörtern deaktiviert, so werden im ganzen Text beispielsweise Artikel, Präpositionen oder manche einsilbigen Wörter nicht betont markiert. Dieser Text soll damit einen Fokus auf den Sprachrhythmus innerhalb ganzer Sätze legen.
+
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=.7\linewidth, frame]{figures/evaluation/annotation5}
-	\caption{Annotation5}
-	\label{fig:frontend-home}
+	\caption{Manuelles Deaktivieren der Hervorhebung in kurzen Wörtern}
+	\label{fig:evaluation-ex5}
 \end{figure}
 \newpage
 
 \section{Nutzertest}
 
-warum? was?
+Während die Beispiele im vorherigen Abschnitt verdeutlichen, dass das Entwickelte Programm generell dazu in der Lage ist, Texte anforderungsgemäß zu annotieren, sollte der Nutzertest zeigen, dass die Applikation von der Zielgruppe (Lerntherapeuten, Nachhilfelehrer und Eltern betroffener Kinder) problemlos bedient werden kann. Intuitivität und Zeiteffizienz sollten dabei vor Allem berücksichtigt werden, da Software, die diese Kriterien schlecht erfüllt, ungern oder im schlechtesten Fall überhaupt nicht benutzt wird. \tocite{irgendwas UX}.
 
 \subsection{Vorbereitung und Durchführung}
 
@@ -80,11 +92,11 @@ In der Testbeschreibung wurde auch verdeutlicht, dass es sich um ein Test des So
 
 Um möglichst konsistente Testbedingungen zu schaffen, wurde bei allen Probanden mit einer aktuellen Version von Google Chrome gearbeitet. Es wurde zudem sichergestellt, dass den Probanden ein möglichst gewohntes Umfeld geboten wird. Im besten Fall benutzten die Nutzer ihre eigenen Computer. Falls dies nicht möglich war, wurde vorher überprüft ob beim Testgerät alles genauso wie gewohnt bedient werden konnte, d.h. Einstellungen für Peripherie wie Maus, Tastatur oder Touchpad wurden vorher, dem Nutzer entsprechend, angepasst.\\
 
-Nach jedem der fünf Szenarien wurde von dem Proband ein After Scenario Questionnaire ausgefüllt \tocite{asc}. Es beinhaltete die folgenden drei Fragen:
+Nach jedem der fünf Szenarien wurde von dem Proband ein After Scenario Questionnaire ausgefüllt \tocite{asq}. Es beinhaltete die folgenden drei Fragen:
 \begin{itemize}
 	\item \textbf{Intuitivität}: Die Aufgabe konnte ich intuitiv und problemlos erledigen.
 	\item \textbf{Zeitaufwand}: Ich halte die Zeit, die ich gebraucht habe um die Aufgabe zu erledigen, für angemessen.
-	\item \textbf{Dokumentation}:Ich bin mit den Informationen, die ich während der Bearbeitung in der App erhalten habe (Beschreibungen, Rückmeldungen) zufrieden.
+	\item \textbf{Dokumentation}: Ich bin mit den Informationen, die ich während der Bearbeitung in der App erhalten habe (Beschreibungen, Rückmeldungen) zufrieden.
 \end{itemize}
 
 Zustimmung oder Ablehnung der Aussagen konnte in den fünf Optionen \textit{trifft zu}, \textit{trifft eher zu}, \textit{weder noch}, \textit{trifft eher nicht zu} oder \textit{trifft nicht zu} ausgedrückt werden.
@@ -225,14 +237,18 @@ Zum Schluss des Nutzertest wurde der Proband zu allgemeinen Äußerungen von Kri
 
 
 \section{Diskussion}
-Die Diskussion kann als Teil des Evaluations- oder Schlusskapitels oder als eigenständiges Kapitel aufgeführt werden. Wichtig ist, dass Sie Ihre Evaluationsergebnisse realistisch einschätzen und ins Verhältnis zum Stand der Technik setzen. Achten Sie besonders darauf, aus den Daten Ihrer Evaluation keine Wunschergebnisse abzulesen, die nicht in den Daten sind (wenn Ihre Testnutzer Ihr neuimplementiertes System nicht besser bedienen können als ein vorhandenes, dann ist das eben so). Gerade unerwartete bzw. \qq{negative} Ergebnisse (z.B. das neue System ist nicht besser als vorhandene) bringen wissenschaftliche Erkenntnisse: man stellt damit fest, dass der gewählte Weg nicht zum gewünschten Ergebnis führt und man generiert damit neue Fragen, z.B. warum der Weg nicht funktioniert hat, obwohl er vor dem Test als überlegen erachtet wurde.
 
-Es kann auch sein, dass verschiedene Evaluationsformen Unterschiede offenbaren. Z.B. kann es sein, dass die Nutzbarkeit des implementierten Systems nicht besser ist als bei anderen Ansätzen, aber dass es deutlich einfacher zu warten ist.
+hat funktioniert\\
+wurde von lerntherapeuten als nütlich bewertet, im verglich zur manuellen erstellung der texte\\
+usability zeigt, das das programm grunsätzlich gut benutzbar ist, teilweise kleine änderungen nötig, damit für alle problemlos bedienbar\\
+teile (wie nur eine betonung im wort) funktionieren, könnten aber noch deutlich besser gemacht/überarbeitet werden\\
 
-
-Im letzten Teil runden Sie Ihre Arbeit ab, in dem Sie Ihre Argumentation aus der Einleitung aufgreifen und mit konkreten Daten aus Ihrem Hauptteil und der Evaluation untermauern. Auch hier können Sie Bezug zur Literatur nehmen. Am Ende sollten Sie einen Ausblick über weitere Forschungsthemen geben. Dabei aufpassen, dass es nicht so klingt wie \qq{mir ist die Zeit ausgegangen und folgendes habe ich nicht mehr geschafft}. Eine gute wissenschaftliche Arbeit wirft mehr Fragen auf als sie beantwortet. Es sollte also eher klingen nach \qq{meine Arbeit hat \dots gezeigt. Daraus ergeben sich weitere interessante Fragen \dots}.
+einleitung aufgreifen, welche fragen, antworten dazu aus hauptteil und evaluation\\
+irgendwelche fragen aus literatur beantwortet?
+weitere fragen?
 
 \section{Ausblick}
 
-datenbank: PHONOLEX als Grundlage (statt oder zusaetzlich zu CELEX)
+datenbank: PHONOLEX als Grundlage (statt oder zusaetzlich zu CELEX)\\
+welche grundlegenden ideen können noch umgesetzt werden, wie kann die software erweitert werden?\\
 ...
