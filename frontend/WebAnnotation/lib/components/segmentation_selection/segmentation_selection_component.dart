@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:WebAnnotation/model/Segmentation.dart';
+import 'package:WebAnnotation/model/common/Segmentation.dart';
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
@@ -12,7 +12,7 @@ import 'package:WebAnnotation/services/text_analysis_service.dart';
 import 'package:WebAnnotation/services/segmentation_proposal_service.dart';
 import 'package:WebAnnotation/services/segmentation_service.dart';
 
-import 'package:WebAnnotation/model/Word.dart';
+import 'package:WebAnnotation/model/text_annotation/Word.dart';
 
 @Component(
     selector: 'segmentation-selection',

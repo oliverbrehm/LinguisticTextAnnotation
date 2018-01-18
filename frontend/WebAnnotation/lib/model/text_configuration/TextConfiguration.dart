@@ -3,7 +3,7 @@ import 'dart:html';
 import 'dart:convert';
 
 import 'package:WebAnnotation/app_service.dart';
-import 'package:WebAnnotation/model/PartOfSpeech.dart';
+import 'package:WebAnnotation/model/text_configuration/PartOfSpeech.dart';
 
 class TextConfiguration {
   int id;

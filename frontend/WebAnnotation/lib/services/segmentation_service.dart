@@ -2,12 +2,12 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:convert';
 
-import 'package:WebAnnotation/model/Segmentation.dart';
+import 'package:WebAnnotation/model/common/Segmentation.dart';
 import 'package:angular/core.dart';
 
 import 'package:WebAnnotation/app_service.dart';
 
-import 'package:WebAnnotation/model/Word.dart';
+import 'package:WebAnnotation/model/text_annotation/Word.dart';
 
 /// service description
 abstract class SegmentationService {

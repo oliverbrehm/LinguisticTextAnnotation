@@ -1,4 +1,4 @@
-import 'package:WebAnnotation/model/TextConfiguration.dart';
+import 'package:WebAnnotation/model/text_configuration/TextConfiguration.dart';
 
 class Syllable {
   String text;

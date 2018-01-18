@@ -5,9 +5,9 @@ import 'dart:async';
 import 'dart:html';
 
 import 'package:WebAnnotation/app_service.dart';
-import 'package:WebAnnotation/model/TextConfiguration.dart';
-import 'package:WebAnnotation/model/UserText.dart';
-import 'package:WebAnnotation/model/UserEntry.dart';
+import 'package:WebAnnotation/model/text_configuration/TextConfiguration.dart';
+import 'package:WebAnnotation/model/user/UserText.dart';
+import 'package:WebAnnotation/model/user/UserEntry.dart';
 
 /// service description
 @Injectable()

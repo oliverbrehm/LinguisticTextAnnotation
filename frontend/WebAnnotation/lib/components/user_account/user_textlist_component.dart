@@ -7,7 +7,7 @@ import 'package:angular_router/angular_router.dart';
 
 import 'package:WebAnnotation/app_service.dart';
 import 'package:WebAnnotation/services/user_account_service.dart';
-import 'package:WebAnnotation/model/UserText.dart';
+import 'package:WebAnnotation/model/user/UserText.dart';
 
 @Component(
     selector: 'user-textlist',

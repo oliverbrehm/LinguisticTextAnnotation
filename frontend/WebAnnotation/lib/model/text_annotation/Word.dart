@@ -1,6 +1,6 @@
-import 'package:WebAnnotation/model/PartOfSpeech.dart';
-import 'package:WebAnnotation/model/Syllable.dart';
-import 'package:WebAnnotation/model/TextConfiguration.dart';
+import 'package:WebAnnotation/model/text_configuration/PartOfSpeech.dart';
+import 'package:WebAnnotation/model/text_annotation/Syllable.dart';
+import 'package:WebAnnotation/model/text_configuration/TextConfiguration.dart';
 
 enum WordState {
   Ignored,

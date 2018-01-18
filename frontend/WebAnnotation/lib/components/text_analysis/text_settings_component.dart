@@ -1,5 +1,5 @@
-import 'package:WebAnnotation/model/PartOfSpeech.dart';
-import 'package:WebAnnotation/model/Common.dart';
+import 'package:WebAnnotation/model/text_configuration/PartOfSpeech.dart';
+import 'package:WebAnnotation/model/common/Common.dart';
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
@@ -8,7 +8,7 @@ import 'dart:html';
 import 'package:WebAnnotation/app_service.dart';
 import 'package:WebAnnotation/services/text_analysis_service.dart';
 import 'package:WebAnnotation/services/user_account_service.dart';
-import 'package:WebAnnotation/model/TextConfiguration.dart';
+import 'package:WebAnnotation/model/text_configuration/TextConfiguration.dart';
 
 @Component(
   selector: 'text-settings',

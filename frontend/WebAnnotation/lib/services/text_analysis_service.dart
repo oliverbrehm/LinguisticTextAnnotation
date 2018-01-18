@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:WebAnnotation/model/PartOfSpeech.dart';
-import 'package:WebAnnotation/model/Syllable.dart';
+import 'package:WebAnnotation/model/text_configuration/PartOfSpeech.dart';
+import 'package:WebAnnotation/model/text_annotation/Syllable.dart';
 import 'package:angular/core.dart';
 
 import 'dart:html';
 
 import 'package:WebAnnotation/app_service.dart';
-import 'package:WebAnnotation/model/TextConfiguration.dart';
-import 'package:WebAnnotation/model/Word.dart';
-import 'package:WebAnnotation/model/AnnotationText.dart';
+import 'package:WebAnnotation/model/text_configuration/TextConfiguration.dart';
+import 'package:WebAnnotation/model/text_annotation/Word.dart';
+import 'package:WebAnnotation/model/text_annotation/AnnotationText.dart';
 
 abstract class TextAnalysisObserver {
   void textUpdated();

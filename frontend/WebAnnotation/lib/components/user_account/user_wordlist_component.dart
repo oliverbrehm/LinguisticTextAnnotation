@@ -6,7 +6,7 @@ import 'package:angular_forms/angular_forms.dart';
 
 import 'package:WebAnnotation/app_service.dart';
 import 'package:WebAnnotation/services/user_account_service.dart';
-import 'package:WebAnnotation/model/UserEntry.dart';
+import 'package:WebAnnotation/model/user/UserEntry.dart';
 
 @Component(
     selector: 'user-wordlist',

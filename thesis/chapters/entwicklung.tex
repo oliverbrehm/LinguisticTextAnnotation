@@ -216,20 +216,122 @@ sqlite Tabellen\\
 Klassendiagramme\\
 
 
+
+
+
+
 \section{Frontend}
 
-angular dart app\\
-komponenten s. software stack erklärung\\
+Das Frontend ist der den Nutzerinnen und Nutzern sichtbare Teil des Softwaresystems. Die Web-Applikation ist zunächst wie eine normale Webseite aufgebaut, Inhalte der Komponenten werden aber dynamisch geladen (d.h. bei Nutzerinteraktionen wird keine Seite neu aufgerufen, sondern der Inhalt der Seite wird direkt angepasst). Neben den standardmäßig im Web verwendeten Sprachen \textit{HTML}, \textit{CSS} und \textit{JavaScript} wurde die Applikation großteils in AngularDart entwickelt (eine genauere Beschreibung zu dieser Technologie, der Unterteilung von Komponenten in Klassen, Templates und Services sowie der Templatesprache von Angular, liefert Abschnitt \ref{sec:angulardart}).\\
 
-app\_component, providers, directives\\
+Die kombinierten Features von \textit{Angular} und der Programmiersprache \textit{Dart} ermöglichen eine strukturierte objektorientierte Architektur der Applikation. Die Folgenden Abschnitte zeigen zunächst den Aufbau der Applikation und das verwendete Datenmodell, danach die Struktur aller größeren Komponenten.
+
+\subsection{Hauptkomponente der Applikation und Routing}
+
+Die Hauptseite \qq{index.html} enthält nur einen Platzhalter (Kasten mit dem Text \qq{Prosodiya Online Text Analyse wird geladen...}) und bindet notwendige CSS Styles aus dem \qq{/styles} Verzeichnis sowie die Hauptkomponente \textit{AppComponent} ein. Das Einbinden dieser Komponente veranlasst Angular, diese beim Aufruf der Webseite zu laden und liefert so den Einstiegspunkt in die \textit{AngularDart} Applikation.\\
+
+Der zur Komponente zugehörige Service \texttt{app\_service} definiert lediglich die Funktionen zum Setzen und Löschen von Info- und Fehlermeldungen. Das Template der Hauptkomponente \qq{app\_component.html} enthält folgende Elemente:
+\begin{itemize}
+	\item Die Navigationsleiste mit den Einträgen \textit{Home}, \textit{Textanalyse}, \textit{Verifizierung} und \textit{Login.}
+	
+	\item Container in denen Info- und Fehlermeldungen angezeigt erden
+	\item Die Komponente \texttt{router-outlet}, die dafür sorgt, dass die in der Navigation ausgewählte Komponente angezeigt wird
+\end{itemize}
+
+In der Komponentenklasse \texttt{AppComponent} werden folgende Metadaten der Applikation per Klassenannotationen definiert:
+\begin{itemize}
+	\item \textbf{Angular Direktiven} in \textit{@Component}: Alle Basiskomponenten (\texttt{CORE\_DIRECTIVES}, \texttt{ROUTER\_DIRECTIVES}, \texttt{materialDirectives},
+	\texttt{formDirectives}) und eigene Subkomponenten (\texttt{TextAnalysisComponent}, \texttt{UserAccountComponent},\\
+	\texttt{WordReviewComponent}, \texttt{WordVerificationComponent}, \texttt{HomeComponent},\\
+	\texttt{UserRegisterComponent}) werden hier eingebunden und können damit in allen Templates verwendet werden \todo{stack: directives, einbinden erklären}
+	
+	\item \textbf{Angular Providers} in \textit{@Component}: Alle vordefinierten (\texttt{ROUTER\_PROVIDERS},\\ \texttt{materialProviders}) und eigenen Provider (\texttt{TextAnalysisService},\\
+	\texttt{UserAccountService}, \texttt{AppService}, \texttt{SegmentationProposalService},\\ \texttt{SegmentationVerificationService}) werden hier der Applikation bekannt gemacht, sodass sie von allen Komponenten verwendet werden können
+	
+	\item \textbf{Routen} für den Angular Router werden in \textit{@RouteConfig} zu den entsprechenden Komponenten zugeordnet (s. Tabelle \ref{table:routeconfig})
+\end{itemize}
+
+\begin{table}
+	\centering
+	\begin{tabular}{|l|l|l|}
+		\hline
+		\textbf{Route} & \textbf{Name} & \textbf{Komponente}\\
+		\hline
+		\hline
+		/\textit{home} & \textit{Home} & \textit{HomeComponent} \\
+		\hline
+		/text\_analysis & TextAnalysis & TextAnalysisComponent \\
+		\hline
+		/text\_analysis/:text & TextAnalysisParam & TextAnalysisComponent \\
+		\hline
+		/word\_review/:wordIndex & WordReview & WordReviewComponent \\
+		\hline
+		/word\_verification & WordVerification & WordVerificationComponent \\
+		\hline
+		/user\_account & UserAccount & UserAccountComponent \\
+		\hline
+		/user\_register & UserRegister & UserRegisterComponent \\
+		\hline
+		/** & NotFound & HomeComponent \\
+		\hline
+	\end{tabular}
+	\caption{Routen für den Angular Router, mit Name und zugehöriger Komponente. Die kursiv dargestellte \textit{Home} Route ist der Default Wert und wird bei Programmstart angezeigt}
+	\label{table:routeconfig}
+\end{table}
 
 \subsection{Datenmodell}
-word, syllable, klassendiagramme, interaktion...
+
+Im Folgenden wird ein Überblick über das Datenmodell gegeben, dessen Klassen diverse Komponenten der Applikation benutzen. Die Klasse \texttt{AnnotationText} wird instantiiert wenn ein neuer Text analysiert wird. Sie
+enthält eine Liste von Wörtern (Klasse \texttt{Word}), welche wiederum eine Liste Silben (Klasse \texttt{Syllable}) speichern. \\
+
+\todo{Klassendiagramm AnnotationText, Word, Syllable}
+
+Diese Klassen enthalten auch Informationen zu HTML Klassen und CSS Styles. Durch entsprechende Zugriffe können diese dann direkt im Angular HTML Template ausgelesen werden. Mit dieser Vorgehensweise ist es möglich, die Textvorschau direkt und verzögerungsfrei nach einer Nutzereingabe anzupassen. Wird zum Beispiel eine Silbenfarbe geändert wird erst über alle Wörter und Silben im \texttt{AnnotationText} iteriert und die entsprechenden CSS Farben (z.B. \texttt{color} oder \texttt{background-color}) auf die neue Farbe gesetzt. Der Angular Update Cycle \todo{heisst das so?} detektiert die Veränderung im Modell und passt das Document Object Model (DOM) der Webseite automatisch an. Folgendes Beispiel zeigt das anpassen der CSS Styles in der \texttt{AnnotationText} Klasse. Die Styles \texttt{font-size} und \texttt{letter-spacing} werden in der \texttt{updateStyles} Methode neu gesetzt. Danach wird über alle Wörter iteriert und deren \texttt{updateStyles} Methoden aufgerufen, die dann die CSS Styles der Wörter und Silben neu setzen.
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=Java, frame=single]
+List<Word> words = new List<Word>();
+
+Map<String, String> styles = {};
+void updateStyles(TextConfiguration c) {
+	styles = {
+		'font-size': c.font\_size.toString() + "px",
+		'letter-spacing' : c.letter\_spacing.toString() + "px"
+	};
+
+	for(Word word in words) {
+		word.updateStyles(c);
+	}
+}
+\end{lstlisting}
+\caption{Anpassung der CSS Styles im Datenmodell}
+\end{figure}
+
+Im Angular Template der Textvorschau, werden die Styles dann mit der Angular Direktive \textit{ngStyle} gesetzt. Es musste kein manueller Code geschrieben werden um das DOM anzupassen. Durch Data Binding werden die aktuellen Werte im Modell (Dart Klassen) sofort automatisch in den DOM übernommen.
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=HTML, frame=single]
+<div id="annotationText" class="annotationText"
+	[ngStyle]="annotatedText().styles">
+\end{lstlisting}
+\caption{Verwendung der \textit{ngStyle} Direktive im Angular Template}
+\end{figure}
+
+
+
+
+\todo{Beschreibung TextConfiguration}\\
+\todo{Klassendiagramm TextConfiguration und PartOfSpeech}\\
+
+\todo{Beschreibung und Klassendiagramm von UserEntry und UserText}
+
+
 
 \subsection{Begrüßungsseite}
 
-home\_component\\
-angular router links
+Die Begrüßungsseite \textit{home\_component} beinhaltet keine Programmlogik. Sie ist der Einstiegspunkt der Web-Applikation und stellt eine Übersicht über die gebotenen Funktionen dar. In den oberen zwei Kästen findet die Nutzerin oder der Nutzer eine kurze Einführung in die Software und ihre Anwendung, sowie eine Erklärung der Textanalyse Funktion. Darunter befinden sich nebeneinander zwei Kästen, in denen die Nutzerkontoverwaltung und der Verifizierungsprozess für die Wortdatenbank erklärt werden.
 
 \begin{figure}[h!]
 	\centering

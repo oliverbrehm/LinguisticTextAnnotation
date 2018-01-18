@@ -10,8 +10,8 @@ import 'package:WebAnnotation/components/text_analysis/word_detail_component.dar
 import 'package:WebAnnotation/app_service.dart';
 import 'package:WebAnnotation/services/text_analysis_service.dart';
 import 'package:WebAnnotation/services/user_account_service.dart';
-import 'package:WebAnnotation/model/Word.dart';
-import 'package:WebAnnotation/model/AnnotationText.dart';
+import 'package:WebAnnotation/model/text_annotation/Word.dart';
+import 'package:WebAnnotation/model/text_annotation/AnnotationText.dart';
 
 @Component(
   selector: 'text-preview',

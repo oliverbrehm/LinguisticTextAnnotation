@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:WebAnnotation/components/segmentation_selection/segmentation_selection_component.dart';
-import 'package:WebAnnotation/model/Segmentation.dart';
+import 'package:WebAnnotation/model/common/Segmentation.dart';
 import 'package:WebAnnotation/services/segmentation_service.dart';
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
@@ -11,7 +11,7 @@ import 'package:angular_router/angular_router.dart';
 import 'package:WebAnnotation/app_service.dart';
 import 'package:WebAnnotation/services/user_account_service.dart';
 import 'package:WebAnnotation/services/text_analysis_service.dart';
-import 'package:WebAnnotation/model/Word.dart';
+import 'package:WebAnnotation/model/text_annotation/Word.dart';
 import 'package:WebAnnotation/services/segmentation_verification_service.dart';
 
 enum WordVerificationComponentState {

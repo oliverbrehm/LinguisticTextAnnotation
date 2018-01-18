@@ -1,4 +1,4 @@
-import 'package:WebAnnotation/model/Word.dart';
+import 'package:WebAnnotation/model/text_annotation/Word.dart';
 
 class Segmentation {
   String text;

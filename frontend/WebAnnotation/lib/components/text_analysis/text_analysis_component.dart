@@ -9,7 +9,7 @@ import 'package:angular_router/angular_router.dart';
 import 'package:WebAnnotation/app_service.dart';
 import 'package:WebAnnotation/services/text_analysis_service.dart';
 import 'package:WebAnnotation/services/user_account_service.dart';
-import 'package:WebAnnotation/model/AnnotationText.dart';
+import 'package:WebAnnotation/model/text_annotation/AnnotationText.dart';
 import 'package:WebAnnotation/components/text_analysis/text_preview_component.dart';
 import 'package:WebAnnotation/components/text_analysis/text_settings_component.dart';
 import 'package:WebAnnotation/components/text_analysis/text_input_component.dart';

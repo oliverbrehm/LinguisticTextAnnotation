@@ -1,4 +1,4 @@
-import 'package:WebAnnotation/model/Syllable.dart';
+import 'package:WebAnnotation/model/text_annotation/Syllable.dart';
 import 'package:angular/angular.dart';
 
 import 'package:angular_components/angular_components.dart';
@@ -6,8 +6,8 @@ import 'package:angular_forms/angular_forms.dart';
 
 import 'package:WebAnnotation/app_service.dart';
 import 'package:WebAnnotation/services/text_analysis_service.dart';
-import 'package:WebAnnotation/model/Word.dart';
-import 'package:WebAnnotation/model/AnnotationText.dart';
+import 'package:WebAnnotation/model/text_annotation/Word.dart';
+import 'package:WebAnnotation/model/text_annotation/AnnotationText.dart';
 
 @Component(
   selector: 'word-detail',
