@@ -3,10 +3,11 @@
 \begin{abstract}
 \section*{Zusammenfassung}
 
-Problem LRS, Lesetraining analog, digital, Rolle der Sprachtherapheuten\\
-Methoden Silbentrennung, Wortbetonung, Tools dafür\\
-Herangehensweise: aufbau der Datenbank, Webapplikation (frontend/backend), user management, Verifizierungsprozess
-Evaluation mit Sprachtherapheuten, anderen (Eltern)
-Schlussfolgerungen: VIELLEICHT Tool vereinfacht prozess, benutzerfreundlich, Datenbank erweiterbar durch crowd sourcing
+Viele Menschen haben Schwierigkeiten, flüssig zu Lesen und zu Schreiben. Man spricht von einer Lese- Rechtschreibschwäche (LRS), wenn keine erkennbaren äußeren Umstände (wie soziales Umfeld, oder längerer Schulausfall z.B. durch Krankheit) die Entwicklung der Fähigkeiten zu Lesen und zu Schreiben beeinträchtigen. Es wurde gezeigt, dass gezielte Übungen, die das Erfassen von Silben und Sprachrhythmus dazu führen können, diese Fähigkeiten zu verbessern. In der Therapie werden häufig Übungstexte verwendet, in denen Silben abwechselnd in verschiedenen Schriftfarben dargestellt werden.\\
+
+In dieser Arbeit wurde eine Web-Applikation entwickelt, mit der es möglich sein sollte, solche farblich markierten Texte einfach und automatisch zu erstellen. Für die Verdeutlichung des Sprachrhythmus sollte auch die betone Silbe im Wort speziell markiert werden können. Dafür wurde zunächst untersucht, wie aus einem beliebigen Text automatisch Silbentrennung und Wortbetonung bestimmt werden können. Es wurde eine eigene Datenbank, basierend auf einem Lexikon aufgebaut, die für jedes Wort diese Merkmale enthält. Die Datenbank ist durch NutzerInnen der Anwendung erweiterbar, hinzugefügte Einträge müssen von ExpertInnen oder anderen NutzerInnen verifiziert werden, damit sie für Alle verfügbar sind.\\
+Für die Entwicklung der Applikation wurde zunächst eine Anforderungsanalyse durchgeführt und festgelegt welche Technologien für die Implementierung verwendet werden sollten. Es wurden anschließend zwei Hauptkomponenten entwickelt: Auf der einen Seite das Backend, welches Anfragen der Web-Applikation entgegen nimmt (z.B. einen zu analysierenden Text) und die Antwort an diese zurücksendet. Das Backend verwaltet die erstellte Wortdatenbank sowie eine weitere Datenbank, die nutzerspezifische Einstellungen speichert. Auf der anderen Seite steht die Entwicklung des Frontends, der eigentlichen Web-Applikation. Das Frontend interagiert mit NutzerInnen, schickt Anfragen an das Backend und stellt die erhaltenen Informationen entsprechend dar.\\
+
+Die Abschließende Evaluation zeigt, dass die Applikation Übungstexte erfolgreich erstellen kann. Im Nutzertest wurde festgestellt, dass die meisten Anwendungsfälle in der Web-Oberfläche intuitiv und zeiteffizient durchgeführt werden konnten. Die erkannten Probleme können durch eine Überarbeitung der Nutzeroberfläche mit wenig Aufwand behoben werden. Weitere Anmerkungen der ProbandInnen generierten interessante Ideen, die auf diese Arbeit aufbauend gut realisierbar sind.
 
 \end{abstract}
