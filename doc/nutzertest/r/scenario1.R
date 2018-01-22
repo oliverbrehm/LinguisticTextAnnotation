@@ -1,0 +1,51 @@
+scenario1 = "
+Dokumentation Zeitaufwand Intuitivität
+1 1 1
+1 1 2
+2 1 1
+1 1 1
+1 1 1
+2 1 2
+1 1 1
+"
+
+#I Z D
+#1 1 1
+#2 1 1
+#1 1 2
+#1 1 1
+#1 1 1
+#2 1 2
+#1 1 1
+
+Data = read.table(text=scenario1,header=TRUE)
+Data[Data==1] <- "trifft zu"
+Data[Data==2] <- "trifft eher zu"
+Data[Data==3] <- "weder noch"
+Data[Data==4] <- "trifft eher nicht zu"
+Data[Data==5] <- "trifft nicht zu"
+
+
+### Change Likert scores to factor and specify levels
+
+l = c("trifft zu", "trifft eher zu", "weder noch", "trifft eher nicht zu", "trifft nicht zu")
+#l = c("1", "2", "3", "4", "5")
+
+Data$Intuitivität = factor(Data$Intuitivität,
+                       levels = l,
+                       ordered = FALSE)
+
+Data$Zeitaufwand = factor(Data$Zeitaufwand,
+                       levels = l,
+                       ordered = FALSE)
+
+Data$Dokumentation = factor(Data$Dokumentation,
+                       levels = l,
+                       ordered = FALSE)
+
+library(likert)
+result = likert(Data)
+
+colors = c('#47DB70', '#AFFFC5', '#DDDDDD', '#EB7D7E', '#DB181A')
+
+plot(result, type="bar", col=colors, sub='hallo')
