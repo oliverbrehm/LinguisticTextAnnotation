@@ -2,27 +2,27 @@
 
 \chapter{Anforderungsanalyse und Spezifikation}
 
-Während der Konzeption des Projekts ist klar geworden, dass die zu entwickelnde Software eine relativ komplexe Architektur erfordert. Da eine Browser Applikation entwickelt wurde, musste die Software in Teilprojekte untergliedert werden. Zum einen das User-Interface für die Web Applikation und zum Anderen die Programmlogik, welche auf Grund der benötigten Funktionalitäten (wie Datenbankanbindung und Algorithmen zur Textverarbeitung) nicht sinnvoll im Web Client implementiert werden konnte.\\
-Um eine Spezifikation für die Software zu entwerfen und den zu verwendenden Software-Stack zu definieren, wurde zunächst eine Anforderungsanalyse durchgeführt, die im Folgendem Teil beschrieben wird. Im darauffolgenden Kapitel gehe ich Schritt für Schritt auf die Entwicklung des Gesamtsystems ein.
+Während der Konzeption des Projekts ist klar geworden, dass die zu entwickelnde Software eine relativ komplexe Architektur erfordert. Da eine Browser Applikation entwickelt wurde, musste die Software in Teilprojekte untergliedert werden. Zum einen das User-Interface für die Web Applikation und zum Anderen die Programmlogik, welche aufgrund der benötigten Funktionalitäten (wie Datenbankanbindung und Algorithmen zur Textverarbeitung) nicht sinnvoll im Web Client implementiert werden konnte.\\
+Um eine Spezifikation für die Software zu entwerfen und den zu verwendenden Software-Stack zu definieren, wurde zunächst im Gespräch mit Experten (Lerntherapeuten) eine Anforderungsanalyse durchgeführt, die im Folgendem Teil beschrieben wird. Im darauffolgenden Kapitel gehe ich Schritt für Schritt auf die Entwicklung des Gesamtsystems ein.
 
 \section{Anforderungen an die Software}
 
-Zunächst wurde festgestellt, welche Funktionen die App dem Nutzer bieten soll. Dazu wurden Folgende mögliche Szenarien aufgestellt:
+Zunächst wurde festgestellt, welche Funktionen die Applikation dem Nutzer bieten soll. Dazu wurden folgende mögliche Szenarien aufgestellt:
 
 \paragraph{Text Analyse} 
-Der User möchte einen Fließtext eingeben und von der Anwendung annotieren lassen. Nach der Eingabe soll das Ergebnis annotiert in der App dargestellt werden.
+Die Nutzerin oder der Nutzer möchte einen Fließtext eingeben und von der Anwendung annotieren lassen. Nach der Eingabe soll das Ergebnis annotiert in der App dargestellt werden.
 
 \paragraph{Anpassung der annotierten Darstellung}
-Der User möchte die Parameter des annotierten Texts ändern. Angepasst werden können sollen die Texteigenschaften (Font, Zeilenabstand, Zeichenabstand) und die Darstellung der Annotation (Farben für betonte und unbetonte Silbe, Silbenabstand, Trennzeichen zwischen Silben)
+Die Nutzerin oder der Nutzer möchte die Parameter des annotierten Texts ändern. Angepasst werden können sollen die Texteigenschaften (Font, Zeilenabstand, Zeichenabstand) und die Darstellung der Annotation (Farben für betonte und unbetonte Silbe, Silbenabstand, Trennzeichen zwischen Silben)
 
 \paragraph{Export der annotierten Darstellung}
-Der User hat die Möglichkeit verschiedene Formate des annotierten Texts zu exportieren, z.B. Druck, HTML oder Word.
+Die Nutzerin oder der Nutzer hat die Möglichkeit verschiedene Formate des annotierten Texts zu exportieren, z.B. Druck, HTML oder Word.
 
 \paragraph{Verwaltung von User Accounts}
-Dem User soll die Möglichkeit gegeben werden, einen User Account zu erstellen um persönlich verwendete Daten (z.B. Texte oder Wortsegmentierungen) speichern zu können. Dazu werden Funktionen und Interfaces zur Registrierung eines Nutzeraccounts, Login, Logout, zum Bearbeiten der Nutzerinformationen und zum Löschen des Accounts bereitgestellt.
+Der Nutzerin oder dem Nutzer soll die Möglichkeit gegeben werden, ein Nutzerkonto zu erstellen um persönlich verwendete Daten (z.B. Texte oder Wortsegmentierungen) speichern zu können. Dazu werden Funktionen und Interfaces zur Registrierung eines Nutzeraccounts, Login, Logout, zum Bearbeiten der Nutzerinformationen und zum Löschen des Accounts bereitgestellt.
 
 \paragraph{Behandlung unbekannter Wörter}
-Der Nutzer kann nacheinander die Segmentierung von Wörtern, die durch das System nicht eindeutig bestimmt wurden konnten, selbst manuell festlegen.
+Die Nutzerin oder der Nutzer kann nacheinander die Segmentierung von Wörtern, die durch das System nicht eindeutig bestimmt wurden konnten, selbst manuell festlegen.
 
 \paragraph{Bestimmung der Segmentierung unbekannter Wörter}
 Für ein unbekanntes Wort wählt der User in einem neuen View die Segmentierung selbst aus. Dafür werden folgende Möglichkeiten gegeben:
@@ -33,49 +33,88 @@ Für ein unbekanntes Wort wählt der User in einem neuen View die Segmentierung 
 \end{itemize}
 
 \paragraph{Speicherung von Nutzer Segmentierungen}
-Vom Nutzer hinzugefügte Segmentierungen sollen (lokal für diesen Nutzer) gespeichert werden können und beim nächsten Vorkommen in einem Text automatisch verwendet werden.
+Von der Nutzerin oder dem Nutzer hinzugefügte Segmentierungen sollen (lokal für das Nutzerkonto) gespeichert werden können und beim nächsten Vorkommen in einem Text automatisch verwendet werden.
 
 \paragraph{Speicherung und Wiederverwendung von Annotationskonfigurationen für Texte}
-Die Einstellungen, die ein Nutzer an einenm annotierten Text vorgenommen hat, können als Vorlage für andere Texte gespeichert werden. In den Annotationseinstellungen eines Textes kann eine zuvor gespeicherte Konfiguration wiederverwendet werden.
+Die Einstellungen, die eine Nutzerin oder ein Nutzer an einem annotierten Text vorgenommen hat, können als Vorlage für andere Texte gespeichert werden. In den Annotationseinstellungen eines Textes kann eine zuvor gespeicherte Konfiguration wiederverwendet werden.
 
 \paragraph{Speicherung und Wiederverwendung von Nutzertexten}
-Analysierte Texte können vom Nutzer zusammen mit der verwendeten Konfiguration gespeichert werden. Den Texten können Metadaten zugeordnet werden, z.B. Thema, Niveau, Zielgruppe. Im Benutzerbereich werden die Texte, die der Nutzer hinzugefügt hat, geeignet strukturiert, dargestellt. Dem Nutzer wird die Möglichkeit gegeben, den gespeicherten Text erneut analysieren zu lassen.
+Analysierte Texte können von der Nutzerin oder dem Nutzer zusammen mit der verwendeten Konfiguration gespeichert werden. Den Texten können Metadaten zugeordnet werden, z.B. Thema, Niveau, Zielgruppe. Im Benutzerbereich werden die Texte, die der Nutzer hinzugefügt hat, geeignet strukturiert, dargestellt. Es wird die Möglichkeit gegeben, den gespeicherten Text erneut analysieren zu lassen.
 
 \paragraph{Verifizierung unbekannter Wörter}
-Manuelle Segmentierungen von unbekannten Wörtern müssen auf Korrektheit überprüft werden. Dazu wird jeder Nutzer aufgefordert, die Einträge anderer Nutzer zu überprüfen. In einem View, ähnlich zur manuellen Segmentierung, kann der Nutzer Einträge anderer Nutzer bestätigen oder Gegenvorschläge übermitteln.
+Manuelle Segmentierungen von unbekannten Wörtern müssen auf Korrektheit überprüft werden. Dazu werden alle Nutzerinnen und Nutzer aufgefordert, die Einträge, die mit anderen Nutzerkonten erstellt wurden, zu überprüfen. In einem Fenster, ähnlich zur manuellen Segmentierung, kann die Nutzerin oder der Nutzer fremde Einträge bestätigen oder Gegenvorschläge übermitteln.
 
 \paragraph{Expertennutzer}
-Ein Experte (z.B. Linguist oder Lerntherapeut) kann sich als solcher bei der Erstellung eines Accounts identifizieren. Bei der Wort Verifizierung zählt die Stimme der Expertennutzers mehr als die eines Nutzers, der kein Experte ist.
-
-\subsubsection{User Interface}
-Von diesen Szenarien ausgehend wurde in den Folgenden Schritten ein geeignetes User Interface erarbeitet:
-
-\paragraph{Informationsstruktur}
-\todo{information structure, menü hierarchie, aufbau des user interfaces (links, lineare hierarchie), storyboards}\\
-
-\paragraph{Farbschema}
-\todo{color scheme https://color.adobe.com}
+Experten (z.B. LinguistInnen oder LerntherapeutInnen) können sich als solche bei der Erstellung eines Accounts identifizieren. Bei der Wort Verifizierung zählt die Stimme der ExpertennutzerInnen mehr als die von NutzerInnen, die keine ExpertInnen sind.
 
 \subsection*{Grundlegende Anforderungen}
 
-Aus den oben beschriebenen Use Cases lassen sich diverse Anforderungen an die Software spezifizieren:
+Aus den beschriebenen Szenarien lassen sich diverse Anforderungen an die Software spezifizieren:
 
 \begin{itemize}
 	\item Service zur Textanalyse
-	\item Wortdatenbank
+	\item Datenbank für Wörter
 	\item Service zur Manipulation der Wortdatenbank
+	\item Speicherung nutzerspezifischer Daten
 	\item Service zur Nutzerverwaltung
-	\item Speicherung Nutzer spezifischer Daten
-	\item Geeignetes User Interface zur Darstellung von Texten und zur Interaktion mit dem System
+	\item Geeignetes User Interface zur Darstellung von Texten, Verwaltung der Nutzerdaten und zur Interaktion mit dem System
 \end{itemize}
+
+\subsubsection{User Interface}
+Von diesen Szenarien und Anforderungen ausgehend wurde in den Folgenden Schritten ein geeignetes User Interface erarbeitet. Tabelle \ref{table:navigation} zeigt die für die Navigation wichtigsten Komponenten.
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|l|p{8cm}|}
+		\hline
+		Hauptnavigationskomponente & Unterpunkte / Funktionen \\
+		\hline
+		\hline
+		Begrüßungsseite (Home) & Informationen zum Hintergrund der Applikation und zu verfügbaren Funktionen\\
+		\hline
+		Textanalyse & Eingabe und Analyse von Texten, Annotation und Darstellung des Textes, sowie Funktionen zum Druck und Export\\
+		\hline
+		Nutzerkonto & Login, Registrierung, Verwaltung des Nutzerkontos und nutzerspezifischer Daten \\
+		\hline
+		Verifizierung & Verifizierung manuell segmentierter Wörter \\
+		\hline
+	\end{tabular}
+	\caption{Hauptkomponenten der Navigationsstruktur}
+	\label{table:navigation}
+\end{table}
+
+\paragraph{Informationsstruktur}
+
+Mithilfe dieser Überlegungen wurde festgelegt, dass es eine horizontale Navigationsleiste mit den vier aufgelisteten Hauptnavigationskomponenten geben soll. Der Link zum Nutzerkonto sollte aufgrund von Nutzergewohnheiten gesondert, rechtsbündig in der Navigationsleiste stehen (\ref{fig:navigation}). Jeder Punkt der Navigation soll Einstiegspunkt in eine Hauptkomponente der Applikation sein, es gibt keine weiteren Ebenen in der Navigationshierarchie, da die Anzahl der Komponenten überschaubar ist. Daher wird auch auf andere Navigationsmöglichkeiten, wie z.B. eine seitenweite Suche verzichtet.
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.8\linewidth]{figures/navigation}
+	\caption{Navigationsstruktur}
+	\label{fig:navigation}
+\end{figure}
+
+\paragraph{Farbschema}
+
+Als nächstes wurde ein möglichst ansprechendes Farbschema gesucht. Hierfür wurder mit einem Farbrad (es wurde Adobe Color CC verwendet, \textit{https://color.adobe.com}) zwei Komplementärfarben als Hauptfarben ausgesucht (s. Figur \ref{fig:colors}). Die blaue Farbe wurde vor Allem für Links eingesetzt, eine hellere Version für Links im Hover Zustand. Eine weitere, ins Türkis gehende Abstufung wurde für Rahmen beim Gruppieren von Elementen auf der Seite verwendet. Der beige Farbton kommt als Hintergrundfarbe für die Navigationsleiste zum Einsatz.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.95\linewidth]{figures/farbschema}
+	\caption{Farbschema aus Komplementärfarben}
+	\label{fig:colors}
+\end{figure}
+
+
 
 
 
 
 \section{Softwarestack}
 
-Bei der Vielseitigkeit der verschiedenen Anforderungen ist die Wahl der zu verwendenden Technologien nicht unerheblich. Programmiersprachen und Frameworks müssen sorgfältig ausgewählt werden um für jedes Teilproblem eine passende Lösung zu entwickeln.\\
-Die erste wichtige Unterteilung fand statt zum Einen in ein Frontend welches die zum Benutzer darstellt und zum Anderen in ein Backend welches die vom System verwendeten Daten speichert und manipuliert und diese mit Hilfe geeigneter Algorithmen an das Frontend schickt. Eine genaue Beschreibung über den detaillierten Aufbau und die Funktion von Front- und Backend wird in Kapitel 4 gegeben.\\
+Bei der Vielseitigkeit der verschiedenen Anforderungen ist die Wahl der zu verwendenden Technologien nicht unerheblich. Programmiersprachen und Frameworks mussten sorgfältig ausgewählt werden um für jedes Teilproblem eine passende Lösung zu entwickeln.\\
+Die erste wichtige Unterteilung fand statt zum Einen in ein Frontend welches die Schnittstelle zum Benutzer darstellt und zum Anderen in ein Backend welches die vom System verwendeten Daten speichert und manipuliert und diese mit Hilfe geeigneter Algorithmen an das Frontend schickt. Eine genaue Beschreibung über den detaillierten Aufbau und die Funktion von Front- und Backend wird in Kapitel 4 gegeben.\\
 
 \todo{kleine Grafik zu front backend}
 
@@ -84,34 +123,36 @@ Diese Aufteilung ist in der Webentwicklung weit verbreitet \tocite{front backend
 \begin{itemize}
 	\item Klare Trennung von Darstellung und Datenverarbeitung
 	\item Einfachere Fehlersuche durch kleinere Komponenten
-	\item Bei der Entwickelung zusätzlicher Frontends (z.B. für Android oder iOS) muss nur ein neuer Teil des Softwaresystems entwickelt werden, während das Backend gleich bleibt
+	\item Bei der Entwickelung zusätzlicher Frontends (z.B. für Android oder iOS) muss nur ein neuer Teil des Softwaresystems entwickelt werden, während das Backend gleich bleibt.
 	\item Einfache Arbeitsaufteilung im Entwicklerteam (relevant bei Weiterentwicklung der Anwendung mit mehreren Personen)
-	\item \todo{more?}
 \end{itemize}
 
 \subsection{Verwendete Technologien}
-Für verschiedene zu realisierende Ziele gibt es für jedes Teilziel Technologien, die Vorteile gegenüber anderen bieten. Die Verwaltung von Datenbanken ist zum Beispiel besser mit einer Server seitigen Skriptsprache zu implementieren, als mit den Möglichkeiten, die das Frontend bietet. Im Web Frontend dagegen sind gewisse Technologien wie HTML, CSS und JavaScript standard, die zwangsläufig verwendet werden müssen. Daher wird In der Applikation eine Vielzahl verschiedener Technologien verwendet, eine Übersicht ist hier gegeben:
+Für verschiedene zu realisierende Ziele gibt es für jedes Teilziel Technologien, die Vorteile gegenüber anderen bieten. Die Verwaltung von Datenbanken ist zum Beispiel besser mit einer serverseitigen Skriptsprache zu implementieren, als mit den Möglichkeiten, die das Frontend bietet. Im Web Frontend dagegen sind gewisse Technologien wie \textit{HTML}, \textit{CSS} und \textit{JavaScript} Standard, die zwangsläufig verwendet werden müssen. Daher wird In der Applikation eine Vielzahl verschiedener Technologien verwendet, eine Übersicht ist hier gegeben:
 
 \begin{itemize}
-	\item Backend: python, REST API, sowie die python Frameworks flask, spacy und sqlalchemy
-	\item Frontend: HTML, CSS, JavaScript, AngularDart
-	\item Kommunikation mit JSON
-	\item Deployment mit Apache auf AWS Server
+	\item Backend: \textit{python}, \textit{REST}, sowie die python Frameworks fla\textit{}sk, \textit{spacy} und \textit{sqlalchemy}
+	\item Frontend: \textit{HTML}, \textit{CSS}, \textit{JavaScript}, \textit{AngularDart}
+	\item Kommunikation mit \textit{JSON}
+	\item Deployment mit \textit{Apache} auf \textit{AWS} Server
 \end{itemize}
 
-Im Folgenden werden die einzelnen Technologien und deren Vorteile beschrieben.
+Im Folgenden werden die einzelnen Technologien und die Gründe für deren Verwendung beschrieben.
 
 \subsection{Backend}
-Backend as a service: e.g. Firebase, zu unflexibel\\
 
-welche alternativen fuer backend\\
-frontend unabhäng von daten
+Um die Entwicklung des Backends möglichst einfach zu halten, wurde zunächst untersucht, ob ein fertiges Backend (Backend as a service) verwendet werden kann. Hierzu können z.B. fertige Services wie MongoDB oder Firebase mit integrierter NoSQL Datenbank verwendet werden\cite{almootassem2017}.\\
+Zunächst wurde Firebase genauer untersucht und testweise implementiert. Prinzipiell war es gut möglich, eine Verbindung mit dem Frontend herzustellen (Daten in der Firebase Datenbank können mit HTTP Requests geschrieben und gelesen werden). Die Möglichkeiten des Backends beschränkten sich allerdings auf Datenmanipulation und Cloud Code (serverseitiges JavaScript in Firebase).\\
+Ein Problem dabei war, dass komplexere Logik wie das \textit{Natural Language Processing} nur entweder im Frontend oder im Backend mit \textit{JavaScript} implementiert werden konnte. NLP frameworks, wie es sie z.B. in \textit{python} oder \textit{Java} gibt, konnten somit nicht verwendet werden. Wurde der Text im Frontend in einzelne Wörter zerlegt und diese in der Firebase Datenbank nachgeschlagen, musste zudem für jedes Wort ein HTTP Request geschickt werden, was zu unbefriedigenden Antwortzeiten führte.\\
+
+Aufgrund der beschriebenen Probleme wurde parallel ein alternatives Backend in python implementiert. Diese Lösung brachte zwar wiederum eigene Schwierigkeiten und Probleme mit sich (s. Abschnitt \ref{sec:REST}), wurde aber später für die einfachere und schneller zu entwickelnde Variante erachtet und daher weiter verfolgt.
+
+\todo{auch denkbar: logik in python und datenbank in firebase}
 
 \subsubsection{python}
 \label{sec:python}
-warum python\\
-flexibel und schnell, viele frameworks\\
-Requests an externe Services, MARY, BALLOON
+
+Die Verwendung von \textit{python}\cite{vanRossum2011} im Backend brachte einige Vorteile für die Effizienz sowie für eine gute Strukturierung des Projekts, da ein großer Teil der Programmlogik im Backend abgebildet und somit die Komplexität des Frontends entlastet werden konnte. Zudem konnten nützliche Frameworks für NLP oder für die Verarbeitung der HTTP Requests benutzt werden.
 
 \subsubsection{REST API}
 \label{sec:REST}
