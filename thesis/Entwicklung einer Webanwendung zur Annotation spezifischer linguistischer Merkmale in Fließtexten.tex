@@ -37,6 +37,18 @@ pdfpagelayout=TwoColumnRight
 \newcommand{\toref}[1]{\textcolor{orange}{[\textbf{REF }#1]}} 
 \newcommand{\qq}[1]{\glqq #1\grqq}
 
+\lstset{
+numbers=left, 
+numberstyle=\small, 
+numbersep=8pt, 
+frame = single, 
+language=Python, 
+framexleftmargin=15pt,
+stepnumber=1,
+tabsize=4,
+showspaces=false,
+showstringspaces=false}
+
 \begin{document}
 
 %%% Titelseite
@@ -87,9 +99,6 @@ Bearbeitungszeitraum: August 2017 - Januar 2018
 %%% Inhaltsverzeichnis
 \KOMAoption{toc}{listof,bib} % Abbildungs-/Tabellenverzeichnis, Literaturverzeichnis aufnehmen
 \tableofcontents\label{toc}
-%\cleardoublepage % hier oder reicht nach list of figures and tables?
-\listoffigures
-\listoftables
 \cleardoublepage
 
 %%% Hauptteil (mit \input{dateiname} wird die Datei 'dateiname' eingebunden)

@@ -47,9 +47,7 @@ Manuelle Segmentierungen von unbekannten Wörtern müssen auf Korrektheit überp
 \paragraph{Expertennutzer}
 Experten (z.B. LinguistInnen oder LerntherapeutInnen) können sich als solche bei der Erstellung eines Accounts identifizieren. Bei der Wort Verifizierung zählt die Stimme der ExpertennutzerInnen mehr als die von NutzerInnen, die keine ExpertInnen sind.
 
-\subsection*{Grundlegende Anforderungen}
-
-Aus den beschriebenen Szenarien lassen sich diverse Anforderungen an die Software spezifizieren:
+Hieraus lassen sich folgende grundlegende Anforderungen an die Software spezifizieren:
 
 \begin{itemize}
 	\item Service zur Textanalyse
@@ -60,8 +58,8 @@ Aus den beschriebenen Szenarien lassen sich diverse Anforderungen an die Softwar
 	\item Geeignetes User Interface zur Darstellung von Texten, Verwaltung der Nutzerdaten und zur Interaktion mit dem System
 \end{itemize}
 
-\subsubsection{User Interface}
-Von diesen Szenarien und Anforderungen ausgehend wurde in den Folgenden Schritten ein geeignetes User Interface erarbeitet. Tabelle \ref{table:navigation} zeigt die für die Navigation wichtigsten Komponenten.
+\subsection{User Interface}
+Von den Szenarien und Anforderungen ausgehend wurde in den Folgenden Schritten ein geeignetes User Interface erarbeitet. Tabelle \ref{table:navigation} zeigt die für die Navigation wichtigsten Komponenten.
 
 \begin{table}[h!]
 	\centering
@@ -83,7 +81,7 @@ Von diesen Szenarien und Anforderungen ausgehend wurde in den Folgenden Schritte
 	\label{table:navigation}
 \end{table}
 
-\paragraph{Informationsstruktur}
+\subsubsection{Informationsstruktur}
 
 Mithilfe dieser Überlegungen wurde festgelegt, dass es eine horizontale Navigationsleiste mit den vier aufgelisteten Hauptnavigationskomponenten geben soll. Der Link zum Nutzerkonto sollte aufgrund von Nutzergewohnheiten gesondert, rechtsbündig in der Navigationsleiste stehen (\ref{fig:navigation}). Jeder Punkt der Navigation soll Einstiegspunkt in eine Hauptkomponente der Applikation sein, es gibt keine weiteren Ebenen in der Navigationshierarchie, da die Anzahl der Komponenten überschaubar ist. Daher wird auch auf andere Navigationsmöglichkeiten, wie z.B. eine seitenweite Suche verzichtet.
 
@@ -95,7 +93,7 @@ Mithilfe dieser Überlegungen wurde festgelegt, dass es eine horizontale Navigat
 	\label{fig:navigation}
 \end{figure}
 
-\paragraph{Farbschema}
+\subsubsection{Farbschema}
 
 Als nächstes wurde ein möglichst ansprechendes Farbschema gesucht. Hierfür wurder mit einem Farbrad (es wurde Adobe Color CC verwendet, \textit{https://color.adobe.com}) zwei Komplementärfarben als Hauptfarben ausgesucht (s. Figur \ref{fig:colors}). Die blaue Farbe wurde vor Allem für Links eingesetzt, eine hellere Version für Links im Hover Zustand. Eine weitere, ins Türkis gehende Abstufung wurde für Rahmen beim Gruppieren von Elementen auf der Seite verwendet. Der beige Farbton kommt als Hintergrundfarbe für die Navigationsleiste zum Einsatz.
 
@@ -114,9 +112,14 @@ Als nächstes wurde ein möglichst ansprechendes Farbschema gesucht. Hierfür wu
 \section{Softwarestack}
 
 Bei der Vielseitigkeit der verschiedenen Anforderungen ist die Wahl der zu verwendenden Technologien nicht unerheblich. Programmiersprachen und Frameworks mussten sorgfältig ausgewählt werden um für jedes Teilproblem eine passende Lösung zu entwickeln.\\
-Die erste wichtige Unterteilung fand statt zum Einen in ein Frontend welches die Schnittstelle zum Benutzer darstellt und zum Anderen in ein Backend welches die vom System verwendeten Daten speichert und manipuliert und diese mit Hilfe geeigneter Algorithmen an das Frontend schickt. Eine genaue Beschreibung über den detaillierten Aufbau und die Funktion von Front- und Backend wird in Kapitel 4 gegeben.\\
+Die erste wichtige Unterteilung fand statt, zum Einen in ein Frontend welches die Schnittstelle zum Benutzer darstellt und zum Anderen in ein Backend, welches die vom System verwendeten Daten speichert, manipuliert und diese mit Hilfe geeigneter Algorithmen an das Frontend schickt (s. Figur \ref{fig:frontendbackend}). Eine genaue Beschreibung über den Aufbau und die Funktion von Front- und Backend wird in Kapitel 4 gegeben.\\
 
-\todo{kleine Grafik zu front backend}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.8\linewidth]{figures/frontendbackend}
+	\caption{Kommunikation zwischen Front- und Backend}
+	\label{fig:frontendbackend}
+\end{figure}
 
 Diese Aufteilung ist in der Webentwicklung weit verbreitet \tocite{front backend} und bietet einige Vorteile gegenüber eins komplett integriertem Gesamtsystems:
 
@@ -145,26 +148,35 @@ Um die Entwicklung des Backends möglichst einfach zu halten, wurde zunächst un
 Zunächst wurde Firebase genauer untersucht und testweise implementiert. Prinzipiell war es gut möglich, eine Verbindung mit dem Frontend herzustellen (Daten in der Firebase Datenbank können mit HTTP Requests geschrieben und gelesen werden). Die Möglichkeiten des Backends beschränkten sich allerdings auf Datenmanipulation und Cloud Code (serverseitiges JavaScript in Firebase).\\
 Ein Problem dabei war, dass komplexere Logik wie das \textit{Natural Language Processing} nur entweder im Frontend oder im Backend mit \textit{JavaScript} implementiert werden konnte. NLP frameworks, wie es sie z.B. in \textit{python} oder \textit{Java} gibt, konnten somit nicht verwendet werden. Wurde der Text im Frontend in einzelne Wörter zerlegt und diese in der Firebase Datenbank nachgeschlagen, musste zudem für jedes Wort ein HTTP Request geschickt werden, was zu unbefriedigenden Antwortzeiten führte.\\
 
-Aufgrund der beschriebenen Probleme wurde parallel ein alternatives Backend in python implementiert. Diese Lösung brachte zwar wiederum eigene Schwierigkeiten und Probleme mit sich (s. Abschnitt \ref{sec:REST}), wurde aber später für die einfachere und schneller zu entwickelnde Variante erachtet und daher weiter verfolgt.
+Aufgrund der beschriebenen Probleme wurde parallel ein alternatives Backend in python implementiert. Die Entwicklung der Softwarearchitektur wurde an den Representational State Transfer (REST) angelehnt. Dieser beschreibt Prinzipien und Restriktionen für die Konzeption von Webarchitekturen\cite{Fielding:2000:ASD:932295}. Diese Lösung brachte zwar wiederum eigene Schwierigkeiten und Probleme mit sich (s. Abschnitt \ref{sec:deployment}), wurde aber später für die einfachere und schneller zu entwickelnde Variante erachtet und daher weiter verfolgt. Da in der Praxis die Entwicklung und Wartung eines eigenen Backends einen erheblichen Mehraufwand bedeuten kann, wäre weiterführend auch eine kombinierte Lösung denkbar, in der ein Backend-as-a-Service wie Firebase benutzt wird, aber zwischen Front- und Backend noch eine weitere Schicht installiert wird, welche Programm Logik enthält und NLP Berechnungen durchführt.\\
 
-\todo{auch denkbar: logik in python und datenbank in firebase}
+Die Einhaltung der REST Restriktionen (z.B. muss das Backend zustandslos sein und die Anfragen resourcenorientiert formuliert werden) wurden so gut es im Rahmen der Arbeit möglich war eingehalten, allerdings konnte die Entwicklung einer konsequenten Softwarearchitektur nicht im Vordergrund stehen, da die entwickelte Applikation lediglich als Prototyp betrachtet werden muss.\\
 
-\subsubsection{python}
+\subsubsection{Python}
 \label{sec:python}
 
-Die Verwendung von \textit{python}\cite{vanRossum2011} im Backend brachte einige Vorteile für die Effizienz sowie für eine gute Strukturierung des Projekts, da ein großer Teil der Programmlogik im Backend abgebildet und somit die Komplexität des Frontends entlastet werden konnte. Zudem konnten nützliche Frameworks für NLP oder für die Verarbeitung der HTTP Requests benutzt werden.
+Die Verwendung von \textit{Python}\cite{vanRossum2011} im Backend brachte einige Vorteile für die Effizienz sowie für eine gute Strukturierung des Projekts, da ein großer Teil der Programmlogik im Backend abgebildet und somit die Komplexität des Frontends entlastet werden konnte. Zudem konnten nützliche Frameworks für NLP oder für die Verarbeitung der HTTP Requests benutzt werden.
 
-\subsubsection{REST API}
-\label{sec:REST}
-was? warum?
-
-\subsubsection{flask}
+\subsubsection{Flask}
 \label{sec:flask}
-gutes framework für REST
+
+\textit{Flask} ist ein \textit{python} Framework für die Webentwicklung. Es kann z.B. eingesetzt werden, um Webseiten an Clients auszuliefern, allerdings auch um eine API zu entwickeln, welche nur Daten an einen Client schickt anstatt ganzer Webseiten. Bei der Entwicklung einer Flask Applikation wird zunächst im Python Skript ein Applikationsobjekt angelegt. Die Applikation kann in Python konfiguriert und mit einem Funktionsaufruf gestartet werden.\\
+Alle beim Server ankommenden HTTP Requests werden von \textit{Flask} automatisch verarbeitet. Das Verhalten für eigene Routen kann durch annotierte Funktionsdefinitionen angepasst werden. Figur \ref{fig:flask} zeigt ein Beispiel, wie das Erstellen einer Resource mit einem HTTP Request an eine selbst definierte Methode weitergeleitet wird.
+
+\begin{figure}
+	\begin{lstlisting}
+@app.route('/user/word/add', methods=['POST'])
+def user_add_word():
+...
+	\end{lstlisting}
+	\caption{Definition von \textit{Flask} Routen}
+	\label{fig:flask}
+\end{figure}
 
 \subsubsection{spacy}
 \label{sec:spacy}
 parser, alternative NLTK, auch benutzt, warum ist spacy besser?\\
+\todo{quelle, dass spacy der performanteste parser ist}
 tokenizer, part of speech
 
 \subsection{Frontend}
@@ -191,10 +203,10 @@ alternativen, typescript...\\
 dart2js compiler, wie funktioniert dieser\\
 
 \subsection{Deployment}
-
+\label{sec:deployment}
 webserver für frontend, auf eigenem server mit apache gehostet\\
 flask python service läuft immer, REST schnittstelle\\
-
+\todo{vernachlässigung von security}
 
 
 
