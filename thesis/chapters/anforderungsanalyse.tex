@@ -121,7 +121,7 @@ Die erste wichtige Unterteilung fand statt, zum Einen in ein Frontend welches di
 	\label{fig:frontendbackend}
 \end{figure}
 
-Diese Aufteilung ist in der Webentwicklung weit verbreitet \tocite{front backend} und bietet einige Vorteile gegenüber eins komplett integriertem Gesamtsystems:
+Diese Aufteilung ist in der Webentwicklung weit verbreitet\cite{Fielding:2000:ASD:932295} \tocite{front backend} und bietet einige Vorteile gegenüber einem komplett integriertem Gesamtsystem:
 
 \begin{itemize}
 	\item Klare Trennung von Darstellung und Datenverarbeitung
@@ -144,24 +144,25 @@ Im Folgenden werden die einzelnen Technologien und die Gründe für deren Verwen
 
 \subsection{Backend}
 
-Um die Entwicklung des Backends möglichst einfach zu halten, wurde zunächst untersucht, ob ein fertiges Backend (Backend as a service) verwendet werden kann. Hierzu können z.B. fertige Services wie MongoDB oder Firebase mit integrierter NoSQL Datenbank verwendet werden\cite{almootassem2017}.\\
-Zunächst wurde Firebase genauer untersucht und testweise implementiert. Prinzipiell war es gut möglich, eine Verbindung mit dem Frontend herzustellen (Daten in der Firebase Datenbank können mit HTTP Requests geschrieben und gelesen werden). Die Möglichkeiten des Backends beschränkten sich allerdings auf Datenmanipulation und Cloud Code (serverseitiges JavaScript in Firebase).\\
-Ein Problem dabei war, dass komplexere Logik wie das \textit{Natural Language Processing} nur entweder im Frontend oder im Backend mit \textit{JavaScript} implementiert werden konnte. NLP frameworks, wie es sie z.B. in \textit{python} oder \textit{Java} gibt, konnten somit nicht verwendet werden. Wurde der Text im Frontend in einzelne Wörter zerlegt und diese in der Firebase Datenbank nachgeschlagen, musste zudem für jedes Wort ein HTTP Request geschickt werden, was zu unbefriedigenden Antwortzeiten führte.\\
+Um die Entwicklung des Backends möglichst einfach zu halten, wurde zunächst untersucht, ob ein fertiges Backend (Backend-a- a-Service) verwendet werden kann. Hierzu können z.B. fertige Services wie MongoDB oder Firebase mit integrierter NoSQL Datenbank verwendet werden\cite{almootassem2017}.\\
+Zunächst wurde Firebase genauer untersucht und in Verbindung mit dem Frontend getestet. Prinzipiell war es gut möglich, eine Verbindung mit dem Frontend herzustellen (Daten in der Firebase Datenbank können mit HTTP Requests geschrieben und gelesen werden). Die Möglichkeiten des Backends beschränkten sich allerdings auf Datenmanipulation und Cloud Code (serverseitiges JavaScript in Firebase).\\
+Ein Problem dabei war, dass komplexere Logik wie das \textit{Natural Language Processing} nur entweder im Frontend oder im Backend mit \textit{JavaScript} implementiert werden konnte. NLP frameworks, wie es sie z.B. in \textit{Python} oder \textit{Java} gibt, konnten somit nicht verwendet werden. Wurde der Text im Frontend in einzelne Wörter zerlegt und diese in der Firebase Datenbank nachgeschlagen, musste zudem für jedes Wort ein eigener HTTP Request geschickt werden, was zu unbefriedigenden Antwortzeiten führte.\\
 
-Aufgrund der beschriebenen Probleme wurde parallel ein alternatives Backend in python implementiert. Die Entwicklung der Softwarearchitektur wurde an den Representational State Transfer (REST) angelehnt. Dieser beschreibt Prinzipien und Restriktionen für die Konzeption von Webarchitekturen\cite{Fielding:2000:ASD:932295}. Diese Lösung brachte zwar wiederum eigene Schwierigkeiten und Probleme mit sich (s. Abschnitt \ref{sec:deployment}), wurde aber später für die einfachere und schneller zu entwickelnde Variante erachtet und daher weiter verfolgt. Da in der Praxis die Entwicklung und Wartung eines eigenen Backends einen erheblichen Mehraufwand bedeuten kann, wäre weiterführend auch eine kombinierte Lösung denkbar, in der ein Backend-as-a-Service wie Firebase benutzt wird, aber zwischen Front- und Backend noch eine weitere Schicht installiert wird, welche Programm Logik enthält und NLP Berechnungen durchführt.\\
+Aufgrund der beschriebenen Probleme wurde parallel ein alternatives Backend in \textit{Python} implementiert. Die Entwicklung der Softwarearchitektur wurde an den \textit{Representational State Transfer} (REST) angelehnt. Dieser beschreibt Prinzipien und Restriktionen für die Konzeption von Webarchitekturen\cite{Fielding:2000:ASD:932295}. Diese Lösung brachte zwar wiederum eigene Schwierigkeiten und Probleme mit sich (s. Abschnitt \ref{sec:deployment}), wurde aber für die kurzfristig bessere und schneller zu entwickelnde Variante erachtet und daher weiter verfolgt. Da in der Praxis die Entwicklung und Wartung eines eigenen Backends einen erheblichen Mehraufwand bedeuten kann, wäre weiterführend auch eine kombinierte Lösung denkbar, in der ein Backend-as-a-Service, wie Firebase benutzt wird, aber zwischen Front- und Backend noch eine weitere Schicht eingesetzt wird, welche Programmlogik enthält und NLP Berechnungen durchführen kann.\\
 
-Die Einhaltung der REST Restriktionen (z.B. muss das Backend zustandslos sein und die Anfragen resourcenorientiert formuliert werden) wurden so gut es im Rahmen der Arbeit möglich war eingehalten, allerdings konnte die Entwicklung einer konsequenten Softwarearchitektur nicht im Vordergrund stehen, da die entwickelte Applikation lediglich als Prototyp betrachtet werden muss.\\
+Die Einhaltung der REST Restriktionen (z.B. muss das Backend zustandslos sein und die Anfragen müssen resourcenorientiert formuliert werden) wurden so gut es im Rahmen der Arbeit möglich war eingehalten, allerdings konnte die Entwicklung einer konsequenten Softwarearchitektur nicht im Vordergrund stehen, da die entwickelte Applikation lediglich als Prototyp betrachtet werden muss.\\
 
-\subsubsection{Python}
+\paragraph{Python}
 \label{sec:python}
 
 Die Verwendung von \textit{Python}\cite{vanRossum2011} im Backend brachte einige Vorteile für die Effizienz sowie für eine gute Strukturierung des Projekts, da ein großer Teil der Programmlogik im Backend abgebildet und somit die Komplexität des Frontends entlastet werden konnte. Zudem konnten nützliche Frameworks für NLP oder für die Verarbeitung der HTTP Requests benutzt werden.
 
-\subsubsection{Flask}
+\paragraph{Flask}
 \label{sec:flask}
 
-\textit{Flask} ist ein \textit{python} Framework für die Webentwicklung. Es kann z.B. eingesetzt werden, um Webseiten an Clients auszuliefern, allerdings auch um eine API zu entwickeln, welche nur Daten an einen Client schickt anstatt ganzer Webseiten. Bei der Entwicklung einer Flask Applikation wird zunächst im Python Skript ein Applikationsobjekt angelegt. Die Applikation kann in Python konfiguriert und mit einem Funktionsaufruf gestartet werden.\\
-Alle beim Server ankommenden HTTP Requests werden von \textit{Flask} automatisch verarbeitet. Das Verhalten für eigene Routen kann durch annotierte Funktionsdefinitionen angepasst werden. Figur \ref{fig:flask} zeigt ein Beispiel, wie das Erstellen einer Resource mit einem HTTP Request an eine selbst definierte Methode weitergeleitet wird.
+ist ein \textit{Python} Framework für die Webentwicklung. Es kann z.B. eingesetzt werden, um Webseiten an Clients auszuliefern, allerdings auch um eine API zu entwickeln, welche nur Daten an einen Client schickt anstatt ganzer Webseiten\cite{Grinberg:2014:FWD:2621997}. Bei der Entwicklung einer Flask Applikation wird zunächst im Python Skript ein Applikationsobjekt angelegt. Die Applikation kann in Python konfiguriert und mit einem Funktionsaufruf gestartet werden.\\
+Alle beim Server ankommenden HTTP Requests werden von \textit{Flask} automatisch verarbeitet. Das Verhalten für eigene Routen kann durch annotierte Funktionsdefinitionen angepasst werden. Figur \ref{fig:flask} zeigt ein Beispiel, wie das Erstellen einer Resource mit einem HTTP Request an eine selbst definierte Methode weitergeleitet wird. Zudem kann im \textit{methods} Array definiert werden für welche HTTP Methoden die Route gilt.\\
+In den zu den Routen definierten Methoden können Backend Services (s. Abschnitt \ref{sec:etwicklung-backend}) aufgerufen werden, die die Daten der Applikation abfragen und entsprechend aufbereitet zurückgeben. 
 
 \begin{figure}
 	\begin{lstlisting}
@@ -173,34 +174,34 @@ def user_add_word():
 	\label{fig:flask}
 \end{figure}
 
-\subsubsection{spacy}
+\paragraph{Spacy}
 \label{sec:spacy}
-parser, alternative NLTK, auch benutzt, warum ist spacy besser?\\
-\todo{quelle, dass spacy der performanteste parser ist}
-tokenizer, part of speech
+Für die Erledigung der linguistischen Aufgaben in der Applikation wurde nach einem effektiven NLP Parser gesucht. Hierfür wurde erst das \textit{Natural Language Toolkit} (NLTK)\cite{Bird2004a} ausprobiert. Hierbei handelt es sich um eine Reihe von Python Modulen für die Durchführung von NLP Aufgaben. Es wurde Open Source und vor Allem für akademische Zwecke entwickelt und wurde für die Verwendung in der Applikation als geeignet befunden.\\
+Zusätzlich wurde der \textit{Spacy} Parser untersucht, ein weiteres Python NLP Framework. Bei der Erstellung von \textit{Spacy} wurde unter Anderem der Fokus auf Performanz gelegt, entwickelt wurde es in \textit{Cython} (eine zu Python kompatible Sprache, welche aber bei der Kompilierung nach C übersetzt wird), was zu schnellerer Ausführung im Vergleich zum Python Interpreter führt.\\
+Eigenes Testen und andere Quellen gezeigt, dass der \textit{Spacy} Parser aufgrund seiner Effizienz\cite{Stent2015} und Benutzbarkeit für die Aufgabe sehr gut geeignet ist. Er wurde daher in der Applikation zum Parsen des Eingabetexts, als Tokenizer und zur Bestimmung der Part-of-Speech Tags benutzt (anstelle von NLTK).
 
 \subsection{Frontend}
 
-webapplication, html css, single-view-application, dynamic data loading
-viele frameworks, verwende AngularDart
-no javascript: weakly typed languages transforming to JS: GWT (java), typescript, Dart
+Für die Entwicklung einer Webapplikation sind viele Technologien schon vorgegeben. Der Einsatz von \textit{HTML}, \textit{CSS} und \textit{JavaScript} auf der Client Seite ist zur Darstellung der Applikation im Browser notwendig und praktisch unverzichtbar. Im Gegensatz zu einer normalen Website wurde hier eine Single-View-Application entwickelt, d.h. anstatt bei Nutzerinteraktionen eine neue HTML Datei zu laden, verändert die Applikation den Inhalt der Seite (das Document Object Model, DOM) dynamisch mit Skripten\cite{mikowski2013single}.\\
+
+JavaScript könnte als einzige Frontend Sprache verwendet werden. Das Modell der Applikation würde dann mit verschiedenen Skripten abgebildet werden und die Kommunikation mit de Backend erfolgt über AJAX Anfragen. Da JavaScript aber über keine starke Typisierung verfügt und eine Strukturierung der Anwendung durch Klassen nur bedingt möglich ist, wurden Alternativen für die Frontendsprache gesucht. Eine Möglichkeit hier ist die Generierung von JavaScript aus Anderen Sprachen. Hierbei wird Code in einer anderen Hochsprache geschrieben und für die Ausführung im Browser mit einem Compiler nach JavaScript übersetzt. Dieser Ansatz wird von einigen Sprachen oder Frameworks unterstützt, z.B. CoffeeScript, TypeScript, GWT (Java) oder AngularDart\todo{Quellen?}. Nach dem Erwerb eines Überblicks über diese Technologien entschied ich mich dafür, die von Google entwickelte Sprache Dart zu verwenden, deren Funktionsweise im folgenden Abschnitt näher erklärt wird.
 
 \subsubsection{Angular Dart}
 \label{sec:angulardart}
-warum? javascript is bad.\\
 
-data binding\\
-more lightweight vs Java\\
+Dart ist eine von Google entwickelte Programmiersprache, die z.B. in einigen Google Tools (\todo{welche?}) verwendet wird. Sie wird nicht in erster Linie nur für die Webentwicklung benutzt, sondern kann durch entsprechende Kompilierung z.B. auch für die Backend Entwicklung oder für Desktop Anwendungen \todo{sitmmt das?} verwendet werden.\cite{angularDart}\cite{dart2015}\todo{better citation?}\\
 
-many google apps use it\\
-objektorientierung\\
+Für die Erstellung einer Webanwendung mit Dart wird das Framework \textit{AngularDart}  benutzt. Dieses wurde nach dem Vorbild der Technologien \textit{AngularJS} entwickelt und \textit{Angular} entwickelt, wobei Ersteres mit reinem JavaScript programmiert wird und bei \textit{Angular} die Programmiersprache \textit{TypeScript} zum Einsatz kommt. Bei \textit{AngularDart} wird der in \textit{Dart} erstellte Code beim Build mit dem \textit{dart2js} Compiler nach \textit{JavaScript} übersetzt.\\
 
-angular? angular2?\\
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.8\linewidth]{figures/angulardart}
+	\caption{Funktionsweise einer AngularDart Webanwendung \todo{quelle: https://webdev.dartlang.org/angular/guide/architecture}}
+	\label{fig:angulardart}
+\end{figure}
 
-dart, google\\
-alternativen, typescript...\\
-
-dart2js compiler, wie funktioniert dieser\\
+Figur \ref{fig:angulardart} gibt einen Überblick über die Funktionsweise einer AngularDart Webanwendung. Bei dieser Architektur wird die Programmlogik in \textit{Services} abgebildet welche durch \textit{Dependency Injection} in anderen Programmteilen verwendet werden können. Das Layout der Website wird von den eingebundenen Komponenten bestimt. Eine AngularDart Komponente besteht aus einem HTML Template und einer (Dart) Komponentenklasse und kann in jedem HTML Template eingebunden werden. Es gibt sowohl von AngularDart vordefinierte Komponenten als auch die Möglichkeit, eigene Komponenten zu entwickeln.\\
+Das Template verwendet einen eigenen Syntax bei dem Angular \textit{Direktiven} in HTML aufgerufen werden können. Der Template Syntax bietet z.B. die Möglichkeiten mit \textit{Property Binding} auf Daten der Komponentenklasse zuzugreifen, oder mit den Direktiven \textit{ngIf} oder \textit{ngFor} Daten bedingt darzustellen.\\Werden in der Komponentenklasse Daten verändert, wird dies automatisch von AngularDart detektiert. Infolgedessen wird durch das \textit{Property Binding} die Anzeige in der HTML Seite automatisch angepasst.
 
 \subsection{Deployment}
 \label{sec:deployment}

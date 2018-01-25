@@ -90,7 +90,7 @@ Ein Wort soll eindeutig identifizierbar sein durch den Worttext und die Wortart.
 Trotz der Wortidentifizierung anhand von zwei Merkmalen, beinhaltet der CELEX teilweise redundante Informationen. 4 356 Einträge verursachen aufgrund des \textit{UNIQUE Constraint} Fehler, da sie mit gleichem Text und gleicher Wortart schon in der Datenbank waren, diese wurden somit übersprungen. Bei einem kompletten Neuaufbau der Datenbank aus dem CELEX werden 360 243 Wörter hinzugefügt. Die Datenbank wurde als sqlite Datei \qq{/backend/db/words.db} angelegt.
 
 \section{Backend}
-
+\label{sec:etwicklung-backend}
 Das in python mit dem Web-Framework flask entwickelte Backend verarbeitet sämtliche, vom Frontend gesendeten HTTP requests. Es sendet entweder eine Antwort mit den geforderten Daten oder einen HTTP Fehlercode mit Fehlermeldung. Das Backend Projekt befindet sich in \qq{/backend/API}. Es wurde in die drei Services \textit{DictionaryService}, \textit{UserService} und \textit{VerificationService} strukturiert. Das Hauptsript \todo{rename} \qq{LinguisticTextAnnotation.py} verwaltet diese Services, startet die flask Applikation und definiert die einzelnen Routen für HTTP requests (diese werden im folgenden Abschnitt aufgelistet). Folgende Grafik zeigt eine Übersicht über die Struktur des Backends.
 
 \todo{Grafik Backend}
