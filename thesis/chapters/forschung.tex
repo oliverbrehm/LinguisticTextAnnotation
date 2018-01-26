@@ -55,6 +55,8 @@ Da die vom Programm zu verarbeitende Eingabe ein Text ist, also eine beliebige F
 \end{itemize}
 
 \subsection{Datenbanken zur Wortbetoung}
+\label{sec:forschung-database}
+
 Liegt der Text als Liste von Wörtern (Tokens) vor, kann auf dieser Ebene weitergearbeitet werden. Für die Annotation des Textes muss eine Repräsentation in einzelnen Silben vorliegen. Zusätzlich wird für die Hervorhebung des Sprachrhythmus die betonte Silbe im Wort gesucht. Es ist durchaus möglich, dass in einem Wort mehrere Betonungen vorkommen (gerade bei Wortkompositionen, die im Deutschen häufig zu finden sind, z.B. \textit{heraus+kommen}). Dies wird hier vernachlässigt, es wird nur eine Hauptbetonung, die erste vorkommende Betonung im Wort gesucht.\\
 Informationen zur Worttrennung in Silben und zur Wortbetonung lassen sich in diversen Lexika finden. \todo{Welche?} Für die weitere Verwendung in der zu entwickelnden Applikation wurde als Grundlage das Lexikon CELEX2 gewählt. Dabei handelt es sich um ein umfangreiches Sprachlexikon für die Sprachen Englisch, Deutsch und Niederländisch. Verarbeitet wurden hier zunächst nur die deutsche Sprache. Neben der gesuchten Worttrennung und -betonung enthält es auch weitere linguistische Informationen wie Wortart und Grundformen sowie phonologische und orthographische Annotationen \tocite{CELEX Publikation} .
 \todo{Alternativen, welche? könnten zusätzlich oder anstelle des CELEX verwendet werden}\\

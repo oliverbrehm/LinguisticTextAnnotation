@@ -306,7 +306,7 @@ class DictionaryService:
             print('root not found')
             return "", ""
 
-        wordElement = root[0][0][0][0] # root: maryxml[0] -> p[0] -> s[0] -> phrase[0] -> t (== Word)
+        wordElement = root[0][0][0][0]  # root: maryxml[0] -> p[0] -> s[0] -> phrase[0] -> t (== Word)
 
         if not wordElement:
             print('word not found')

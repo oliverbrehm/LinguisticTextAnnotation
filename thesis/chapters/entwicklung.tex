@@ -24,21 +24,31 @@ Hier wurde darauf geachtet, eine einheitliche orthographische Form der Wörter d
 
 \paragraph{Wortart}
 Um Doppeldeutigkeit zu vermeiden wird ein Eintrag nur eindeutig über das Paar aus Worttext und Wortart identifiziert. Viele Grundformen von Verben kommen zum Beispiel auch als Nomen vor, werden aber dann groß geschrieben (\qq{sie sollte die Maschine \textit{verwenden}} gegen \qq{das \textit{Verwenden} der Maschine}). Die Bezeichner für Wortart sind in verschiedenen Systemen wie dem CELEX und dem NLP parser \textit{spacy} unterschiedlich, daher wird hier eine eigene - im Gesamtsystem konsistente - Benennung der Wortart eingeführt (die Benennung orientiert sich an den Tag Namen des spacy parsers, verwendet jedoch zur Unterscheidung Klein- statt Großschreibung):
-\begin{itemize}
-	\item Nomen: \qq{noun}
-	\item Eigenname: \qq{propn}
-	\item Verb: \qq{verb}
-	\item Hilfsverb: \qq{aux}
-	\item Adjektiv: \qq{adj}
-	\item Adverb: \qq{adv}
-	\item Artikel: \qq{det}
-	\item Adposition (Überbegriff für Präposition und Postposition): \qq{adp}
-	\item Pronomen: \qq{propn}
-	\item Konjunktion: \qq{conj}
-	\item Zahl: \qq{num}
-	\item Partikel: \qq{part}
-	\item Zahl: \qq{num}
-\end{itemize}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|l|l|}
+		\hline
+		Wortart & Benennung/Tag \\
+		\hline
+		\hline
+		Nomen & \textit{noun}\\
+		Eigenname & \textit{propn}\\
+		Verb & \textit{verb}\\
+		Hilfsverb & \textit{aux}\\
+		Adjektiv & \textit{adj}\\
+		Adverb & \textit{adv}\\
+		Artikel & \textit{det}\\
+		Adposition & \textit{adp}\\
+		Pronomen & \textit{propn}\\
+		Konjunktion & \textit{conj}\\
+		Zahl & \textit{num}\\
+		Partikel & \textit{part}\\
+		Zahl & \textit{num}\\
+		\hline
+	\end{tabular}
+	\caption{Benennung der Wortarten in der Applikation}
+\end{table}
 
 \paragraph{Silbentrennung}
 Die Silbentrennung enthält die einzelnen Silben, getrennt durch einen Querstrich (\qq{-}). Im Gegensatz zum Worttext erhält dieser Eintrag Groß- und Kleinschreibung, sowie alle Umlaute. Die Silbentrennung des Wortes \textit{Möglichkeit} ist also \textit{Mög-lich-keit}.
@@ -47,15 +57,15 @@ Die Silbentrennung enthält die einzelnen Silben, getrennt durch einen Querstric
 Das Betonungsmuster identifiziert eine Silbe als Hauptbetonung im Wort. Dieser Eintrag ist ein String aus aneinandergereihten \qq{0} und \qq{1} Werten. Die \qq{1} bezeichnet dabei die betonte Silbe, die \qq{0} stellt eine unbetonte Silbe dar. Nebenbetonungen werden im Rahmen dieser Arbeit vernachlässigt. Das Betonungsmuster besteht nur aus einer einzigen \qq{1} - der Hauptbetonung - während alle anderen Silben unbetont (\qq{0}) bleiben. Beispiel resultiert das Wort \textit{hervorragend} mit der Silbentrennung \textit{her-vor-ra-gend} in das Betonungsmuster \qq{0100}.
 
 \paragraph{Lemma}
-was genau? auch im celex, keine wirkliche anwendung in der app, vielleicht ausblick
+\todo{was genau? auch im celex, keine wirkliche anwendung in der app, vielleicht ausblick}
 
-Neben den Worteinträgen sollen in der Datenbank noch Informationen über die Herkunft der Wörter gespeichert werden. Neben den Basiseinträgen, die aus dem CELEX extrahiert werden, wird den Nutzern später die Möglichkeit gegeben Einträge zur Datenbank hinzuzufügen. Um diesen Vorgang nachvollziehbar zu machen gibt es eine zweite Tabelle, in welcher Einträge für neu hinzugefügte Wörter mit Zeitstempel angelegt werden. Das Folgende Schema \ref{figure:worddatabase} zeigt die Struktur der Wortdatenbank.
+Neben den Worteinträgen sollen in der Datenbank noch Informationen über die Herkunft der Wörter gespeichert werden. Neben den Basiseinträgen, die aus dem CELEX extrahiert werden, wird den Nutzern später die Möglichkeit gegeben Einträge zur Datenbank hinzuzufügen. Um diesen Vorgang nachvollziehbar zu machen gibt es eine zweite Tabelle, in welcher Einträge für neu hinzugefügte Wörter mit Zeitstempel angelegt werden. Das Folgende Schema \ref{fig:worddatabase} zeigt die Struktur der Wortdatenbank.
 
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=.6\linewidth]{figures/worddb}
 	\caption{Schema der Wortdatenbank (\textit{word.db})}
-	\label{figure:worddatabase}
+	\label{fig:worddatabase}
 \end{figure}
 
 Alle in der Worttabelle beschriebenen Einträge sind auch im CELEX vorhanden. Der Folgende Abschnitt beschreibt, wie die Daten aus dem Lexikon extrahiert und in der Wortdatenbank gespeichert wurden.
@@ -97,7 +107,6 @@ Das in python mit dem Web-Framework flask entwickelte Backend verarbeitet sämtl
 
 \subsection{HTTP Routen}
 Tabelle \ref{table:backendroutes} bietet eine Übersicht über die verfügbaren Routen, welche die HTTP requests verarbeiten. Zudem werden kurz der Zweck und die Parameter der Route beschrieben. Ein \textit{X} in der Spalte Authentifizierung bedeutet, dass die Mail Adresse und das Passwort des Nutzers übergeben werden muss. Diese werden nicht extra in der Spalte Parameter aufgeführt (außer in der \qq{/user/authenticate} Route, diese dient ausschließlich dazu, die Übermittelten Nutzer Credentials zu prüfen).
-\todo{include return JSON fields...}
 
 \begin{table}[h!]
 	\centering
@@ -118,9 +127,7 @@ Tabelle \ref{table:backendroutes} bietet eine Übersicht über die verfügbaren 
 		\hline
 		/user/authenticate & \textit{email, password} & POST & X\\
 		\hline
-		/user/list & \todo{remove} & GET & \\
-		\hline
-		/user/delete & \todo{implement} & POST & X\\
+		/user/delete & id & POST & X\\
 		\hline
 		\hline
 		/user/word/add& text, stress\_pattern, hyphenation, pos & POST & X\\
@@ -159,9 +166,9 @@ Die bei \qq{user/configuration/} nicht aufgeführten \textit{options} bestehen a
 
 \subsection{Dictionary Service}
 
-Das Modul \textit{DictionaryService.py} verarbeitet Anfragen zur Textanalyse, verwaltet die Wortdatenbank und generiert Vorschläge für die manuelle Segmentierung von Wörtern \todo{Segmentierung beschreiben}. Das Schema der Wortdatenbank zeigt Figur \ref{figure:worddatabase}. Folgende Klassen werden definiert:
+Das Modul \textit{DictionaryService.py} verarbeitet Anfragen zur Textanalyse, verwaltet die Wortdatenbank und generiert Vorschläge für die manuelle Segmentierung von Wörtern. Das Schema der Wortdatenbank zeigt Figur \ref{figure:worddatabase}. Folgende Klassen werden definiert:
 \begin{itemize}
-	\item \texttt{Word}: Entspricht Tabelle \textit{word} in der Wortdatenbank und speichert die Merkmale eines Wortes.
+	\item \texttt{Word}: Entspricht Tabelle \textit{word} in der Wortdatenbank (Figur \ref{fig:worddatabase}) und speichert die Merkmale eines Wortes.
 	\item \texttt{AddedEntry}: Enthält einen Verweis (Fremdschlüssel) auf ein hinzugefügtes Wort und dessen Erstellungszeitpunkt.
 	\item \texttt{Segmentation}: Modelliert einen Segmentierungsvorschlag. Die Klasse enthält Worttext, Segmentierung und Betonungsmuster. Außerdem speichert sie den Namen (\texttt{origin}) und die Herkunft (\texttt{source}) der Quelle des Vorschlags (z.B. MARY TTS).
 \end{itemize}
@@ -195,13 +202,31 @@ Die Methode \texttt{query\_text} bekommt den gesamten zu analysierenden Text üb
 \subsubsection{Generierung von Segmentierungsvorschlägen}
 \label{sec:segmentation-proposals}
 
-\todo{pyphen, MARY...}
+Der \texttt{DictionaryService} bietet auch die Möglichkeit, automatisch Segmentierungsvorschläge zu generieren. Diese werden im Frontend dazu benutzt, den NutzerInnen bei der manuellen Wortsegmentierung die Arbeit zu erleichtern, indem das Wort schon in Silben zerlegt wird und versucht wird, automatisch die Wortbetonung zu bestimmen. Der Standardvorschlag, den das System liefert ist einfach die Silbentrennung, die der Python Silbentrenner \textit{Pyphen} liefert. Diese ist in vielen Fällen korrekt und bietet in jedm Fall einen Anhaltspunkt für die Silbentrennung des Wortes. Zudem wird beim Standardvorschlag ein Betonungsmuster generiert, welches immer die erste Silbe im Wort betont. Auch das ist in der Deutschen Sprache oft der Fall, so können Betonung und Silbentrennung bei der manuellen Analyse einfach bestätigt werden.\\
+
+Bei der Abfrage der Vorschläge im Backend wird eine Liste von Segmentierungsvorschlägen zurückgeliefert. Der Standardvorschlag mit \textit{Pyphen} ist nur eine Möglichkeit. Hier wurde überlegt, aus mehreren externen Systemen, wie z.B. MARY TTS oder BAS (s. Abschnitt \ref{sec:forschung-database}), oder später auch z.B. Duden und Anderen, Vorschläge zu sammeln und den NutzerInnen in einer Liste zu präsentieren, aus der der passendste Vorschlag ausgewählt werden kann. Exemplarisch wurde hier eine Anfrage an MARY TTS geschickt und in der Antwort an das Frontend mit eingebunden. Das System kann ebenfalls mit HTTP Requests abgefragt werden. Das entsprechende Interface ist unter \textit{http://mary.dfki.de:59125/process} zu finden. Tabelle \ref{table:mary} zeigt die bei der Anfrage verwendeten GET Parameter. MARY liefert eine Antwort im XML Format zurück, die die phonologische Silbentrennung und die Betonung enthält. Das XML wird entsprechend geparsed, womit dann ein neuer Segmentierungsvorschlag bestimmt werden kann.
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|l|l|}
+		\hline
+		\textbf{Parameter} & \textbf{Wert}\\
+		\hline
+		\hline
+		INPUT\_TEXT & \textit{das abzufragende Wort}\\
+		INPUT\_TYPE & TEXT\\
+		OUTPUT\_TYPE & ACOUSTPARAMS\\
+		LOCALE & de\\
+		\hline
+	\end{tabular}
+	\caption{GET Parameter für Anfrage an MARY TTS}
+	\label{table:mary}
+\end{table}
 
 \subsection{User Service}
 \label{sec:userservice}
 
-was macht dieser?\\
-sqlite Tabellen\\
+Der \texttt{UserService} dient der Verwaltung der Nutzerdaten und der Authentifizierung. Nutzerkonten bestehen aus Email Adresse, Passwort und Vor- und Nachnamen der Nutzerin oder des Nutzers. Daneben werden die Resourcen \textit{user\_text}, \textit{user\_word}, \textit{text\_config} und \textit{pos\_config} verwaltet. Welche Funktionen für die jeweilige Ressource zur Verfügung stehen, wird im Folgenden erklärt. Figur \ref{fig:userdb} zeigt das Schema der Nutzerdatenbank.
 
 \begin{figure}[h!]
 	\centering
@@ -210,13 +235,42 @@ sqlite Tabellen\\
 	\label{fig:userdb}
 \end{figure}
 
-Klassendiagramme\\
+\begin{itemize}
+	\item Zur \textbf{Authentifizierung} wird überprüft, ob ein Nutzerkonto für die als Parameter übergebene Email Adresse und das übermittelte Passwort existiert.
+	
+	\item \textbf{Nutzertexte} (\textit{user\_text}) können mit Text und Titel erstellt, sowie mit entsprechenden Anfragen abgefragt (als Liste aller Texte eines Nutzerkontos) oder entfernt werden.
+	
+	\item Auch für \textbf{Nutzerwörter} (\textit{user\_word}, Einträge, die durch die manuelle Segmentierung entstehen), können mit Text, Silbentrennung, Betonungsmuster und optional Wortart angelegt, sowie abgefragt (ebenfalls als Liste aller Wörter eines Nutzerkontos) oder gelöscht werden.
+	
+	\item Für \textbf{Annotationskonfigurationen} (\textit{text\_config}) gibt es vier Funktionen: Sie können als Liste abgefragt oder mit der zugehörigen \textit{id} gelöscht werden, sowie angelegt und aktualisiert werden. Beim Anlegen und Aktualisieren werden sämtliche Attribute der Konfiguration (Name, Silbenfarben, Texteinstellungen, wie Silben- oder Wortabstand etc.) in der Anfrage mit übergeben. Auch die Konfigurationsliste für die Wortarten (\textit{pos\_config}), die für jede Wortart die Einstellung, ob diese annotiert oder ignoriert wird speichert, wird in der Anfrage benötigt.
+\end{itemize}
+
 
 \subsection{Verification Service}
 \label{sec:verification-service}
-was macht dieser?\\
-sqlite Tabellen\\
-Klassendiagramme\\
+
+Von den NutzerInnen manuell erstellte Segmentierungen für Wörter können nicht direkt in die globale Wortdatenbank für alle Nutzer übernommen werden, da bei der Segmentierung Fehler gemacht werden können. Der \texttt{VerificationService} definiert die Funktionen mit denen zu verifizierende Segmentierungen abgefragt oder Verifizierungsvorschläge abgeschickt werden können.\\
+Ein zu verifizierender Eintrag ist hierbei direkt ein \textit{user\_word} (s. Abbildung \ref{fig:userdb}), dass von einer Nutzerin oder einem Nutzer bei der manuellen Segmentierung erstellt wurde. Die Verifizierung (Klasse \texttt{VerificationProposal}) bezieht sich auf diesen Eintrag und enthält ebenfalls Silbentrennung und Betonungsmuster für das Wort. Nach der Übermittlung eines Verifizierungsvorschlags prüft ein Algorithmus, ob ausreichend Verifizierungen unterschiedlicher NutzerInnen für das Wort übereinstimmen (also Silbentrennung und Betonung identisch sind). Ist dies der Fall, wird das Wort in die globale Wortdatenbank übernommen und alle Verifizierungsvorschläge werden wieder entfernt. Im Folgenden wird der Verifizierungsalgorithmus (dieser wird dann verwendet, wenn ein neuer Verifizierungsvorschlag übermittelt wird) kurz vorgestellt:
+
+\begin{enumerate}
+	\item Für den übermittelten Vorschlag wird ein \texttt{VerificationProposal} Objekt in der Nutzerdatenbank angelegt.
+	
+	\item Der Vorschlag erhält initial den \texttt{score} $0$. Es wird über alle Vorschläge, die sich auf das Wort beziehen iteriert, dabei werden Silbentrennung und Betonungsmuster verglichen. Bei Übereinstimmung wird der \texttt{score} erhöht, die Gewichtung ergibt sich je nachdem, ob der Autor des Vorschlags ein normaler Nutzer, Experte oder Administrator ist. Vorschläge von Administratoren erhalten drei, Expertenvorschläge zwei Punkte und normale NutzerInnen einen Punkt.
+	
+	\item Wird die Zielwertung von $3$ nicht erreicht, so wird abgebrochen. Bei der Übermittlung des nächsten Vorschlags kann so wieder überprüft werden, ob genug Verifizierungen einstimmig sind.
+	
+	\item Bei einem Score von $3$ kann wird das Wort in die globale Wortdatenbank übertragen. Bei der gegebenen Punkteverteilung geschieht das, sobald entweder ein Administrator, ein Experte und mindestens ein anderer, beliebiger Nutzer, oder drei normale NutzerInnen identische Vorschläge übermitteln.
+	
+	\item Sowohl, die manuelle Segmentierung für das Wort, sowie alle Verifizierungsvorschläge werden nun nicht mehr gebraucht und daher aus der Datenbank gelöscht.
+	
+	\item Zudem wird ein Eintrag \texttt{AddedEntry} angelegt, der einen Verweis auf das verifizierte, neue Wort in der Wortdatenbank enthält und einen Zeitstempel mit dem Erstellungszeitpunkt. So kann nachvollzogen werden, welche Wörter wann durch den Verifizierungsprozess der Datenbank hinzugefügt wurden.
+\end{enumerate}
+
+\todo{datenbank schema}\\
+
+
+
+
 
 
 
