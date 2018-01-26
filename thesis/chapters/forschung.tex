@@ -2,40 +2,40 @@
 
 \chapter{Stand der Forschung}
 
-Die Motivation der Arbeit beruht auf Erkenntnissen zu Behandlungsformen für Lese- Rechtschreibschwäche (LRS). Es wird untersucht wie gut der Prozess des Erzeugens von Übungstexten automatisiert werden kann. Hierfür war das Ziel bei der Entwicklung der App eine möglichst gute User Experience zu bieten. Die Zielgruppe, vorwiegend bestehend aus Lerntherapeuten, Nachhilfelehrern und Eltern betroffener Kinder soll das Programm möglichst intuitiv bedienen können.\\
-Im Folgenden werden daher erst die Grundlagen zu LRS erklärt und Ansätze zur Digitalisierung von Übungstexten, z.B. auch ähnliche, bereits vorhandene Software, beschrieben. Danach werden die computerlinguistischen technischen Grundlagen erklärt, die in der Entwicklung der Applikation benötigt werden.
+Die Motivation der Arbeit beruht auf Erkenntnissen zu Behandlungsformen für Lese- Rechtschreibschwäche (LRS). Es wird untersucht wie gut der Prozess des Erzeugens von Übungstexten automatisiert werden kann. Hierfür war das Ziel bei der Entwicklung der App eine möglichst gute User Experience zu bieten. Die Zielgruppe, bestehend aus LerntherapeutInnen, Lehrkräften und Eltern betroffener Kinder soll das Programm möglichst intuitiv bedienen können.\\
+Im Folgenden werden daher erst die Grundlagen zu LRS erklärt und digitale Ansätze zur Erstellung von Übungstexten, z.B. auch ähnliche, bereits vorhandene Software beschrieben. Danach werden die technischen Grundlagen und computerlinguistische Begriffe erklärt, die in der Entwicklung der Applikation benötigt werden.
 
 \section{Lese- Rechtschreibschwäche}
 
-Ein Ausgangspunkt zur Feststellung von LRS bietet die Lesekompetenz. Eine Definition aus der PISA Studie \tocite{PISA, SK s51} untergliedert die Lesekompetenz in die vier Teilbereiche \textit{Kognitive Grundfähigkeit}, \textit{Dekodierfähigkeit}, \textit{Lernstrategiewissen} und \textit{Leseinteresse}.\\
+Ein Ausgangspunkt zur Feststellung von LRS bietet die Lesekompetenz. Eine Definition aus der PISA Studie untergliedert die Lesekompetenz in die vier Teilbereiche \textit{Kognitive Grundfähigkeit}, \textit{Dekodierfähigkeit}, \textit{Lernstrategiewissen} und \textit{Leseinteresse}\cite{Schulte-Koerne2014}.\\
 Der Teilbereich, zu dessen Verbesserung diese Arbeit einen Beitrag leisten kann ist die Dekodierfähigkeit. Diese Stellt die Kompetenz dar, die Bedeutung von Wörtern, Sätzen und Texten zu erfassen und zu verstehen. Die Unterteilung in dei Elemente Wort, Satz und Text stellt eine Dekodierungsfähigkeit auf verschiedenen Ebenen dar, die sich gegenseitig bedingen. Das Wort ist hier die Basisebene, so kann ein Text nur verstanden werden, wenn die Bedeutung der einzelnen Sätze erfasst wurde und diese wiederum wird nur erkannt, wenn eine Ausreichende Dekodierfähigkeit für Wörter vorhanden ist.\\
 Somit ist eine Vorraussetzung für die Verbesserung des Textverständnis, dass das Erkennen des Basiselements Wort beherrscht wird.
 
 \subsection{Dekodierung des Wortbildes}
 
-Es ist bekannt, dass Kinder der Entwicklung des Lesens und des Schreibens verschiedene Phasen durchlaufen. \tocite{quelle hier sehr weit weg (steinbrink), vielleicht frueher bringen, weitere quelle} So gibt in jedem Fall eine alphabetische und eine orthographische Phase. Beim Lesen wird in der alphabetischen Phase ein Wort Buchstabe für Buchstabe dekodiert, \textit{Grapheme} (die kleinste Einheit in der Schriftsprache, in deutsch Buchstaben) werden einzeln in \textit{Phoneme} (Laute, die kleinste Einheit der gesprochenen Sprache) umgewandelt, was aber bei nicht lautgetreuen Wörtern (Wörtern, in denen nicht alle Grapheme korrekt in die zugehörigen Phoneme übersetzen lassen) nicht gelingt.\\
-Daher wird später in der orthographischen Phase eine Strategie benutzt, die sich an größeren Bestandteilen orientiert. Wörter oder Wortteile werden hier aus dem Langzeitgedächtnis abgerufen, was bei richtig gelernten Silben und Wörtern zu korrekter Aussprache führt. \cite{Steinbrink2014}\\
-Einige schulische Ansätze fördern das orthographische Lernen mit einer gezielten Hervorhebung von Silben. \tocite{ABC der Tiere, Silbenfibeln}. \todo{mehr dekodierung stuff} Viele Fördermaterialien sind erhältlich, die Silben beispielsweise farblich hervorheben und damit guten Lernerfolg erzielen. \tocite{ABC}
-Weiterführende Arbeiten legen aber auch nahe, dass der Sprachrhythmus eine zentrale Rollen sowohl beim Lesen als auch beim Schreiben spielt. So hat ein Wort in der deutschen Sprache eine oder mehrere Betonungen. Betonte Silben werden, im Gegensatz zu den unbetonten Silben lauter und länger gesprochen. Es wurde gezeigt, dass gezieltes Training des Sprachrhythmus in Verbindung mit der orthographischen Repräsentation eines Wortes die Dekodierfähigkeit steigern kann. \cite{Brandelik2014}
-\todo{more betonung stuff}
+Es ist bekannt, dass Kinder der Entwicklung des Lesens und des Schreibens verschiedene Phasen durchlaufen\cite{Steinbrink2014}. So gibt in jedem Fall eine alphabetische und eine orthographische Phase. Beim Lesen wird in der alphabetischen Phase ein Wort Buchstabe für Buchstabe dekodiert, \textit{Grapheme} (die kleinste Einheit in der Schriftsprache, in deutsch Buchstaben) werden einzeln in \textit{Phoneme} (Laute, die kleinste Einheit der gesprochenen Sprache) umgewandelt, was aber bei nicht lautgetreuen Wörtern (Wörter, in denen sich nicht alle Grapheme korrekt in die zugehörigen Phoneme übersetzen lassen) nicht gelingt.\\
+Daher wird später in der orthographischen Phase eine Strategie benutzt, die sich an größeren Bestandteilen orientiert. Wörter oder Wortteile werden hier aus dem Langzeitgedächtnis abgerufen, was bei richtig gelernten Silben und Wörtern zu korrekter Aussprache und Schreibung führt.\\
+Einige schulische Ansätze wie das \textit{ABC der Tiere}\cite{mildenberger2013} oder die \textit{Freiburger Rechtschreibschule (FRESCH)}\cite{Fresch2016} fördern das orthographische Lernen mit einer gezielten Hervorhebung von Silben. Hier sind z.B. Fördermaterialien sind erhältlich, die Silben farblich hervorheben um Lernerfolge für den Schrifterwerb zu erzielen.\\
 
-warum ist zeicheinabstand wichtig? mehr zu font, textgröße, wortabstand... -> Katharina?
-
-\subsection{Therapiemethoden}
-
-Wie kann LRS sonst noch behandelt werden?\\
-Methoden zum Lesetraining\\
-Farbliche Hervorhebung, Silbenmethode ABC der Tiere, andere quellen
-Literatur zu übungen\\
+Weiterführende Arbeiten legen auch nahe, dass der Sprachrhythmus und die Silbenbetonung eine zentrale Rolle sowohl beim Lesen als auch beim Schreiben spielt. Ein Wort hat in der deutschen Sprache eine oder mehrere Betonungen. Betonte Silben werden, im Gegensatz zu den unbetonten Silben lauter und länger gesprochen. In der Arbeit von Brandelik\cite{Brandelik2014} wurde gezeigt, dass sprachrhythmische Fähigkeiten, wie das Identifizieren von Betonungen einen Einfluss auf die Lese- und Rechtschreibleistung hat. An diese Ergebnisse angelehnt trainiert z.B. die Prosodiya App\cite{Holz2017} für mobile Geräte bei LRS Kindern das Bewusstsein für linguistische Eigenschaften im Zusammenhang mit der Silbenbetonung.\\
+In einer Studie von Rello\cite{Rello:2017:PMR:3057333.3057414} wurde zudem herausgefunden, dass die Art der Präsentation von Text ein starken Einfluss auf die Lesbarkeit für Menschen mit LRS hat. Es wurde gezeigt, dass Parameter wie verschiedene Fonts, Schriftgröße, Farbkombinationen und Hintergrundfarbe, sowie die Abstände zwischen Zeilen oder einzelnen Zeichen eine wesentliche Rolle für die Lesegeschwindigkeit spielen.
 
 \subsection{Digitale Ansätze}
-Vorhandene Methoden\\
-ABC der Tiere software, CELESCO ( https://www.celeco.de/?page=LRS\_Texte\_mit\_Silbenboegen\_drucken)
-Digitale Tools\\
 
-vorhandene tools vorstellen, Literatur zu Tools, zeigen, wie diese Ideen weitergeführt werden können, übergang zur notwendigkeit des eigenen tools\\
+In der Recherche für die Entwicklung der Webapplikation wurde auch untersucht, welche ähnlichen Software basierten Lösungen es schon gibt. Das im vorherigen Abschnitt erwähnte ABC der Tiere liefert auch einen \textit{Silben-Generator}\cite{ABCSilbengenerator2018}. Dieser ist allerdings nur als Windows Programm erhältlich und die Möglichkeiten der Applikation sind sehr begrenzt, so gibt es z.B. kein Textfeld, in das man selbst Text eingeben kann, es ist nur das Laden von Textdateien möglich. Es gibt hier auch nur wenige Einstellungen, so kann man zwar Silbenfarben und Zeilenabstand anpassen, nicht jedoch den Abstand zwischen Wörtern oder Silben. Einstellungen lassen sich auch nur global ändern und nicht, z.B. bezogen auf einzelne Texte speichern.\\
 
-\section{Computerlinguistische Grundlagen}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.5\linewidth]{figures/ABCsilbengenerator}
+	\caption{Bildschirmfoto des Silbengenerators auf der Internetseite von \textit{ABC der Tiere}\cite{ABCSilbengenerator2018}}
+	\label{fig:ABCsilbengenerator}
+\end{figure}
+
+Ein weiteres zu erwähnendes Tool ist die \textit{celeco Druckstation}\cite{celeco2018}. Auch hier können eigene Texte entweder mit farblich markierten Silben oder Silbenbögen gedruckt werden. Das Programm ist zusammen mit der \textit{celeco} Software (LRS Therapie und Leseübungen) erhältlich, welche für Windows verfügbar ist.
+
+Um die Vorteile durch silben- und betonungsorientiertes Lernen auszunutzen ist man oft auf Materialien von Verlagen oder eine aufwendige manuelle Erstellung von Texten angewiesen. Dies bekräftigt die Motivation eine neue Lösung zu entwickeln um eigenes Übungsmaterial erstellen zu können, was zudem flexibel gestaltbar und z.B. auf bestimmte Schüler anpassbar ist. \todo{move einleitung?}
+
+\section{Technischer Hintergrund}
 
 Um das Ziel einer automatischen Analyse und Annotation beliebiger Texte zu realisieren, werden computerlinguistisch vor Allem die folgenden zwei Schritte untersucht:
 \begin{enumerate}
