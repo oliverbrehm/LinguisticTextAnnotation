@@ -17,7 +17,7 @@ Im Anschluss konnten Front- und Backend parallel entwickelt werden. Es wurden im
 \section{Erstellung einer Basisdatenbank}
 \label{sec:worddatabase}
 
-Für die Segmentierung von Wörtern in Silben mit Betonung wird eine sqlite Datenbank verwendet, deren Entwicklung hier beschrieben wird. Als Grundlage für die Datenbank dient das digitale Lexikon \todo{Lexikon/woerterbuch...?} CELEX2, wie in Kapitel \toref{CELEX} beschrieben. Folgende Informationen wurden dem CELEX entnommen und in der Datenbank gespeichert:
+Für die Segmentierung von Wörtern in Silben mit Betonung wird eine sqlite Datenbank verwendet, deren Entwicklung hier beschrieben wird. Als Grundlage für die Datenbank dient das digitale Lexikon \todo{Lexikon/woerterbuch...?} CELEX2, wie in Kapitel \ref{sec:forschung-database} beschrieben. Folgende Informationen wurden dem CELEX entnommen und in der Datenbank gespeichert:
 
 \paragraph{Worttext}
 Hier wurde darauf geachtet, eine einheitliche orthographische Form der Wörter durchzusetzen. Wörter bestehen nur aus Kleinbuchstaben (auch die Anfänge von Nomen und Eigennamen). Außerdem wird hier auf Umlaute verzichtet, \qq{ä} wird durch \qq{ae} ersetzt, \qq{ö} durch \qq{oe}, \qq{ü} durch \qq{ue} und \qq{ß} durch \qq{ss}. Beispielsweise wird das Wort \textit{Häuser} zu \textit{haeuser}. So kann beim Nachschlagen garantiert werden, dass ein Wort nicht wegen uneinheitlicher Schreibweise nicht gefunden wird, sofern alle Umlaute vorher ersetzt wurden.
@@ -72,7 +72,7 @@ Alle in der Worttabelle beschriebenen Einträge sind auch im CELEX vorhanden. De
 
 \subsection{Impementierung}
 
-Für die Generierung der Datenbank wurde das python Projekt \textit{celex2db} erstellt, welches in \qq{/backend/celex2db} zu finden ist (alle Pfadangaben in diesem Abschnitt beziehen sich auf dieses Verzeichnis). Die Daten im CELEX \todo{in Forschungsstand teil verschieben} sind über mehrere Dateien verteilt. So gibt es eine Teilung in Sprachen (für die Datenbank werden nur Deutsche Wörter benutzt, zu finden in \qq{celex2/german}), Wörter und Lemmata sowie in Orthographie, Phonologie und Morphologie. Die Teilung in Wort und Lemma spart Speicherplatz. Das Lemma eines Verbs, zum Beispiel, ist die Grundform dieses. Zur Beugung \textit{gehst} gehört also das Lemma \textit{gehen}. Viele Eigenschaften des Verbs \textit{gehen} beziehen sich auf alle Beugungen \todo{=Flexionsformen?}, so müssen diese nicht für alle Verbformen redundant gespeichert werden.\\
+Für die Generierung der Datenbank wurde das python Projekt \textit{celex2db} erstellt, welches in \qq{/backend/celex2db} zu finden ist (alle Pfadangaben in diesem Abschnitt beziehen sich auf dieses Verzeichnis). Die Daten im CELEX \todo{in Forschungsstand teil verschieben} sind über mehrere Dateien verteilt. So gibt es eine Teilung in Sprachen (für die Datenbank werden nur Deutsche Wörter benutzt, zu finden in \qq{celex2/german}), Wörter und Lemmata sowie in Orthographie, Phonologie und Morphologie. Die Teilung in Wort und Lemma spart Speicherplatz. Das Lemma eines Verbs, zum Beispiel, ist die Grundform dieses. Zur Beugung \textit{gehst} gehört also das Lemma \textit{gehen}. Viele Eigenschaften des Verbs \textit{gehen} beziehen sich auf alle Flexionsformen, so müssen diese nicht für alle Verbformen redundant gespeichert werden.\\
 Die Einträge in den Wortlisten des CELEX verweisen jeweils mit einer ID auf den zugehörigen Eintrag in der Lemma Liste. Da in der zu entwickelnden Datenbank auch das Lemma gespeichert werden soll, müssen sowohl Wort Listen als auch Lemma Listen geparsed werden.\\
 
 Das Hauptskript \qq{celex2db.py} führt die folgenden Schritte aus:
@@ -81,20 +81,26 @@ Das Hauptskript \qq{celex2db.py} führt die folgenden Schritte aus:
 	\item Parsen der orthographischen und phonologischen Wort Listen
 	\item Generierung von Einträgen aus Wort und Lemma Listen und Schreiben in die Datenbank
 \end{enumerate}
-Während der Ausführung des Skripts werden Schrittweise Fortschrittsangaben mit Fehlern ausgegeben (Schrittweite im Skript einstellbar), da das Parsen und Erstellen der Datenbank einige Zeit benötigt (mehr dazu im Abschnitt \toref{Ergebnisse}).
+Während der Ausführung des Skripts werden Schrittweise Fortschrittsangaben mit Fehlern ausgegeben (Schrittweite im Skript einstellbar), da das Parsen und Erstellen der Datenbank einige Zeit benötigt (mehr dazu im Abschnitt \ref{sec:database-results}).
 
-Die Klasse \texttt{CelexDictionary} im Skript \qq{celex.py} bietet die Methoden zum Parsen der Wort und Lemma Listen. Die Struktur ist in \toref{Figur} dargestellt.\\
+Die Klasse \texttt{CelexDictionary} im Skript \qq{celex.py} bietet die Methoden zum Parsen der Wort und Lemma Listen. Die Struktur ist in \ref{fig:celex2db} dargestellt.\\
 
-\todo{Klassendiagramm CelexDictionary}
+\begin{figure}
+	\centering
+	\todo{Klassendiagramm CelexDictionary}
+	\caption{Diagramm der \textit{celex2db} Klassen}
+	\label{fig:celex2db}
+\end{figure}
 
 In der \texttt{parseLemma} Methode wird die CELEX Datei \qq{gml.cd} verarbeitet. Die morphologische Informationen zu den Lemmata enthält. Jede Zeile enthält ein Lemma, für welches in der Struktur \texttt{CelexLemma} die ID des Lemmas, Text und Wortart gespeichert werden.\\
 
 In der \texttt{parseWords} Methode werden nun die beiden Dateien \qq{g\textbf{p}w.cd} und \qq{g\textbf{o}w.cd} verarbeitet, welche phonologische und orthographische Informationen zu allen enthaltenen Beugungen der Wörter enthalten. Die IDs und Reihenfolge in beiden Wortlisten stimmen überein, sodass beide Listen gleichzeitig verarbeitet werden können. Aus der phonologischen Liste werden der Text des Wortes, der Verweis auf das zugehörige Lemma (lemma\_id) sowie die phonologische Darstellung entnommen. Die orthographischen Liste liefert lediglich die Silbentrennung.\\
-Danach wird in der zuvor verarbeiteten Liste der Lemmas, mithilfe der \texttt{lemma\_id} der Text passende Lemmas gesucht und alle verfügbaren Daten in der Struktur \texttt{CelexWord} gespeichert. Die Hauptklasse \texttt{CelexDictionary} enthält ein python Dictionary aller \texttt{CelexWord} Einträge, siehe \toref{klassendiagram figur}.
+Danach wird in der zuvor verarbeiteten Liste der Lemmas, mithilfe der \texttt{lemma\_id} der Text passende Lemmas gesucht und alle verfügbaren Daten in der Struktur \texttt{CelexWord} gespeichert. Die Hauptklasse \texttt{CelexDictionary} enthält ein python Dictionary aller \texttt{CelexWord} Einträge, siehe Abbildung \ref{fig:celex2db}.
 
-Letztendlich werden die Einträge der Wortliste im Skript \qq{writeSQLite.py} in die Datenbank übertragen. In einem frühen Entwicklungsstadium wurden hier SQL Instruktionen verwendet um die Datenbankeinträge zu erstellen. Nach der Entwicklung des \texttt{DictionaryService} im Backend (genauer beschrieben im Abschnitt \toref{DictionaryService}) wurde später direkt auf diesen zugegriffen, um Redundanten Code zu vermeiden. Ein einfacher Funktionsaufruf der Methode \texttt{add\_word} des \texttt{DictionaryService} fügt den Eintrag der Wortdatenbank hinzu.
+Letztendlich werden die Einträge der Wortliste im Skript \qq{writeSQLite.py} in die Datenbank übertragen. In einem frühen Entwicklungsstadium wurden hier SQL Instruktionen verwendet um die Datenbankeinträge zu erstellen. Nach der Entwicklung des \texttt{DictionaryService} im Backend (genauer beschrieben im Abschnitt \ref{sec:dictionary-service}wurde später direkt auf diesen zugegriffen, um Redundanten Code zu vermeiden. Ein einfacher Funktionsaufruf der Methode \texttt{add\_word} des \texttt{DictionaryService} fügt den Eintrag der Wortdatenbank hinzu.
 
 \subsection{Ergebnisse}
+\label{sec:database-results}
 
 Ein Wort soll eindeutig identifizierbar sein durch den Worttext und die Wortart. Daher wurde in der Datenbank die Kombination der Felder \textit{text} und \textit{pos} (part of speech/Wortart) als Primärschlüssel gewählt. Ein doppeltes Einfügen eines Wortes in die Datenbank verletzt den SQL \textit{UNIQUE Constraint}, und ist somit nicht möglich. Die dadurch von python geworfene Exception wird in diesem Fall abgefangen und und die \texttt{add\_word} Methode liefert \texttt{None} zurück.\\
 Trotz der Wortidentifizierung anhand von zwei Merkmalen, beinhaltet der CELEX teilweise redundante Informationen. 4 356 Einträge verursachen aufgrund des \textit{UNIQUE Constraint} Fehler, da sie mit gleichem Text und gleicher Wortart schon in der Datenbank waren, diese wurden somit übersprungen. Bei einem kompletten Neuaufbau der Datenbank aus dem CELEX werden 360 243 Wörter hinzugefügt. Die Datenbank wurde als sqlite Datei \qq{/backend/db/words.db} angelegt.
@@ -165,6 +171,7 @@ Tabelle \ref{table:backendroutes} bietet eine Übersicht über die verfügbaren 
 Die bei \qq{user/configuration/} nicht aufgeführten \textit{options} bestehen aus allen für die Annotationsvorlage gespeicherten einstellungen. Dies sind die Folgenden Felder: \textit{stressed\_color, unstressed\_color, word\_background, alternate\_color, syllable\_separator, line\_height, word\_distance, syllable\_distance, font\_size, letter\_spacing, use\_background, highlight\_foreground, stressed\_bold, use\_alternate\_color, use\_syllable\_separator, part\_of\_speech\_configuration}.
 
 \subsection{Dictionary Service}
+\label{sec:dictionary-service}
 
 Das Modul \textit{DictionaryService.py} verarbeitet Anfragen zur Textanalyse, verwaltet die Wortdatenbank und generiert Vorschläge für die manuelle Segmentierung von Wörtern. Das Schema der Wortdatenbank zeigt Figur \ref{figure:worddatabase}. Folgende Klassen werden definiert:
 \begin{itemize}
