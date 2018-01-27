@@ -70,7 +70,7 @@ Neben den Worteinträgen sollen in der Datenbank noch Informationen über die He
 
 Alle in der Worttabelle beschriebenen Einträge sind auch im CELEX vorhanden. Der Folgende Abschnitt beschreibt, wie die Daten aus dem Lexikon extrahiert und in der Wortdatenbank gespeichert wurden.
 
-\subsection{Impementierung}
+\subsection{Implementierung}
 
 Für die Generierung der Datenbank wurde das python Projekt \textit{celex2db} erstellt, welches in \qq{/backend/celex2db} zu finden ist (alle Pfadangaben in diesem Abschnitt beziehen sich auf dieses Verzeichnis). Die Daten im CELEX \todo{in Forschungsstand teil verschieben} sind über mehrere Dateien verteilt. So gibt es eine Teilung in Sprachen (für die Datenbank werden nur Deutsche Wörter benutzt, zu finden in \qq{celex2/german}), Wörter und Lemmata sowie in Orthographie, Phonologie und Morphologie. Die Teilung in Wort und Lemma spart Speicherplatz. Das Lemma eines Verbs, zum Beispiel, ist die Grundform dieses. Zur Beugung \textit{gehst} gehört also das Lemma \textit{gehen}. Viele Eigenschaften des Verbs \textit{gehen} beziehen sich auf alle Flexionsformen, so müssen diese nicht für alle Verbformen redundant gespeichert werden.\\
 Die Einträge in den Wortlisten des CELEX verweisen jeweils mit einer ID auf den zugehörigen Eintrag in der Lemma Liste. Da in der zu entwickelnden Datenbank auch das Lemma gespeichert werden soll, müssen sowohl Wort Listen als auch Lemma Listen geparsed werden.\\
@@ -369,7 +369,7 @@ Zur Verwaltung von Vorlagen zur Einstellung der Annotation wird die Klasse \text
 Die Klasse \texttt{UserEntry} bildet die manuell segmentierten Wörter ab, die dem System unbekannt waren und vom Nutzer selbst erstellt wurden. Ein \texttt{UserEntry} enthält Informationen über Worttext, Wortart, Segmentierung der Silben und Wortbetonung. Vom Nutzer angelegte, eigene Texte werden in der Klasse \texttt{UserText} (mit dem Wortlaut des Texts und einem Titel) abgebildet.
 \todo{Klassendiagramm von UserEntry und UserText}
 
-\subsection{Text Analyse}
+\subsection{Textanalyse}
 
 Die Text Analyse stellt das Herzstück der Applikation dar und ist in der Komponente \textit{text\_analysis\_component} abgebildet. Sie bindet mehrere Subkomponenten ein, die in den folgenden Abschnitten vorgestellt werden. Es gibt Nutzeroberflächen für
 \begin{itemize}
@@ -570,7 +570,7 @@ Ganz unten auf der Seite sind Buttons zum Ausloggen und Löschen des Kontos vorh
 	\label{fig:frontend-useraccount}
 \end{figure}
 
-\subsection{Wort Verifizierung}
+\subsection{Wort-Verifizierung}
 
 Die Wort Verifizierung dient der Bestätigung von manuellen Segmentierung von NutzerInnen durch andere NutzerInnen, sodass diese in die globale Wortdatenbank aufgenommen werden können (s. Abschnitt \ref{sec:verification-service}). Das User Interface für diesen Prozess ist in der Komponente \texttt{word\_verification\_component} implementiert.\\
 
