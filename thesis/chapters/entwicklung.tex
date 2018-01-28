@@ -173,9 +173,9 @@ Die bei \qq{user/configuration/} nicht aufgeführten \textit{options} bestehen a
 \subsection{Dictionary Service}
 \label{sec:dictionary-service}
 
-Das Modul \textit{DictionaryService.py} verarbeitet Anfragen zur Textanalyse, verwaltet die Wortdatenbank und generiert Vorschläge für die manuelle Segmentierung von Wörtern. Das Schema der Wortdatenbank zeigt Figur \ref{figure:worddatabase}. Folgende Klassen werden definiert:
+Das Modul \textit{DictionaryService.py} verarbeitet Anfragen zur Textanalyse, verwaltet die Wortdatenbank und generiert Vorschläge für die manuelle Segmentierung von Wörtern. Das Schema der Wortdatenbank zeigt Abbildung \ref{fig:worddatabase}. Folgende Klassen werden definiert:
 \begin{itemize}
-	\item \texttt{Word}: Entspricht Tabelle \textit{word} in der Wortdatenbank (Figur \ref{fig:worddatabase}) und speichert die Merkmale eines Wortes.
+	\item \texttt{Word}: Entspricht Tabelle \textit{word} in der Wortdatenbank (Abbildung \ref{fig:worddatabase}) und speichert die Merkmale eines Wortes.
 	\item \texttt{AddedEntry}: Enthält einen Verweis (Fremdschlüssel) auf ein hinzugefügtes Wort und dessen Erstellungszeitpunkt.
 	\item \texttt{Segmentation}: Modelliert einen Segmentierungsvorschlag. Die Klasse enthält Worttext, Segmentierung und Betonungsmuster. Außerdem speichert sie den Namen (\texttt{origin}) und die Herkunft (\texttt{source}) der Quelle des Vorschlags (z.B. MARY TTS).
 \end{itemize}
@@ -233,7 +233,7 @@ Bei der Abfrage der Vorschläge im Backend wird eine Liste von Segmentierungsvor
 \subsection{User Service}
 \label{sec:userservice}
 
-Der \texttt{UserService} dient der Verwaltung der Nutzerdaten und der Authentifizierung. Nutzerkonten bestehen aus Email Adresse, Passwort und Vor- und Nachnamen der Nutzerin oder des Nutzers. Daneben werden die Resourcen \textit{user\_text}, \textit{user\_word}, \textit{text\_config} und \textit{pos\_config} verwaltet. Welche Funktionen für die jeweilige Ressource zur Verfügung stehen, wird im Folgenden erklärt. Figur \ref{fig:userdb} zeigt das Schema der Nutzerdatenbank.
+Der \texttt{UserService} dient der Verwaltung der Nutzerdaten und der Authentifizierung. Nutzerkonten bestehen aus Email Adresse, Passwort und Vor- und Nachnamen der Nutzerin oder des Nutzers. Daneben werden die Resourcen \textit{user\_text}, \textit{user\_word}, \textit{text\_config} und \textit{pos\_config} verwaltet. Welche Funktionen für die jeweilige Ressource zur Verfügung stehen, wird im Folgenden erklärt. Abbildung \ref{fig:userdb} zeigt das Schema der Nutzerdatenbank.
 
 \begin{figure}[h!]
 	\centering
@@ -352,7 +352,7 @@ In der Komponentenklasse \texttt{AppComponent} werden folgende Metadaten der App
 	\label{fig:frontend-home}
 \end{figure}
 
-Die Begrüßungsseite (Figur \ref{fig:frontend-home}) \textit{home\_component} beinhaltet keine Programmlogik. Sie ist der Einstiegspunkt der Web-Applikation und stellt eine Übersicht über die gebotenen Funktionen dar. In den oberen zwei Kästen findet die Nutzerin oder der Nutzer eine kurze Einführung in die Software und ihre Anwendung, sowie eine Erklärung der Textanalyse Funktion. Darunter befinden sich nebeneinander zwei Kästen, in denen die Nutzerkontoverwaltung und der Verifizierungsprozess für die Wortdatenbank erklärt werden.
+Die Begrüßungsseite (Abbildung \ref{fig:frontend-home}) \textit{home\_component} beinhaltet keine Programmlogik. Sie ist der Einstiegspunkt der Web-Applikation und stellt eine Übersicht über die gebotenen Funktionen dar. In den oberen zwei Kästen findet die Nutzerin oder der Nutzer eine kurze Einführung in die Software und ihre Anwendung, sowie eine Erklärung der Textanalyse Funktion. Darunter befinden sich nebeneinander zwei Kästen, in denen die Nutzerkontoverwaltung und der Verifizierungsprozess für die Wortdatenbank erklärt werden.
 
 \subsection{Datenmodell}
 
@@ -402,7 +402,7 @@ Der \texttt{TextAnalysisService} wird von mehreren Komponenten verwendet und ver
 
 \subsubsection{Textvorschau}
 
-Die Textvorschau (Komponente \textit{text\_preview\_component}, abgebildet in Figur \ref{fig:frontend-textanalyse}) stellt das Ergebnis der Textannotation so dar, wie es auch im Druck aussehen würde. Die Informationen über die Darstellung (HTML Klassen, CSS Attribute) sind jeweils schon im Datenmodell (in den Wörtern und Silben des \texttt{AnnotationText}) gespeichert und werden im Template der Komponente nur abgerufen. Im Template wird mithilfe von Angular Direktiven über alle Wörter und Silben des Texts iteriert, je nach Typ des Wortes werden verschiedene HTML Tags eingesetzt:
+Die Textvorschau (Komponente \textit{text\_preview\_component}, gezeigt in Abbildung \ref{fig:frontend-textanalyse}) stellt das Ergebnis der Textannotation so dar, wie es auch im Druck aussehen würde. Die Informationen über die Darstellung (HTML Klassen, CSS Attribute) sind jeweils schon im Datenmodell (in den Wörtern und Silben des \texttt{AnnotationText}) gespeichert und werden im Template der Komponente nur abgerufen. Im Template wird mithilfe von Angular Direktiven über alle Wörter und Silben des Texts iteriert, je nach Typ des Wortes werden verschiedene HTML Tags eingesetzt:
 \begin{itemize}
 	\item Für jedes annotierte Wort und jede Silbe wird ein \texttt{span} erstellt. Die Klassen und CSS Attribute der  Spans werden mit \textit{Data Binding} (\texttt{[ngClass]} und \texttt{[ngStyle]}, s. Abschnitt \ref{sec:angulardart}) dem Modell entnommen.
 	
@@ -411,7 +411,7 @@ Die Textvorschau (Komponente \textit{text\_preview\_component}, abgebildet in Fi
 	\item Für Wörter, welche bei der Analyse nicht in der Datenbank gefunden wurden, wird ein Link (\texttt{span} mit \texttt{(click)} Event) eingesetzt, welcher zur manuellen Wortanalyse (Abschnitt \ref{sec:manuelleanalyse}) führt.
 \end{itemize}
 
-Jedes annotierte Wort enthält außerdem eine Subkomponente \texttt{word\_detail\_component}, die beim Klicken auf das Wort als Popup sichtbar gemacht wird. Dieses Popup (Figur \ref{fig:frontend-wordconf}) enthält folgende Einstellungen, die für jedes Wort manuell angepasst werden können (eine Änderung hier verändert die grundlegenden Texteinstellungen nicht und hat auch keine Auswirkungen auf die Wortdatenbank oder manuelle Nutzereinträge).
+Jedes annotierte Wort enthält außerdem eine Subkomponente \texttt{word\_detail\_component}, die beim Klicken auf das Wort als Popup sichtbar gemacht wird. Dieses Popup (Abbildung \ref{fig:frontend-wordconf}) enthält folgende Einstellungen, die für jedes Wort manuell angepasst werden können (eine Änderung hier verändert die grundlegenden Texteinstellungen nicht und hat auch keine Auswirkungen auf die Wortdatenbank oder manuelle Nutzereinträge).
 
 \begin{itemize}
 	\item Wort annotieren oder nicht (wird diese Option ausgeschaltet, so wird das Wort ohne Silbentrennung und in der Farbe der unbetonten Silben dargestellt)
@@ -466,7 +466,7 @@ Im Kasten links neben der Textvorschau können die Einstellungen verändert werd
 
 \subsubsection{User Interfache für Einstellungen}
 
-Ganz oben können zunächst Farben für die Annotation und die Art, wie diese verwendet werden eingestellt werden (Figur \ref{fig:frontend-colorconf}):
+Ganz oben können zunächst Farben für die Annotation und die Art, wie diese verwendet werden eingestellt werden (Abbildung \ref{fig:frontend-colorconf}):
 
 \begin{itemize}
 	\item \textit{Betonte Silbe}: Hier wird die Farbe für die betonte Silbe in jedem Wort festgelegt. Außerdem kann gewählt werden, ob der Text der Silbe fett dargestellt werden soll. Für die Auswahl der Farben wurde ein entsprechend farbiger Kasten verwendet, der beim Anklicken den Farbwahldialog des Browsers öffnet.
@@ -489,7 +489,7 @@ Beispiele zu verschiedenen Einstellungen sind in der Evaluation in Abschnitt \re
 	\label{fig:frontend-colorconf}
 \end{figure}
 
-Unter den Farbeinstellungen lassen sich verschiedene Größen und Abstände im Text definieren (Figur \ref{fig:frontend-textconf}):
+Unter den Farbeinstellungen lassen sich verschiedene Größen und Abstände im Text definieren (Abbildung \ref{fig:frontend-textconf}):
 \begin{itemize}
 	\item Schriftgröße
 	\item Silbenabstand (Abstand zwischen einzelnen Silben)
@@ -507,7 +507,7 @@ Unter den Farbeinstellungen lassen sich verschiedene Größen und Abstände im T
 
 Alle Werte lassen sich hier mithilfe eines Sliders einstellen. Außerdem gibt es die Möglichkeit, ein beliebiges Zeichen als Silbentrennzeichen zu benutzen, was dann im Zwischenraum zwischen allen Silben im Text erscheint.\\
 
-An letzter Stelle in den Einstellungen steht ein Dropdown Menü, in dem man eine Wortart auswählen kann (Figur \ref{fig:frontend-pos-einstellungen}). Für jede Wortart lassen sich folgende Einstellungen vornehmen, die dann auf den gesamten Text angewandt werden:
+An letzter Stelle in den Einstellungen steht ein Dropdown Menü, in dem man eine Wortart auswählen kann (Abbildung \ref{fig:frontend-pos-einstellungen}). Für jede Wortart lassen sich folgende Einstellungen vornehmen, die dann auf den gesamten Text angewandt werden:
 \begin{itemize}
 	\item \textbf{Annotieren}: Aktiviert die Annotation für Wörter dieser Wortart, d.h. Silben werden getrennt und in den gewählten Farben dargestellt).
 	
