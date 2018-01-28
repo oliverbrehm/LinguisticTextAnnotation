@@ -92,17 +92,8 @@ Das Hauptskript \textit{celex2db.py} führt die folgenden Schritte aus:
 
 Während der Ausführung des Skripts werden Schrittweise Fortschrittsangaben mit Fehlern ausgegeben, da das Parsen und Erstellen der Datenbank einige Zeit benötigt (mehr dazu im Abschnitt \ref{sec:database-results}).\\
 
-Die Klasse \texttt{CelexDictionary} im Skript \textit{celex.py} bietet die Methoden zum Parsen der Wort und Lemma Listen. Die Struktur ist in Abbildung \ref{fig:celex2db} dargestellt.
-
-\begin{figure}
-	\centering
-	\todo{Klassendiagramm CelexDictionary}
-	\caption{Diagramm der \textit{celex2db} Klassen}
-	\label{fig:celex2db}
-\end{figure}
-
-In der Methode zum Parsen der Lemmata wird die CELEX Datei \textit{gml.cd} verarbeitet, die morphologische Informationen zu den Lemmata enthält. Jede Zeile enthält ein Lemma, welches in mit ID, Text und Wortart gespeichert wird.\\
-Beim Parsen der Wort-Listen werden die beiden Dateien \textit{g\textbf{p}w.cd} und \textit{g\textbf{o}w.cd} verarbeitet, welche phonologische und orthographische Informationen zu allen enthaltenen Flexionsformen der Wörter enthalten. Die IDs und Reihenfolge in beiden Wort-Listen stimmen überein, sodass beide Listen gleichzeitig verarbeitet werden konnten. Aus der phonologischen Liste wurden der Text des Wortes, der Verweis auf das zugehörige Lemma sowie die phonologische Darstellung entnommen. Die orthographischen Liste lieferte lediglich die Silbentrennung.\\
+Die Klasse \texttt{CelexDictionary} im Skript \textit{celex.py} bietet die Methoden zum Parsen der Wort- und Lemma-Listen. In der Methode zum Parsen der Lemmata wird die CELEX Datei \textit{gml.cd} verarbeitet, die morphologische Informationen zu den Lemmata enthält. Jede Zeile enthält ein Lemma, welches in mit ID, Text und Wortart gespeichert wird.\\
+Beim Parsen der Wort-Listen werden die beiden Dateien \textit{g\textbf{p}w.cd} und \textit{g\textbf{o}w.cd} verarbeitet, welche phonologische bzw. orthographische Informationen zu allen enthaltenen Flexionsformen der Wörter enthalten. Die IDs und Reihenfolge in beiden Wort-Listen stimmen überein, sodass beide Listen gleichzeitig verarbeitet werden konnten. Aus der phonologischen Liste wurden der Text des Wortes, der Verweis auf das zugehörige Lemma sowie die phonologische Darstellung entnommen. Die orthographischen Liste lieferte lediglich die Silbentrennung.\\
 Die geparsten Lemma- und Wortstrukturen wurden zusammengeführt und daraus Einträge für die Datenbank erstellt, welche dann mit dem Skript \qq{writeSQLite.py} in die Datenbank übertragen wurden. In einem frühen Entwicklungsstadium wurden hier SQL Instruktionen verwendet um die Datenbankeinträge zu erstellen. Nach der Entwicklung des \texttt{DictionaryService} im Backend (genauer beschrieben im Abschnitt \ref{sec:dictionary-service}) wurde später direkt auf diesen zugegriffen, um redundanten Code zu vermeiden. Ein einfacher Funktionsaufruf der Methode \texttt{add\_word} des \texttt{DictionaryService} fügt den Eintrag der Wortdatenbank hinzu.
 
 \subsection{Ergebnisse}
@@ -113,12 +104,12 @@ Trotz der Wortidentifizierung anhand von zwei Merkmalen, beinhaltet der CELEX te
 
 \section{Backend}
 \label{sec:etwicklung-backend}
-Das in Python mit dem Web-Framework Flask entwickelte Backend verarbeitet sämtliche, vom Frontend gesendeten HTTP Requests (s. Abschnitt \ref{sec:flask}). Es sendet entweder eine Antwort mit den geforderten Daten im JSON Format, oder einen HTTP Fehlercode mit Fehlermeldung. Das Backend Projekt befindet sich in \qq{/backend/API}. Es wurde in die drei Services \textit{DictionaryService}, \textit{UserService} und \textit{VerificationService} strukturiert. Das Hauptskript \qq{LinguisticTextAnnotation.py} verwaltet diese Services, startet die Flask Applikation und definiert die einzelnen Routen für HTTP Requests (diese werden im folgenden Abschnitt aufgelistet). Folgende Grafik zeigt eine Übersicht der Struktur des Backends.
+Das in Python mit dem Web-Framework Flask entwickelte Backend verarbeitet sämtliche, vom Frontend gesendeten HTTP Requests (s. Abschnitt \ref{sec:flask}). Es sendet entweder eine Antwort mit den geforderten Daten im JSON Format, oder einen HTTP Fehlercode mit Fehlermeldung. Das Backend Projekt befindet sich in \qq{/backend/API}. Es wurde in die drei Services \textit{DictionaryService}, \textit{UserService} und \textit{VerificationService} strukturiert. Das Hauptskript \qq{LinguisticTextAnnotation.py} verwaltet diese Services, startet die Flask Applikation und definiert die einzelnen Routen für HTTP Requests (diese werden im folgenden Abschnitt aufgelistet). Abbildung \ref{fig:backend} zeigt eine Übersicht der Struktur des Backends.
 
 \begin{figure}[h!]
 	\centering
-	\todo{Grafik Backend}
-	\caption{\todo{Grafik Backend}}
+	\includegraphics[width=.8\linewidth]{figures/backend}
+	\caption{Aufbau und Kommunikation des Backends, mit Services und Datenbanken}
 	\label{fig:backend}
 \end{figure}
 
@@ -220,7 +211,7 @@ Die Methode \texttt{query\_text} bekommt den gesamten zu analysierenden Text üb
 
 Der \textit{DictionaryService} bietet auch die Möglichkeit, automatisch Segmentierungsvorschläge zu generieren. Diese werden im Frontend dazu benutzt, den NutzerInnen bei der manuellen Wortsegmentierung die Arbeit zu erleichtern, indem das Wort schon in Silben zerlegt wird und versucht wird, automatisch die Wortbetonung zu bestimmen. Der Standardvorschlag, den das System liefert ist einfach die Silbentrennung, die der Python Silbentrenner \textit{Pyphen} liefert. Diese ist in vielen Fällen korrekt und bietet in jedem Fall einen Anhaltspunkt für die Silbentrennung des Wortes. Zudem wird beim Standardvorschlag ein Betonungsmuster generiert, welches immer die erste Silbe im Wort betont. Auch das ist in der deutschen Sprache oft der Fall, so können Betonung und Silbentrennung bei der manuellen Analyse einfach bestätigt werden.\\
 
-Bei der Abfrage der Vorschläge im Backend wird eine Liste von Segmentierungsvorschlägen zurückgeliefert. Der Standardvorschlag mit \textit{Pyphen} ist nur eine Möglichkeit. Hier wurde überlegt, aus mehreren externen Systemen, wie z.B. MARY TTS oder BAS \todo{PhonoLex?} (s. Abschnitt \ref{sec:forschung-database}), oder später auch z.B. Duden und Anderen, Vorschläge zu sammeln und den NutzerInnen in einer Liste zu präsentieren, aus welcher der passendste Vorschlag ausgewählt werden kann. Exemplarisch wurde hier eine Anfrage an MARY TTS geschickt und in der Antwort an das Frontend mit eingebunden. Dieses System kann ebenfalls mit HTTP Requests abgefragt werden. Das entsprechende Interface ist unter \textit{http://mary.dfki.de:59125/process} zu erreichen. Tabelle \ref{table:mary} zeigt die bei der Anfrage verwendeten GET Parameter. MARY liefert eine Antwort im XML Format zurück, welche die phonologische Silbentrennung und die Betonung enthält. Das XML wird entsprechend geparsed, womit dann ein neuer Segmentierungsvorschlag bestimmt werden kann.
+Bei der Abfrage der Vorschläge im Backend wird eine Liste von Segmentierungsvorschlägen zurückgeliefert. Der Standardvorschlag mit \textit{Pyphen} ist nur eine Möglichkeit. Hier wurde überlegt, aus mehreren externen Systemen, wie z.B. MARY TTS oder \todo{BAS, PhonoLex} (s. Abschnitt \ref{sec:forschung-database}), oder später auch z.B. Duden und Anderen, Vorschläge zu sammeln und den NutzerInnen in einer Liste zu präsentieren, aus welcher der passendste Vorschlag ausgewählt werden kann. Exemplarisch wurde hier eine Anfrage an MARY TTS geschickt und in der Antwort an das Frontend mit eingebunden. Dieses System kann ebenfalls mit HTTP Requests abgefragt werden. Das entsprechende Interface ist unter \textit{http://mary.dfki.de:59125/process} zu erreichen. Tabelle \ref{table:mary} zeigt die bei der Anfrage verwendeten GET Parameter. MARY liefert eine Antwort im XML Format zurück, welche die phonologische Silbentrennung und die Betonung enthält. Das XML wird entsprechend geparsed, womit dann ein neuer Segmentierungsvorschlag bestimmt werden kann.
 
 \begin{table}[h!]
 	\centering
@@ -367,31 +358,25 @@ enthält eine Liste von Wörtern (Klasse \texttt{Word}), welche wiederum eine Li
 
 \begin{figure}[h!]
 	\centering
-	\todo{Klassendiagramm AnnotationText, Word, Syllable}
-	\caption{Klassendiagramm des Datenmodells für das Frontend}
+	\includegraphics[width=.8\linewidth]{figures/frontend/uml-annotationtext}
+	\caption{UML Klassendiagramm des Textmodells mit Wörtern und Silben}
 	\label{fig:frontendmodel}
 \end{figure}
 
 
 Diese Klassen enthalten auch Informationen zu HTML Klassen und CSS Styles. Durch entsprechende Zugriffe können diese dann direkt im Angular HTML Template ausgelesen werden. Mit dieser Vorgehensweise ist es möglich, die Textvorschau direkt und verzögerungsfrei nach einer Nutzereingabe anzupassen. Wird zum Beispiel eine Silbenfarbe geändert, wird erst über alle Wörter und Silben im \texttt{AnnotationText} iteriert und die entsprechenden CSS Farben (z.B. \texttt{color} oder \texttt{background-color}) auf die neue Farbe gesetzt. Im Angular Update Cycle wird dann die Veränderung im Modell detektiert und das \textit{Document Object Model} (DOM) der Webseite automatisch angepasst. Es musste kein manueller Code geschrieben, durch \textit{Data Binding} werden die aktuellen Werte des Modells (\textit{Dart} Klassen) sofort automatisch in das DOM übernommen.
 
-Die Klasse \texttt{TextConfiguration} (\ref{fig:textconf}) wird zur Verwaltung von Vorlagen zur Einstellung der Annotation verwendet. Sie enthält alle Einstellungen, die auf einen Text angewandt werden können, z.B. die Farben von betonten und unbetonten Silben, Silben- und Wortabstände oder das Silbentrennzeichen. Außerdem beinhaltet sie eine Instanz der Klasse \texttt{PartOfSpeech}, welche spezielle Annotationseinstellungen für die verschiedenen Wortarten speichert.
+Die Klasse \texttt{TextConfiguration} (Abbildung \ref{fig:textconf}) wird zur Verwaltung von Vorlagen zur Einstellung der Annotation verwendet. Sie enthält alle Einstellungen, die auf einen Text angewandt werden können, z.B. die Farben von betonten und unbetonten Silben, Silben- und Wortabstände oder das Silbentrennzeichen. Außerdem beinhaltet sie eine Instanz der Klasse \texttt{PartOfSpeech}, welche spezielle Annotationseinstellungen für die verschiedenen Wortarten speichert.
 
 \begin{figure}[h!]
 	\centering
-	\todo{Klassendiagramm TextConfiguration und PartOfSpeech}
-	\caption{\todo{Klassendiagramm TextConfiguration und PartOfSpeech}}
+	\includegraphics[width=.5\linewidth]{figures/frontend/uml-textconfig}
+	\caption{UML Klassendiagramm der Textkonfiguration mit der Wortartkonfiguration (bestehend aus dein Einstellungen für alle 12 Wortarten)}
 	\label{fig:textconf}
 \end{figure}
 
-Die Klasse \texttt{UserEntry} bildet die manuell segmentierten Wörter ab, die dem System unbekannt waren und von den NutzerInnen selbst erstellt wurden. Ein \texttt{UserEntry} enthält Informationen über Worttext, Wortart, Segmentierung der Silben und Wortbetonung. Vom Nutzer angelegte, eigene Texte werden in der Klasse \texttt{UserText} (mit dem Wortlaut des Texts und einem Titel) abgebildet (Abbildung \ref{fig:usermodel}).
+Die Klasse \texttt{UserEntry} bildet die manuell segmentierten Wörter ab, die dem System unbekannt waren und von den NutzerInnen selbst erstellt wurden. Ein \texttt{UserEntry} enthält Informationen über Worttext, Wortart, Segmentierung der Silben und Wortbetonung. Vom Nutzer angelegte, eigene Texte werden in der Klasse \texttt{UserText} (mit dem Wortlaut des Texts und einem Titel) abgebildet.
 
-\begin{figure}[h!]
-	\centering
-	\todo{Klassendiagramm von UserEntry und UserText}
-	\caption{\todo{Klassendiagramm von UserEntry und UserText}}
-	\label{fig:usermodel}
-\end{figure}
 
 \subsection{Textanalyse}
 
@@ -404,7 +389,7 @@ Die Text Analyse (Komponente \textit{text\_analysis\_component}) stellt das Herz
 
 \begin{figure}[h!]
 	\centering
-	\todo{screenshot von nur vorschau}
+	\includegraphics[width=.5\linewidth]{figures/frontend/textvorschau}
 	\caption{Bildschirmfoto der Textanalyse-Vorschau}
 	\label{fig:frontend-textanalyse}
 \end{figure}
