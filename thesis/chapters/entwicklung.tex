@@ -2,7 +2,14 @@
 
 \chapter{Entwicklung der Anwendung}
 
-Im Rahmen dieser Arbeit wurde die beschriebene Webapplikation prototypisch entwickelt. Die dazu nötige Planung und die verwendeten Technologien wurden in den vorherigen Kapiteln geschildert. Nun wird auf den Prozess der Entwicklung und auf die detaillierte Struktur der Applikation eingegangen.
+Im Rahmen dieser Arbeit wurde die beschriebene Webapplikation prototypisch entwickelt. Die dazu nötige Planung und die verwendeten Technologien wurden in den vorherigen Kapiteln geschildert. Nun wird auf den Prozess der Entwicklung und auf die detaillierte Struktur der Applikation eingegangen. Ein Bildschirmfoto des fertigen Prototyps ist in Abbildung \ref{fig:textanalyse} zu sehen.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.8\linewidth, frame]{figures/frontend/textanalyse}
+	\caption{Bildschirmfoto der Textanalyse im fertigen Prototyp}
+	\label{fig:textanalyse}
+\end{figure}
 
 Das Entwicklung des Systems wurde in drei Teilprojekte untergliedert:
 \begin{enumerate}
@@ -285,23 +292,23 @@ Ein zu verifizierender Eintrag ist hierbei direkt ein \textit{user\_word} (s. Ab
 
 \section{Frontend}
 
-Das Frontend ist der den Nutzerinnen und Nutzern sichtbare Teil des Softwaresystems. Die Web-Applikation ist zunächst wie eine normale Webseite aufgebaut, Inhalte der Komponenten werden aber dynamisch geladen (d.h. bei Nutzerinteraktionen wird keine Seite neu aufgerufen, sondern der Inhalt der Seite wird direkt angepasst). Neben den standardmäßig im Web verwendeten Sprachen \textit{HTML}, \textit{CSS} und \textit{JavaScript} wurde die Applikation großteils in AngularDart entwickelt (eine genauere Beschreibung zu dieser Technologie, der Unterteilung von Komponenten in Klassen, Templates und Services sowie der Templatesprache von Angular, liefert Abschnitt \ref{sec:angulardart}).\\
+Das Frontend ist der den Nutzerinnen und Nutzern sichtbare Teil des Softwaresystems. Die Web-Applikation ist zunächst wie eine normale Webseite aufgebaut, Inhalte der Komponenten werden aber dynamisch geladen (d.h. bei Nutzerinteraktionen wird keine HTML Seite neu aufgerufen, sondern der Inhalt der Seite wird direkt angepasst). Neben den standardmäßig im Web verwendeten Sprachen \textit{HTML}, \textit{CSS} und \textit{JavaScript} wurde die Applikation großteils in AngularDart entwickelt (eine Beschreibung zu dieser Technologie, der Unterteilung von Komponenten in Klassen, Templates und Services sowie der Templatesprache von Angular, liefert Abschnitt \ref{sec:angulardart}).\\
 
-Die kombinierten Features von \textit{Angular} und der Programmiersprache \textit{Dart} ermöglichen eine strukturierte objektorientierte Architektur der Applikation. Die Folgenden Abschnitte zeigen zunächst den Aufbau der Applikation und das verwendete Datenmodell, danach die Struktur aller größeren Komponenten.
+Die Features des \textit{AngularDart} Frameworks ermöglichen eine strukturierte, objektorientierte Architektur des Frontends. Die Folgenden Abschnitte zeigen zunächst den Aufbau der Applikation und das verwendete Datenmodell, danach die Struktur aller größeren Komponenten.
 
 \subsection{Hauptkomponente der Applikation und Routing}
 
-Die Hauptseite \qq{index.html} enthält nur einen Platzhalter (Kasten mit dem Text \qq{Prosodiya Online Text Analyse wird geladen...}) und bindet notwendige CSS Styles sowie die Hauptkomponente \textit{AppComponent} ein. Das Einbinden dieser Komponente veranlasst Angular, diese beim Aufruf der Webseite zu laden und liefert so den Einstiegspunkt in die \textit{AngularDart} Applikation.\\
+Die Hauptseite \textit{index.html} enthält nur einen Platzhalter (Kasten mit dem Text \textit{Prosodiya Online Text Analyse wird geladen...}) und bindet notwendige CSS Styles sowie die Hauptkomponente \textit{app\_component} ein. Das Einbinden dieser Komponente veranlasst Angular, diese beim Aufruf der Webseite zu laden und liefert so den Einstiegspunkt in die \textit{AngularDart} Applikation.
 
-Der zur Komponente zugehörige Service \texttt{app\_service} definiert lediglich die Funktionen zum Setzen und Löschen von Info- und Fehlermeldungen. Das Template der Hauptkomponente \qq{app\_component.html} enthält folgende Elemente:
+Der zur Komponente zugehörige \textit{AppService} definiert lediglich die Funktionen zum Anzeigen und Löschen von Info- und Fehlermeldungen. Das Template der Hauptkomponente \textit{app\_component.html} enthält folgende Elemente:
 \begin{itemize}
-	\item Die Navigationsleiste mit den Einträgen \textit{Home}, \textit{Textanalyse}, \textit{Verifizierung} und \textit{Login.}
+	\item Die Navigationsleiste mit den Einträgen \textit{Home}, \textit{Textanalyse}, \textit{Verifizierung} und \textit{Login}
 	
 	\item Container in denen Info- und Fehlermeldungen angezeigt erden
 	\item Die \texttt{router-outlet} Direktive, die dafür sorgt, dass die in der Navigation ausgewählte Komponente angezeigt wird
 \end{itemize}
 
-In der Komponentenklasse \texttt{AppComponent} werden folgende Metadaten der Applikation per Klassenannotationen definiert:
+In der Komponentenklasse \textit{AppComponent} werden folgende Metadaten der Applikation per Klassenannotationen definiert:
 \begin{itemize}
 	\item \textbf{Angular Direktiven} in \textit{@Component}: Alle Basiskomponenten (\texttt{CORE\_DIRECTIVES}, \texttt{ROUTER\_DIRECTIVES}, \texttt{materialDirectives},
 	\texttt{formDirectives}) und eigene Subkomponenten (\texttt{TextAnalysisComponent}, \texttt{UserAccountComponent},\\
@@ -338,7 +345,7 @@ In der Komponentenklasse \texttt{AppComponent} werden folgende Metadaten der App
 		/** & NotFound & HomeComponent \\
 		\hline
 	\end{tabular}
-	\caption{Routen für den Angular Router, mit Name und zugehöriger Komponente. Die kursiv dargestellte \textit{Home} Route ist der Default Wert und wird bei Programmstart angezeigt}
+	\caption{Routen für den Angular Router, mit Name und zugehöriger Komponente. Die kursiv dargestellte \textit{Home} Route ist der Default Wert und wird bei Programmstart angezeigt.}
 	\label{table:routeconfig}
 \end{table}
 
@@ -356,13 +363,19 @@ Die Begrüßungsseite (Abbildung \ref{fig:frontend-home}) \textit{home\_componen
 \subsection{Datenmodell}
 
 Im Folgenden wird ein Überblick über das Datenmodell gegeben, dessen Klassen diverse Komponenten der Applikation benutzen. Die Klasse \texttt{AnnotationText} wird instantiiert wenn ein neuer Text analysiert wird. Sie
-enthält eine Liste von Wörtern (Klasse \texttt{Word}), welche wiederum eine Liste von Silben (Klasse \texttt{Syllable}) speichern. \\
+enthält eine Liste von Wörtern (Klasse \texttt{Word}), welche wiederum eine Liste von Silben (Klasse \texttt{Syllable}) speichern (Abbildung \ref{fig:frontendmodel}). \\
 
-\todo{Klassendiagramm AnnotationText, Word, Syllable}
+\begin{figure}[h!]
+	\centering
+	\todo{Klassendiagramm AnnotationText, Word, Syllable}
+	\caption{Klassendiagramm des Datenmodells für das Frontend}
+	\label{fig:frontendmodel}
+\end{figure}
 
-Diese Klassen enthalten auch Informationen zu HTML Klassen und CSS Styles. Durch entsprechende Zugriffe können diese dann direkt im Angular HTML Template ausgelesen werden. Mit dieser Vorgehensweise ist es möglich, die Textvorschau direkt und verzögerungsfrei nach einer Nutzereingabe anzupassen. Wird zum Beispiel eine Silbenfarbe geändert wird erst über alle Wörter und Silben im \texttt{AnnotationText} iteriert und die entsprechenden CSS Farben (z.B. \texttt{color} oder \texttt{background-color}) auf die neue Farbe gesetzt. Der Angular Update Cycle \todo{heisst das so?} detektiert die Veränderung im Modell und passt das Document Object Model (DOM) der Webseite automatisch an. Es musste kein manueller Code geschrieben, durch \textit{Data Binding} werden die aktuellen Werte im Modell (Dart Klassen) sofort automatisch in das DOM übernommen.\\
 
-Zur Verwaltung von Vorlagen zur Einstellung der Annotation wird die Klasse \texttt{TextConfiguration} verwendet. Sie enthält alle Einstellungen, die auf einen Text angewandt werden können, z.B. die Farben von betonter und unbetonter Silben, Silben- und Wortabstände oder das Silbentrennzeichen. Außerdem beinhaltet sie eine Instanz der Klasse \texttt{PartOfSpeech}, welche spezielle Annotationseinstellungen für die verschiedenen Wortarten speichert.
+Diese Klassen enthalten auch Informationen zu HTML Klassen und CSS Styles. Durch entsprechende Zugriffe können diese dann direkt im Angular HTML Template ausgelesen werden. Mit dieser Vorgehensweise ist es möglich, die Textvorschau direkt und verzögerungsfrei nach einer Nutzereingabe anzupassen. Wird zum Beispiel eine Silbenfarbe geändert, wird erst über alle Wörter und Silben im \texttt{AnnotationText} iteriert und die entsprechenden CSS Farben (z.B. \texttt{color} oder \texttt{background-color}) auf die neue Farbe gesetzt. Im Angular Update Cycle wird dann die Veränderung im Modell detektiert und das \textit{Document Object Model} (DOM) der Webseite automatisch angepasst. Es musste kein manueller Code geschrieben, durch \textit{Data Binding} werden die aktuellen Werte des Modells (\textit{Dart} Klassen) sofort automatisch in das DOM übernommen.
+
+Die Klasse \texttt{TextConfiguration} (\ref{fig:textconf}) wird zur Verwaltung von Vorlagen zur Einstellung der Annotation verwendet. Sie enthält alle Einstellungen, die auf einen Text angewandt werden können, z.B. die Farben von betonten und unbetonten Silben, Silben- und Wortabstände oder das Silbentrennzeichen. Außerdem beinhaltet sie eine Instanz der Klasse \texttt{PartOfSpeech}, welche spezielle Annotationseinstellungen für die verschiedenen Wortarten speichert.
 
 \begin{figure}[h!]
 	\centering
@@ -371,12 +384,18 @@ Zur Verwaltung von Vorlagen zur Einstellung der Annotation wird die Klasse \text
 	\label{fig:textconf}
 \end{figure}
 
-Die Klasse \texttt{UserEntry} bildet die manuell segmentierten Wörter ab, die dem System unbekannt waren und vom Nutzer selbst erstellt wurden. Ein \texttt{UserEntry} enthält Informationen über Worttext, Wortart, Segmentierung der Silben und Wortbetonung. Vom Nutzer angelegte, eigene Texte werden in der Klasse \texttt{UserText} (mit dem Wortlaut des Texts und einem Titel) abgebildet.
-\todo{Klassendiagramm von UserEntry und UserText}
+Die Klasse \texttt{UserEntry} bildet die manuell segmentierten Wörter ab, die dem System unbekannt waren und von den NutzerInnen selbst erstellt wurden. Ein \texttt{UserEntry} enthält Informationen über Worttext, Wortart, Segmentierung der Silben und Wortbetonung. Vom Nutzer angelegte, eigene Texte werden in der Klasse \texttt{UserText} (mit dem Wortlaut des Texts und einem Titel) abgebildet (Abbildung \ref{fig:usermodel}).
+
+\begin{figure}[h!]
+	\centering
+	\todo{Klassendiagramm von UserEntry und UserText}
+	\caption{\todo{Klassendiagramm von UserEntry und UserText}}
+	\label{fig:usermodel}
+\end{figure}
 
 \subsection{Textanalyse}
 
-Die Text Analyse stellt das Herzstück der Applikation dar und ist in der Komponente \textit{text\_analysis\_component} abgebildet. Sie bindet mehrere Subkomponenten ein, die in den folgenden Abschnitten vorgestellt werden. Es gibt Nutzeroberflächen für
+Die Text Analyse (Komponente \textit{text\_analysis\_component}) stellt das Herzstück der Applikation dar. Sie bindet mehrere Subkomponenten ein, die in den folgenden Abschnitten vorgestellt werden. Es gibt Nutzeroberflächen für
 \begin{itemize}
 	\item die Eingabe neuer Texte,
 	\item die Vorschau des aktuell analysierten Texts,
@@ -385,14 +404,14 @@ Die Text Analyse stellt das Herzstück der Applikation dar und ist in der Kompon
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=.8\linewidth, frame]{figures/frontend/textanalyse}
-	\caption{Bildschirmfoto der Textanalyse}
+	\todo{screenshot von nur vorschau}
+	\caption{Bildschirmfoto der Textanalyse-Vorschau}
 	\label{fig:frontend-textanalyse}
 \end{figure}
 
 \subsubsection{Texteingabe}
 
-Ist noch kein Text analysiert, so zeigt die Text Analyse ein leeres Eingabetextfeld (in Komponente \textit{text\_analysis\_component}). Hier kann ein beliebiger Text eingetippt und analysiert werden.
+Ist noch kein Text analysiert, so zeigt die Textanalyse ein leeres Eingabetextfeld (in Komponente \textit{text\_analysis\_component}). Hier kann ein beliebiger Text eingetippt und analysiert werden.
 
 \begin{figure}[h!]
 	\centering
@@ -403,15 +422,15 @@ Ist noch kein Text analysiert, so zeigt die Text Analyse ein leeres Eingabetextf
 
 \subsubsection{TextAnalysisService}
 
-Der \texttt{TextAnalysisService} wird von mehreren Komponenten verwendet und verwaltet vor Allem eine Instanz der Klasse \texttt{AnnotationText}. Er beinhaltet auch die Logik um einen Eingabetext zu analysieren. Dazu wird ein HTTP Request mit dem Eingabetext an das Backend geschickt. Aus der Antwort kann das Modell des annotierten Texts aufgebaut und in der Vorschau angezeigt werden. Der Service bietet zudem die Funktionen zum Anwenden der aktuellen Annotationseinstellung auf den Text.
+Der \textit{TextAnalysisService} wird von mehreren Komponenten verwendet und verwaltet vor Allem eine Instanz der Klasse \texttt{AnnotationText}. Er beinhaltet auch die Logik um einen Eingabetext zu analysieren. Dazu wird ein HTTP Request mit dem Eingabetext an das Backend geschickt. Aus der Antwort kann das Modell des annotierten Texts aufgebaut und in der Vorschau angezeigt werden. Der Service bietet zudem die Funktionen zum Anwenden der aktuellen Annotationseinstellung auf den Text.
 
 \subsubsection{Textvorschau}
 
 Die Textvorschau (Komponente \textit{text\_preview\_component}, gezeigt in Abbildung \ref{fig:frontend-textanalyse}) stellt das Ergebnis der Textannotation so dar, wie es auch im Druck aussehen würde. Die Informationen über die Darstellung (HTML Klassen, CSS Attribute) sind jeweils schon im Datenmodell (in den Wörtern und Silben des \texttt{AnnotationText}) gespeichert und werden im Template der Komponente nur abgerufen. Im Template wird mithilfe von Angular Direktiven über alle Wörter und Silben des Texts iteriert, je nach Typ des Wortes werden verschiedene HTML Tags eingesetzt:
 \begin{itemize}
-	\item Für jedes annotierte Wort und jede Silbe wird ein \texttt{span} erstellt. Die Klassen und CSS Attribute der  Spans werden mit \textit{Data Binding} (\texttt{[ngClass]} und \texttt{[ngStyle]}, s. Abschnitt \ref{sec:angulardart}) dem Modell entnommen.
+	\item Für jedes annotierte Wort und jede Silbe wird ein \texttt{span} erstellt. Die Klassen und CSS Attribute der  Spans werden mit \textit{Data Binding} (\texttt{[ngClass]} und \texttt{[ngStyle]}) dem Modell entnommen.
 	
-	\item Für im Text vorkommende Linebreaks (diese werden als \texttt{Word} mit speziellem Typ dargestellt) wird jeweils ein \texttt{<br>} Tag eingesetzt.
+	\item Für im Text vorkommende Linebreaks (diese werden als \texttt{Word} mit speziellem Typ abgebildet) wird jeweils ein \texttt{<br>} Tag eingesetzt.
 	
 	\item Für Wörter, welche bei der Analyse nicht in der Datenbank gefunden wurden, wird ein Link (\texttt{span} mit \texttt{(click)} Event) eingesetzt, welcher zur manuellen Wortanalyse (Abschnitt \ref{sec:manuelleanalyse}) führt.
 \end{itemize}
@@ -435,15 +454,15 @@ Jedes annotierte Wort enthält außerdem eine Subkomponente \texttt{word\_detail
 
 Zusätzlich sind im Vorschaufenster Buttons für das Drucken und Kopieren des Texts vorhanden.
 \begin{itemize}
-	\item Der \textit{Drucken} Button öffnet den Drucken Dialog des verwendeten Browsers. Damit nur der Text in der Vorschau gedruckt wird, wird hier ein eigener CSS Style verwendet. Mit der \texttt{@media print} CSS Anweisung werden dafür alle nicht im Druck benötigten HTML Tags auf \texttt{display: none} gesetzt. und somit ausgeblendet. Zudem wird die Größe des Textvorschau Tags verändert. Ist auf dem Nutzersystem ein PDF Drucker installiert, kann der Text so auch als PDF gespeichert werden.
+	\item Der \textit{Drucken} Button öffnet den Drucken Dialog des verwendeten Browsers. Damit nur der Text in der Vorschau gedruckt wird, wird hier ein eigener CSS Style verwendet. Mit der \texttt{@media print} CSS Anweisung werden dafür alle nicht im Druck benötigten HTML Tags auf \texttt{display: none} gesetzt. und somit ausgeblendet. Zudem wird die Größe des Textvorschau Elements verändert. Ist auf dem Nutzersystem ein PDF Drucker installiert, kann der Text so auch als PDF gespeichert werden.
 	
-	\item Der Button \textit{Kopieren (Zwischenablage)} kopiert automatisch nur den Vorschautext samt Annotation in die Zwischenablage, sodass dieser z.B. in einem externen Textverarbeitungsprogramm weiter bearbeitet werden kann.
+	\item Der Button \textit{Kopieren (Zwischenablage)} kopiert automatisch den Vorschautext samt Annotation in die Zwischenablage, sodass dieser z.B. in einem externen Textverarbeitungsprogramm weiter bearbeitet werden kann.
 \end{itemize}
 
 \subsubsection{Manuelle Wortanalyse}
 \label{sec:manuelleanalyse}
 
-Ist bei der Analyse dem System ein Wort nicht bekannt, so wird es in der Textvorschau rot hinterlegt. Beim Klicken auf das Wort öffnet sich die Manuelle Wortanalyse (Komponente \textit{word\_review\_component}), in der der die Nutzerin oder der Nutzer für dieses Wort das Betonungsmuster und die Silbentrennung selbst bestimmen kann. Hierfür gibt es zum Einen ein Auswahlfenster für die betonte Silbe (durch Klicken kann diese bestimmt werden und wird bei Auswahl in deiner anderen Farbe dargestellt) und zum Anderen ein Textfeld für die Silbentrennung. Hier können manuell Trennstriche gesetzt werden, wobei der Text des Wortes selbst nicht verändert werden darf. Ändert sich bei entsprechender Eingabe die Silbentrennung, passt sich die Eingabe für das Betonungsmuster automatisch an. Mit entsprechenden Buttons kann die Nutzerin oder der Nutzer dann die vorgenommene Analyse entweder speichern, das Wort im Text ignorieren oder ohne zu speichern zum Text zurückkehren.\\
+Ist bei der Analyse dem System ein Wort nicht bekannt, so wird es in der Textvorschau rot hinterlegt. Beim Klicken auf das Wort öffnet sich die Manuelle Wortanalyse (Komponente \textit{word\_review\_component}), in welcher der die Nutzerin oder der Nutzer für dieses Wort das Betonungsmuster und die Silbentrennung selbst bestimmen kann. Hierfür gibt es zum Einen ein Auswahlfenster für die betonte Silbe (durch Klicken kann diese bestimmt werden und wird bei Auswahl in einer anderen Farbe dargestellt), und zum Anderen ein Textfeld für die Silbentrennung. Hier können manuell Trennstriche gesetzt werden, wobei der Text des Wortes selbst nicht verändert werden darf. Ändert sich bei entsprechender Eingabe die Silbentrennung, passt sich die Eingabe für das Betonungsmuster automatisch an. Mit entsprechenden Buttons kann die Nutzerin oder der Nutzer dann die vorgenommene Analyse entweder speichern, das Wort im Text ignorieren oder ohne zu speichern zum Text zurückkehren.
 
 Um die manuellen Eingaben zu erleichtern und zu minimieren werden außerdem automatische Vorschläge generiert. Das Backend sendet für jedes zu bearbeitende Wort eine Liste von Vorschlägen, die aus verschiedenen Quellen stammen können (s. Abschnitt \ref{sec:segmentation-proposals}). Durch Anklicken eines Vorschlags wird dieser in den Eingabefenstern auf der linken Seite übernommen.
 
@@ -456,34 +475,20 @@ Um die manuellen Eingaben zu erleichtern und zu minimieren werden außerdem auto
 
 \subsubsection{Textoptionen}
 
-Unter dem Textvorschaufenster befinden sich weitere Fenster zur Verwaltung des aktuellen Texts (Komponente \texttt{text\_input\_component}). Folgende Funktionen (in drei Kästen, von oben nach unten) werden hier noch angeboten:
+Unter dem Textvorschaufenster befinden sich weitere Fenster zur Verwaltung des aktuellen Texts (Komponente \texttt{text\_input\_component}). Folgende Funktionen (in drei Kästen, von oben nach unten) werden hier angeboten:
 \begin{itemize}
 	\item Der aktuelle Text wird in einem Eingabefeld angezeigt. Dieser kann hier verändert und neu analysiert werden.
-	\item Der aktuelle Text kann im Nutzerkonto (s. Abschnitt \ref{sec:nutzerkonto}) gespeichert werden. Dazu muss ein Titel eingegeben werden. Wird anschließend der \textit{Speichern} Button gedrückt, wird der Text mit zugehörigem Titel vom \texttt{UserAccountService} gespeichert.
+	\item Der aktuelle Text kann im Nutzerkonto (s. Abschnitt \ref{sec:nutzerkonto}) gespeichert werden. Dazu muss ein Titel eingegeben werden. Wird anschließend der \textit{Speichern} Button gedrückt, wird der Text mit zugehörigem Titel vom \textit{UserAccountService} gespeichert.
 	\item Die aktuelle Analyse kann vollständig verworfen werden, sodass wieder das ursprüngliche, leere Textfeld angezeigt wird.
 \end{itemize}
 
 \subsection{Annotationseinstellungen}
 
-Im Kasten links neben der Textvorschau können die Einstellungen verändert werden, die die Art der Annotation bestimmen. Die Einstellungen werden zentral in einem Objekt der Klasse \texttt{TextConfiguration} im \texttt{TextAnalysisService} gespeichert und nach Nutzereingaben auf den aktuellen Text angewandt. Wird hier eine Farbe oder ein Abstand verändert, so ist dies sofort in der Textvorschau sichtbar. Außerdem kann die aktuelle Konfiguration jederzeit als Vorlage gespeichert werden, so kann sie später (z.B. für einen anderen Text) wiederverwendet werden. Das User Interface für die Einstellungen ist in der Komponente \texttt{text\_settings\_component} definiert.
+Im Kasten links neben der Textvorschau können die Einstellungen verändert werden, welche die Art der Annotation bestimmen. Die Einstellungen werden zentral in einem Objekt der Klasse \texttt{TextConfiguration} im \textit{TextAnalysisService} gespeichert und nach Nutzereingaben auf den aktuellen Text angewandt. Wird hier eine Farbe oder ein Abstand verändert, so ist dies sofort in der Textvorschau sichtbar. Außerdem kann die aktuelle Konfiguration jederzeit als Vorlage gespeichert werden, so kann sie später (z.B. für einen anderen Text) wiederverwendet werden. Das User Interface für die Einstellungen ist in der Komponente \texttt{text\_settings\_component} definiert.
 
 \subsubsection{User Interface für Einstellungen}
 
 Ganz oben können zunächst Farben für die Annotation und die Art, wie diese verwendet werden eingestellt werden (Abbildung \ref{fig:frontend-colorconf}):
-
-\begin{itemize}
-	\item \textit{Betonte Silbe}: Hier wird die Farbe für die betonte Silbe in jedem Wort festgelegt. Außerdem kann gewählt werden, ob der Text der Silbe fett dargestellt werden soll. Für die Auswahl der Farben wurde ein entsprechend farbiger Kasten verwendet, der beim Anklicken den Farbwahldialog des Browsers öffnet.
-	
-	\item \textit{Unbetonte Silbe}: Alle unbetonten Silben werden in dieser Farbe dargestellt.
-	
-	\item \textit{2. Unbetonte Silbe}: In längeren Wörtern folgen mehrere unbetonte Silben aufeinander. Wird diese Option aktiviert, werden aufeinanderfolgende unbetonte Silben abwechselnd in den Farben der 1. und der 2. unbetonten Silbe dargestellt.
-	
-	\item \textit{Worthintergrundfarbe}: Ist diese Option aktiviert erhält zusätzlich jedes Wort (über Silbengrenzen hinaus) eine Hintergrundfarbe. Dies ist z.B. dann sinnvoll, wenn man große Abstände zwischen den einzelnen Silben wählt, so kann das Wort trotzdem als Einheit erfasst werden.
-	
-	\item \textit{Silbe hervorheben}: Hier kann gewählt werden, ob die Silbenfarben als Schriftfarbe (\textit{Vordergrundfarbe}) oder Hintergrundfarbe benutzt werden
-\end{itemize}
-
-Beispiele zu verschiedenen Einstellungen sind in der Evaluation in Abschnitt \ref{sec:annotation-results} zu finden.
 
 \begin{figure}[h!]
 	\centering
@@ -492,7 +497,21 @@ Beispiele zu verschiedenen Einstellungen sind in der Evaluation in Abschnitt \re
 	\label{fig:frontend-colorconf}
 \end{figure}
 
-Unter den Farbeinstellungen lassen sich verschiedene Größen und Abstände im Text definieren (Abbildung \ref{fig:frontend-textconf}):
+\begin{itemize}
+	\item \textbf{Betonte Silbe}: Hier wird die Farbe für die betonte Silbe in jedem Wort festgelegt. Außerdem kann gewählt werden, ob der Text der Silbe fett dargestellt werden soll. Für die Auswahl der Farben wurde ein entsprechend farbiger Kasten verwendet, der beim Anklicken den Farbwahldialog des Browsers öffnet.
+	
+	\item \textbf{Unbetonte Silbe}: Alle unbetonten Silben werden in dieser Farbe dargestellt.
+	
+	\item \textbf{2. Unbetonte Silbe}: In längeren Wörtern folgen mehrere unbetonte Silben aufeinander. Wird diese Option aktiviert, werden aufeinanderfolgende unbetonte Silben abwechselnd in den Farben der 1. und der 2. unbetonten Silbe dargestellt.
+	
+	\item \textbf{Worthintergrundfarbe}: Ist diese Option aktiviert erhält zusätzlich jedes Wort (über Silbengrenzen hinaus) eine Hintergrundfarbe. Dies ist z.B. dann sinnvoll, wenn man große Abstände zwischen den einzelnen Silben wählt, so kann das Wort trotzdem als Einheit erfasst werden.
+	
+	\item \textbf{Silbe hervorheben}: Hier kann gewählt werden, ob die Silbenfarben als Schriftfarbe (\textit{Vordergrundfarbe}) oder Hintergrundfarbe benutzt werden sollen.
+\end{itemize}
+
+Beispiele zu den verschiedenen Einstellungen sind in der Evaluation in Abschnitt \ref{sec:annotation-results} zu finden.
+
+Unterhalb der Farbeinstellungen lassen sich verschiedene Größen und Abstände im Text definieren (Abbildung \ref{fig:frontend-textconf}):
 \begin{itemize}
 	\item Schriftgröße
 	\item Silbenabstand (Abstand zwischen einzelnen Silben)
@@ -508,11 +527,11 @@ Unter den Farbeinstellungen lassen sich verschiedene Größen und Abstände im T
 	\label{fig:frontend-textconf}
 \end{figure}
 
-Alle Werte lassen sich hier mithilfe eines Sliders einstellen. Außerdem gibt es die Möglichkeit, ein beliebiges Zeichen als Silbentrennzeichen zu benutzen, was dann im Zwischenraum zwischen allen Silben im Text erscheint.\\
+Alle Werte lassen sich hier mithilfe eines Sliders einstellen. Außerdem gibt es die Möglichkeit, ein beliebiges Zeichen als Silbentrennzeichen zu benutzen, was dann im Zwischenraum zwischen allen Silben im Text erscheint.
 
 An letzter Stelle in den Einstellungen steht ein Dropdown Menü, in dem man eine Wortart auswählen kann (Abbildung \ref{fig:frontend-pos-einstellungen}). Für jede Wortart lassen sich folgende Einstellungen vornehmen, die dann auf den gesamten Text angewandt werden:
 \begin{itemize}
-	\item \textbf{Annotieren}: Aktiviert die Annotation für Wörter dieser Wortart, d.h. Silben werden getrennt und in den gewählten Farben dargestellt).
+	\item \textbf{Annotieren}: Aktiviert die Annotation für Wörter dieser Wortart, d.h. Silben werden getrennt und in den gewählten Farben dargestellt.
 	
 	\item \textbf{Unbetont}: Die Annotation ist zwar aktiv und Silben werden getrennt dargestellt, allerdings wird die betonte Silbe nicht besonders hervorgehoben.
 	
@@ -537,7 +556,7 @@ Sind bereits Vorlagen vorhanden, werden diese hier aufgelistet. Sie können ausg
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=.4\linewidth]{figures/frontend/config-vorlagen}
-	\caption{Bildschirmfoto der UI zur Verwaltung und Verwendung von Annotationsvorlagen}
+	\caption{Bildschirmfoto des User Interface zur Verwaltung und Verwendung von Annotationsvorlagen}
 	\label{fig:frontend-vorlagen}
 \end{figure}
 
@@ -552,18 +571,16 @@ Der \texttt{UserAccountService} speichert die Informationen zum aktiven Nutzerko
 
 \subsubsection{Login und Registrierung}
 
-Ist kein Nutzer eingeloggt, so wird zuerst das Login Formular angezeigt. Außerdem lautet der Link rechts oben in der Navigationsleiste \textit{Login}, sodass der Login schnell gefunden werden kann. Loggt sich eine Nutzerin oder ein Nutzer mit einem bereits bestehenden Konto ein, so enthält der Navigationslink die Email Adresse des Nutzerkontos.\\
+Ist keine Nutzerin oder kein Nutzer eingeloggt, so wird zuerst das Login Formular angezeigt. Außerdem lautet der Link rechts oben in der Navigationsleiste \textit{Login}, sodass der Login schnell gefunden werden kann. Loggt sich eine Nutzerin oder ein Nutzer mit einem bereits bestehenden Konto ein, so enthält der Navigationslink die Mailadresse des Nutzerkontos.
 
-Unter dem Login Formular führt ein Link mit der Aufschrift \textit{Neues Konto erstellen} auf die Registrierungsseite. Hier muss für die erfolgreiche Registrierung eine Mailadresse sowie ein Passwort eingegeben werden. Außerdem speichert das Nutzerkonto Vor- und Nachname, sowie die Information, ob es sich bei dem neu anzulegenden Konto um ein Expertenkonto handelt, was in einer Checkbox angegeben werden kann. Expertenkontos sollen von SprachtherapeutInnen oder NachhilfelehrerInnen genutzt werden.  Diese verfügen bei der Verifizierung über eine schwerer gewichtete Stimmt (s. Abschnitt \ref{sec:verification-service}). Wird die Registrierung abgeschickt wird das neue Nutzerkonto im Backend erstellt und die Nutzerkontoseite kehrt zum Login Formular zurück. Schlägt das Registrieren fehl (z.B wenn es schon ein Konto mit der eingegebenen Email Adresse gibt, oder weil Eingaben fehlen) wird eine entsprechende Fehlermeldung angezeigt.
+Unter dem Login Formular führt ein Link mit der Aufschrift \textit{Neues Konto erstellen} auf die Registrierungsseite. Hier muss für die erfolgreiche Registrierung eine Mailadresse sowie ein Passwort eingegeben werden. Außerdem speichert das Nutzerkonto Vor- und Nachname, sowie die Information, ob es sich bei dem neu anzulegenden Konto um ein Expertenkonto handelt, was in einer Checkbox angegeben werden kann. Expertenkonten sollen von SprachtherapeutInnen oder NachhilfelehrerInnen genutzt werden.  Diese verfügen bei der Verifizierung über eine schwerer gewichtete Stimme (s. Abschnitt \ref{sec:verification-service}). Wird die Registrierung abgeschickt, so wird das neue Nutzerkonto im Backend erstellt und die Nutzerkontoseite kehrt zum Login Formular zurück. Schlägt das Registrieren fehl (z.B. wenn es schon ein Konto mit der angegebenen Mailadresse gibt, oder weil Eingaben fehlen), wird eine entsprechende Fehlermeldung angezeigt.
 
 \subsubsection{Nutzerkonto Seite}
 
-Ist aktuell eine Nutzerin oder ein Nutzer eingeloggt, werden Informationen zum Konto, sowie Listen von gespeicherten Texten und manuell segmentierten Wörtern angezeigt.\\
+Ist aktuell eine Nutzerin oder ein Nutzer eingeloggt, werden Informationen zum Konto, sowie Listen von gespeicherten Texten und manuell segmentierten Wörtern angezeigt (Abbildung \ref{fig:frontend-useraccount}).
 
-Die Liste der gespeicherten Nutzertexte zeigt zunächst nur deren Titel als Links an (Komponente \texttt{user\_textlist\_component}). Werden diese angeklickt, sieht man den Text und hat die Möglichkeit, diesen für die Analyse zu verwenden oder zu löschen. Klickt man auf den Button \textit{Verwenden}, wechselt die Applikation zur Textanalyse und analysiert den gewählten Text. \\
-
-Unter der Textliste ist die Liste manuell segmentierter Wörter zu finden (Komponente \texttt{user\_wordlist\_component}). Die Einträge zeigen den Worttext, die Silbentrennung und das Betonungsmuster der Segmentierung. Die Einträge können auch gelöscht werden, z.B. falls ein Fehler bei deren Erstellung unterlaufen ist.\\
-
+Die Liste der gespeicherten Nutzertexte zeigt zunächst nur deren Titel als Links an (Komponente \texttt{user\_textlist\_component}). Werden diese angeklickt, sieht man den Text und hat die Möglichkeit, diesen für die Analyse zu verwenden oder zu löschen. Klickt man auf den Button \textit{Verwenden}, so wechselt die Applikation zur Textanalyse und analysiert den gewählten Text. \\
+Unter der Textliste ist die Liste manuell segmentierter Wörter zu finden, deren User Interface in der Komponente \texttt{user\_wordlist\_component} definiert ist. Die Einträge zeigen den Worttext, die Silbentrennung und das Betonungsmuster der Segmentierung. Die Einträge können auch gelöscht werden, z.B. falls ein Fehler bei deren Erstellung unterlaufen ist.\\
 Ganz unten auf der Seite sind Buttons zum Ausloggen und Löschen des Kontos vorhanden.
 
 \begin{figure}[h!]
@@ -575,11 +592,11 @@ Ganz unten auf der Seite sind Buttons zum Ausloggen und Löschen des Kontos vorh
 
 \subsection{Wort-Verifizierung}
 
-Die Wort Verifizierung dient der Bestätigung von manuellen Segmentierung von NutzerInnen durch andere NutzerInnen, sodass diese in die globale Wortdatenbank aufgenommen werden können (s. Abschnitt \ref{sec:verification-service}). Das User Interface für diesen Prozess ist in der Komponente \texttt{word\_verification\_component} implementiert.\\
+Die Wort-Verifizierung dient der Bestätigung von manuellen Segmentierung von NutzerInnen durch andere NutzerInnen, sodass diese in die globale Wortdatenbank aufgenommen werden können (s. Abschnitt \ref{sec:verification-service}). Das User Interface für diesen Prozess ist in der Komponente \texttt{word\_verification\_component} implementiert.
 
-Ist eine Nutzerin oder ein Nutzer eingeloggt, werden nacheinander zu verifizierende Wörter geladen, das User Interface ähnelt dem, das zur manuellen Analyse von unbekannten Wörtern verwendet wird (s. Abschnitt \ref{sec:manuelleanalyse}). Auch hier gibt es jeweils eine Eingabemöglichkeit zur Auswahl der betonten Silbe und zur Bestimmung der Silbentrennung. Auf der Rechten Seite befinden sich allerdings neben den automatisch generierten Vorschlägen auch die Segmentierungsvorschläge anderer NutzerInnen. Automatisch wird der Vorschlag der Nutzerin oder des Nutzers ausgewählt, die die Segmentierung zuerst erstellt hat. Haben weitere NutzerInnen den Vorschlag schon verifiziert, so erscheinen auch deren Segmentierungen in der Liste. \\
+Ist eine Nutzerin oder ein Nutzer eingeloggt, werden nacheinander zu verifizierende Wörter geladen, das User Interface ähnelt dem, das zur manuellen Analyse von unbekannten Wörtern verwendet wird (s. Abschnitt \ref{sec:manuelleanalyse}). Auch hier gibt es jeweils eine Eingabemöglichkeit zur Auswahl der betonten Silbe und zur Bestimmung der Silbentrennung. Auf der Rechten Seite befinden sich allerdings neben den automatisch generierten Vorschlägen auch die Segmentierungsvorschläge anderer NutzerInnen. Automatisch wird der Vorschlag der Nutzerin oder des Nutzers ausgewählt, welche oder welcher die Segmentierung zuerst erstellt hat. Haben weitere NutzerInnen den Vorschlag schon verifiziert, so erscheinen auch deren Segmentierungen in der Liste.
 
-Zur eigentlichen Verifizierung kann nun ein Eintrag in der Liste der Vorschläge ausgewählt werden oder, falls alle Vorschläge als falsch empfunden werden, ein andere Segmentierung auf der linken Seite eingestellt werden. Danach wird die Verifizierung mit dem Button \textit{Abschicken} gespeichert.\\
+Zur eigentlichen Verifizierung kann nun ein Eintrag in der Liste der Vorschläge ausgewählt werden oder, falls alle Vorschläge als falsch empfunden werden, eine eigene, andere Segmentierung auf der linken Seite eingestellt werden. Danach wird die Verifizierung mit dem Button \textit{Abschicken} gespeichert.\\
 Sind noch weitere zu verifizierende Einträge vorhanden, wird sofort das nächste Wort geladen. Ein Label unter der Überschrift der Komponente zeigt an, wie viele zu verifizierende Wörter es noch gibt.
 
 \begin{figure}[h!]
