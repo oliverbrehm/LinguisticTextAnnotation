@@ -4,7 +4,7 @@
 \label{sec:specification}
 
 Während der Recherche und der Konzeption des Projekts ist klar geworden, dass die zu entwickelnde Software eine relativ komplexe Architektur erfordert. Da eine Browser-basierte Webapplikation entwickelt wurde, wurde untersucht, wie die Software am besten in Teilprojekte untergliedert werden konnte. Zum einen musste das User-Interface für die Web Applikation und zum Anderen die Programmlogik entwickelt werden, welche aufgrund der benötigten Funktionalitäten (wie Datenbankanbindung und Algorithmen zur Textverarbeitung) nicht sinnvoll im Web Client implementiert werden konnte.\\
-Um eine Spezifikation für die Software zu entwerfen und den zu verwendenden Software-Stack zu definieren, wurde zunächst im Gespräch mit Experten (ComputerlinguistInnen und LerntherapeutInnen) eine Anforderungsanalyse durchgeführt, die im Folgendem Teil beschrieben wird. Im darauffolgenden Kapitel gehe ich Schritt für Schritt auf die Entwicklung des Gesamtsystems ein.
+Um eine Spezifikation für die Software zu entwerfen und den zu verwendenden Software-Stack zu definieren, wurde zunächst im Gespräch mit ExpertInnen (ComputerlinguistInnen und LerntherapeutInnen) eine Anforderungsanalyse durchgeführt, die im folgendem Teil beschrieben wird. Im darauffolgenden Kapitel gehe ich Schritt für Schritt auf die Entwicklung des Gesamtsystems ein.
 
 \section{Anforderungen an die Software}
 
@@ -23,7 +23,7 @@ Die Nutzerin oder der Nutzer soll die Möglichkeit haben, verschiedene Formate d
 Der Nutzerin oder dem Nutzer soll die Möglichkeit gegeben werden, ein Nutzerkonto zu erstellen um persönlich verwendete Daten (z.B. Texte oder Wortsegmentierungen) speichern zu können. Dazu sollen Funktionen und Interfaces zur Registrierung eines Nutzerkontos, Login, Logout, zum Bearbeiten der Nutzerinformationen und zum Löschen des Accounts bereitgestellt werden.
 
 \paragraph{Behandlung unbekannter Wörter}
-Die Nutzerin oder der Nutzer kann nacheinander die Segmentierung von Wörtern, die durch das System nicht eindeutig bestimmt wurden konnten, selbst manuell festlegen.
+Die Nutzerin oder der Nutzer kann nacheinander die Segmentierung von Wörtern, die durch das System nicht eindeutig bestimmt werden konnten, selbst manuell festlegen.
 
 \paragraph{Bestimmung der Segmentierung unbekannter Wörter}
 Für ein unbekanntes Wort wählt die Nutzerin oder der Nutzer in einem neuen View die Segmentierung selbst aus. Dafür sollen folgende Möglichkeiten gegeben werden:
@@ -46,7 +46,7 @@ Analysierte Texte sollen von der Nutzerin oder dem Nutzer zusammen mit der verwe
 Manuelle Segmentierungen von unbekannten Wörtern müssen auf Korrektheit überprüft werden können. Dazu sollen alle NutzerInnen aufgefordert werden, die Einträge, die mit anderen Nutzerkonten erstellt wurden, zu überprüfen. In einem Fenster, ähnlich zur manuellen Segmentierung, sollen die NutzerInnen fremde Einträge bestätigen oder Gegenvorschläge übermitteln können.
 
 \paragraph{Expertennutzer}
-Experten (z.B. LinguistInnen oder LerntherapeutInnen) sollen sich als Solche bei der Erstellung eines Accounts identifizieren können. Bei der Wort-Verifizierung zählt die Stimme der ExpertennutzerInnen mehr als die von NutzerInnen, die keine Experten sind.
+ExpertInnen (z.B. LinguistInnen oder LerntherapeutInnen) sollen sich als Solche bei der Erstellung eines Accounts identifizieren können. Bei der Wort-Verifizierung zählt die Stimme der ExpertennutzerInnen mehr als die von NutzerInnen, die keine Experten sind.
 
 Hieraus lassen sich folgende grundlegende Anforderungen an die Software spezifizieren:
 
@@ -96,7 +96,7 @@ Mithilfe dieser Überlegungen wurde festgelegt, dass es eine horizontale Navigat
 
 \subsubsection{Farbschema}
 
-Als nächstes wurde ein möglichst ansprechendes Farbschema gesucht. Hierfür wurder mit einem Farbrad (es wurde Adobe Color CC verwendet, \textit{https://color.adobe.com}) zwei Komplementärfarben als Hauptfarben ausgesucht (s. Abbildung \ref{fig:colors}). Die blaue Farbe wurde vor Allem für Links eingesetzt, eine hellere Version für Links im Hover Zustand. Eine weitere, ins Türkis gehende Abstufung wurde für Rahmen beim Gruppieren von Elementen auf der Seite verwendet. Der beige Farbton kommt als Hintergrundfarbe für die Navigationsleiste zum Einsatz.
+Als Nächstes wurde ein möglichst ansprechendes Farbschema gesucht. Hierfür wurde mit einem Farbrad (es wurde Adobe Color CC verwendet, \textit{https://color.adobe.com}) zwei Komplementärfarben als Hauptfarben ausgesucht (s. Abbildung \ref{fig:colors}). Die blaue Farbe wurde vor allem für Links eingesetzt, eine hellere Version für Links im Hover Zustand. Eine weitere, ins Türkis gehende Abstufung wurde für Rahmen beim Gruppieren von Elementen auf der Seite verwendet. Der beige Farbton kommt als Hintergrundfarbe für die Navigationsleiste zum Einsatz.
 
 \begin{figure}[h!]
 	\centering
@@ -108,8 +108,8 @@ Als nächstes wurde ein möglichst ansprechendes Farbschema gesucht. Hierfür wu
 
 \section{Softwarestack}
 
-Bei der Vielseitigkeit der verschiedenen Anforderungen ist die Wahl der zu verwendenden Technologien nicht unerheblich. Programmiersprachen und Frameworks mussten sorgfältig ausgewählt werden um für jedes Teilproblem eine passende Lösung zu entwickeln.\\
-Die erste wichtige Unterteilung fand statt, zum Einen in ein Frontend welches die Schnittstelle den NutzerInnen darstellt und zum Anderen in ein Backend, welches die vom System verwendeten Daten speichert, manipuliert und diese nach Aufbereitung mit entsprechenden Algorithmen an das Frontend schickt (s. Abbildung \ref{fig:frontendbackend}). Eine genaue Beschreibung über den Aufbau und die Funktion von Front- und Backend wird in Kapitel 4 gegeben.\\
+Bei der Vielseitigkeit der verschiedenen Anforderungen ist die Wahl der zu verwendenden Technologien nicht unerheblich. Programmiersprachen und Frameworks mussten sorgfältig ausgewählt werden, um für jedes Teilproblem eine passende Lösung zu entwickeln.\\
+Die erste wichtige Unterteilung fand zum Einen in ein Frontend statt, welches die Schnittstelle den NutzerInnen darstellt und zum Anderen in ein Backend, das die vom System verwendeten Daten speichert, manipuliert und diese nach Aufbereitung mit entsprechenden Algorithmen an das Frontend schickt (s. Abbildung \ref{fig:frontendbackend}). Eine genaue Beschreibung über den Aufbau und die Funktion von Front- und Backend wird in Kapitel 4 gegeben.\\
 
 \begin{figure}[h!]
 	\centering
@@ -128,7 +128,7 @@ Diese Aufteilung ist in der Webentwicklung weit verbreitet\cite{Fielding:2000:AS
 \end{itemize}
 
 \subsection{Verwendete Technologien}
-Bei den verschiedenen, zu realisierenden Ziele gibt es für jedes Teilziel Technologien, die Vorteile gegenüber Anderen bieten. Die Verwaltung von Datenbanken ist zum Beispiel besser mit einer server-seitigen Skriptsprache zu implementieren, als mit den Möglichkeiten, die das Frontend bietet. Im Web Frontend dagegen sind gewisse Technologien wie \textit{HTML}, \textit{CSS} und \textit{JavaScript} Standard, die zwangsläufig verwendet werden müssen. Daher wird in der Applikation eine Vielzahl verschiedener Technologien verwendet, eine Übersicht ist hier gegeben:
+Bei den verschiedenen zu realisierenden Zielen gibt es für jedes Teilziel Technologien, die Vorteile gegenüber Anderen bieten. Die Verwaltung von Datenbanken ist zum Beispiel besser mit einer server-seitigen Skriptsprache zu implementieren, als mit den Möglichkeiten, die das Frontend bietet. Im Web Frontend dagegen sind gewisse Technologien wie \textit{HTML}, \textit{CSS} und \textit{JavaScript} Standard, die zwangsläufig verwendet werden müssen. Daher wird in der Applikation eine Vielzahl verschiedener Technologien verwendet, eine Übersicht ist hier gegeben:
 
 \begin{itemize}
 	\item Backend: \textit{Python} mit den Frameworks \textit{Flask}, \textit{Spacy} und \textit{Sqlalchemy}
@@ -143,12 +143,12 @@ Im Folgenden werden die einzelnen Technologien und die Gründe für deren Verwen
 \label{sec:backend}
 
 Um die Entwicklung des Backends möglichst einfach zu halten, wurde zunächst untersucht, ob ein fertiges Backend (Backend-a- a-Service) verwendet werden kann. Hierfür kämen z.B. fertige Services wie MongoDB oder Firebase mit integrierter NoSQL Datenbank infrage\cite{almootassem2017}.\\
-Zunächst wurde Firebase genauer untersucht und in Verbindung mit dem Frontend getestet. Prinzipiell war es gut möglich, eine Verbindung mit dem Frontend herzustellen (Daten in der Firebase Datenbank können mit HTTP Requests geschrieben und gelesen werden). Die Möglichkeiten des Backends beschränkten sich allerdings auf Datenmanipulation und Cloud Code (server-seitiges JavaScript in Firebase).\\
+Zunächst wurde Firebase genauer untersucht und in Verbindung mit dem Frontend getestet. Prinzipiell war es gut möglich eine Verbindung mit dem Frontend herzustellen (Daten in der Firebase Datenbank können mit HTTP Requests geschrieben und gelesen werden). Die Möglichkeiten des Backends beschränkten sich allerdings auf Datenmanipulation und Cloud Code (server-seitiges JavaScript in Firebase).\\
 Ein Problem dabei war, dass komplexere Logik wie das \textit{Natural Language Processing} nur entweder im Frontend oder im Backend mit \textit{JavaScript} implementiert werden konnte. NLP Frameworks, wie es sie z.B. in \textit{Python} oder \textit{Java} gibt, konnten somit nicht verwendet werden. Wurde der Text im Frontend in einzelne Wörter zerlegt und diese in der Firebase Datenbank nachgeschlagen, musste zudem für jedes Wort ein eigener HTTP Request geschickt werden, was zu unbefriedigenden Antwortzeiten führte.\\
 
-Aufgrund der beschriebenen Probleme wurde parallel ein alternatives Backend in \textit{Python} implementiert. Die Entwicklung der Softwarearchitektur wurde an den \textit{Representational State Transfer} (REST) angelehnt. Dieser beschreibt Prinzipien und Restriktionen für die Konzeption von Webarchitekturen\cite{Fielding:2000:ASD:932295}. Diese Lösung brachte zwar wiederum eigene Schwierigkeiten und Probleme mit sich (s. Abschnitt \ref{sec:deployment}), wurde aber für die kurzfristig bessere und schneller zu entwickelnde Variante erachtet und daher weiter verfolgt. Da in der Praxis die Entwicklung und Wartung eines eigenen Backends einen erheblichen Mehraufwand bedeuten kann, wäre weiterführend auch eine kombinierte Lösung denkbar, in der ein Backend-as-a-Service, wie Firebase benutzt wird, aber zwischen Front- und Backend noch eine weitere Schicht eingesetzt wird, welche Programmlogik enthält und NLP Berechnungen durchführen kann.
+Aufgrund der beschriebenen Probleme wurde parallel ein alternatives Backend in \textit{Python} implementiert. Die Entwicklung der Softwarearchitektur wurde an den \textit{Representational State Transfer} (REST) angelehnt. Dieser beschreibt Prinzipien und Restriktionen für die Konzeption von Webarchitekturen\cite{Fielding:2000:ASD:932295}. Diese Lösung brachte zwar wiederum eigene Schwierigkeiten und Probleme mit sich (s. Abschnitt \ref{sec:deployment}), wurde aber für die kurzfristig bessere und schneller zu entwickelnde Variante erachtet und daher weiter verfolgt. Da in der Praxis die Entwicklung und Wartung eines eigenen Backends einen erheblichen Mehraufwand bedeuten kann, wäre weiterführend auch eine kombinierte Lösung denkbar. Hierfür könnt ein Backend-as-a-Service wie Firebase benutzt, aber zwischen Front- und Backend noch eine weitere Schicht eingesetzt werden, welche Programmlogik enthält und NLP Berechnungen durchführen kann.
 
-Die Einhaltung der REST Restriktionen (z.B. muss das Backend zustandslos sein und die Anfragen müssen resourcenorientiert formuliert werden) wurden so gut es im Rahmen der Arbeit möglich war eingehalten, allerdings konnte die Konzeption einer konsequenten Softwarearchitektur nicht im Vordergrund stehen, da die entwickelte Applikation lediglich als Prototyp betrachtet werden muss. Im Folgenden werden die Technologien, die für das Python Backend benutzt wurden vorgestellt.
+Die Einhaltung der REST Restriktionen (z.B. muss das Backend zustandslos sein und die Anfragen müssen resourcenorientiert formuliert werden) wurden so gut es im Rahmen der Arbeit möglich war eingehalten. Allerdings konnte die Konzeption einer konsequenten Softwarearchitektur nicht im Vordergrund stehen, da die entwickelte Applikation lediglich als Prototyp betrachtet werden muss. Im Folgenden werden die Technologien, die für das Python Backend benutzt wurden vorgestellt.
 
 \paragraph{Python}
 \label{sec:python}
@@ -175,7 +175,7 @@ def user_add_word():
 \paragraph{Spacy}
 \label{sec:spacy}
 
-Für die Erledigung der linguistischen Aufgaben in der Applikation wurde nach einem effektiven NLP Parser gesucht. Hierfür wurde erst das \textit{Natural Language Toolkit} (NLTK)\cite{Bird2004a} ausprobiert. Hierbei handelt es sich um eine Reihe von Python Modulen für die Durchführung von NLP Aufgaben. Es wurde Open Source und vor Allem für akademische Zwecke entwickelt und wurde für die Verwendung in der Applikation als geeignet befunden.\\
+Für die Erledigung der linguistischen Aufgaben in der Applikation wurde nach einem effektiven NLP Parser gesucht. Hierfür wurde erst das \textit{Natural Language Toolkit} (NLTK)\cite{Bird2004a} ausprobiert. Hierbei handelt es sich um eine Reihe von Python Modulen für die Durchführung von NLP Aufgaben. Es wurde Open Source und vor allem für akademische Zwecke entwickelt und wurde für die Verwendung in der Applikation als geeignet befunden.\\
 Zusätzlich wurde der \textit{Spacy} Parser untersucht, ein weiteres Python NLP Framework. Bei der Erstellung von \textit{Spacy} wurde unter Anderem der Fokus auf Performanz gelegt, entwickelt wurde es in \textit{Cython} (eine zu Python kompatible Sprache, welche aber bei der Kompilierung nach C übersetzt wird), was zu schnellerer Ausführung im Vergleich zum Python Interpreter führt.\\
 Eigenes Testen und andere Quellen haben gezeigt, dass der \textit{Spacy} Parser aufgrund seiner Effizienz\cite{Stent2015} und Benutzbarkeit für die Aufgabe sehr gut geeignet ist. Er wurde daher in der Applikation zum Parsen des Eingabetexts, als Tokenizer und zur Bestimmung der Part-of-Speech Tags anstelle von NLTK benutzt.
 
