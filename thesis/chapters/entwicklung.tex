@@ -19,7 +19,7 @@ Das Entwicklung des Systems wurde in drei Teilprojekte untergliedert:
 \end{enumerate}
 
 Dabei wurde Schritt 1 als Erstes durchgeführt, die Verfügbarkeit der Basisdatenbank war Voraussetzung, um mit der Entwicklung von Front- und Backend zu beginnen. Als eine erste Version der Datenbank vorlag, wurde zunächst mit der Entwicklung eines minimalen Backends begonnen, welches die Kernfunktionalität - das Analysieren von Texten - beherrschte. Damit konnte eine erste Version des Frontends erstellt werden, um einen ersten Eindruck zu bekommen, wie alle Technologien miteinander funktionieren.\\
-Im Anschluss konnten Front- und Backend parallel entwickelt werden. Es wurden immer wieder Funktionen im Backend entwickelt, woraufhin das Frontend angepasst wurde, um den NutzerInnen diese Funktionen anzubieten. Zu diesem Zeitpunkt wurde auch die Basisdatenbank einige male überarbeitet, so ist das Gesamtsystem Schritt für Schritt auf eine agile Weise \tocite{agil} gewachsen. Im Folgenden wird näher auf die drei Teilprojekte eingegangen.
+Im Anschluss konnten Front- und Backend parallel entwickelt werden. Es wurden immer wieder Funktionen im Backend entwickelt, woraufhin das Frontend angepasst wurde, um den NutzerInnen diese Funktionen anzubieten. Zu diesem Zeitpunkt wurde auch die Basisdatenbank einige male überarbeitet, so ist das Gesamtsystem Schritt für Schritt gewachsen. Im Folgenden wird näher auf die drei Teilprojekte eingegangen.
 
 \section{Erstellung einer Basisdatenbank}
 \label{sec:worddatabase}
@@ -209,9 +209,9 @@ Die Methode \texttt{query\_text} bekommt den gesamten zu analysierenden Text üb
 \subsubsection{Generierung von Segmentierungsvorschlägen}
 \label{sec:segmentation-proposals}
 
-Der \textit{DictionaryService} bietet auch die Möglichkeit, automatisch Segmentierungsvorschläge zu generieren. Diese werden im Frontend dazu benutzt, den NutzerInnen bei der manuellen Wortsegmentierung die Arbeit zu erleichtern, indem das Wort schon in Silben zerlegt wird und versucht wird, automatisch die Wortbetonung zu bestimmen. Der Standardvorschlag, den das System liefert ist einfach die Silbentrennung, die der Python Silbentrenner \textit{Pyphen} liefert. Diese ist in vielen Fällen korrekt und bietet in jedem Fall einen Anhaltspunkt für die Silbentrennung des Wortes. Zudem wird beim Standardvorschlag ein Betonungsmuster generiert, welches immer die erste Silbe im Wort betont. Auch das ist in der deutschen Sprache oft der Fall, so können Betonung und Silbentrennung bei der manuellen Analyse einfach bestätigt werden.\\
+Der \textit{DictionaryService} bietet auch die Möglichkeit, automatisch Segmentierungsvorschläge zu generieren. Diese werden im Frontend dazu benutzt, den NutzerInnen bei der manuellen Wortsegmentierung die Arbeit zu erleichtern, indem das Wort schon in Silben zerlegt und versucht wird, automatisch die Wortbetonung zu bestimmen. Der Standardvorschlag, den das System liefert ist einfach die Silbentrennung, die der Python Silbentrenner \textit{Pyphen} liefert. Diese ist in vielen Fällen korrekt und bietet in jedem Fall einen Anhaltspunkt für die Silbentrennung des Wortes. Zudem wird beim Standardvorschlag ein Betonungsmuster generiert, welches immer die erste Silbe im Wort betont. Auch das ist in der deutschen Sprache oft der Fall, so können Betonung und Silbentrennung bei der manuellen Analyse einfach bestätigt werden.
 
-Bei der Abfrage der Vorschläge im Backend wird eine Liste von Segmentierungsvorschlägen zurückgeliefert. Der Standardvorschlag mit \textit{Pyphen} ist nur eine Möglichkeit. Hier wurde überlegt, aus mehreren externen Systemen, wie z.B. MARY TTS oder \todo{BAS, PhonoLex} (s. Abschnitt \ref{sec:forschung-database}), oder später auch z.B. Duden und Anderen, Vorschläge zu sammeln und den NutzerInnen in einer Liste zu präsentieren, aus welcher der passendste Vorschlag ausgewählt werden kann. Exemplarisch wurde hier eine Anfrage an MARY TTS geschickt und in der Antwort an das Frontend mit eingebunden. Dieses System kann ebenfalls mit HTTP Requests abgefragt werden. Das entsprechende Interface ist unter \textit{http://mary.dfki.de:59125/process} zu erreichen. Tabelle \ref{table:mary} zeigt die bei der Anfrage verwendeten GET Parameter. MARY liefert eine Antwort im XML Format zurück, welche die phonologische Silbentrennung und die Betonung enthält. Das XML wird entsprechend geparsed, womit dann ein neuer Segmentierungsvorschlag bestimmt werden kann.
+Bei der Abfrage der Vorschläge im Backend wird eine Liste von Segmentierungsvorschlägen zurückgeliefert. Der Standardvorschlag mit \textit{Pyphen} ist nur eine Möglichkeit. Hier wurde überlegt, aus mehreren externen Systemen, wie z.B. MARY oder BALLOON (s. Abschnitt \ref{sec:forschung-database}), sowie später auch Duden und Anderen, Vorschläge zu sammeln und den NutzerInnen in einer Liste zu präsentieren, aus welcher der passendste Vorschlag ausgewählt werden kann. Exemplarisch wurde hier eine Anfrage an MARY geschickt und der resultierende Vorschlag in der Antwort an das Frontend mit eingebunden. Dieses System kann mit HTTP Requests angefragt werden. Das entsprechende Interface ist unter \textit{http://mary.dfki.de:59125/process} zu erreichen. Tabelle \ref{table:mary} zeigt die bei der Anfrage verwendeten GET Parameter. MARY liefert eine Antwort im XML Format zurück, welche die phonologische Silbentrennung und die Betonung enthält. Das XML wird entsprechend geparst, womit dann ein neuer Segmentierungsvorschlag bestimmt werden kann.
 
 \begin{table}[h!]
 	\centering
@@ -454,7 +454,7 @@ Um die manuellen Eingaben zu erleichtern und zu minimieren werden außerdem auto
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=.8\linewidth]{figures/frontend/manuelle-analyse}
-	\caption{Bildschirmfoto der Manuellen Wortanalyse\todo{bild wo MARY funktioniert!}}
+	\caption{Bildschirmfoto der Manuellen Wortanalyse}
 	\label{fig:frontend-manuelle-analyse}
 \end{figure}
 
