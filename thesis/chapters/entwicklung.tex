@@ -67,7 +67,7 @@ Das Betonungsmuster identifiziert eine Silbe als Hauptbetonung im Wort. Dieser E
 Das Lemma ist die Grundform eines Wortes. Diese unterscheidet sich je nach Wortart, beispielsweise ist das Lemma eines Verbs dessen Infinitiv und das Lemma eines Pronomens die erste Person Singular.
 
 
-Neben den Worteinträgen sollen in der Datenbank noch Informationen über die Herkunft der Wörter gespeichert werden. Neben den Basiseinträgen, die aus dem CELEX extrahiert werden, wird den NutzerInnen später die Möglichkeit gegeben, Einträge zur Datenbank hinzuzufügen. Um diesen Vorgang nachvollziehbar zu machen gibt es eine zweite Tabelle, in welcher Einträge für neu hinzugefügte Wörter mit Zeitstempel angelegt werden. Das Folgende Schema \ref{fig:worddatabase} zeigt die Struktur der Wortdatenbank.
+Neben den Worteinträgen sollen in der Datenbank noch Informationen über die Herkunft der Wörter gespeichert werden. Neben den Basiseinträgen, die aus dem CELEX extrahiert werden, wird den NutzerInnen später die Möglichkeit gegeben, Einträge zur Datenbank hinzuzufügen. Um diesen Vorgang nachvollziehbar zu machen gibt es eine zweite Tabelle, in welcher Einträge für neu hinzugefügte Wörter mit Zeitstempel angelegt werden. Das folgende Schema \ref{fig:worddatabase} zeigt die Struktur der Wortdatenbank.
 
 \begin{figure}[h!]
 	\centering
@@ -256,7 +256,7 @@ Der \textit{UserService} dient der Verwaltung der Nutzerdaten und der Authentifi
 \subsection{Verification Service}
 \label{sec:verification-service}
 
-Von den NutzerInnen manuell erstellte Segmentierungen für Wörter können nicht direkt in die globale Wortdatenbank für alle NutzerInnen übernommen werden, da bei der Segmentierung Fehler gemacht werden können. Eine Verifizierung der Einträge durch mehrere NutzerInnen soll die Anzahl der fehlerhaften Einträge, die der Datenbank hinzugefügt werden minimieren. Der \textit{VerificationService} definiert die Funktionen, mit denen zu verifizierende Segmentierungen abgefragt oder Verifizierungsvorschläge abgeschickt werden können (s. \textit{Croudsourcing} in Abschnitt \ref{sec:forschung-database}).\\
+Von den NutzerInnen manuell erstellte Segmentierungen für Wörter können nicht direkt in die globale Wortdatenbank für alle NutzerInnen übernommen werden, da bei der Segmentierung Fehler gemacht werden können. Eine Verifizierung der Einträge durch mehrere NutzerInnen soll die Anzahl der fehlerhaften Einträge, die der Datenbank hinzugefügt werden minimieren. Der \textit{VerificationService} definiert die Funktionen, mit denen zu verifizierende Segmentierungen abgefragt oder Verifizierungsvorschläge abgeschickt werden können (s. \textit{Crowdsourcing} in Abschnitt \ref{sec:forschung-database}).\\
 Ein zu verifizierender Eintrag ist hierbei direkt ein \textit{user\_word} (s. Abbildung \ref{fig:userdb}), dass von einer Nutzerin oder einem Nutzer bei der manuellen Segmentierung erstellt wurde. Die Verifizierung (Klasse \texttt{VerificationProposal}) bezieht sich auf diesen Eintrag und enthält ebenfalls Silbentrennung und Betonungsmuster für das Wort. Nach der Übermittlung eines Verifizierungsvorschlags prüft ein Algorithmus, ob ausreichend Verifizierungen unterschiedlicher NutzerInnen für das Wort übereinstimmen (also Silbentrennung und Betonung identisch sind). Ist dies der Fall, wird das Wort in die globale Wortdatenbank übernommen und alle Verifizierungsvorschläge werden wieder entfernt. Im Folgenden wird der Verifizierungsalgorithmus (dieser wird dann verwendet, wenn ein neuer Verifizierungsvorschlag übermittelt wird) kurz vorgestellt:
 
 \begin{enumerate}
@@ -371,7 +371,7 @@ Die Klasse \texttt{TextConfiguration} (Abbildung \ref{fig:textconf}) wird zur Ve
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=.5\linewidth]{figures/frontend/uml-textconfig}
-	\caption{UML Klassendiagramm der Textkonfiguration mit der Wortartkonfiguration (bestehend aus dein Einstellungen für alle 12 Wortarten)}
+	\caption{UML Klassendiagramm der Textkonfiguration mit der Wortartkonfiguration (bestehend aus den Einstellungen für alle 12 Wortarten)}
 	\label{fig:textconf}
 \end{figure}
 
@@ -389,7 +389,7 @@ Die Textanalyse (Komponente \textit{text\_analysis\_component}) stellt das Herzs
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=.5\linewidth]{figures/frontend/textvorschau}
+	\includegraphics[width=.8\linewidth]{figures/frontend/textvorschau}
 	\caption{Bildschirmfoto der Textanalyse-Vorschau}
 	\label{fig:frontend-textanalyse}
 \end{figure}
@@ -400,7 +400,7 @@ Ist noch kein Text analysiert, so zeigt die Textanalyse ein leeres Eingabetextfe
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=.6\linewidth, frame]{figures/frontend/texteingabe}
+	\includegraphics[width=.75\linewidth, frame]{figures/frontend/texteingabe}
 	\caption{Bildschirmfoto der Texteingabe}
 	\label{fig:frontend-texteingabe}
 \end{figure}
