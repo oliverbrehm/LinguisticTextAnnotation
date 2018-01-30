@@ -6,20 +6,20 @@ Im Rahmen dieser Arbeit wurde die beschriebene Webapplikation prototypisch entwi
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=.8\linewidth, frame]{figures/frontend/textanalyse}
+	\includegraphics[width=.9\linewidth, frame]{figures/frontend/textanalyse}
 	\caption{Bildschirmfoto der Textanalyse im fertigen Prototyp}
 	\label{fig:textanalyse}
 \end{figure}
 
-Das Entwicklung des Systems wurde in drei Teilprojekte untergliedert:
+Die Entwicklung des Systems wurde in drei Teilprojekte untergliedert:
 \begin{enumerate}
 	\item Erstellung der Basisdatenbank aus dem Wörterbuch CELEX2
 	\item Entwicklung des Backends mit Python
 	\item Entwicklung des Frontends mit gängigen Webtechnologien und AngularDart
 \end{enumerate}
 
-Dabei wurde Schritt 1 als Erstes durchgeführt, die Verfügbarkeit der Basisdatenbank war Voraussetzung, um mit der Entwicklung von Front- und Backend zu beginnen. Als eine erste Version der Datenbank vorlag, wurde zunächst mit der Entwicklung eines minimalen Backends begonnen, welches die Kernfunktionalität - das Analysieren von Texten - beherrschte. Damit konnte eine erste Version des Frontends erstellt werden, um einen ersten Eindruck zu bekommen, wie alle Technologien miteinander funktionieren.\\
-Im Anschluss konnten Front- und Backend parallel entwickelt werden. Es wurden immer wieder Funktionen im Backend entwickelt, woraufhin das Frontend angepasst wurde, um den NutzerInnen diese Funktionen anzubieten. Zu diesem Zeitpunkt wurde auch die Basisdatenbank einige male überarbeitet, so ist das Gesamtsystem Schritt für Schritt gewachsen. Im Folgenden wird näher auf die drei Teilprojekte eingegangen.
+Dabei wurde Schritt 1 als Erstes durchgeführt, die Verfügbarkeit der Basisdatenbank war Voraussetzung, um mit der Entwicklung von Front- und Backend zu beginnen. Als eine erste Version der Datenbank vorlag wurde zunächst mit der Entwicklung eines minimalen Backends begonnen, welches die Kernfunktionalität - das Analysieren von Texten - beherrschte. Damit konnte eine erste Version des Frontends erstellt werden, um einen ersten Eindruck zu bekommen, wie alle Technologien miteinander funktionieren.\\
+Im Anschluss konnten Front- und Backend parallel entwickelt werden. Es wurden immer wieder Funktionen im Backend entwickelt, woraufhin das Frontend angepasst wurde, um den NutzerInnen diese Funktionen anzubieten. Zu diesem Zeitpunkt wurde auch die Basisdatenbank einige Male überarbeitet, so ist das Gesamtsystem Schritt für Schritt gewachsen. Im Folgenden wird näher auf die drei Teilprojekte eingegangen.
 
 \section{Erstellung einer Basisdatenbank}
 \label{sec:worddatabase}
@@ -30,7 +30,7 @@ Für die Segmentierung von Wörtern in Silben mit Betonung wird eine SQLite Date
 Hier wurde darauf geachtet, eine einheitliche orthographische Form der Wörter durchzusetzen. Wörter bestehen nur aus Kleinbuchstaben (auch die Anfänge von Nomen und Eigennamen). Außerdem wird hier auf Umlaute verzichtet, \qq{ä} wird durch \qq{ae} ersetzt, \qq{ö} durch \qq{oe}, \qq{ü} durch \qq{ue} und \qq{ß} durch \qq{ss}. Beispielsweise wird das Wort \textit{Häuser} zu \textit{haeuser}. So kann beim Nachschlagen garantiert werden, dass ein Wort nicht wegen uneinheitlicher Schreibweise nicht gefunden wird, sofern alle Umlaute vorher ersetzt wurden.
 
 \paragraph{Wortart}
-Um Doppeldeutigkeiten zu vermeiden wird ein Eintrag nur eindeutig über das Paar aus Worttext und Wortart identifiziert. Viele Grundformen von Verben kommen zum Beispiel auch als Nomen vor, werden aber dann groß geschrieben (\qq{sie sollte die Maschine \textit{verwenden}} gegen \qq{das \textit{Verwenden} der Maschine}). Die Bezeichner für Wortarten sind in verschiedenen Systemen wie dem CELEX und dem NLP Parser \textit{Spacy} unterschiedlich, daher wird hier eine eigene - im Gesamtsystem konsistente - Benennung der Wortart eingeführt (die Benennung orientiert sich an den Tag Namen des Spacy Parsers, verwendet jedoch zur Unterscheidung Klein- statt Großschreibung):
+Um Doppeldeutigkeiten zu vermeiden wird ein Eintrag nur eindeutig über das Paar aus Worttext und Wortart identifiziert. Viele Grundformen von Verben kommen zum Beispiel auch als Nomen vor, werden aber dann groß geschrieben (\qq{sie sollte die Maschine \textit{verwenden}} gegen \qq{das \textit{Verwenden} der Maschine}). Die Bezeichner für Wortarten sind in verschiedenen Systemen wie dem CELEX und dem NLP Parser \textit{Spacy} unterschiedlich, daher wird hier eine eigene - im Gesamtsystem konsistente - Benennung der Wortart eingeführt (die Benennung orientiert sich an den Namen der Spacy Tags, verwendet jedoch zur Unterscheidung Klein- statt Großschreibung):
 
 \begin{table}[h!]
 	\centering
@@ -61,10 +61,10 @@ Um Doppeldeutigkeiten zu vermeiden wird ein Eintrag nur eindeutig über das Paar
 Die Silbentrennung enthält die einzelnen Silben, getrennt durch einen Querstrich (\qq{-}). Im Gegensatz zum Worttext erhält dieser Eintrag Groß- und Kleinschreibung, sowie alle Umlaute. Die Silbentrennung des Wortes \textit{Möglichkeit} ist also \textit{Mög-lich-keit}.
 
 \paragraph{Betonungsmuster}
-Das Betonungsmuster identifiziert eine Silbe als Hauptbetonung im Wort. Dieser Eintrag ist ein String aus aneinandergereihten \qq{0} und \qq{1} Werten. Die \qq{1} bezeichnet dabei die betonte Silbe, die \qq{0} stellt eine unbetonte Silbe dar. Nebenbetonungen werden im Rahmen dieser Arbeit vernachlässigt. Das Betonungsmuster besteht nur aus einer einzigen \qq{1} - der Hauptbetonung - während alle anderen Silben unbetont (\qq{0}) bleiben. Beispiel resultiert das Wort \textit{hervorragend} mit der Silbentrennung \textit{her-vor-ra-gend} in das Betonungsmuster \qq{0100}.
+Das Betonungsmuster identifiziert eine Silbe als Hauptbetonung im Wort. Dieser Eintrag ist ein String aus aneinandergereihten \qq{0} und \qq{1} Werten. Die \qq{1} bezeichnet dabei die betonte Silbe, die \qq{0} stellt eine unbetonte Silbe dar. Nebenbetonungen werden im Rahmen dieser Arbeit vernachlässigt (s. Abschnitt \ref{sec:forschung-database}). Das Betonungsmuster besteht nur aus einer einzigen \qq{1} - der Hauptbetonung - während alle anderen Silben unbetont (\qq{0}) bleiben. Beispielsweise resultiert das Wort \textit{hervorragend} mit der Silbentrennung \textit{her-vor-ra-gend} in das Betonungsmuster \qq{0100}.
 
 \paragraph{Lemma}
-Das Lemma ist die Grundform des Wortes. Diese unterscheidet sich je nach Wortart, beispielsweise ist das Lemma eines Verbs dessen Grundform und das Lemma eines Pronomens die erste Person Singular.
+Das Lemma ist die Grundform eines Wortes. Diese unterscheidet sich je nach Wortart, beispielsweise ist das Lemma eines Verbs dessen Infinitiv und das Lemma eines Pronomens die erste Person Singular.
 
 
 Neben den Worteinträgen sollen in der Datenbank noch Informationen über die Herkunft der Wörter gespeichert werden. Neben den Basiseinträgen, die aus dem CELEX extrahiert werden, wird den NutzerInnen später die Möglichkeit gegeben, Einträge zur Datenbank hinzuzufügen. Um diesen Vorgang nachvollziehbar zu machen gibt es eine zweite Tabelle, in welcher Einträge für neu hinzugefügte Wörter mit Zeitstempel angelegt werden. Das Folgende Schema \ref{fig:worddatabase} zeigt die Struktur der Wortdatenbank.
@@ -76,11 +76,11 @@ Neben den Worteinträgen sollen in der Datenbank noch Informationen über die He
 	\label{fig:worddatabase}
 \end{figure}
 
-Alle in der Worttabelle beschriebenen Einträge sind auch im CELEX vorhanden. Der Folgende Abschnitt beschreibt, wie die Daten aus dem Lexikon extrahiert und in der Wortdatenbank gespeichert wurden.
+Alle in der Worttabelle beschriebenen Einträge sind auch im CELEX vorhanden. Der folgende Abschnitt beschreibt, wie die Daten aus dem Lexikon extrahiert und in der Wortdatenbank gespeichert wurden.
 
 \subsection{Implementierung}
 
-Für die Generierung der Datenbank wurde das python Projekt \textit{celex2db} erstellt, welches in \qq{/backend/celex2db} zu finden ist (alle Pfadangaben in diesem Abschnitt beziehen sich auf dieses Verzeichnis). Die Daten im CELEX sind über mehrere Dateien verteilt. So gibt es eine Teilung in Sprachen (für die Datenbank werden nur Deutsche Wörter benutzt, zu finden in \qq{celex2/german}), Wörter und Lemmata sowie in Orthographie, Phonologie und Morphologie. Die Teilung in Wort und Lemma spart Speicherplatz. Das Lemma eines Verbs zum Beispiel, ist die Grundform dieses. Zur Flexionsform \textit{gehst} gehört also das Lemma \textit{gehen}. Viele Eigenschaften des Verbs \textit{gehen} beziehen sich auf alle Flexionsformen, so müssen diese nicht für alle Formen redundant gespeichert werden.\\
+Für die Generierung der Datenbank wurde das python Projekt \textit{celex2db} erstellt, welches in \qq{/backend/celex2db} zu finden ist (alle Pfadangaben in diesem Abschnitt beziehen sich auf dieses Verzeichnis). Die Daten im CELEX sind über mehrere Dateien verteilt. So gibt es eine Teilung in Sprachen (für die Datenbank werden nur deutsche Wörter benutzt, zu finden in \qq{celex2/german}), Wörter und Lemmata sowie in Orthographie, Phonologie und Morphologie. Die Teilung in Wort und Lemma spart Speicherplatz. Das Lemma eines Verbs zum Beispiel, ist dessen Infinitiv. Zur Flexionsform \textit{gehst} gehört also das Lemma \textit{gehen}. Viele Eigenschaften des Verbs \textit{gehen} beziehen sich auf alle Flexionsformen, so müssen diese nicht für alle Formen redundant gespeichert werden.\\
 Die Einträge in den Wortlisten des CELEX verweisen jeweils mit einer ID auf den zugehörigen Eintrag in der Lemma Liste. Da in der zu entwickelnden Datenbank auch das Lemma gespeichert werden sollte, mussten sowohl Wort- als auch Lemma-Listen geparst werden.
 
 Das Hauptskript \textit{celex2db.py} führt die folgenden Schritte aus:
@@ -90,21 +90,21 @@ Das Hauptskript \textit{celex2db.py} führt die folgenden Schritte aus:
 	\item Generierung von Einträgen aus Wort- und Lemma-Listen und Schreiben in die Datenbank
 \end{enumerate}
 
-Während der Ausführung des Skripts werden Schrittweise Fortschrittsangaben mit Fehlern ausgegeben, da das Parsen und Erstellen der Datenbank einige Zeit benötigt (mehr dazu im Abschnitt \ref{sec:database-results}).\\
+Während der Ausführung des Skripts werden schrittweise Fortschrittsangaben mit Fehlern ausgegeben, da das Parsen und Erstellen der Datenbank einige Zeit benötigt (mehr dazu im Abschnitt \ref{sec:database-results}).
 
 Die Klasse \texttt{CelexDictionary} im Skript \textit{celex.py} bietet die Methoden zum Parsen der Wort- und Lemma-Listen. In der Methode zum Parsen der Lemmata wird die CELEX Datei \textit{gml.cd} verarbeitet, die morphologische Informationen zu den Lemmata enthält. Jede Zeile enthält ein Lemma, welches in mit ID, Text und Wortart gespeichert wird.\\
-Beim Parsen der Wort-Listen werden die beiden Dateien \textit{g\textbf{p}w.cd} und \textit{g\textbf{o}w.cd} verarbeitet, welche phonologische bzw. orthographische Informationen zu allen enthaltenen Flexionsformen der Wörter enthalten. Die IDs und Reihenfolge in beiden Wort-Listen stimmen überein, sodass beide Listen gleichzeitig verarbeitet werden konnten. Aus der phonologischen Liste wurden der Text des Wortes, der Verweis auf das zugehörige Lemma sowie die phonologische Darstellung entnommen. Die orthographischen Liste lieferte lediglich die Silbentrennung.\\
-Die geparsten Lemma- und Wortstrukturen wurden zusammengeführt und daraus Einträge für die Datenbank erstellt, welche dann mit dem Skript \qq{writeSQLite.py} in die Datenbank übertragen wurden. In einem frühen Entwicklungsstadium wurden hier SQL Instruktionen verwendet um die Datenbankeinträge zu erstellen. Nach der Entwicklung des \texttt{DictionaryService} im Backend (genauer beschrieben im Abschnitt \ref{sec:dictionary-service}) wurde später direkt auf diesen zugegriffen, um redundanten Code zu vermeiden. Ein einfacher Funktionsaufruf der Methode \texttt{add\_word} des \texttt{DictionaryService} fügt den Eintrag der Wortdatenbank hinzu.
+Beim Parsen der Wort-Listen werden die beiden Dateien \textit{g\textbf{p}w.cd} und \textit{g\textbf{o}w.cd} verarbeitet, welche phonologische bzw. orthographische Informationen zu allen enthaltenen Flexionsformen der Wörter enthalten. Die IDs und Reihenfolge in beiden Wort-Listen stimmen überein, sodass beide Listen gleichzeitig verarbeitet werden konnten. Aus der phonologischen Liste wurden der Text des Wortes, der Verweis auf das zugehörige Lemma sowie die phonologische Darstellung entnommen. Die orthographische Liste lieferte lediglich die Silbentrennung.\\
+Die geparsten Lemma- und Wortstrukturen wurden zusammengeführt und daraus Einträge für die Datenbank erstellt, welche dann mit dem Skript \qq{writeSQLite.py} in die Datenbank übertragen wurden. In einem frühen Entwicklungsstadium wurden hier SQL Instruktionen verwendet, um die Datenbankeinträge zu erstellen. Nach der Entwicklung des \texttt{DictionaryService} im Backend (genauer beschrieben im Abschnitt \ref{sec:dictionary-service}) wurde später direkt auf diesen zugegriffen, um redundanten Code zu vermeiden. Ein einfacher Funktionsaufruf der Methode \texttt{add\_word} des \texttt{DictionaryService} fügt den Eintrag der Wortdatenbank hinzu.
 
 \subsection{Ergebnisse}
 \label{sec:database-results}
 
-Ein Wort sollte eindeutig identifizierbar sein durch den Worttext und die Wortart. Daher wurde in der Datenbank die Kombination der Felder \textit{text} und \textit{pos} (Part-of-Speech/Wortart) als Primärschlüssel gewählt. Ein doppeltes Einfügen eines Wortes in die Datenbank verletzt den SQL \textit{UNIQUE Constraint}, und ist somit nicht möglich. Die dadurch von Python geworfene Exception wird in diesem Fall abgefangen und die \texttt{add\_word} Methode liefert \texttt{None} zurück.\\
-Trotz der Wortidentifizierung anhand von zwei Merkmalen, beinhaltet der CELEX teilweise redundante Informationen. 4 356 Einträge verursachen aufgrund des \textit{UNIQUE Constraint} Fehler, da sie mit gleichem Text und gleicher Wortart schon in der Datenbank vorhanden waren, diese wurden somit übersprungen. Bei einem kompletten Neuaufbau der Datenbank aus dem CELEX werden 360 243 Einträge (Flexionsformen von Wörtern) hinzugefügt. Die Datenbank wurde in der SQLite Datei \qq{/backend/db/words.db} angelegt.
+Ein Wort sollte durch den Worttext und die Wortart eindeutig identifizierbar sein. Daher wurde in der Datenbank die Kombination der Felder \textit{text} und \textit{pos} (Part-of-Speech/Wortart) als Primärschlüssel gewählt. Ein doppeltes Einfügen eines Wortes in die Datenbank verletzt den SQL \textit{UNIQUE Constraint} und ist somit nicht möglich. Die dadurch von Python geworfene Exception wird in diesem Fall abgefangen und die \texttt{add\_word} Methode liefert \texttt{None} zurück.\\
+Trotz der Wortidentifizierung anhand von zwei Merkmalen beinhaltet der CELEX teilweise redundante Informationen. 4 356 Einträge verursachen aufgrund des \textit{UNIQUE Constraint} Fehler, da sie mit gleichem Text und gleicher Wortart schon in der Datenbank vorhanden waren und wurden somit übersprungen. Bei einem kompletten Neuaufbau der Datenbank aus dem CELEX werden 360 243 Einträge (Flexionsformen von Wörtern) hinzugefügt. Die Datenbank wurde in der SQLite Datei \qq{/backend/db/words.db} angelegt.
 
 \section{Backend}
 \label{sec:etwicklung-backend}
-Das in Python mit dem Web-Framework Flask entwickelte Backend verarbeitet sämtliche, vom Frontend gesendeten HTTP Requests (s. Abschnitt \ref{sec:flask}). Es sendet entweder eine Antwort mit den geforderten Daten im JSON Format, oder einen HTTP Fehlercode mit Fehlermeldung. Das Backend Projekt befindet sich in \qq{/backend/API}. Es wurde in die drei Services \textit{DictionaryService}, \textit{UserService} und \textit{VerificationService} strukturiert. Das Hauptskript \qq{LinguisticTextAnnotation.py} verwaltet diese Services, startet die Flask Applikation und definiert die einzelnen Routen für HTTP Requests (diese werden im folgenden Abschnitt aufgelistet). Abbildung \ref{fig:backend} zeigt eine Übersicht der Struktur des Backends.
+Das in Python mit dem Web-Framework Flask entwickelte Backend verarbeitet sämtliche, vom Frontend gesendeten HTTP Requests (s. Abschnitt \ref{sec:flask}). Es sendet entweder eine Antwort mit den geforderten Daten im JSON Format oder einen HTTP Fehlercode mit Fehlermeldung. Das Backend Projekt befindet sich in \qq{/backend/API}. Es wurde in die drei Services \textit{DictionaryService}, \textit{UserService} und \textit{VerificationService} strukturiert. Das Hauptskript \qq{LinguisticTextAnnotation.py} verwaltet diese Services, startet die Flask Applikation und definiert die einzelnen Routen für HTTP Requests (diese werden im folgenden Abschnitt aufgelistet). Abbildung \ref{fig:backend} zeigt eine Übersicht der Struktur des Backends.
 
 \begin{figure}[h!]
 	\centering
@@ -114,7 +114,7 @@ Das in Python mit dem Web-Framework Flask entwickelte Backend verarbeitet sämtl
 \end{figure}
 
 \subsection{HTTP Routen}
-Tabelle \ref{table:backendroutes} bietet eine Übersicht über die verfügbaren Routen, welche die HTTP Requests verarbeiten. Zudem werden kurz der Zweck und die Parameter der Route beschrieben. Ein \textit{X} in der Spalte Authentifizierung bedeutet, dass die Mailadresse und das Passwort der Nutzerin oder des Nutzers übergeben werden muss. Diese werden nicht extra in der Spalte Parameter aufgeführt (außer in der \qq{/user/authenticate} Route, diese dient ausschließlich dazu, die Übermittelten Anmeldedaten der NutzerInnen zu prüfen).
+Tabelle \ref{table:backendroutes} bietet eine Übersicht über die verfügbaren Routen, welche die HTTP Requests verarbeiten. Zudem werden kurz der Zweck und die Parameter der Route beschrieben. Ein \textit{X} in der Spalte Authentifizierung bedeutet, dass die Mailadresse und das Passwort der Nutzerin oder des Nutzers übergeben werden muss. Diese werden nicht extra in der Spalte Parameter aufgeführt (außer in der \qq{/user/authenticate} Route, diese dient ausschließlich dazu, die übermittelten Anmeldedaten der NutzerInnen zu prüfen).
 
 \begin{table}[h!]
 	\centering
@@ -189,7 +189,7 @@ Das Modul \textit{DictionaryService.py} verarbeitet Anfragen zur Textanalyse, ve
 	\item \texttt{query\_word} schlägt ein Wort mit den Parametern Worttext und Wortart in der Datenbank nach und gibt das annotierte Wort im JSON Format (\textit{text}, \textit{stress\_pattern}, \textit{hyphenation}, \textit{lemma}, \textit{pos}) zurück. Als Parameter kann optional die eingeloggte Nutzerin oder der eingeloggte Nutzer übergeben werden. Ist das der Fall, wird zuerst überprüft, ob im Nutzeraccount (s. Abschnitt \ref{sec:userservice}) eine manuelle Segmentierung für das Wort gespeichert ist und falls ja, diese zurückgegeben. Werden in der Wortdatenbank mehrere Wörter gefunden, die dem gesuchten Worttext entsprechen, wird zusätzlich die Wortart geprüft und der passende Eintrag (bzw. der erste Eintrag, falls kein Wort mit der entsprechenden Wortart gefunden wird) zurückgegeben.
 	
 \subsubsection{Textanalyse}
-Die Methode \texttt{query\_text} bekommt den gesamten zu analysierenden Text übergeben (sowie optional die eingeloggte Nutzerin oder den eingeloggten Nutzer für manuelle Worteinträge). Der Text wird zunächst mit dem Spacy Parser analysiert. Dieser zerlegt den Text in einzelne Wörter und Trennzeichen und gibt eine Liste von Tokens zurück. Nun wird über die Liste der Tokens iteriert und dabei wiederum eine Liste von JSON Einträgen generiert, welche am Schluss von der Methode zurückgegeben wird. Jedes spacy Token liefert den Worttext \texttt{text} die Wortart \texttt{pos\_} und das Lemma \texttt{lemma\_}. Das Token wird wie folgt verarbeitet:
+Die Methode \texttt{query\_text} bekommt den gesamten zu analysierenden Text übergeben (sowie optional die eingeloggte Nutzerin oder den eingeloggten Nutzer für manuelle Worteinträge). Der Text wird zunächst mit dem Spacy Parser analysiert. Dieser zerlegt den Text in einzelne Wörter und Trennzeichen und gibt eine Liste von Tokens zurück. Nun wird über die Liste der Tokens iteriert und dabei wiederum eine Liste von JSON Einträgen generiert, welche am Schluss von der Methode zurückgegeben wird. Jedes spacy Token liefert den Worttext \texttt{text}, die Wortart \texttt{pos\_} und das Lemma \texttt{lemma\_}. Das Token wird wie folgt verarbeitet:
 
 \begin{enumerate}
 	\item In jedem Fall wird ein neuer JSON Eintrag angelegt und die Felder \texttt{text}, \texttt{pos} und \texttt{lemma} mit den entsprechenden Inhalt des Spacy Tokens gefüllt.
@@ -249,7 +249,7 @@ Der \textit{UserService} dient der Verwaltung der Nutzerdaten und der Authentifi
 	
 	\item Auch für \textbf{Nutzerwörter} (\textit{user\_word}, Einträge die durch die manuelle Segmentierung entstehen), können mit Text, Silbentrennung, Betonungsmuster und optional Wortart angelegt, sowie abgefragt (ebenfalls als Liste aller Wörter eines Nutzerkontos) oder gelöscht werden.
 	
-	\item Für \textbf{Annotationskonfigurationen} (\textit{text\_config}) gibt es vier Funktionen: Sie können als Liste abgefragt oder mit der zugehörigen \textit{id} gelöscht werden, sowie angelegt und aktualisiert werden. Beim Anlegen und Aktualisieren werden sämtliche Attribute der Konfiguration (Name, Silbenfarben, Texteinstellungen, wie Silben- oder Wortabstand etc.) in der Anfrage mit übergeben. Auch die Konfigurationsliste für die Wortarten (\textit{pos\_config}), die für jede Wortart die Einstellung, ob diese annotiert oder ignoriert wird speichert, wird in der Anfrage benötigt.
+	\item Für \textbf{Annotationskonfigurationen} (\textit{text\_config}) gibt es vier Funktionen: Sie können als Liste abgefragt oder mit der zugehörigen ID gelöscht werden, sowie angelegt und aktualisiert werden. Beim Anlegen und Aktualisieren werden sämtliche Attribute der Konfiguration (Name, Silbenfarben, Texteinstellungen, wie Silben- oder Wortabstand etc.) in der Anfrage mit übergeben. Auch die Konfigurationsliste für die Wortarten (\textit{pos\_config}), die für jede Wortart die Einstellung, ob diese annotiert oder ignoriert wird speichert, wird in der Anfrage benötigt.
 \end{itemize}
 
 
@@ -262,15 +262,15 @@ Ein zu verifizierender Eintrag ist hierbei direkt ein \textit{user\_word} (s. Ab
 \begin{enumerate}
 	\item Für den übermittelten Vorschlag wird ein \texttt{VerificationProposal} Objekt in der Nutzerdatenbank angelegt.
 	
-	\item Der Vorschlag erhält initial den \texttt{score} $0$. Es wird über alle Vorschläge, die sich auf dasselbe Wort beziehen iteriert, dabei werden Silbentrennung und Betonungsmuster verglichen. Bei Übereinstimmung wird der \texttt{score} erhöht, die Gewichtung ergibt sich je nachdem, ob die Autorin oder der Autor des Vorschlags ein normaler Nutzer, Experte oder Administrator ist. Vorschläge von Administratoren erhalten drei, Expertenvorschläge zwei Punkte und die Vorschläge normaler NutzerInnen einen Punkt.
+	\item Der Vorschlag erhält initial den \texttt{score} $0$. Es wird über alle Vorschläge, die sich auf dasselbe Wort beziehen iteriert, dabei werden Silbentrennung und Betonungsmuster verglichen. Bei Übereinstimmung wird der \texttt{score} erhöht, die Gewichtung ergibt sich je nachdem, ob die Autorin oder der Autor des Vorschlags ein normaler Nutzer, Experte oder Administrator ist. Vorschläge von Administratoren erhalten drei Punkte, Expertenvorschläge zwei Punkte und die Vorschläge normaler NutzerInnen einen Punkt.
 	
 	\item Wird die Zielwertung von $3$ nicht erreicht, so wird abgebrochen. Bei der Übermittlung des nächsten Vorschlags kann so erneut überprüft werden, ob genug Verifizierungen einstimmig sind.
 	
-	\item Bei einem Score von $3$ wird das Wort in die globale Wortdatenbank übertragen. Bei der gegebenen Punkteverteilung geschieht das, sobald entweder ein Administrator, ein Experte und mindestens ein anderer, beliebiger Nutzer, oder drei normale NutzerInnen, identische Vorschläge übermitteln.
+	\item Bei einem Score von $3$ wird das Wort in die globale Wortdatenbank übertragen. Bei der gegebenen Punkteverteilung geschieht das, sobald entweder ein Administrator, ein Experte und mindestens ein anderer, beliebiger Nutzer oder drei normale NutzerInnen identische Vorschläge übermitteln.
 	
 	\item Sowohl die manuelle Segmentierung für das Wort, sowie alle Verifizierungsvorschläge werden nun nicht mehr benötigt und daher aus der Datenbank gelöscht.
 	
-	\item Zudem wird ein Eintrag \texttt{AddedEntry} angelegt, der einen Verweis auf das verifizierte, neue Wort in der Wortdatenbank und einen Zeitstempel mit dem Erstellungszeitpunkt enthält. So kann nachvollzogen werden, welche Wörter wann durch den Verifizierungsprozess der Datenbank hinzugefügt wurden.
+	\item Zudem wird ein Eintrag \texttt{AddedEntry} angelegt, der einen Verweis auf das verifizierte, neue Wort in der Wortdatenbank und einen Zeitstempel mit dem Erstellungszeitpunkt enthält. So kann nachvollzogen werden welche Wörter wann durch den Verifizierungsprozess der Datenbank hinzugefügt wurden.
 \end{enumerate}
 
 
@@ -283,19 +283,19 @@ Ein zu verifizierender Eintrag ist hierbei direkt ein \textit{user\_word} (s. Ab
 
 \section{Frontend}
 
-Das Frontend ist der den Nutzerinnen und Nutzern sichtbare Teil des Softwaresystems. Die Web-Applikation ist zunächst wie eine normale Webseite aufgebaut, Inhalte der Komponenten werden aber dynamisch geladen (d.h. bei Nutzerinteraktionen wird keine HTML Seite neu aufgerufen, sondern der Inhalt der Seite wird direkt angepasst). Neben den standardmäßig im Web verwendeten Sprachen \textit{HTML}, \textit{CSS} und \textit{JavaScript} wurde die Applikation großteils in AngularDart entwickelt (eine Beschreibung zu dieser Technologie, der Unterteilung von Komponenten in Klassen, Templates und Services sowie der Templatesprache von Angular, liefert Abschnitt \ref{sec:angulardart}).\\
+Das Frontend ist der den Nutzerinnen und Nutzern sichtbare Teil des Softwaresystems. Die Webapplikation ist zunächst wie eine normale Webseite aufgebaut, Inhalte der Komponenten werden aber dynamisch geladen (d.h. bei Nutzerinteraktionen wird keine HTML Seite neu aufgerufen, sondern der Inhalt der Seite wird direkt angepasst). Neben den standardmäßig im Web verwendeten Sprachen \textit{HTML}, \textit{CSS} und \textit{JavaScript} wurde die Applikation großteils in AngularDart entwickelt (eine Beschreibung zu dieser Technologie, der Unterteilung von Komponenten in Klassen, Templates und Services sowie der Templatesprache von Angular, liefert Abschnitt \ref{sec:angulardart}).\\
 
-Die Features des \textit{AngularDart} Frameworks ermöglichen eine strukturierte, objektorientierte Architektur des Frontends. Die Folgenden Abschnitte zeigen zunächst den Aufbau der Applikation und das verwendete Datenmodell, danach die Struktur aller größeren Komponenten.
+Die Features des \textit{AngularDart} Frameworks ermöglichen eine strukturierte, objektorientierte Architektur des Frontends. Die folgenden Abschnitte zeigen zunächst den Aufbau der Applikation und das verwendete Datenmodell, danach die Struktur aller größeren Komponenten.
 
 \subsection{Hauptkomponente der Applikation und Routing}
 
-Die Hauptseite \textit{index.html} enthält nur einen Platzhalter (Kasten mit dem Text \textit{Prosodiya Online Text Analyse wird geladen...}) und bindet notwendige CSS Styles sowie die Hauptkomponente \textit{app\_component} ein. Das Einbinden dieser Komponente veranlasst Angular, diese beim Aufruf der Webseite zu laden und liefert so den Einstiegspunkt in die \textit{AngularDart} Applikation.
+Die Hauptseite \textit{index.html} enthält nur einen Platzhalter (Kasten mit dem Text \textit{Prosodiya Online Text Analyse wird geladen...}) und bindet notwendige CSS Styles sowie die Hauptkomponente \textit{app\_component} ein. Das Einbinden dieser Komponente veranlasst Angular diese beim Aufruf der Webseite zu laden und liefert so den Einstiegspunkt in die \textit{AngularDart} Applikation.
 
 Der zur Komponente zugehörige \textit{AppService} definiert lediglich die Funktionen zum Anzeigen und Löschen von Info- und Fehlermeldungen. Das Template der Hauptkomponente \textit{app\_component.html} enthält folgende Elemente:
 \begin{itemize}
 	\item Die Navigationsleiste mit den Einträgen \textit{Home}, \textit{Textanalyse}, \textit{Verifizierung} und \textit{Login}
 	
-	\item Container in denen Info- und Fehlermeldungen angezeigt erden
+	\item Container, in denen Info- und Fehlermeldungen angezeigt erden
 	\item Die \texttt{router-outlet} Direktive, die dafür sorgt, dass die in der Navigation ausgewählte Komponente angezeigt wird
 \end{itemize}
 
@@ -349,7 +349,7 @@ In der Komponentenklasse \textit{AppComponent} werden folgende Metadaten der App
 	\label{fig:frontend-home}
 \end{figure}
 
-Die Begrüßungsseite (Abbildung \ref{fig:frontend-home}) \textit{home\_component} beinhaltet keine Programmlogik. Sie ist der Einstiegspunkt der Web-Applikation und stellt eine Übersicht über die gebotenen Funktionen dar. In den oberen zwei Kästen findet die Nutzerin oder der Nutzer eine kurze Einführung in die Software und ihre Anwendung, sowie eine Erklärung der Textanalyse Funktion. Darunter befinden sich nebeneinander zwei Kästen, in denen die Nutzerkontoverwaltung und der Verifizierungsprozess für die Wortdatenbank erklärt werden.
+Die Begrüßungsseite (Abbildung \ref{fig:frontend-home}) \textit{home\_component} beinhaltet keine Programmlogik. Sie ist der Einstiegspunkt der Webapplikation und stellt eine Übersicht über die gebotenen Funktionen dar. In den oberen zwei Kästen findet die Nutzerin oder der Nutzer eine kurze Einführung in die Software und ihre Anwendung, sowie eine Erklärung der Textanalyse Funktion. Darunter befinden sich nebeneinander zwei Kästen, in denen die Nutzerkontoverwaltung und der Verifizierungsprozess für die Wortdatenbank erklärt werden.
 
 \subsection{Datenmodell}
 
@@ -364,7 +364,7 @@ enthält eine Liste von Wörtern (Klasse \texttt{Word}), welche wiederum eine Li
 \end{figure}
 
 
-Diese Klassen enthalten auch Informationen zu HTML Klassen und CSS Styles. Durch entsprechende Zugriffe können diese dann direkt im Angular HTML Template ausgelesen werden. Mit dieser Vorgehensweise ist es möglich, die Textvorschau direkt und verzögerungsfrei nach einer Nutzereingabe anzupassen. Wird zum Beispiel eine Silbenfarbe geändert, wird erst über alle Wörter und Silben im \texttt{AnnotationText} iteriert und die entsprechenden CSS Farben (z.B. \texttt{color} oder \texttt{background-color}) auf die neue Farbe gesetzt. Im Angular Update Cycle wird dann die Veränderung im Modell detektiert und das \textit{Document Object Model} (DOM) der Webseite automatisch angepasst. Es musste kein manueller Code geschrieben, durch \textit{Data Binding} werden die aktuellen Werte des Modells (\textit{Dart} Klassen) sofort automatisch in das DOM übernommen.
+Diese Klassen enthalten auch Informationen zu HTML Klassen und CSS Styles. Durch entsprechende Zugriffe können diese dann direkt im Angular HTML Template ausgelesen werden. Mit dieser Vorgehensweise ist es möglich, die Textvorschau direkt und verzögerungsfrei nach einer Nutzereingabe anzupassen. Wird zum Beispiel eine Silbenfarbe geändert, wird erst über alle Wörter und Silben im \texttt{AnnotationText} iteriert und die entsprechenden CSS Farben (z.B. \texttt{color} oder \texttt{background-color}) auf die neue Farbe gesetzt. Im Angular Update Cycle wird dann die Veränderung im Modell detektiert und das \textit{Document Object Model} (DOM) der Webseite automatisch angepasst. Es musste kein manueller Code geschrieben werden, durch \textit{Data Binding} werden die aktuellen Werte des Modells (\textit{Dart} Klassen) sofort automatisch in das DOM übernommen.
 
 Die Klasse \texttt{TextConfiguration} (Abbildung \ref{fig:textconf}) wird zur Verwaltung von Vorlagen zur Einstellung der Annotation verwendet. Sie enthält alle Einstellungen, die auf einen Text angewandt werden können, z.B. die Farben von betonten und unbetonten Silben, Silben- und Wortabstände oder das Silbentrennzeichen. Außerdem beinhaltet sie eine Instanz der Klasse \texttt{PartOfSpeech}, welche spezielle Annotationseinstellungen für die verschiedenen Wortarten speichert.
 
@@ -380,11 +380,11 @@ Die Klasse \texttt{UserEntry} bildet die manuell segmentierten Wörter ab, die d
 
 \subsection{Textanalyse}
 
-Die Text Analyse (Komponente \textit{text\_analysis\_component}) stellt das Herzstück der Applikation dar. Sie bindet mehrere Subkomponenten ein, die in den folgenden Abschnitten vorgestellt werden. Es gibt Nutzeroberflächen für
+Die Textanalyse (Komponente \textit{text\_analysis\_component}) stellt das Herzstück der Applikation dar. Sie bindet mehrere Subkomponenten ein, die in den folgenden Abschnitten vorgestellt werden. Es gibt Nutzeroberflächen für
 \begin{itemize}
 	\item die Eingabe neuer Texte,
 	\item die Vorschau des aktuell analysierten Texts,
-	\item sowie die Manuelle Analyse dem System unbekannter Wörter.
+	\item sowie die manuelle Analyse dem System unbekannter Wörter.
 \end{itemize}
 
 \begin{figure}[h!]
@@ -407,7 +407,7 @@ Ist noch kein Text analysiert, so zeigt die Textanalyse ein leeres Eingabetextfe
 
 \subsubsection{TextAnalysisService}
 
-Der \textit{TextAnalysisService} wird von mehreren Komponenten verwendet und verwaltet vor Allem eine Instanz der Klasse \texttt{AnnotationText}. Er beinhaltet auch die Logik um einen Eingabetext zu analysieren. Dazu wird ein HTTP Request mit dem Eingabetext an das Backend geschickt. Aus der Antwort kann das Modell des annotierten Texts aufgebaut und in der Vorschau angezeigt werden. Der Service bietet zudem die Funktionen zum Anwenden der aktuellen Annotationseinstellung auf den Text.
+Der \textit{TextAnalysisService} wird von mehreren Komponenten verwendet und verwaltet vor allem eine Instanz der Klasse \texttt{AnnotationText}. Er beinhaltet auch die Logik, um einen Eingabetext zu analysieren. Dazu wird ein HTTP Request mit dem Eingabetext an das Backend geschickt. Aus der Antwort kann das Modell des annotierten Texts aufgebaut und in der Vorschau angezeigt werden. Der Service bietet zudem die Funktionen zum Anwenden der aktuellen Annotationseinstellung auf den Text.
 
 \subsubsection{Textvorschau}
 
@@ -439,7 +439,7 @@ Jedes annotierte Wort enthält außerdem eine Subkomponente \texttt{word\_detail
 
 Zusätzlich sind im Vorschaufenster Buttons für das Drucken und Kopieren des Texts vorhanden.
 \begin{itemize}
-	\item Der \textit{Drucken} Button öffnet den Drucken Dialog des verwendeten Browsers. Damit nur der Text in der Vorschau gedruckt wird, wird hier ein eigener CSS Style verwendet. Mit der \texttt{@media print} CSS Anweisung werden dafür alle nicht im Druck benötigten HTML Tags auf \texttt{display: none} gesetzt. und somit ausgeblendet. Zudem wird die Größe des Textvorschau Elements verändert. Ist auf dem Nutzersystem ein PDF Drucker installiert, kann der Text so auch als PDF gespeichert werden.
+	\item Der \textit{Drucken} Button öffnet den Drucken Dialog des verwendeten Browsers. Damit nur der Text in der Vorschau gedruckt wird, wird hier ein eigener CSS Style verwendet. Mit der \texttt{@media print} CSS Anweisung werden dafür alle nicht im Druck benötigten HTML Tags auf \texttt{display: none} gesetzt und somit ausgeblendet. Zudem wird die Größe des Textvorschauelements verändert. Ist auf dem Nutzersystem ein PDF Drucker installiert, kann der Text so auch als PDF gespeichert werden.
 	
 	\item Der Button \textit{Kopieren (Zwischenablage)} kopiert automatisch den Vorschautext samt Annotation in die Zwischenablage, sodass dieser z.B. in einem externen Textverarbeitungsprogramm weiter bearbeitet werden kann.
 \end{itemize}
@@ -447,14 +447,14 @@ Zusätzlich sind im Vorschaufenster Buttons für das Drucken und Kopieren des Te
 \subsubsection{Manuelle Wortanalyse}
 \label{sec:manuelleanalyse}
 
-Ist bei der Analyse dem System ein Wort nicht bekannt, so wird es in der Textvorschau rot hinterlegt. Beim Klicken auf das Wort öffnet sich die Manuelle Wortanalyse (Komponente \textit{word\_review\_component}), in welcher der die Nutzerin oder der Nutzer für dieses Wort das Betonungsmuster und die Silbentrennung selbst bestimmen kann. Hierfür gibt es zum Einen ein Auswahlfenster für die betonte Silbe (durch Klicken kann diese bestimmt werden und wird bei Auswahl in einer anderen Farbe dargestellt), und zum Anderen ein Textfeld für die Silbentrennung. Hier können manuell Trennstriche gesetzt werden, wobei der Text des Wortes selbst nicht verändert werden darf. Ändert sich bei entsprechender Eingabe die Silbentrennung, passt sich die Eingabe für das Betonungsmuster automatisch an. Mit entsprechenden Buttons kann die Nutzerin oder der Nutzer dann die vorgenommene Analyse entweder speichern, das Wort im Text ignorieren oder ohne zu speichern zum Text zurückkehren.
+Ist bei der Analyse dem System ein Wort nicht bekannt, so wird es in der Textvorschau rot hinterlegt. Beim Klicken auf das Wort öffnet sich die manuelle Wortanalyse (Komponente \textit{word\_review\_component}), in welcher die Nutzerin oder der Nutzer für dieses Wort das Betonungsmuster und die Silbentrennung selbst bestimmen kann. Hierfür gibt es zum Einen ein Auswahlfenster für die betonte Silbe (durch Klicken kann diese bestimmt werden und wird bei Auswahl in einer anderen Farbe dargestellt), und zum Anderen ein Textfeld für die Silbentrennung. Hier können manuell Trennstriche gesetzt werden, wobei der Text des Wortes selbst nicht verändert werden darf. Ändert sich bei entsprechender Eingabe die Silbentrennung, passt sich die Eingabe für das Betonungsmuster automatisch an. Mit entsprechenden Buttons kann die Nutzerin oder der Nutzer dann die vorgenommene Analyse entweder speichern, das Wort im Text ignorieren oder ohne zu speichern zum Text zurückkehren.
 
 Um die manuellen Eingaben zu erleichtern und zu minimieren werden außerdem automatische Vorschläge generiert. Das Backend sendet für jedes zu bearbeitende Wort eine Liste von Vorschlägen, die aus verschiedenen Quellen stammen können (s. Abschnitt \ref{sec:segmentation-proposals}). Durch Anklicken eines Vorschlags wird dieser in den Eingabefenstern auf der linken Seite übernommen.
 
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=.8\linewidth]{figures/frontend/manuelle-analyse}
-	\caption{Bildschirmfoto der Manuellen Wortanalyse}
+	\caption{Bildschirmfoto der manuellen Wortanalyse}
 	\label{fig:frontend-manuelle-analyse}
 \end{figure}
 
@@ -512,7 +512,7 @@ Unterhalb der Farbeinstellungen lassen sich verschiedene Größen und Abstände 
 	\label{fig:frontend-textconf}
 \end{figure}
 
-Alle Werte lassen sich hier mithilfe eines Sliders einstellen. Außerdem gibt es die Möglichkeit, ein beliebiges Zeichen als Silbentrennzeichen zu benutzen, was dann im Zwischenraum zwischen allen Silben im Text erscheint.
+Alle Werte lassen sich hier mithilfe eines Sliders einstellen. Außerdem gibt es die Möglichkeit, ein beliebiges Zeichen als Silbentrennzeichen zu benutzen, das dann im Zwischenraum zwischen allen Silben im Text erscheint.
 
 An letzter Stelle in den Einstellungen steht ein Dropdown Menü, in dem man eine Wortart auswählen kann (Abbildung \ref{fig:frontend-pos-einstellungen}). Für jede Wortart lassen sich folgende Einstellungen vornehmen, die dann auf den gesamten Text angewandt werden:
 \begin{itemize}
@@ -528,7 +528,7 @@ An letzter Stelle in den Einstellungen steht ein Dropdown Menü, in dem man eine
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=.4\linewidth, frame]{figures/frontend/config-pos}
-	\caption{Bildschirmfoto der spezifischen Wortart Einstellungen}
+	\caption{Bildschirmfoto der für die Wortart spezifischen Einstellungen}
 	\label{fig:frontend-pos-einstellungen}
 \end{figure}
 
@@ -536,7 +536,7 @@ An letzter Stelle in den Einstellungen steht ein Dropdown Menü, in dem man eine
 
 Im Kasten unterhalb der Annotationseinstellungen können Konfigurationen verwaltet werden. Jedem Nutzerkonto sind Vorlagen zugeordnet, d.h. jede Nutzerin und jeder Nutzer verwaltet und sieht nur ihre oder seine eigenen Vorlagen. In der Vorlage werden sämtliche Einstellungen gespeichert, das ganze \texttt{TextConfiguration} Objekt wird hier an das Backend geschickt und serialisiert.\\
 
-Sind bereits Vorlagen vorhanden, werden diese hier aufgelistet. Sie können ausgewählt (und damit auf den aktuellen Text angewandt) werden oder durch Klicken auf das kleine \textit{X} rechts neben dem Vorlagennamen gelöscht werden. Darunter befindet sich ein Textfeld für den Namen einer neu anzulegenden Vorlagen. Beim Klicken des \textit{Vorlage speichern} Buttons wird diese dann unter dem gewählten Namen (und mit den momentan aktiven Einstellungen) neu gespeichert oder, wenn die Vorlage schon existiert überschrieben.
+Sind bereits Vorlagen vorhanden, werden diese hier aufgelistet. Sie können ausgewählt (und damit auf den aktuellen Text angewandt) werden oder durch Klicken auf das kleine \textit{X} rechts neben dem Vorlagennamen gelöscht werden. Darunter befindet sich ein Textfeld für den Namen einer neu anzulegenden Vorlage. Beim Klicken des \textit{Vorlage speichern} Buttons wird diese dann unter dem gewählten Namen (und mit den momentan aktiven Einstellungen) neu gespeichert oder, wenn die Vorlage schon existiert überschrieben.
 
 \begin{figure}[h!]
 	\centering
@@ -579,7 +579,7 @@ Ganz unten auf der Seite sind Buttons zum Ausloggen und Löschen des Kontos vorh
 
 Die Wort-Verifizierung dient der Bestätigung von manuellen Segmentierung von NutzerInnen durch andere NutzerInnen, sodass diese in die globale Wortdatenbank aufgenommen werden können (s. Abschnitt \ref{sec:verification-service}). Das User Interface für diesen Prozess ist in der Komponente \texttt{word\_verification\_component} implementiert.
 
-Ist eine Nutzerin oder ein Nutzer eingeloggt, werden nacheinander zu verifizierende Wörter geladen, das User Interface ähnelt dem, das zur manuellen Analyse von unbekannten Wörtern verwendet wird (s. Abschnitt \ref{sec:manuelleanalyse}). Auch hier gibt es jeweils eine Eingabemöglichkeit zur Auswahl der betonten Silbe und zur Bestimmung der Silbentrennung. Auf der Rechten Seite befinden sich allerdings neben den automatisch generierten Vorschlägen auch die Segmentierungsvorschläge anderer NutzerInnen. Automatisch wird der Vorschlag der Nutzerin oder des Nutzers ausgewählt, welche oder welcher die Segmentierung zuerst erstellt hat. Haben weitere NutzerInnen den Vorschlag schon verifiziert, so erscheinen auch deren Segmentierungen in der Liste.
+Ist eine Nutzerin oder ein Nutzer eingeloggt, werden nacheinander zu verifizierende Wörter geladen, das User Interface ähnelt dem, das zur manuellen Analyse von unbekannten Wörtern verwendet wird (s. Abschnitt \ref{sec:manuelleanalyse}). Auch hier gibt es jeweils eine Eingabemöglichkeit zur Auswahl der betonten Silbe und zur Bestimmung der Silbentrennung. Auf der rechten Seite befinden sich allerdings neben den automatisch generierten Vorschlägen auch die Segmentierungsvorschläge anderer NutzerInnen. Automatisch wird der Vorschlag der Nutzerin oder des Nutzers ausgewählt, welche oder welcher die Segmentierung zuerst erstellt hat. Haben weitere NutzerInnen den Vorschlag schon verifiziert, so erscheinen auch deren Segmentierungen in der Liste.
 
 Zur eigentlichen Verifizierung kann nun ein Eintrag in der Liste der Vorschläge ausgewählt werden oder, falls alle Vorschläge als falsch empfunden werden, eine eigene, andere Segmentierung auf der linken Seite eingestellt werden. Danach wird die Verifizierung mit dem Button \textit{Abschicken} gespeichert.\\
 Sind noch weitere zu verifizierende Einträge vorhanden, wird sofort das nächste Wort geladen. Ein Label unter der Überschrift der Komponente zeigt an, wie viele zu verifizierende Wörter es noch gibt.
