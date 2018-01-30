@@ -30,7 +30,7 @@ Für die Segmentierung von Wörtern in Silben mit Betonung wird eine SQLite Date
 Hier wurde darauf geachtet, eine einheitliche orthographische Form der Wörter durchzusetzen. Wörter bestehen nur aus Kleinbuchstaben (auch die Anfänge von Nomen und Eigennamen). Außerdem wird hier auf Umlaute verzichtet, \qq{ä} wird durch \qq{ae} ersetzt, \qq{ö} durch \qq{oe}, \qq{ü} durch \qq{ue} und \qq{ß} durch \qq{ss}. Beispielsweise wird das Wort \textit{Häuser} zu \textit{haeuser}. So kann beim Nachschlagen garantiert werden, dass ein Wort nicht wegen uneinheitlicher Schreibweise nicht gefunden wird, sofern alle Umlaute vorher ersetzt wurden.
 
 \paragraph{Wortart}
-Um Doppeldeutigkeiten zu vermeiden wird ein Eintrag nur eindeutig über das Paar aus Worttext und Wortart identifiziert. Viele Grundformen von Verben kommen zum Beispiel auch als Nomen vor, werden aber dann groß geschrieben (\qq{sie sollte die Maschine \textit{verwenden}} gegen \qq{das \textit{Verwenden} der Maschine}). Die Bezeichner für Wortarten sind in verschiedenen Systemen wie dem CELEX und dem NLP Parser \textit{Spacy} unterschiedlich, daher wird hier eine eigene - im Gesamtsystem konsistente - Benennung der Wortart eingeführt (die Benennung orientiert sich an den Namen der Spacy Tags, verwendet jedoch zur Unterscheidung Klein- statt Großschreibung):
+Um Doppeldeutigkeiten zu vermeiden wird ein Eintrag nur eindeutig über das Paar aus Worttext und Wortart identifiziert. Viele Grundformen von Verben kommen zum Beispiel auch als Nomen vor, werden aber dann groß geschrieben (\qq{sie sollte die Maschine \textit{verwenden}} gegen \qq{das \textit{Verwenden} der Maschine}). Die Bezeichner für Wortarten sind in verschiedenen Systemen wie dem CELEX und dem NLP Parser \textit{Spacy} unterschiedlich, daher wird hier eine eigene - im Gesamtsystem konsistente - Benennung der Wortart eingeführt (die Benennung orientiert sich an den Namen der Spacy Tags, verwendet jedoch zur Unterscheidung Klein- statt Großschreibung, s. Abbildung \ref{table:pos}).
 
 \begin{table}[h!]
 	\centering
@@ -55,6 +55,7 @@ Um Doppeldeutigkeiten zu vermeiden wird ein Eintrag nur eindeutig über das Paar
 		\hline
 	\end{tabular}
 	\caption{Benennung der Wortarten in der Applikation}
+	\label{table:pos}
 \end{table}
 
 \paragraph{Silbentrennung}
@@ -81,7 +82,7 @@ Alle in der Worttabelle beschriebenen Einträge sind auch im CELEX vorhanden. De
 \subsection{Implementierung}
 
 Für die Generierung der Datenbank wurde das python Projekt \textit{celex2db} erstellt, welches in \qq{/backend/celex2db} zu finden ist (alle Pfadangaben in diesem Abschnitt beziehen sich auf dieses Verzeichnis). Die Daten im CELEX sind über mehrere Dateien verteilt. So gibt es eine Teilung in Sprachen (für die Datenbank werden nur deutsche Wörter benutzt, zu finden in \qq{celex2/german}), Wörter und Lemmata sowie in Orthographie, Phonologie und Morphologie. Die Teilung in Wort und Lemma spart Speicherplatz. Das Lemma eines Verbs zum Beispiel, ist dessen Infinitiv. Zur Flexionsform \textit{gehst} gehört also das Lemma \textit{gehen}. Viele Eigenschaften des Verbs \textit{gehen} beziehen sich auf alle Flexionsformen, so müssen diese nicht für alle Formen redundant gespeichert werden.\\
-Die Einträge in den Wortlisten des CELEX verweisen jeweils mit einer ID auf den zugehörigen Eintrag in der Lemma Liste. Da in der zu entwickelnden Datenbank auch das Lemma gespeichert werden sollte, mussten sowohl Wort- als auch Lemma-Listen geparst werden.
+Die Einträge in den Wortlisten des CELEX verweisen jeweils mit einer ID auf den zugehörigen Eintrag in der Lemma-Liste. Da in der zu entwickelnden Datenbank auch das Lemma gespeichert werden sollte, mussten sowohl Wort- als auch Lemma-Listen geparst werden.
 
 Das Hauptskript \textit{celex2db.py} führt die folgenden Schritte aus:
 \begin{enumerate}
@@ -92,7 +93,7 @@ Das Hauptskript \textit{celex2db.py} führt die folgenden Schritte aus:
 
 Während der Ausführung des Skripts werden schrittweise Fortschrittsangaben mit Fehlern ausgegeben, da das Parsen und Erstellen der Datenbank einige Zeit benötigt (mehr dazu im Abschnitt \ref{sec:database-results}).
 
-Die Klasse \texttt{CelexDictionary} im Skript \textit{celex.py} bietet die Methoden zum Parsen der Wort- und Lemma-Listen. In der Methode zum Parsen der Lemmata wird die CELEX Datei \textit{gml.cd} verarbeitet, die morphologische Informationen zu den Lemmata enthält. Jede Zeile enthält ein Lemma, welches in mit ID, Text und Wortart gespeichert wird.\\
+Die Klasse \texttt{CelexDictionary} im Skript \textit{celex.py} bietet die Methoden zum Parsen der Wort- und Lemma-Listen. In der Methode zum Parsen der Lemmata wird die CELEX Datei \textit{gml.cd} verarbeitet, die morphologische Informationen zu den Lemmata enthält. Jede Zeile enthält ein Lemma, welches mit ID, Text und Wortart gespeichert wird.\\
 Beim Parsen der Wort-Listen werden die beiden Dateien \textit{g\textbf{p}w.cd} und \textit{g\textbf{o}w.cd} verarbeitet, welche phonologische bzw. orthographische Informationen zu allen enthaltenen Flexionsformen der Wörter enthalten. Die IDs und Reihenfolge in beiden Wort-Listen stimmen überein, sodass beide Listen gleichzeitig verarbeitet werden konnten. Aus der phonologischen Liste wurden der Text des Wortes, der Verweis auf das zugehörige Lemma sowie die phonologische Darstellung entnommen. Die orthographische Liste lieferte lediglich die Silbentrennung.\\
 Die geparsten Lemma- und Wortstrukturen wurden zusammengeführt und daraus Einträge für die Datenbank erstellt, welche dann mit dem Skript \qq{writeSQLite.py} in die Datenbank übertragen wurden. In einem frühen Entwicklungsstadium wurden hier SQL Instruktionen verwendet, um die Datenbankeinträge zu erstellen. Nach der Entwicklung des \texttt{DictionaryService} im Backend (genauer beschrieben im Abschnitt \ref{sec:dictionary-service}) wurde später direkt auf diesen zugegriffen, um redundanten Code zu vermeiden. Ein einfacher Funktionsaufruf der Methode \texttt{add\_word} des \texttt{DictionaryService} fügt den Eintrag der Wortdatenbank hinzu.
 
@@ -358,15 +359,15 @@ enthält eine Liste von Wörtern (Klasse \texttt{Word}), welche wiederum eine Li
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=.8\linewidth]{figures/frontend/uml-annotationtext}
+	\includegraphics[width=.75\linewidth]{figures/frontend/uml-annotationtext}
 	\caption{UML Klassendiagramm des Textmodells mit Wörtern und Silben}
 	\label{fig:frontendmodel}
 \end{figure}
 
 
-Diese Klassen enthalten auch Informationen zu HTML Klassen und CSS Styles. Durch entsprechende Zugriffe können diese dann direkt im Angular HTML Template ausgelesen werden. Mit dieser Vorgehensweise ist es möglich, die Textvorschau direkt und verzögerungsfrei nach einer Nutzereingabe anzupassen. Wird zum Beispiel eine Silbenfarbe geändert, wird erst über alle Wörter und Silben im \texttt{AnnotationText} iteriert und die entsprechenden CSS Farben (z.B. \texttt{color} oder \texttt{background-color}) auf die neue Farbe gesetzt. Im Angular Update Cycle wird dann die Veränderung im Modell detektiert und das \textit{Document Object Model} (DOM) der Webseite automatisch angepasst. Es musste kein manueller Code geschrieben werden, durch \textit{Data Binding} werden die aktuellen Werte des Modells (\textit{Dart} Klassen) sofort automatisch in das DOM übernommen.
-
-Die Klasse \texttt{TextConfiguration} (Abbildung \ref{fig:textconf}) wird zur Verwaltung von Vorlagen zur Einstellung der Annotation verwendet. Sie enthält alle Einstellungen, die auf einen Text angewandt werden können, z.B. die Farben von betonten und unbetonten Silben, Silben- und Wortabstände oder das Silbentrennzeichen. Außerdem beinhaltet sie eine Instanz der Klasse \texttt{PartOfSpeech}, welche spezielle Annotationseinstellungen für die verschiedenen Wortarten speichert.
+Diese Klassen enthalten auch Informationen zu HTML Klassen und CSS Styles. Durch entsprechende Zugriffe können diese dann direkt im Angular HTML Template ausgelesen werden. Mit dieser Vorgehensweise ist es möglich, die Textvorschau direkt und verzögerungsfrei nach einer Nutzereingabe anzupassen. Wird zum Beispiel eine Silbenfarbe geändert, wird erst über alle Wörter und Silben im \texttt{AnnotationText} iteriert und die entsprechenden CSS Farben (z.B. \texttt{color} oder \texttt{background-color}) auf die neue Farbe gesetzt. Im Angular Update Cycle wird dann die Veränderung im Modell detektiert und das \textit{Document Object Model} (DOM) der Webseite automatisch angepasst. Es musste kein manueller Code geschrieben werden, durch \textit{Data Binding} werden die aktuellen Werte des Modells (\textit{Dart} Klassen) sofort automatisch in das DOM übernommen.\\
+Die Klasse \texttt{TextConfiguration} (Abbildung \ref{fig:textconf}) wird zur Verwaltung von Vorlagen zur Einstellung der Annotation verwendet. Sie enthält alle Einstellungen, die auf einen Text angewandt werden können, z.B. die Farben von betonten und unbetonten Silben, Silben- und Wortabstände oder das Silbentrennzeichen. Außerdem beinhaltet sie eine Instanz der Klasse \texttt{PartOfSpeech}, welche spezielle Annotationseinstellungen für die verschiedenen Wortarten speichert.\\
+Die Klasse \texttt{UserEntry} bildet die manuell segmentierten Wörter ab, die dem System unbekannt waren und von den NutzerInnen selbst erstellt wurden. Ein \texttt{UserEntry} enthält Informationen über Worttext, Wortart, Segmentierung der Silben und Wortbetonung. Vom Nutzer angelegte, eigene Texte werden in der Klasse \texttt{UserText} (mit dem Wortlaut des Texts und einem Titel) abgebildet.
 
 \begin{figure}[h!]
 	\centering
@@ -374,9 +375,6 @@ Die Klasse \texttt{TextConfiguration} (Abbildung \ref{fig:textconf}) wird zur Ve
 	\caption{UML Klassendiagramm der Textkonfiguration mit der Wortartkonfiguration (bestehend aus den Einstellungen für alle 12 Wortarten)}
 	\label{fig:textconf}
 \end{figure}
-
-Die Klasse \texttt{UserEntry} bildet die manuell segmentierten Wörter ab, die dem System unbekannt waren und von den NutzerInnen selbst erstellt wurden. Ein \texttt{UserEntry} enthält Informationen über Worttext, Wortart, Segmentierung der Silben und Wortbetonung. Vom Nutzer angelegte, eigene Texte werden in der Klasse \texttt{UserText} (mit dem Wortlaut des Texts und einem Titel) abgebildet.
-
 
 \subsection{Textanalyse}
 

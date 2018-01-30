@@ -17,7 +17,7 @@ Es ist bekannt, dass Kinder in der Entwicklung des Lesens und Schreibens verschi
 Daher wird später in der orthographischen Phase eine Strategie benutzt, die sich an größeren Bestandteilen orientiert. Wörter oder Wortteile werden hier aus dem Langzeitgedächtnis abgerufen, was bei richtig gelernten Silben und Wörtern zu korrekter Aussprache und Schreibung führt.\\
 Einige schulische Ansätze wie das \textit{ABC der Tiere}\cite{mildenberger2013} oder die \textit{Freiburger Rechtschreibschule (FRESCH)}\cite{Fresch2016} fördern das orthographische Lernen mit einer gezielten Hervorhebung von Silben. Hier sind z.B. Fördermaterialien erhältlich, die Silben farblich hervorheben um Lernerfolge beim Schrifterwerb zu erzielen.\\
 
-Weiterführende Arbeiten legen auch nahe, dass der Sprachrhythmus und die Silbenbetonung eine zentrale Rolle, sowohl beim Lesen, als auch beim Schreiben spielt. Ein Wort hat in der deutschen Sprache eine oder mehrere Betonungen. Betonte Silben werden, im Gegensatz zu den unbetonten Silben, lauter und länger gesprochen. In der Dissertation von Brandelik\cite{Brandelik2014} wurde gezeigt, dass sprachrhythmische Fähigkeiten, wie das Identifizieren von Betonungen einen Einfluss auf die Lese- und Rechtschreibleistung hat. An diese Ergebnisse angelehnt trainiert z.B. die Prosodiya App\cite{Holz2017} für mobile Geräte bei LRS Kindern das Bewusstsein für linguistische Eigenschaften im Zusammenhang mit der Silbenbetonung.\\
+Weiterführende Arbeiten legen auch nahe, dass der Sprachrhythmus und die Silbenbetonung eine zentrale Rolle, sowohl beim Lesen, als auch beim Schreiben spielt. Ein Wort hat in der deutschen Sprache eine oder mehrere Betonungen. Betonte Silben werden, im Gegensatz zu den unbetonten Silben, lauter und länger gesprochen. In der Dissertation von Brandelik\cite{Brandelik2014} wurde gezeigt, dass sprachrhythmische Fähigkeiten, wie das Identifizieren von Betonungen einen Einfluss auf die Lese- und Rechtschreibleistung hat. An diese Ergebnisse angelehnt trainiert z.B. die Prosodiya App\cite{Holz2017d} für mobile Geräte bei LRS Kindern das Bewusstsein für linguistische Eigenschaften im Zusammenhang mit der Silbenbetonung.\\
 In einer Studie von Rello\cite{Rello:2017:PMR:3057333.3057414} wurde zudem herausgefunden, dass die Art der Präsentation von Text ein starken Einfluss auf die Lesbarkeit für Menschen mit LRS hat. Es wurde gezeigt, dass Parameter wie verschiedene Fonts, Schriftgröße, Farbkombinationen und Hintergrundfarbe, sowie die Abstände zwischen Zeilen oder einzelnen Zeichen eine wesentliche Rolle für die Lesegeschwindigkeit spielen.
 
 \subsection{Digitale Ansätze}
@@ -38,7 +38,7 @@ Um die Vorteile durch silben- und betonungsorientiertes Lernen auszunutzen ist m
 
 \section{Technischer Hintergrund}
 
-Um das Ziel einer automatischen Analyse und Annotation beliebiger Texte zu realisieren, wurden vor Allem die folgenden zwei Schritte untersucht:
+Um das Ziel einer automatischen Analyse und Annotation beliebiger Texte zu realisieren, wurden vor allem die folgenden zwei Schritte untersucht:
 \begin{enumerate}
 	\item Linguistische Analyse (Zerlegung des Texts in Wörter)
 	\item Bestimmung von Silbentrennung und Betonungsmuster
@@ -50,7 +50,7 @@ Da die von der Applikation zu verarbeitende Eingabe ein Text ist, also eine Folg
 \begin{itemize}
 	\item \textbf{Textstruktur}: Zerlegung des Texts in Tokens, dadurch wird bestimmt, ob es sich bei den Zeichenfolgen um Wörter oder andere Strukturen wie Leerraum oder Interpunktionen handelt.
 	
-	\item \textbf{Wortart}: Die Werte der Wortart- (\textit{Part-of-Speech-}) Tags geben an um was für ein Wort es sich handelt (mit dem \textit{spacy} Parser z.B. \textit{NOM} für Nomen, \textit{PROPN} für Eigennamen, \textit{DET} für Artikel etc.).
+	\item \textbf{Wortart}: Die Werte der Wortart- (\textit{Part-of-Speech-}) Tags geben an um was für ein Wort es sich handelt (mit dem \textit{Spacy} Parser z.B. \textit{NOM} für Nomen, \textit{PROPN} für Eigennamen, \textit{DET} für Artikel etc.).
 	\item  \textbf{Lemma}: Gibt die Grundform eines Wortes an, welche je nach Wortart unterschiedliche Ausprägungen annehmen kann. Bei Verben steht hier z.B. der Infinitiv, bei Pronomen die erste Person Singular etc.
 \end{itemize}
 

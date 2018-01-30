@@ -10,7 +10,7 @@ Um eine Spezifikation für die Software zu entwerfen und den zu verwendenden Sof
 
 Zunächst wurde festgestellt, welche Funktionen die Applikation den NutzerInnen bieten sollte. Dazu wurden folgende mögliche Szenarien aufgestellt:
 
-\paragraph{Text Analyse} 
+\paragraph{Textanalyse} 
 Die Nutzerin oder der Nutzer möchte einen Fließtext eingeben und von der Anwendung annotieren lassen. Nach der Eingabe soll das Ergebnis annotiert in der Applikation dargestellt werden.
 
 \paragraph{Anpassung der annotierten Darstellung}
@@ -20,7 +20,7 @@ Die Nutzerin oder der Nutzer möchte die Einstellungen des annotierten Texts än
 Die Nutzerin oder der Nutzer soll die Möglichkeit haben, verschiedene Formate des annotierten Texts zu exportieren, z.B. Druck, HTML oder Word.
 
 \paragraph{Verwaltung von User Accounts}
-Der Nutzerin oder dem Nutzer soll die Möglichkeit gegeben werden, ein Nutzerkonto zu erstellen um persönlich verwendete Daten (z.B. Texte oder Wortsegmentierungen) speichern zu können. Dazu sollen Funktionen und Interfaces zur Registrierung eines Nutzerkontos, Login, Logout, zum Bearbeiten der Nutzerinformationen und zum Löschen des Accounts bereitgestellt werden.
+Der Nutzerin oder dem Nutzer soll die Möglichkeit gegeben werden, ein Nutzerkonto zu erstellen um persönlich verwendete Daten (z.B. Texte oder Wortsegmentierungen) speichern zu können. Dazu sollen Funktionen und Interfaces zur Registrierung eines Nutzerkontos, zum Login und Logout, zum Bearbeiten der Nutzerinformationen und zum Löschen des Accounts bereitgestellt werden.
 
 \paragraph{Behandlung unbekannter Wörter}
 Die Nutzerin oder der Nutzer kann nacheinander die Segmentierung von Wörtern, die durch das System nicht eindeutig bestimmt werden konnten, selbst manuell festlegen.
@@ -33,7 +33,7 @@ Für ein unbekanntes Wort wählt die Nutzerin oder der Nutzer in einem neuen Vie
 	\item Eventuell weitere Quellen für die Segmentierung (z.B. Duden oder Wictionary)
 \end{itemize}
 
-\paragraph{Speicherung von Nutzer Segmentierungen}
+\paragraph{Speicherung von Nutzer-Segmentierungen}
 Von der Nutzerin oder dem Nutzer hinzugefügte Segmentierungen sollen (lokal für das Nutzerkonto) gespeichert werden können und beim nächsten Vorkommen in einem Text automatisch verwendet werden.
 
 \paragraph{Speicherung und Wiederverwendung von Annotationskonfigurationen für Texte}
@@ -56,6 +56,7 @@ Hieraus lassen sich folgende grundlegende Anforderungen an die Software spezifiz
 	\item Service zur Manipulation der Wortdatenbank
 	\item Speicherung nutzerspezifischer Daten
 	\item Service zur Nutzerverwaltung
+	\item Service zur Verifizierung von manuell erstellten Einträgen
 	\item Geeignetes User Interface zur Darstellung von Texten, Verwaltung der Nutzerdaten und zur Interaktion mit dem System
 \end{itemize}
 
@@ -96,7 +97,7 @@ Mithilfe dieser Überlegungen wurde festgelegt, dass es eine horizontale Navigat
 
 \subsubsection{Farbschema}
 
-Als Nächstes wurde ein möglichst ansprechendes Farbschema gesucht. Hierfür wurde mit einem Farbrad (es wurde Adobe Color CC verwendet, \textit{https://color.adobe.com}) zwei Komplementärfarben als Hauptfarben ausgesucht (s. Abbildung \ref{fig:colors}). Die blaue Farbe wurde vor allem für Links eingesetzt, eine hellere Version für Links im Hover Zustand. Eine weitere, ins Türkis gehende Abstufung wurde für Rahmen beim Gruppieren von Elementen auf der Seite verwendet. Der beige Farbton kommt als Hintergrundfarbe für die Navigationsleiste zum Einsatz.
+Als Nächstes wurde ein möglichst ansprechendes Farbschema gesucht. Hierfür wurden mit einem Farbrad (es wurde Adobe Color CC verwendet, \textit{https://color.adobe.com}) zwei Komplementärfarben als Hauptfarben ausgesucht (s. Abbildung \ref{fig:colors}). Die blaue Farbe wurde vor allem für Links eingesetzt, eine hellere Version für Links im Hover Zustand. Eine weitere, ins Türkis gehende Abstufung wurde für Rahmen beim Gruppieren von Elementen auf der Seite verwendet. Der beige Farbton kommt als Hintergrundfarbe für die Navigationsleiste zum Einsatz.
 
 \begin{figure}[h!]
 	\centering
@@ -109,7 +110,7 @@ Als Nächstes wurde ein möglichst ansprechendes Farbschema gesucht. Hierfür wu
 \section{Softwarestack}
 
 Bei der Vielseitigkeit der verschiedenen Anforderungen ist die Wahl der zu verwendenden Technologien nicht unerheblich. Programmiersprachen und Frameworks mussten sorgfältig ausgewählt werden, um für jedes Teilproblem eine passende Lösung zu entwickeln.\\
-Die erste wichtige Unterteilung fand zum Einen in ein Frontend statt, welches die Schnittstelle den NutzerInnen darstellt und zum Anderen in ein Backend, das die vom System verwendeten Daten speichert, manipuliert und diese nach Aufbereitung mit entsprechenden Algorithmen an das Frontend schickt (s. Abbildung \ref{fig:frontendbackend}). Eine genaue Beschreibung über den Aufbau und die Funktion von Front- und Backend wird in Kapitel 4 gegeben.\\
+Die erste wichtige Unterteilung fand zum Einen in ein Frontend statt, welches die Schnittstelle zu den NutzerInnen darstellt und zum Anderen in ein Backend, das die vom System verwendeten Daten speichert, manipuliert und diese nach Aufbereitung mit entsprechenden Algorithmen an das Frontend schickt (s. Abbildung \ref{fig:frontendbackend}). Eine genaue Beschreibung über den Aufbau und die Funktion von Front- und Backend wird in Kapitel 4 gegeben.\\
 
 \begin{figure}[h!]
 	\centering
@@ -123,7 +124,7 @@ Diese Aufteilung ist in der Webentwicklung weit verbreitet\cite{Fielding:2000:AS
 \begin{itemize}
 	\item Klare Trennung von Darstellung und Datenverarbeitung
 	\item Einfachere Fehlersuche durch kleinere Komponenten
-	\item Bei der Entwickelung zusätzlicher Frontends (z.B. für Android oder iOS) muss nur ein neuer Teil des Softwaresystems entwickelt werden, während das Backend gleich bleibt.
+	\item Bei der Entwicklung zusätzlicher Frontends (z.B. für Android oder iOS) muss nur ein neuer Teil des Softwaresystems entwickelt werden, während das Backend gleich bleibt.
 	\item Arbeitsaufteilung im Entwicklerteam (relevant bei Weiterentwicklung der Applikation mit mehreren Personen)
 \end{itemize}
 
@@ -143,10 +144,10 @@ Im Folgenden werden die einzelnen Technologien und die Gründe für deren Verwen
 \label{sec:backend}
 
 Um die Entwicklung des Backends möglichst einfach zu halten, wurde zunächst untersucht, ob ein fertiges Backend (Backend-a- a-Service) verwendet werden kann. Hierfür kämen z.B. fertige Services wie MongoDB oder Firebase mit integrierter NoSQL Datenbank infrage\cite{almootassem2017}.\\
-Zunächst wurde Firebase genauer untersucht und in Verbindung mit dem Frontend getestet. Prinzipiell war es gut möglich eine Verbindung mit dem Frontend herzustellen (Daten in der Firebase Datenbank können mit HTTP Requests geschrieben und gelesen werden). Die Möglichkeiten des Backends beschränkten sich allerdings auf Datenmanipulation und Cloud Code (server-seitiges JavaScript in Firebase).\\
+Zunächst wurde Firebase genauer untersucht und in Verbindung mit dem Frontend getestet. Prinzipiell war es möglich eine Verbindung mit dem Frontend herzustellen (Daten in der Firebase Datenbank können mit HTTP Requests geschrieben und gelesen werden). Die Möglichkeiten des Backends beschränkten sich allerdings auf Datenmanipulation und Cloud Code (server-seitiges JavaScript in Firebase).\\
 Ein Problem dabei war, dass komplexere Logik wie das \textit{Natural Language Processing} nur entweder im Frontend oder im Backend mit \textit{JavaScript} implementiert werden konnte. NLP Frameworks, wie es sie z.B. in \textit{Python} oder \textit{Java} gibt, konnten somit nicht verwendet werden. Wurde der Text im Frontend in einzelne Wörter zerlegt und diese in der Firebase Datenbank nachgeschlagen, musste zudem für jedes Wort ein eigener HTTP Request geschickt werden, was zu unbefriedigenden Antwortzeiten führte.\\
 
-Aufgrund der beschriebenen Probleme wurde parallel ein alternatives Backend in \textit{Python} implementiert. Die Entwicklung der Softwarearchitektur wurde an den \textit{Representational State Transfer} (REST) angelehnt. Dieser beschreibt Prinzipien und Restriktionen für die Konzeption von Webarchitekturen\cite{Fielding:2000:ASD:932295}. Diese Lösung brachte zwar wiederum eigene Schwierigkeiten und Probleme mit sich (s. Abschnitt \ref{sec:deployment}), wurde aber für die kurzfristig bessere und schneller zu entwickelnde Variante erachtet und daher weiter verfolgt. Da in der Praxis die Entwicklung und Wartung eines eigenen Backends einen erheblichen Mehraufwand bedeuten kann, wäre weiterführend auch eine kombinierte Lösung denkbar. Hierfür könnt ein Backend-as-a-Service wie Firebase benutzt, aber zwischen Front- und Backend noch eine weitere Schicht eingesetzt werden, welche Programmlogik enthält und NLP Berechnungen durchführen kann.
+Aufgrund der beschriebenen Probleme wurde parallel ein alternatives Backend in \textit{Python} implementiert. Die Entwicklung der Softwarearchitektur wurde an den \textit{Representational State Transfer} (REST) angelehnt. Dieser beschreibt Prinzipien und Restriktionen für die Konzeption von Webarchitekturen\cite{Fielding:2000:ASD:932295}. Diese Lösung brachte zwar wiederum eigene Schwierigkeiten und Probleme mit sich (s. Abschnitt \ref{sec:deployment}), wurde aber für die kurzfristig bessere und schneller zu entwickelnde Variante erachtet und daher weiter verfolgt. Da in der Praxis die Entwicklung und Wartung eines eigenen Backends einen erheblichen Mehraufwand bedeuten kann, wäre weiterführend auch eine kombinierte Lösung denkbar. Hierfür könnte ein Backend-as-a-Service wie Firebase benutzt, aber zwischen Front- und Backend noch eine weitere Schicht eingesetzt werden, welche Programmlogik enthält und NLP Berechnungen durchführen kann.
 
 Die Einhaltung der REST Restriktionen (z.B. muss das Backend zustandslos sein und die Anfragen müssen resourcenorientiert formuliert werden) wurden so gut es im Rahmen der Arbeit möglich war eingehalten. Allerdings konnte die Konzeption einer konsequenten Softwarearchitektur nicht im Vordergrund stehen, da die entwickelte Applikation lediglich als Prototyp betrachtet werden muss. Im Folgenden werden die Technologien, die für das Python Backend benutzt wurden vorgestellt.
 
