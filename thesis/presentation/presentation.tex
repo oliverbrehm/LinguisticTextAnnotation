@@ -42,9 +42,10 @@
 \begin{frame}{Motivation}
 \begin{itemize}
 	\item \textbf{Lese- Rechtschreibschwäche}: Weit verbreitete Entwicklungsstörung
-	\item Übungstexte mit Hervorhebung von Silben in verschiedenen Farben (Unterstützung bei der Wortdekodierung, Sprachrhythmus)
-	\item \textbf{Zielgruppe}: LerntherapeutInnen, Linguisten, Eltern betroffener Kinder
-	\item Webanwendung mit Fokus auf User Experience
+	\item Übungstexte mit Hervorhebung von Silben in verschiedenen Farben (Unterstützung bei der Wortdekodierung)
+	\item Training der Bewusstheit des Sprachrhythmus (Betonte Silbe)
+	\item Webanwendung zur automatischen Erstellung von Übungstexten, Fokus auf User Experience
+	\item \textbf{Zielgruppe}: LerntherapeutInnen, LinguistInnen, Eltern betroffener Kinder
 \end{itemize}
 \end{frame}
 
@@ -59,20 +60,6 @@
 	\huge{Grundlagen und Forschung}
 \end{frame}
 
-\begin{frame}{Vergleichbare Projekte}
-\begin{itemize}
-	\item ABC der Tiere Silbengenerator
-\end{itemize}
-
-\centering
-\includegraphics[height=0.6\textheight]{../figures/ABCsilbengenerator}
-
-\begin{itemize}
-	\item celeco Druckstation
-	\item an Verlage und Produkte gebunden
-\end{itemize}
-\end{frame}
-
 \begin{frame}{Linguistische Analyse}
 \begin{itemize}
 	\item beliebiger Eingabetext
@@ -80,7 +67,8 @@
 	\item Tagging (Part-of-Speech, Lemma)
 \end{itemize}
 \vfill
-\includegraphics[height=0.5\textheight]{../figures/json}
+\centering
+\includegraphics[width=1.05\textwidth]{../figures/json}
 \end{frame}
 
 \begin{frame}{Wortdatenbank}
@@ -91,7 +79,7 @@
 	\item Bestimmung der Betonung aus Phonologischer Darstellung (z.b. \textit{antizipiert | \&n-ti-=i-'pirt})
 	\item Nicht alle Wörter (mit Flexionsformen) enthalten
 	\item Generieren von Vorschlägen bei unbekannten Wörtern
-	\item Text-to-Speech Systeme (z.B. MARY)
+	\item Text-to-Speech Systeme (z.B. MARY) für Wortbetonung
 \end{itemize}
 \end{frame}
 
@@ -101,24 +89,17 @@
 \huge{Entwicklung der Anwendung}
 \end{frame}
 
-\begin{frame}{Anforderungsanalyse}
-Erarbeitung der Anforderungen in Expertengesprächen:
-\begin{itemize}
-	\item Verwaltung der Wortdatenbank
-	\item Nutzerverwaltung
-	\item Textanalyse
-	\item Nutzer: Registrierung, Anmeldung, Speicherung von Texten und Einstellungen
-	\item Verifizierung neuer Datenbankeinträge durch NutzerInnen
-\end{itemize}
-\end{frame}
-
 \begin{frame}{Aufbau der Anwendung}
+	\begin{itemize}
+		\item Anforderungsanalyse mit Expertengesprächen
+	\end{itemize}
+
 	\centering
 	\includegraphics[width=0.85\textwidth]{../figures/frontendbackend}\\
+	
 	\begin{itemize}
 		\item RESTful API mit Python und Flask
 		\item Wort- und User-Datenbanken (SQLite)
-		\item Alternativen recherchiert (NoSQL, Backend-as-a-Service)
 	\end{itemize}
 \end{frame}
 
@@ -136,6 +117,16 @@ Erarbeitung der Anforderungen in Expertengesprächen:
 \end{itemize}
 \centering
 \includegraphics[width=0.95\textwidth]{../figures/frontend/uml-annotationtext}
+\end{frame}
+
+\begin{frame}{Wort-Verifizierung}
+\begin{itemize}
+	\item Manuelle Eingabe von Silbentrennung und Wortbetonung mit Vorschlägen
+	\item Übertragung in die Wortdatenbank nach Abstimmung
+	\item Crowdsourcing nach dem Mehrheitsprinzip
+\end{itemize}
+\centering
+\includegraphics[width=0.75\textwidth]{../figures/frontend/verifizierung}
 \end{frame}
 
 \section{Evaluation}
@@ -161,6 +152,7 @@ Erarbeitung der Anforderungen in Expertengesprächen:
 
 \begin{frame}{Nutzertest}
 \begin{itemize}
+	\item Fünf aufeinanderfolgende Szenarien
 	\item Interview mit \textit{Thinking Aloud}
 	\item Zusätzlich \textit{After Scenqrio Questionnaire} für quantitative Daten
 	\item Pilottest
@@ -192,7 +184,7 @@ Erarbeitung der Anforderungen in Expertengesprächen:
 	\item Automatische Erstellung von Übungstexten, Arbeitserleichterung
 	\item Erweiterbare Wortdatenbank durch Crowdsourcing
 	\item Intuitive Bedienbarkeit
-	\item Erweiterung möglich (Modul für SchülerInnen, mobile App...)
+	\item Erweiterungen möglich (Modul für SchülerInnen, mobile App...)
 \end{itemize}
 \end{frame}
 
