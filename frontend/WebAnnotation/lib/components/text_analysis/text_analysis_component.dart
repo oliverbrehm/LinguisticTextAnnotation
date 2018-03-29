@@ -74,7 +74,7 @@ class TextAnalysisComponent implements OnInit {
       } else {
         textAnalysisService.applyCurrentConfiguration();
         appService.infoMessage("Der Text wurde erfolgreich analysiert und wird in der Vorschau hervorgehoben dargestellt. "
-            "Sie Können in der Vorschau jedes Wort bearbeiten indem Sie darauf klicken.");
+            "Sie können in der Vorschau jedes Wort bearbeiten, indem Sie darauf klicken.");
       }
     });
   }
