@@ -1,28 +1,12 @@
 <!--
     new text input
  -->
-<div class="container" *ngIf="!textAnalysisService.analyzing && annotatedText() == null">
+<div class="container" *ngIf="!textAnalysisService.analyzing && textAnalysisService.annotatedText == null">
     <h1>Text Analyse</h1>
 
-    Bitte geben Sie einen Text ein.
+    Bitte geben Sie einen Text ein.<br>
 
-    <div class="row">
-        <material-input class="bordered"
-                        id="analysisInputText"
-                        multiline
-                        label="Text"
-                        rows="10"
-                        autoFocus floatingLabel style="width:100%"
-                        [(ngModel)]="textAnalysisService.lookupText">
-        </material-input>
-    </div>
-
-    <div class="row">
-        <material-button raised
-                         (trigger)="lookup()">
-            Analysieren
-        </material-button>
-    </div>
+    <text-input></text-input>
 </div>
 
 <!--
@@ -37,7 +21,7 @@
 <!--
     analysed text view with settings
  -->
-<div class="container textPreview" *ngIf="!textAnalysisService.analyzing && annotatedText() != null">
+<div class="container textPreview" *ngIf="!textAnalysisService.analyzing && textAnalysisService.annotatedText != null">
     <div class="row textPreview">
         <div class="col-md-4">
             <text-settings></text-settings>

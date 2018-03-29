@@ -88,6 +88,10 @@ class TextAnalysisService {
 
       annotatedText.originalText = lookupText;
 
+      print('TEST: updated');
+      this.updatePOS();
+      this.applyCurrentConfiguration();
+
       return true;
     }, onError: (error) {
       analyzing = false;

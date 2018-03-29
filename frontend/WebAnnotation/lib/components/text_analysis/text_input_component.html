@@ -1,9 +1,8 @@
 <div class="bordered">
-    <h2>Text</h2>
+    <h3>Text</h3>
 
     <material-input multiline
-                    label="Text"
-                    rows="5"
+                    rows="{{numInputRows()}}"
                     autoFocus floatingLabel style="width:100%"
                     [(ngModel)]="textAnalysisService.lookupText">
     </material-input>
@@ -16,7 +15,7 @@
 </div>
 <br>
 
-<div *ngIf="userAccountService.loggedIn" class="bordered">
+<div *ngIf="userAccountService.loggedIn && !textAnalysisService.analyzing && textAnalysisService.annotatedText != null" class="bordered">
     <h3>Text speichern</h3>
     Speichere den aktuellen Text, er kann dann auf der Benutzer Seite aufgerufen und wiederverwendet werden.
     <material-input label="Titel"
@@ -32,7 +31,7 @@
 </div>
 <br>
 
-<div class="bordered">
+<div class="bordered" *ngIf="!textAnalysisService.analyzing && textAnalysisService.annotatedText != null">
     <h3>Neu</h3>
     <material-button raised
                      (trigger)="newText()">

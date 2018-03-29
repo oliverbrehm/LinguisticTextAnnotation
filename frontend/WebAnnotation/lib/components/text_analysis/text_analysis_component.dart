@@ -39,12 +39,15 @@ class TextAnalysisComponent implements OnInit {
 
   TextAnalysisComponent(this.appService, this.textAnalysisService, this.userAccountService, this.router, this.routeParams);
 
+  @ViewChild(TextInputComponent)
+  TextInputComponent textInputComponent;
+
   @override
   Future<Null> ngOnInit() async {
     var routerText = routeParams.get('text');
     if(routerText != null && routerText.isNotEmpty) {
       textAnalysisService.lookupText = routerText;
-      lookup();
+      textInputComponent.lookup();
     } else if(textAnalysisService.annotatedText != null) {
       textAnalysisService.lookupText = textAnalysisService.annotatedText.originalText;
       textAnalysisService.applyCurrentConfiguration();
@@ -58,24 +61,5 @@ class TextAnalysisComponent implements OnInit {
         }
       });
     }
-  }
-
-  AnnotationText annotatedText() {
-    return textAnalysisService.annotatedText;
-  }
-
-  void lookup() {
-    appService.clearMessage();
-    var userData = userAccountService.credentials();
-    textAnalysisService.lookup(userData).then((success) {
-
-      if(!success) {
-        appService.errorMessage("Der Text konnte nicht analysiert werden.");
-      } else {
-        textAnalysisService.applyCurrentConfiguration();
-        appService.infoMessage("Der Text wurde erfolgreich analysiert und wird in der Vorschau hervorgehoben dargestellt. "
-            "Sie können in der Vorschau jedes Wort bearbeiten, indem Sie darauf klicken.");
-      }
-    });
   }
 }

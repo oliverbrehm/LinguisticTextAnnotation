@@ -57,7 +57,14 @@ class TextInputComponent implements OnInit {
     });
   }
 
-  // TODO CLEANUP copy code from text_analysis_component
+  String numInputRows() {
+    if(textAnalysisService.annotatedText == null) {
+      return "10";
+    } else {
+      return "5";
+    }
+  }
+
   void lookup() {
     appService.clearMessage();
     var userData = userAccountService.credentials();
@@ -65,7 +72,11 @@ class TextInputComponent implements OnInit {
       if(!success) {
         appService.errorMessage("Der Text konnte nicht analysiert werden.");
       } else {
+        appService.infoMessage("Der Text wurde erfolgreich analysiert und wird in der Vorschau hervorgehoben dargestellt. "
+            "Sie können in der Vorschau jedes Wort bearbeiten, indem Sie darauf klicken.");
+
         textAnalysisService.applyCurrentConfiguration();
+        textAnalysisService.updatePOS();
       }
     });
   }
