@@ -70,17 +70,18 @@ class TextAnalysisService {
             } else {
               w.state = WordState.NotFound;
             }
+
+            if(annotation.containsKey("pos")) {
+              w.posId = selectedConfiguration.partOfSpeechConfiguration.withTag(annotation['pos']).posId;
+            }
+
+            if(annotation.containsKey("lemma")) {
+              w.lemma = annotation['lemma'];
+            }
+
             break;
           default:
              w.state = WordState.Ignored; break;
-        }
-
-        if(entry.containsKey("pos")) {
-          w.posId = selectedConfiguration.partOfSpeechConfiguration.withTag(entry['pos']).posId;
-        }
-
-        if(entry.containsKey("lemma")) {
-          w.lemma = entry['lemma'];
         }
 
         annotatedText.addWord(w);

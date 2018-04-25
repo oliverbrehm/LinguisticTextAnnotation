@@ -39,18 +39,18 @@ class PartOfSpeechConfiguration {
   static PartOfSpeechConfiguration defaultConfiguration = new PartOfSpeechConfiguration();
 
   List<PartOfSpeech> _posItems = [
-    new PartOfSpeech("Nomen", "noun", ["NOUN"],POSPolicy.Annotate),
-    new PartOfSpeech("Eigenname", "propn", ["PROPN"], POSPolicy.Annotate),
-    new PartOfSpeech("Verb", "verb", ["VERB"], POSPolicy.Annotate),
-    new PartOfSpeech("Hilfsverb", "aux", ["AUX"], POSPolicy.Annotate),
-    new PartOfSpeech("Adjektiv", "adj", ["ADJ"], POSPolicy.Annotate),
-    new PartOfSpeech("Adverb", "adv", ["ADV"], POSPolicy.Annotate),
-    new PartOfSpeech("Artikel", "det", ["DET"], POSPolicy.Annotate),
-    new PartOfSpeech("Adposition", "adp", ["ADP"], POSPolicy.Annotate),
-    new PartOfSpeech("Pronomen", "pron", ["PRON"], POSPolicy.Annotate),
-    new PartOfSpeech("Konjunktion", "conj", ["CONJ", "SCONJ"], POSPolicy.Annotate),
-    new PartOfSpeech("Zahl", "num", ["NUM"], POSPolicy.Annotate),
-    new PartOfSpeech("Partikel", "part", ["PART"], POSPolicy.Annotate),
+    new PartOfSpeech("Nomen", "noun", ["noun", "NOUN"],POSPolicy.Annotate),
+    new PartOfSpeech("Eigenname", "propn", ["propn", "PROPN"], POSPolicy.Annotate),
+    new PartOfSpeech("Verb", "verb", ["verb", "VERB"], POSPolicy.Annotate),
+    new PartOfSpeech("Hilfsverb", "aux", ["aux", "AUX"], POSPolicy.Annotate),
+    new PartOfSpeech("Adjektiv", "adj", ["adj", "ADJ"], POSPolicy.Annotate),
+    new PartOfSpeech("Adverb", "adv", ["adv", "ADV"], POSPolicy.Annotate),
+    new PartOfSpeech("Artikel", "det", ["det", "DET"], POSPolicy.Annotate),
+    new PartOfSpeech("Adposition", "adp", ["adp", "ADP"], POSPolicy.Annotate),
+    new PartOfSpeech("Pronomen", "pron", ["pron", "PRON"], POSPolicy.Annotate),
+    new PartOfSpeech("Konjunktion", "conj", ["conj", "CONJ", "SCONJ"], POSPolicy.Annotate),
+    new PartOfSpeech("Zahl", "num", ["num", "NUM"], POSPolicy.Annotate),
+    new PartOfSpeech("Partikel", "part", ["part", "PART"], POSPolicy.Annotate),
     unknownPOS()
   ];
 

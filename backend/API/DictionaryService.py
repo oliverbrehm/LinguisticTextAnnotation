@@ -168,13 +168,13 @@ class DictionaryService:
         # if not found in user database, search the global word database
         candidates = self.database.session.query(Word).filter(Word.text == query_text).all()
 
+        # look for word with the right pos tag (e.g. noun/verb with same text, 'Hacken'/'hacken')
         word = None
         if len(candidates) > 0:
             word = candidates[0]
 
             for w in candidates:
-                print(w.text)
-                if w.pos == pos:
+                if w.pos.lower() == pos.lower():
                     word = w
                     break
 
@@ -230,8 +230,6 @@ class DictionaryService:
     def _lookup_token(self, word, pos, lemma, user, user_service):
         entry = {
             'text': word,
-            'pos': pos,
-            'lemma': lemma
         }
 
         # don't analyze special tokens
@@ -239,13 +237,18 @@ class DictionaryService:
             entry['type'] = 'ignored'
 
         else:
-            print("word:", word)
             annotated = self.query_word(word, pos, user_service, user)
             if annotated is None:
-                print('not found')
                 entry['type'] = 'not_found'
             else:
                 entry['type'] = 'annotated_word'
+
+                # if pos or lemma not in word database, use defaults from spacy parser
+                if not annotated['pos']:
+                    annotated['pos'] = pos
+                if not annotated['lemma']:
+                    annotated['lemma'] = lemma
+
                 entry['annotation'] = annotated
 
         return entry

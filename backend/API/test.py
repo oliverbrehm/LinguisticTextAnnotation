@@ -18,8 +18,8 @@ userService = UserService(userDatabase)
 
 user = userService.get_user('olibrehm@gmail.com')
 
-entries = dictionaryService.database.session.query(Word).all()
-print('length: ', len(entries))
+#entries = dictionaryService.database.session.query(Word).all()
+#print('length: ', len(entries))
 
-w = dictionaryService.query_word('Überblick', '', userService, user)
+w = dictionaryService.query_text('Wir hacken heute Holz.', userService, user)
 print(w)
